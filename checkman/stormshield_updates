@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: Stormshield Updates
+=======
+title: Stormshield: Updates
+>>>>>>> upstream/master
 agents: snmp
 catalog: app/stormshield
 license: GPL
@@ -11,9 +15,17 @@ description:
  be {OK}, {WARN}, {CRIT} or {UNKNOWN}.
 
 item:
+<<<<<<< HEAD
  The description of the service as provided by
  the device.
 
 inventory:
  One check for each service is created by the inventory, if the
  sensor is not in state (not available).
+=======
+ The name of the subsystem
+
+inventory:
+ One service is created for each subsystem
+ if it is not in state (not available).
+>>>>>>> upstream/master

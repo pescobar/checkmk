@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,6 +24,13 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 # 7 mode
 # <<<netapp_api_systemtime:sep(9)>>>
@@ -33,6 +41,7 @@
 # node1 76123   123123
 # node2 7612311 123123
 
+<<<<<<< HEAD
 
 def inventory_netapp_api_systemtime(info):
     for line in info:
@@ -70,4 +79,44 @@ check_info['netapp_api_systemtime'] = {
     'check_function': check_netapp_api_systemtime,
     'service_description': 'Systemtime %s',
     'group': 'netapp_systemtime'
+=======
+NetappApiTimeEntry = collections.namedtuple("NetappApiTimeEntry", [
+    'agent_time',
+    'system_time',
+])
+
+
+def parse_netapp_api_systemtime(info):
+    parsed = {}
+    for line in info:
+        try:
+            item, agent_time, system_time = line
+            parsed[item] = NetappApiTimeEntry(int(agent_time), int(system_time))
+        except ValueError:
+            pass
+    return parsed
+
+
+@get_parsed_item_data
+def check_netapp_api_systemtime(item, params, entry):
+    yield check_levels(entry.system_time,
+                       None,
+                       None,
+                       infoname='System time',
+                       human_readable_func=get_timestamp_human_readable)
+    yield check_levels(entry.agent_time - entry.system_time,
+                       'time_difference',
+                       params.get('levels', (None, None)),
+                       infoname='Time difference',
+                       human_readable_func=get_age_human_readable)
+
+
+check_info['netapp_api_systemtime'] = {
+    'parse_function': parse_netapp_api_systemtime,
+    'inventory_function': discover(),
+    'check_function': check_netapp_api_systemtime,
+    'service_description': 'Systemtime %s',
+    'group': 'netapp_systemtime',
+    'has_perfdata': True,
+>>>>>>> upstream/master
 }

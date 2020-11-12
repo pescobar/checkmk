@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // +------------------------------------------------------------------+
 // |             ____ _               _        __  __ _  __           |
 // |            / ___| |__   ___  ___| | __   |  \/  | |/ /           |
@@ -21,6 +22,11 @@
 // License along with GNU Make; see the file  COPYING.  If  not,  write
 // to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 // Boston, MA 02110-1301 USA.
+=======
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+// conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 import * as utils from "utils";
 
@@ -37,8 +43,12 @@ import * as utils from "utils";
 
 var g_visibility_detection_enabled = true;
 
+<<<<<<< HEAD
 export function initialize()
 {
+=======
+export function initialize() {
+>>>>>>> upstream/master
     var hidden_attr_name = "hidden";
 
     // Standards:
@@ -72,6 +82,7 @@ export function initialize()
     }
 
     function on_visibility_change(evt) {
+<<<<<<< HEAD
         var v = "visible", h = "hidden",
             evtMap = {
                 focus:v, focusin:v, pageshow:v, blur:h, focusout:h, pagehide:h
@@ -79,6 +90,20 @@ export function initialize()
 
         if (!g_visibility_detection_enabled)
             return;
+=======
+        var v = "visible",
+            h = "hidden",
+            evtMap = {
+                focus: v,
+                focusin: v,
+                pageshow: v,
+                blur: h,
+                focusout: h,
+                pagehide: h,
+            };
+
+        if (!g_visibility_detection_enabled) return;
+>>>>>>> upstream/master
 
         utils.remove_class(document.body, "visible");
         utils.remove_class(document.body, "hidden");

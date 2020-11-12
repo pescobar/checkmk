@@ -1,3 +1,10 @@
+<<<<<<< HEAD
+=======
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+// conditions defined in the file COPYING, which is part of this source code package.
+
+>>>>>>> upstream/master
 #include "stdafx.h"
 
 #include "types.h"
@@ -10,7 +17,11 @@
 #include "cfg.h"
 #include "logger.h"
 #include "stringutil.h"
+<<<<<<< HEAD
 namespace fs = std::experimental::filesystem;
+=======
+namespace fs = std::filesystem;
+>>>>>>> upstream/master
 
 template <>
 bool from_string<bool>(const std::string &value) {

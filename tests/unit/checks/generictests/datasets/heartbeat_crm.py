@@ -1,4 +1,16 @@
+<<<<<<< HEAD
 # yapf: disable
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# yapf: disable
+# type: ignore
+
+>>>>>>> upstream/master
 
 
 checkname = 'heartbeat_crm'
@@ -113,16 +125,28 @@ discovery = {'': [(None, {'num_nodes': 2, 'num_resources': 10})],
 
 checks = {'': [(None,
                 {'max_age': 60, 'num_nodes': 2, 'num_resources': 10},
+<<<<<<< HEAD
                 [(3, 'Ignoring reported data (Status output too old: 31 d)', [])])],
           'resources': [(u'clone_nfs_sapmnt_IFG',
                          {},
                          [(0,
                            u"clone_nfs_sapmnt_IFG Clone Started [u'hrssc61i01', u'hrssc61i02']",
+=======
+                [(2, 'Ignoring reported data (Status output too old: 31 d)', [])])],
+          'resources': [(u'clone_nfs_sapmnt_IFG',
+                         {},
+                         [(0,
+                           u"clone_nfs_sapmnt_IFG Clone Started hrssc61i01, hrssc61i02",
+>>>>>>> upstream/master
                            [])]),
                         (u'clone_nfs_usr_sap_IFG',
                          {},
                          [(0,
+<<<<<<< HEAD
                            u"clone_nfs_usr_sap_IFG Clone Started [u'hrssc61i01', u'hrssc61i02']",
+=======
+                           u"clone_nfs_usr_sap_IFG Clone Started hrssc61i01, hrssc61i02",
+>>>>>>> upstream/master
                            [])]),
                         (u'grp_IFG_ASCS22',
                          {},
@@ -150,4 +174,8 @@ checks = {'': [(None,
                          {},
                          [(0,
                            u'st-vmware2 (stonith:fence_vmware_rest): Started hrssc61i01',
+<<<<<<< HEAD
                            [])])]}
+=======
+                           [])])]}
+>>>>>>> upstream/master

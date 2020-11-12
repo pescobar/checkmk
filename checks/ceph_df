@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,6 +24,24 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# NOTE: Careful when replacing the *-import below with a more specific import. This can cause
+# problems because it might remove variables from the check-context which are necessary for
+# resolving legacy discovery results such as [("SUMMARY", "diskstat_default_levels")]. Furthermore,
+# it might also remove variables needed for accessing discovery rulesets.
+from cmk.base.check_legacy_includes.df import *  # pylint: disable=wildcard-import,unused-wildcard-import
+# NOTE: Careful when replacing the *-import below with a more specific import. This can cause
+# problems because it might remove variables from the check-context which are necessary for
+# resolving legacy discovery results such as [("SUMMARY", "diskstat_default_levels")]. Furthermore,
+# it might also remove variables needed for accessing discovery rulesets.
+from cmk.base.check_legacy_includes.size_trend import *  # pylint: disable=wildcard-import,unused-wildcard-import
+>>>>>>> upstream/master
 
 
 def _sanitize_line(line):
@@ -44,7 +63,11 @@ def parse_ceph_df(info):
     pools_headers = None
 
     for line in info:
+<<<<<<< HEAD
         if line[0] == "GLOBAL:":
+=======
+        if line[0] in ["GLOBAL:", "RAW"]:
+>>>>>>> upstream/master
             section = "global"
             continue
 
@@ -57,6 +80,12 @@ def parse_ceph_df(info):
             if line == ['SIZE', 'AVAIL', 'RAW', 'USED', '%RAW', 'USED', 'OBJECTS']:
                 global_headers = ['SIZE', 'AVAIL', 'RAW USED', '%RAW USED', 'OBJECTS']
 
+<<<<<<< HEAD
+=======
+            elif line == ['CLASS', 'SIZE', 'AVAIL', 'USED', 'RAW', 'USED', '%RAW', 'USED']:
+                global_headers = ['CLASS', 'SIZE', 'AVAIL', 'USED', 'RAW USED', '%RAW USED']
+
+>>>>>>> upstream/master
             elif global_headers is not None:
                 parsed.setdefault("SUMMARY", dict(zip(global_headers, line)))
 
@@ -79,6 +108,18 @@ def parse_ceph_df(info):
                     'OBJECTS', 'DIRTY', 'READ', 'WRITE', 'RAW USED'
                 ]
 
+<<<<<<< HEAD
+=======
+            elif line == [
+                    'POOL', 'ID', 'STORED', 'OBJECTS', 'USED', '%USED', 'MAX', 'AVAIL', 'QUOTA',
+                    'OBJECTS', 'QUOTA', 'BYTES', 'DIRTY', 'USED', 'COMPR', 'UNDER', 'COMPR'
+            ]:
+                pools_headers = [
+                    'POOL', 'ID', 'STORED', 'OBJECTS', 'USED', '%USED', 'MAX AVAIL',
+                    'QUOTA OBJECTS', 'QUOTA BYTES', 'DIRTY', 'USED COMPR', 'UNDER COMPR'
+                ]
+
+>>>>>>> upstream/master
             elif pools_headers is not None:
                 parsed.setdefault(line[0], dict(zip(pools_headers[1:], line[1:])))
 
@@ -106,7 +147,11 @@ def parse_ceph_df(info):
         return float(value_str) / (1024**2)
 
     mps = []
+<<<<<<< HEAD
     for mp, data in parsed.iteritems():
+=======
+    for mp, data in parsed.items():
+>>>>>>> upstream/master
         # http://docs.ceph.com/docs/master/rados/operations/monitoring/
         # GLOBAL section:
         #   SIZE: The overall storage capacity of the cluster.
@@ -134,7 +179,10 @@ check_info['ceph_df'] = {
     'check_function': df_check_filesystem_list,
     'service_description': 'Ceph Pool %s',
     'has_perfdata': True,
+<<<<<<< HEAD
     'includes': ['df.include', 'size_trend.include'],
+=======
+>>>>>>> upstream/master
     'group': 'filesystem',
     'default_levels_variable': 'filesystem_default_levels',
 }

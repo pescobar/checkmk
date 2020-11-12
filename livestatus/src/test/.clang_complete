@@ -1,11 +1,20 @@
+<<<<<<< HEAD
 -std=c++17
+=======
+-std=c++20
+>>>>>>> upstream/master
 -DHAVE_CONFIG_H
 -I.
 -I..
 -I../..
 -I../../..
+<<<<<<< HEAD
 -I../../../omd/packages/boost/destdir/include
 -I../../../omd/packages/re2/destdir/include
 -I../../../omd/packages/googletest/destdir/include
+=======
+-I../../../omd/packages/re2/destdir/include
+-I../includes/googletest
+>>>>>>> upstream/master
 -Wall
 -Wextra

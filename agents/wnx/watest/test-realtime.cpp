@@ -174,8 +174,27 @@ TEST(RealtimeTest, PackData) {
     }
 }
 
+<<<<<<< HEAD
 TEST(RealtimeTest, Base_Long) {
     // stub
+=======
+template <typename T, typename B>
+void WaitFor(std::function<bool()> predicat,
+             std::chrono::duration<T, B> max_dur) noexcept {
+    using namespace std::chrono;
+    auto end = steady_clock::now() + max_dur;
+
+    while (!predicat()) {
+        auto cur = steady_clock::now();
+        if (cur > end) break;
+        std::this_thread::sleep_until(cur + 100ms);
+    }
+}
+
+TEST(RealtimeTest, Base_Long) {
+    // stub
+    using namespace std::chrono;
+>>>>>>> upstream/master
 
     cma::OnStart(cma::AppType::test);
     ON_OUT_OF_SCOPE(
@@ -200,7 +219,12 @@ TEST(RealtimeTest, Base_Long) {
                         "");
 
         EXPECT_TRUE(ret);
+<<<<<<< HEAD
         cma::tools::sleep(5000);
+=======
+        WaitFor([]() { return TestTable.size() >= 6; }, 20s);
+
+>>>>>>> upstream/master
         EXPECT_TRUE(dev.started_);
         dev.stop();
         EXPECT_FALSE(dev.started_);
@@ -230,7 +254,11 @@ TEST(RealtimeTest, Base_Long) {
                         "encrypt");
 
         EXPECT_TRUE(ret);
+<<<<<<< HEAD
         cma::tools::sleep(5000);
+=======
+        WaitFor([]() { return TestTable.size() >= 6; }, 20s);
+>>>>>>> upstream/master
         EXPECT_TRUE(dev.started_);
         dev.stop();
         EXPECT_FALSE(dev.started_);

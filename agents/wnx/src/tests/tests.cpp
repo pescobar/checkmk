@@ -12,11 +12,19 @@
 
 // Candidates to place in pch
 #include <iostream>
+<<<<<<< HEAD
 #include "asio.hpp"
 #include "fmt/format.h"
 #include "gtest/gtest.h"
 #include "gtest/gtest.h"
 #include "catch.hpp"
+=======
+#include <asio.hpp>
+#include <fmt/format.h>
+#include <gtest/gtest.h>
+#include <gtest/gtest.h>
+#include <catch.hpp>
+>>>>>>> upstream/master
 
 int main() {
     std::cout << "Hello World!\n";

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/env python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -25,11 +26,23 @@
 # Boston, MA 02110-1301 USA.
 
 from __future__ import division
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+>>>>>>> upstream/master
 import cmk.gui.sites as sites
 import cmk.gui.visuals as visuals
 from cmk.gui.i18n import _
 from cmk.gui.globals import html
+<<<<<<< HEAD
 from . import (
+=======
+from cmk.gui.plugins.sidebar import (
+>>>>>>> upstream/master
     CustomizableSidebarSnapin,
     snapin_registry,
     snapin_width,
@@ -101,7 +114,11 @@ class HostMatrixSnapin(CustomizableSidebarSnapin):
         style = 'width:%spx' % (snapin_width - n * cell_size_rest)
 
         html.open_table(class_=["content_center", "hostmatrix"],
+<<<<<<< HEAD
                         cellspacing=0,
+=======
+                        cellspacing="0",
+>>>>>>> upstream/master
                         style=["border-collapse:collapse;", style])
         col = 1
         row = 1
@@ -113,6 +130,7 @@ class HostMatrixSnapin(CustomizableSidebarSnapin):
             elif not has_been_checked:
                 s = "p"
             elif worstsvc == 2 or state == 1:
+<<<<<<< HEAD
                 s = 2
             elif worstsvc == 3 or state == 2:
                 s = 3
@@ -120,6 +138,15 @@ class HostMatrixSnapin(CustomizableSidebarSnapin):
                 s = 1
             else:
                 s = 0
+=======
+                s = "2"
+            elif worstsvc == 3 or state == 2:
+                s = "3"
+            elif worstsvc == 1:
+                s = "1"
+            else:
+                s = "0"
+>>>>>>> upstream/master
             url = "view.py?view_name=host&site=%s&host=%s" % (html.urlencode(site),
                                                               html.urlencode(host))
             html.open_td(class_=["state", "state%s" % s])

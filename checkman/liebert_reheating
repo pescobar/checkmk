@@ -4,9 +4,16 @@ catalog: hw/environment/emerson
 license: GPL
 distribution: check_mk
 description:
+<<<<<<< HEAD
 
  This check monitors the capacity of reheating utilization in percent.
 
 inventory:
 
  One service will be created
+=======
+ This check monitors the capacity of reheating utilization in percent.
+
+inventory:
+ One service is created.
+>>>>>>> upstream/master

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,6 +24,13 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 from cmk.gui.i18n import _
 from cmk.gui.valuespec import (
@@ -57,11 +65,19 @@ cpu_util_common_dict = Dictionary(
                  Age(title=_("Warning after "), default_value=5 * 60),
                  Age(title=_("Critical after "), default_value=15 * 60),
              ],
+<<<<<<< HEAD
              help=_(
                  "With this configuration, check_mk will alert if the total CPU is "
                  "exceeding a utilization threshold over an extended period of time. "
                  "ATTENTION: This configuration cannot be used for check <i>lparstat_aix.cpu_util</i>!"
              ))),
+=======
+             help=
+             _("With this configuration, check_mk will alert if the actual (not averaged) total CPU is "
+               "exceeding a utilization threshold over an extended period of time. "
+               "ATTENTION: This configuration cannot be used for check <i>lparstat_aix.cpu_util</i>!"
+              ))),
+>>>>>>> upstream/master
         ("core_util_time",
          Tuple(title=_("Levels over an extended time period on a single core CPU utilization"),
                elements=[
@@ -86,6 +102,49 @@ cpu_util_common_dict = Dictionary(
              default_value=15,
              label=_("Compute average over last "),
          )),
+<<<<<<< HEAD
+=======
+        ("average_single",
+         Dictionary(
+             title=_("Averaging for single cores"),
+             help=_("Compute averaged single-core CPU utilizations. Note that this option only has "
+                    "an effect if at least one of the sub-options 'Apply single-core levels' or "
+                    "'Graphs for averaged single-core utilizations' is enabled."),
+             elements=[
+                 ("time_average",
+                  Integer(
+                      title=_("Time frame"),
+                      unit=_("minutes"),
+                      minvalue=1,
+                      default_value=15,
+                      label=_("Compute average over last "),
+                  )),
+                 ("apply_levels",
+                  DropdownChoice(
+                      title=_("Apply single-core levels defined in 'Levels on single cores'"),
+                      help=_("Apply the levels for single cores to the averaged instead of the "
+                             "instantaneous utilizations."),
+                      choices=[
+                          (True, _("Enable")),
+                          (False, _("Disable")),
+                      ],
+                      default_value=False,
+                  )),
+                 ("show_graph",
+                  DropdownChoice(
+                      title=_("Graphs for averaged single-core utilizations"),
+                      help=_("Create a separate graph showing the averaged single-core CPU "
+                             "utilizations."),
+                      choices=[
+                          (True, _("Enable")),
+                          (False, _("Disable")),
+                      ],
+                      default_value=False,
+                  )),
+             ],
+             optional_keys=False,
+         )),
+>>>>>>> upstream/master
         ("util",
          Levels(
              title=_("Levels on total CPU utilization"),
@@ -197,7 +256,11 @@ rulespec_registry.register(
 def _transform_cpu_utilization(params):
     if params is None:
         return {}
+<<<<<<< HEAD
     if isinstance(params, Tuple):
+=======
+    if isinstance(params, tuple):
+>>>>>>> upstream/master
         return {"util": params}
     return params
 

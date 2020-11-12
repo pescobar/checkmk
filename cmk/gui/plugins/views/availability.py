@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -36,10 +37,66 @@ from cmk.gui.table import table_element
 import cmk.gui.bi as bi
 from cmk.gui.i18n import _
 from cmk.gui.globals import html
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+import time
+import itertools
+from typing import List, TYPE_CHECKING, Set, Tuple, Iterator
+
+import cmk.utils.version as cmk_version
+import cmk.utils.render
+from cmk.utils.defines import (
+    host_state_name,
+    service_state_name,
+)
+
+import cmk.gui.config as config
+
+import cmk.gui.availability as availability
+from cmk.gui.availability import (
+    AVObjectType,
+    AVOptions,
+    AVObjectSpec,
+    AVSpan,
+    AVMode,
+    AVRowCells,
+    AVObjectCells,
+    AVData,
+    AVRawData,
+    AVEntry,
+    AVTimeRange,
+    AVOptionValueSpecs,
+)
+from cmk.gui.table import table_element, Table
+
+import cmk.gui.bi as bi
+from cmk.gui.i18n import _
+from cmk.gui.globals import html, request
+from cmk.gui.htmllib import HTML
+from cmk.gui.breadcrumb import BreadcrumbItem, Breadcrumb
+from cmk.gui.page_menu import (
+    PageMenu,
+    PageMenuDropdown,
+    PageMenuTopic,
+    PageMenuEntry,
+    PageMenuSidePopup,
+    make_simple_link,
+    make_simple_form_page_menu,
+)
+>>>>>>> upstream/master
 
 from cmk.gui.exceptions import MKUserError
 
 from cmk.gui.valuespec import (
+<<<<<<< HEAD
+=======
+    ValueSpec,
+>>>>>>> upstream/master
     Checkbox,
     TextAreaUnicode,
     TextAscii,
@@ -48,13 +105,36 @@ from cmk.gui.valuespec import (
     Optional,
     AbsoluteDate,
     DropdownChoice,
+<<<<<<< HEAD
+=======
+    MonitoringState,
+    HostState,
+>>>>>>> upstream/master
 )
 
 from cmk.gui.plugins.views import (
     view_title,
     display_options,
+<<<<<<< HEAD
 )
 
+=======
+    format_plugin_output,
+)
+
+from cmk.gui.utils.urls import makeuri, make_confirm_link
+
+from cmk.gui.visuals import page_menu_dropdown_add_to_visual
+
+if TYPE_CHECKING:
+    from cmk.gui.type_defs import (
+        FilterHeaders,
+        Rows,
+        HTTPVariables,
+    )
+    from cmk.gui.views import View
+
+>>>>>>> upstream/master
 # Variable name conventions
 # av_rawdata: a two tier dict: (site, host) -> service -> list(spans)
 #   In case of BI (site, host) is (None, aggr_group), service is aggr_name
@@ -74,6 +154,7 @@ from cmk.gui.plugins.views import (
 #   '----------------------------------------------------------------------'
 
 
+<<<<<<< HEAD
 # Get availability options without rendering the valuespecs
 def get_availability_options_from_url(what):
     with html.plugged():
@@ -88,23 +169,33 @@ def render_availability_options(what):
         html.request.del_vars("avo_")
         html.request.del_var("avoptions")
 
+=======
+def get_availability_options_from_request(what: AVObjectType) -> AVOptions:
+>>>>>>> upstream/master
     avoptions = availability.get_default_avoptions()
 
     # Users of older versions might not have all keys set. The following
     # trick will merge their options with our default options.
     avoptions.update(config.user.load_file("avoptions", {}))
 
+<<<<<<< HEAD
     is_open = False
     html.begin_form("avoptions")
     html.hidden_field("avoptions", "set")
     avoption_entries = availability.get_avoption_entries(what)
     if html.request.var("avoptions") == "set":
         for name, height, _show_in_reporting, vs in avoption_entries:
+=======
+    avoption_entries = availability.get_av_display_options(what)
+    if html.request.var("avoptions") == "set":
+        for name, _height, _show_in_reporting, vs in avoption_entries:
+>>>>>>> upstream/master
             try:
                 avoptions[name] = vs.from_html_vars("avo_" + name)
                 vs.validate_value(avoptions[name], "avo_" + name)
             except MKUserError as e:
                 html.add_user_error(e.varname, e)
+<<<<<<< HEAD
                 is_open = True
 
     if html.request.var("_unset_logrow_limit") == "1":
@@ -115,12 +206,17 @@ def render_availability_options(what):
         if name == 'rangespec':
             range_vs = vs
 
+=======
+
+    range_vs = availability.vs_rangespec()
+>>>>>>> upstream/master
     try:
         range_, range_title = range_vs.compute_range(avoptions["rangespec"])
         avoptions["range"] = range_, range_title
     except MKUserError as e:
         html.add_user_error(e.varname, e)
 
+<<<<<<< HEAD
     if html.has_user_errors():
         html.show_user_errors()
 
@@ -132,14 +228,66 @@ def render_availability_options(what):
         remove_prefix="avo_",
         delvars=["apply", "filled_in"],
     ))
-
-    html.hidden_fields()
-    html.end_form()
+=======
+    if html.request.var("_unset_logrow_limit") == "1":
+        avoptions["logrow_limit"] = 0
 
     if html.form_submitted():
         config.user.save_file("avoptions", avoptions)
 
     return avoptions
+
+
+def _handle_availability_option_reset() -> None:
+    if html.request.var("_reset"):
+        config.user.save_file("avoptions", {})
+        html.request.del_vars("avo_")
+        html.request.del_var("avoptions")
+
+
+def _show_availability_options(option_type: str, what: AVObjectType, avoptions: AVOptions,
+                               valuespecs: AVOptionValueSpecs) -> None:
+    html.begin_form("avoptions")
+    html.hidden_field("avoptions", "set")
+
+    _show_availability_options_controls()
+
+    container_id = "av_options_%s" % option_type
+    html.open_div(id_=container_id, class_="side_popup_content")
+    if html.has_user_errors():
+        html.show_user_errors()
+
+    for name, height, _show_in_reporting, vs in valuespecs:
+        html.render_floating_option(name, height, "avo_", vs, avoptions.get(name))
+    html.close_div()
+>>>>>>> upstream/master
+
+    html.hidden_fields()
+    html.end_form()
+
+<<<<<<< HEAD
+    if html.form_submitted():
+        config.user.save_file("avoptions", avoptions)
+
+    return avoptions
+=======
+
+def _show_availability_options_controls() -> None:
+    html.open_div(class_="side_popup_controls")
+
+    html.open_div(class_="update_buttons")
+    html.button("apply", _("Apply"), "submit")
+    reset_url = makeuri(
+        request,
+        [("_reset", "1")],
+        remove_prefix="avo_",
+        delvars=["apply", "filled_in"],
+    )
+    html.buttonlink(reset_url, _("Reset"))
+    html.close_div()
+
+    html.close_div()
+>>>>>>> upstream/master
 
 
 #.
@@ -168,12 +316,18 @@ def render_availability_options(what):
 # Render the page showing availability table or timelines. It
 # is (currently) called by views.py, when showing a view but
 # availability mode is activated.
+<<<<<<< HEAD
 def render_availability_page(view, context, filterheaders):
     config.user.need_permission("general.see_availability")
 
     if handle_edit_annotations():
         return
 
+=======
+def show_availability_page(view: 'View', filterheaders: 'FilterHeaders') -> None:
+    config.user.need_permission("general.see_availability")
+
+>>>>>>> upstream/master
     # We make reports about hosts, services or BI aggregates
     if "service" in view.datasource.infos:
         what = "service"
@@ -182,6 +336,7 @@ def render_availability_page(view, context, filterheaders):
     else:
         what = "host"
 
+<<<<<<< HEAD
     avoptions = get_availability_options_from_url(what)
     time_range, range_title = avoptions["range"]
 
@@ -190,6 +345,18 @@ def render_availability_page(view, context, filterheaders):
     # - Show timeline                   "timeline"
     # --> controlled by URL variable "av_mode"
     av_mode = html.request.var("av_mode", "table")
+=======
+    _handle_availability_option_reset()
+    avoptions = get_availability_options_from_request(what)
+    time_range: AVTimeRange = avoptions["range"][0]
+    range_title: str = avoptions["range"][1]
+
+    # We have two display modes:
+    # - Show availability table (stats) "availability"
+    # - Show timeline                   "timeline"
+    # --> controlled by URL variable "av_mode"
+    av_mode = html.request.get_ascii_input_mandatory("av_mode", "availability")
+>>>>>>> upstream/master
 
     if av_mode == "timeline":
         title = _("Availability Timeline")
@@ -202,31 +369,73 @@ def render_availability_page(view, context, filterheaders):
     # --> controlled by URL variables "av_site", "av_host" and "av_service"
     # --> controlled by "av_aggr" in case of BI aggregate
     title += " - "
+<<<<<<< HEAD
     if html.request.var("av_host"):
         av_object = (html.request.var("av_site"), html.request.var("av_host"),
                      html.request.var("av_service"))
+=======
+    av_object: AVObjectSpec = None
+    if html.request.var("av_host"):
+        av_object = (html.request.get_str_input_mandatory("av_site"),
+                     html.request.get_str_input_mandatory("av_host"),
+                     html.request.get_unicode_input_mandatory("av_service"))
+>>>>>>> upstream/master
         title += av_object[1]
         if av_object[2]:
             title += " - " + av_object[2]
     elif html.request.var("av_aggr"):
+<<<<<<< HEAD
         av_object = (None, None, html.request.var("av_aggr"))
         title += av_object[2]
     else:
         av_object = None
         title += view_title(view.spec)
 
+=======
+        av_object = (None, None, html.request.get_unicode_input_mandatory("av_aggr"))
+        title += av_object[2]
+    else:
+        title += view_title(view.spec)
+
+    title += " - " + range_title
+
+    breadcrumb = view.breadcrumb()
+    breadcrumb.append(BreadcrumbItem(
+        title=title,
+        url=breadcrumb[-1].url + "&mode=availability",
+    ))
+
+    if handle_edit_annotations(breadcrumb):
+        return
+
+>>>>>>> upstream/master
     # Deletion must take place before computation, since it affects the outcome
     with html.plugged():
         handle_delete_annotations()
         confirmation_html_code = html.drain()
 
+<<<<<<< HEAD
+=======
+    # Remove variables for editing annotations, otherwise they will make it into the uris
+    html.request.del_vars("anno_")
+    if html.request.var("filled_in") == "editanno":
+        html.request.del_var("filled_in")
+    # Re-read the avoptions again, because the HTML vars have changed above (anno_ and editanno_ has
+    # been removed, which must not be part of the form
+    avoptions = get_availability_options_from_request(what)
+
+>>>>>>> upstream/master
     # Now compute all data, we need this also for CSV export
     if not html.has_user_errors():
         include_long_output = av_mode == "timeline" \
                 and "timeline_long_output" in avoptions["labelling"]
         av_rawdata, has_reached_logrow_limit = availability.get_availability_rawdata(
             what,
+<<<<<<< HEAD
             context,
+=======
+            view.context,
+>>>>>>> upstream/master
             filterheaders,
             view.only_sites,
             av_object=av_object,
@@ -237,15 +446,22 @@ def render_availability_page(view, context, filterheaders):
 
     # Do CSV ouput
     if html.output_format == "csv_export" and config.user.may("general.csv_export"):
+<<<<<<< HEAD
         output_availability_csv(what, av_data, avoptions)
         return
 
     title += " - " + range_title
 
+=======
+        _output_csv(what, av_mode, av_data, avoptions)
+        return
+
+>>>>>>> upstream/master
     if display_options.enabled(display_options.H):
         html.body_start(title, force=True)
 
     if display_options.enabled(display_options.T):
+<<<<<<< HEAD
         html.top_heading(title)
 
     html.write(confirmation_html_code)
@@ -307,6 +523,18 @@ def render_availability_page(view, context, filterheaders):
     # Render the avoptions again to get the HTML code, because the HTML vars have changed
     # above (anno_ and editanno_ has been removed, which must not be part of the form
     avoptions = render_availability_options(what)
+=======
+        html.top_heading(title,
+                         breadcrumb,
+                         page_menu=_page_menu_availability(breadcrumb, view, what, av_mode,
+                                                           av_object, time_range, avoptions)
+                         if display_options.enabled(display_options.B) else None)
+
+    if html.has_user_errors():
+        html.final_javascript("cmk.page_menu.open_popup('avoptions');")
+
+    html.write(confirmation_html_code)
+>>>>>>> upstream/master
 
     if not html.has_user_errors():
         # If we abolish the limit we have to fetch the data again
@@ -318,7 +546,11 @@ def render_availability_page(view, context, filterheaders):
                 "matched entries and the result might be incomplete. ") % avoptions["logrow_limit"]
             text += html.render_a(
                 _('Repeat query without limit.'),
+<<<<<<< HEAD
                 html.makeuri([("_unset_logrow_limit", "1"), ("avo_logrow_limit", 0)]))
+=======
+                makeuri(request, [("_unset_logrow_limit", "1"), ("avo_logrow_limit", 0)]))
+>>>>>>> upstream/master
             html.show_warning(text)
 
         do_render_availability(what, av_rawdata, av_data, av_mode, av_object, avoptions)
@@ -330,8 +562,151 @@ def render_availability_page(view, context, filterheaders):
         html.body_end()
 
 
+<<<<<<< HEAD
 def do_render_availability(what, av_rawdata, av_data, av_mode, av_object, avoptions):
 
+=======
+def _page_menu_availability(breadcrumb: Breadcrumb, view, what: AVObjectType, av_mode: AVMode,
+                            av_object: AVObjectSpec, time_range: AVTimeRange,
+                            avoptions: AVOptions) -> PageMenu:
+    menu = PageMenu(
+        dropdowns=[
+            PageMenuDropdown(
+                name="availability",
+                title=_("Availability"),
+                topics=[
+                    PageMenuTopic(
+                        title=_("Options"),
+                        entries=[
+                            PageMenuEntry(
+                                title=_("Change display options"),
+                                icon_name="painteroptions",
+                                item=PageMenuSidePopup(
+                                    _render_avoptions_form(
+                                        "display", what, avoptions,
+                                        availability.get_av_display_options(what)),),
+                                name="avoptions_display",
+                            ),
+                            PageMenuEntry(
+                                title=_("Change computation options"),
+                                icon_name="av_computation",
+                                item=PageMenuSidePopup(
+                                    _render_avoptions_form(
+                                        "computation", what, avoptions,
+                                        availability.get_av_computation_options()),),
+                                name="avoptions_computation",
+                            )
+                        ],
+                    ),
+                    PageMenuTopic(
+                        title=_("Display mode"),
+                        entries=list(
+                            _page_menu_entries_av_mode(what, av_mode, av_object, time_range)),
+                    ),
+                ],
+            )
+        ] + page_menu_dropdown_add_to_visual(add_type="availability", name=view.name) + [
+            PageMenuDropdown(
+                name="related",
+                title=_("Related"),
+                topics=[
+                    PageMenuTopic(
+                        title=_("Monitoring"),
+                        entries=[
+                            PageMenuEntry(
+                                title=_("Status view"),
+                                icon_name="status",
+                                item=make_simple_link(makeuri(request, [("mode", "status")])),
+                            ),
+                        ],
+                    ),
+                ],
+            ),
+            PageMenuDropdown(
+                name="export",
+                title=_("Export"),
+                topics=[
+                    PageMenuTopic(
+                        title=_("Data"),
+                        entries=list(_page_menu_entries_export_data()),
+                    ),
+                    PageMenuTopic(
+                        title=_("Reports"),
+                        entries=list(_page_menu_entries_export_reporting()),
+                    ),
+                ],
+            ),
+        ],
+        breadcrumb=breadcrumb,
+    )
+
+    return menu
+
+
+def _render_avoptions_form(option_type: str, what: AVObjectType, avoptions: AVOptions,
+                           valuespecs: AVOptionValueSpecs) -> str:
+    with html.plugged():
+        _show_availability_options(option_type, what, avoptions, valuespecs)
+        return html.drain()
+
+
+def _page_menu_entries_av_mode(what: AVObjectType, av_mode: AVMode, av_object: AVObjectSpec,
+                               time_range: AVTimeRange) -> Iterator[PageMenuEntry]:
+
+    if av_mode == "timeline" or av_object:
+        yield PageMenuEntry(
+            title=_("Availability"),
+            icon_name="availability",
+            item=make_simple_link(
+                makeuri(request, [("av_mode", "availability"), ("av_host", ""), ("av_aggr", "")])),
+        )
+        return
+
+    if what != "bi" and not av_object:
+        yield PageMenuEntry(
+            title=_("Timeline"),
+            icon_name="timeline",
+            item=make_simple_link(makeuri(request, [("av_mode", "timeline")])),
+        )
+        return
+
+    if av_mode == "timeline" and what != "bi":
+        history_url = availability.history_url_of(av_object, time_range)
+        yield PageMenuEntry(
+            title=_("History"),
+            icon_name="history",
+            item=make_simple_link(history_url),
+        )
+
+
+def _page_menu_entries_export_data() -> Iterator[PageMenuEntry]:
+    if not config.user.may("general.csv_export"):
+        return
+
+    yield PageMenuEntry(
+        title=_("Export CSV"),
+        icon_name="download_csv",
+        item=make_simple_link(makeuri(request, [("output_format", "csv_export")])),
+    )
+
+
+def _page_menu_entries_export_reporting() -> Iterator[PageMenuEntry]:
+    if not config.reporting_available():
+        return
+
+    if not config.user.may("general.reporting") or not config.user.may("general.instant_reports"):
+        return
+
+    yield PageMenuEntry(
+        title=_("This view as PDF"),
+        icon_name="report",
+        item=make_simple_link(makeuri(request, [], filename="report_instant.py")),
+    )
+
+
+def do_render_availability(what: AVObjectType, av_rawdata: AVRawData, av_data: AVData,
+                           av_mode: AVMode, av_object: AVObjectSpec, avoptions: AVOptions) -> None:
+>>>>>>> upstream/master
     if av_mode == "timeline":
         render_availability_timelines(what, av_data, avoptions)
     else:
@@ -344,7 +719,11 @@ def do_render_availability(what, av_rawdata, av_data, av_mode, av_object, avopti
 
 def render_availability_tables(availability_tables, what, avoptions):
     if not availability_tables:
+<<<<<<< HEAD
         html.message(_("No matching hosts/services."))
+=======
+        html.show_message(_("No matching hosts/services."))
+>>>>>>> upstream/master
         return
 
     for group_title, availability_table in availability_tables:
@@ -352,7 +731,11 @@ def render_availability_tables(availability_tables, what, avoptions):
 
     # Legend for Availability levels
     av_levels = avoptions["av_levels"]
+<<<<<<< HEAD
     if av_levels and not "omit_av_levels" in avoptions["labelling"]:
+=======
+    if av_levels and "omit_av_levels" not in avoptions["labelling"]:
+>>>>>>> upstream/master
         warn, crit = av_levels
         html.open_div(class_="avlegend levels")
         html.h3(_("Availability levels"))
@@ -371,17 +754,32 @@ def render_availability_tables(availability_tables, what, avoptions):
         render_timeline_legend(what)
 
 
+<<<<<<< HEAD
 def render_availability_timelines(what, av_data, avoptions):
     for timeline_nr, av_entry in enumerate(av_data):
         render_availability_timeline(what, av_entry, avoptions, timeline_nr)
 
 
 def render_availability_timeline(what, av_entry, avoptions, timeline_nr):
+=======
+def render_availability_timelines(what: AVObjectType, av_data: AVData,
+                                  avoptions: AVOptions) -> None:
+    for timeline_nr, av_entry in enumerate(av_data):
+        _render_availability_timeline(what, av_entry, avoptions, timeline_nr)
+
+
+def _render_availability_timeline(what: AVObjectType, av_entry: AVEntry, avoptions: AVOptions,
+                                  timeline_nr: int) -> None:
+>>>>>>> upstream/master
     html.open_h3()
     html.write("%s %s" % (_("Timeline of"), availability.object_title(what, av_entry)))
     html.close_h3()
 
     timeline_rows = av_entry["timeline"]
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/master
     if not timeline_rows:
         html.div(_("No information available"), class_="info")
         return
@@ -393,12 +791,17 @@ def render_availability_timeline(what, av_entry, avoptions, timeline_nr):
         avoptions,
         "standalone",
     )
+<<<<<<< HEAD
     render_timeline_bar(timeline_layout, "standalone", timeline_nr)
 
     # TODO: Hier fehlt bei BI der Timewarpcode (also der Baum im Zauberzustand)
     # if what == "bi":
     #    render_timewarp(
     # soso..
+=======
+
+    render_timeline_bar(timeline_layout, "standalone", timeline_nr)
+>>>>>>> upstream/master
 
     # Table with detailed events
     with table_element("av_timeline", "", css="timelineevents", sortable=False,
@@ -408,22 +811,44 @@ def render_availability_timeline(what, av_entry, avoptions, timeline_nr):
                 id_="timetable_%d_entry_%d" % (timeline_nr, row_nr),
                 onmouseover="cmk.availability.timetable_hover(%d, %d, 1);" % (timeline_nr, row_nr),
                 onmouseout="cmk.availability.timetable_hover(%d, %d, 0);" % (timeline_nr, row_nr))
+<<<<<<< HEAD
             table.cell(_("Links"), css="buttons")
             if what == "bi":
                 url = html.makeuri([("timewarp", str(int(row["from"])))])
                 if html.request.var("timewarp") and int(html.request.var("timewarp")) == int(
                         row["from"]):
+=======
+
+            table.cell(_("Links"), css="buttons")
+            if what == "bi":
+                url = makeuri(request, [("timewarp", str(int(row["from"])))])
+                if html.request.var("timewarp") and html.request.get_integer_input_mandatory(
+                        "timewarp") == int(row["from"]):
+>>>>>>> upstream/master
                     html.disabled_icon_button("timewarp_off")
                 else:
                     html.icon_button(url,
                                      _("Time warp - show BI aggregate during this time period"),
                                      "timewarp")
             else:
+<<<<<<< HEAD
                 url = html.makeuri([("anno_site", av_entry["site"]),
                                     ("anno_host", av_entry["host"]),
                                     ("anno_service", av_entry["service"]),
                                     ("anno_from", str(row["from"])),
                                     ("anno_until", str(row["until"]))])
+=======
+                url = makeuri(
+                    request,
+                    [
+                        ("anno_site", av_entry["site"]),
+                        ("anno_host", av_entry["host"]),
+                        ("anno_service", av_entry["service"]),
+                        ("anno_from", str(row["from"])),
+                        ("anno_until", str(row["until"])),
+                    ],
+                )
+>>>>>>> upstream/master
                 html.icon_button(url, _("Create an annotation for this period"), "annotation")
 
             table.cell(_("From"), row["from_text"], css="nobr narrow")
@@ -432,17 +857,30 @@ def render_availability_timeline(what, av_entry, avoptions, timeline_nr):
             table.cell(_("State"), row["state_name"], css=row["css"] + " state narrow")
 
             if "omit_timeline_plugin_output" not in avoptions["labelling"]:
+<<<<<<< HEAD
                 table.cell(_("Last Known Plugin Output"), row.get("log_output", ""))
 
             if "timeline_long_output" in avoptions["labelling"]:
                 table.cell(_("Last Known Long Output"), row.get("long_log_output", ""))
+=======
+                table.cell(_("Last known summary"),
+                           format_plugin_output(row.get("log_output", ""), row))
+
+            if "timeline_long_output" in avoptions["labelling"]:
+                table.cell(_("Last known details"),
+                           format_plugin_output(row.get("long_log_output", ""), row))
+>>>>>>> upstream/master
 
     # Legend for timeline
     if "display_timeline_legend" in avoptions["labelling"]:
         render_timeline_legend(what)
 
 
+<<<<<<< HEAD
 def render_timeline_legend(what):
+=======
+def render_timeline_legend(what: AVObjectType) -> None:
+>>>>>>> upstream/master
     html.open_div(class_="avlegend timeline")
 
     html.h3(_('Timeline colors'))
@@ -513,7 +951,11 @@ def render_availability_table(group_title, availability_table, what, avoptions):
             if show_urls:
                 table.cell("", "")  # Empty cell in URLs column
             table.cell("", _("Summary"), css="heading")
+<<<<<<< HEAD
             for _x in xrange(1, len(av_table["object_titles"])):
+=======
+            for _x in range(1, len(av_table["object_titles"])):
+>>>>>>> upstream/master
                 table.cell("", "")  # empty cells, of more object titles than one
             if show_timeline:
                 table.cell("", "")
@@ -524,7 +966,12 @@ def render_availability_table(group_title, availability_table, what, avoptions):
 
 def render_timeline_bar(timeline_layout, style, timeline_nr=0):
     render_date = timeline_layout["render_date"]
+<<<<<<< HEAD
     from_time, until_time = timeline_layout["range"]
+=======
+    time_range: AVTimeRange = timeline_layout["range"]
+    from_time, until_time = time_range
+>>>>>>> upstream/master
     html.open_div(class_=["timelinerange", style])
 
     if style == "standalone":
@@ -579,17 +1026,54 @@ def render_timeline_bar(timeline_layout, style, timeline_nr=0):
 #   '----------------------------------------------------------------------'
 
 
+<<<<<<< HEAD
+=======
+def _get_bi_availability(avoptions, aggr_rows, timewarp):
+
+    logrow_limit = avoptions["logrow_limit"]
+    if logrow_limit == 0:
+        livestatus_limit = None
+    else:
+        livestatus_limit = (len(aggr_rows) * logrow_limit) + 1
+
+    timeline_containers, fetched_rows = availability.get_timeline_containers(
+        aggr_rows, avoptions, timewarp, livestatus_limit)
+
+    has_reached_logrow_limit = livestatus_limit and fetched_rows > livestatus_limit
+
+    spans: List[AVSpan] = []
+    for timeline_container in timeline_containers:
+        spans.extend(timeline_container.timeline)
+
+    av_rawdata = availability.spans_by_object(spans)
+
+    return timeline_containers, av_rawdata, has_reached_logrow_limit
+
+
+>>>>>>> upstream/master
 # Render availability of a BI aggregate. This is currently
 # no view and does not support display options
 # TODO: Why should we handle this in a special way? Probably because we cannot
 # get the list of BI aggregates from the statehist table but use the views
 # logic for getting the aggregates. As soon as we have cleaned of the visuals,
 # filters, contexts etc we can unify the code!
+<<<<<<< HEAD
 def render_bi_availability(title, aggr_rows):
     config.user.need_permission("general.see_availability")
 
     av_mode = html.request.var("av_mode", "availability")
     avoptions = get_availability_options_from_url("bi")
+=======
+def show_bi_availability(view: "View", aggr_rows: 'Rows') -> None:
+    config.user.need_permission("general.see_availability")
+
+    av_mode = html.request.get_ascii_input_mandatory("av_mode", "availability")
+
+    _handle_availability_option_reset()
+    avoptions = get_availability_options_from_request("bi")
+
+    title = view_title(view.spec)
+>>>>>>> upstream/master
     if av_mode == "timeline":
         title = _("Timeline of") + " " + title
     else:
@@ -597,6 +1081,7 @@ def render_bi_availability(title, aggr_rows):
 
     if html.output_format != "csv_export":
         html.body_start(title)
+<<<<<<< HEAD
         html.top_heading(title)
         html.begin_context_buttons()
         html.toggle_button("avoptions", False, "painteroptions",
@@ -646,14 +1131,75 @@ def render_bi_availability(title, aggr_rows):
             livestatus_limit + 1 if livestatus_limit is not None else None)
         if livestatus_limit and fetched_rows > livestatus_limit:
             has_reached_logrow_limit = True
+=======
+
+        breadcrumb = view.breadcrumb()
+        breadcrumb.append(
+            BreadcrumbItem(
+                title=title,
+                url=breadcrumb[-1].url + "&mode=availability",
+            ))
+
+        av_object: AVObjectSpec = None
+        if html.request.var("av_aggr"):
+            av_object = (None, None, html.request.get_unicode_input_mandatory("av_aggr"))
+
+        # Dummy time_range, this is not needed for the BI
+        page_menu = _page_menu_availability(breadcrumb, view, "bi", av_mode, av_object, (0.0, 0.0),
+                                            avoptions)
+
+        # This hack is needed because of some BI specific link. May be generalized in the future
+        if av_mode != "timeline" and len(aggr_rows) == 1:
+            dropdown = page_menu.get_dropdown_by_name("availability",
+                                                      deflt=PageMenuDropdown(
+                                                          name="availability",
+                                                          title=_("Availability"),
+                                                          topics=[]))
+            if not dropdown:
+                raise RuntimeError("Dropdown \"availability\" missing")
+
+            aggr_name = aggr_rows[0]["aggr_name"]
+            aggr_group = aggr_rows[0]["aggr_group"]
+            timeline_url = makeuri(
+                request,
+                [
+                    ("av_mode", "timeline"),
+                    ("av_aggr_name", aggr_name),
+                    ("av_aggr_group", aggr_group),
+                ],
+            )
+
+            dropdown.topics[-1].entries.append(
+                PageMenuEntry(
+                    title=_("Timeline"),
+                    icon_name="timeline",
+                    item=make_simple_link(timeline_url),
+                ))
+
+        html.top_heading(title, breadcrumb, page_menu)
+
+        avoptions = get_availability_options_from_request("bi")
+
+    if not html.has_user_errors():
+
+        # iterate all aggregation rows
+        timewarpcode = HTML()
+        timewarp = html.request.get_integer_input("timewarp")
+
+        timeline_containers, av_rawdata, has_reached_logrow_limit = _get_bi_availability(
+            avoptions, aggr_rows, timewarp)
+>>>>>>> upstream/master
 
         for timeline_container in timeline_containers:
             tree = timeline_container.aggr_tree
             these_spans = timeline_container.timeline
             timewarp_tree_state = timeline_container.timewarp_state
 
+<<<<<<< HEAD
             spans += these_spans
 
+=======
+>>>>>>> upstream/master
             # render selected time warp for the corresponding aggregation row (should be matched by only one)
             if timewarp and timewarp_tree_state:
                 state, assumed_state, node, _subtrees = timewarp_tree_state
@@ -669,6 +1215,7 @@ def render_bi_availability(title, aggr_rows):
                     "aggr_name": node["title"],
                     "aggr_output": eff_state["output"],
                     "aggr_hosts": node["reqhosts"],
+<<<<<<< HEAD
                     "aggr_function": node["func"],
                     "aggr_group": html.request.var("aggr_group"),
                 }
@@ -678,6 +1225,17 @@ def render_bi_availability(title, aggr_rows):
                                                        expansion_level=bi.load_ex_level(),
                                                        only_problems=False,
                                                        lazy=False)
+=======
+                    "aggr_group": html.request.var("aggr_group"),
+                }
+
+                renderer = bi.FoldableTreeRendererTree(
+                    row,
+                    omit_root=False,
+                    expansion_level=config.user.bi_expansion_level,
+                    only_problems=False,
+                    lazy=False)
+>>>>>>> upstream/master
                 tdclass, htmlcode = renderer.css_class(), renderer.render()
 
                 with html.plugged():
@@ -697,7 +1255,11 @@ def render_bi_availability(title, aggr_rows):
                         if not button_back_shown and int(
                                 span["from"]) == timewarp and previous_span is not None:
                             html.icon_button(
+<<<<<<< HEAD
                                 html.makeuri([("timewarp", str(int(previous_span["from"])))]),
+=======
+                                makeuri(request, [("timewarp", str(int(previous_span["from"])))]),
+>>>>>>> upstream/master
                                 _("Jump one phase back"), "back")
                             button_back_shown = True
                         # Multiple followup spans can have the same "from" time
@@ -705,15 +1267,27 @@ def render_bi_availability(title, aggr_rows):
                         elif not button_forth_shown and previous_span and int(
                                 previous_span["from"]) == timewarp and int(
                                     span["from"]) != timewarp:
+<<<<<<< HEAD
                             html.icon_button(html.makeuri([("timewarp", str(int(span["from"])))]),
                                              _("Jump one phase forth"), "forth")
+=======
+                            html.icon_button(
+                                makeuri(
+                                    request,
+                                    [("timewarp", str(int(span["from"])))],
+                                ), _("Jump one phase forth"), "forth")
+>>>>>>> upstream/master
                             button_forth_shown = True
                         previous_span = span
                     if not button_forth_shown:
                         html.disabled_icon_button("forth_off")
 
                     html.write_text(" &nbsp; ")
+<<<<<<< HEAD
                     html.icon_button(html.makeuri([("timewarp", "")]), _("Close Timewarp"),
+=======
+                    html.icon_button(makeuri(request, [("timewarp", "")]), _("Close Timewarp"),
+>>>>>>> upstream/master
                                      "closetimewarp")
                     html.write_text("%s %s" %
                                     (_("Timewarp to "),
@@ -730,10 +1304,13 @@ def render_bi_availability(title, aggr_rows):
 
                     timewarpcode += html.drain()
 
+<<<<<<< HEAD
         # Note: 'spans_by_object' returns two arguments which are used by
         # all availability views but not by BI. There we have to take
         # only complete aggregations
         av_rawdata = availability.spans_by_object(spans, None)[0]
+=======
+>>>>>>> upstream/master
         av_data = availability.compute_availability("bi", av_rawdata, avoptions)
 
         # If we abolish the limit we have to fetch the data again
@@ -744,11 +1321,19 @@ def render_bi_availability(title, aggr_rows):
                 "<b>Note:</b> The shown data does not necessarily reflect the "
                 "matched entries and the result might be incomplete. ") % avoptions["logrow_limit"]
             text += html.render_a(_('Repeat query without limit.'),
+<<<<<<< HEAD
                                   html.makeuri([("_unset_logrow_limit", "1")]))
             html.show_warning(text)
 
         if html.output_format == "csv_export" and config.user.may("general.csv_export"):
             output_availability_csv("bi", av_data, avoptions)
+=======
+                                  makeuri(request, [("_unset_logrow_limit", "1")]))
+            html.show_warning(text)
+
+        if html.output_format == "csv_export" and config.user.may("general.csv_export"):
+            _output_csv("bi", av_mode, av_data, avoptions)
+>>>>>>> upstream/master
             return
 
         html.write(timewarpcode)
@@ -774,6 +1359,7 @@ def render_bi_availability(title, aggr_rows):
 
 
 def get_relevant_annotations(annotations, by_host, what, avoptions):
+<<<<<<< HEAD
     (from_time, until_time), _range_title = avoptions["range"]
     annos_to_render = []
     annos_rendered = set()
@@ -783,6 +1369,19 @@ def get_relevant_annotations(annotations, by_host, what, avoptions):
             for search_what in ["host", "service"]:
                 if what == "host" and search_what == "service":
                     continue  # Service notifications are not relevant for host
+=======
+    time_range: AVTimeRange = avoptions["range"][0]
+    from_time, until_time = time_range
+
+    annos_to_render = []
+    annos_rendered: Set[int] = set()
+
+    for site_host, avail_entries in by_host.items():
+        for service in avail_entries.keys():
+            for search_what in ["host", "service"]:
+                if what == "host" and search_what == "service":
+                    continue  # Service annotations are not relevant for host
+>>>>>>> upstream/master
 
                 if search_what == "host":
                     site_host_svc = site_host[0], site_host[1], None
@@ -796,7 +1395,10 @@ def get_relevant_annotations(annotations, by_host, what, avoptions):
                             annos_to_render.append((site_host_svc, annotation))
                             annos_rendered.add(id(annotation))
 
+<<<<<<< HEAD
     annos_to_render.sort(key=lambda x: (x[0], x[1]["from"]))
+=======
+>>>>>>> upstream/master
     return annos_to_render
 
 
@@ -830,6 +1432,7 @@ def show_annotations(annotations, av_rawdata, what, avoptions, omit_service):
                 ("anno_from", int(annotation["from"])),
                 ("anno_until", int(annotation["until"])),
             ]
+<<<<<<< HEAD
             edit_url = html.makeuri(anno_vars)
             html.icon_button(edit_url, _("Edit this annotation"), "edit")
             delete_url = html.makeactionuri([("_delete_annotation", "1")] + anno_vars)
@@ -837,6 +1440,19 @@ def show_annotations(annotations, av_rawdata, what, avoptions, omit_service):
 
             if not omit_service:
                 if not "omit_host" in avoptions["labelling"]:
+=======
+            edit_url = makeuri(request, anno_vars)
+            html.icon_button(edit_url, _("Edit this annotation"), "edit")
+            del_anno: 'HTTPVariables' = [("_delete_annotation", "1")]
+            delete_url = make_confirm_link(
+                url=html.makeactionuri(del_anno + anno_vars),
+                message=_("Are you sure that you want to delete this annotation?"),
+            )
+            html.icon_button(delete_url, _("Delete this annotation"), "delete")
+
+            if not omit_service:
+                if "omit_host" not in avoptions["labelling"]:
+>>>>>>> upstream/master
                     host_url = "view.py?" + html.urlencode_vars([("view_name", "hoststatus"),
                                                                  ("site", site_id), ("host", host)])
                     table.cell(_("Host"), html.render_a(host, host_url))
@@ -857,6 +1473,7 @@ def show_annotations(annotations, av_rawdata, what, avoptions, omit_service):
             table.cell(_("Until"), render_date(annotation["until"]), css="nobr narrow")
             table.cell("", css="buttons")
             if annotation.get("downtime") is True:
+<<<<<<< HEAD
                 html.icon(_("This period has been reclassified as a scheduled downtime"),
                           "downtime")
             elif annotation.get("downtime") is False:
@@ -867,10 +1484,36 @@ def show_annotations(annotations, av_rawdata, what, avoptions, omit_service):
             table.cell(_("Author"), annotation["author"])
             table.cell(_("Entry"), render_date(annotation["date"]), css="nobr narrow")
             if not cmk.is_raw_edition():
+=======
+                html.icon("downtime",
+                          _("This period has been reclassified as a scheduled downtime"))
+            elif annotation.get("downtime") is False:
+                html.icon(
+                    "nodowntime",
+                    _("This period has been reclassified as a not being a scheduled downtime"))
+            recl_host_state = annotation.get("host_state")
+            if recl_host_state is not None:
+                html.icon(
+                    "status",
+                    _("This period has been reclassified in host state to state: %s" %
+                      host_state_name(recl_host_state)))
+            recl_svc_state = annotation.get("service_state")
+            if recl_svc_state is not None:
+                html.icon(
+                    "status",
+                    _("This period has been reclassified in service state to state: %s" %
+                      service_state_name(recl_svc_state)))
+
+            table.cell(_("Annotation"), html.render_text(annotation["text"]))
+            table.cell(_("Author"), annotation["author"])
+            table.cell(_("Entry"), render_date(annotation["date"]), css="nobr narrow")
+            if not cmk_version.is_raw_edition():
+>>>>>>> upstream/master
                 table.cell(_("Hide in report"),
                            _("Yes") if annotation.get("hide_from_report") else _("No"))
 
 
+<<<<<<< HEAD
 def edit_annotation():
     site_id = html.request.var("anno_site") or ""
     hostname = html.request.var("anno_host")
@@ -885,12 +1528,34 @@ def edit_annotation():
 
     if not annotation:
         value = {
+=======
+def edit_annotation(breadcrumb: Breadcrumb) -> bool:
+    site_id, hostname, host_state, service, service_state, fromtime, \
+            untiltime, site_host_svc = _handle_anno_request_vars()
+
+    # Find existing annotation with this specification
+    annotations = availability.load_annotations()
+    annotation = availability.find_annotation(annotations, site_host_svc, host_state, service_state,
+                                              fromtime, untiltime)
+
+    if annotation:
+        value = annotation.copy()
+        value.setdefault("host_state", None)
+        value.setdefault("service_state", None)
+    else:
+        value = {
+            "host_state": None,
+            "service_state": None,
+>>>>>>> upstream/master
             "from": fromtime,
             "until": untiltime,
             "text": "",
         }
+<<<<<<< HEAD
     else:
         value = annotation.copy()
+=======
+>>>>>>> upstream/master
 
     value["host"] = hostname
     value["service"] = service
@@ -902,7 +1567,11 @@ def edit_annotation():
             value = vs.from_html_vars("_editanno")
             vs.validate_value(value, "_editanno")
 
+<<<<<<< HEAD
             site_host_svc = value["site"], value["host"], value["service"]
+=======
+            site_host_svc = (value["site"], value["host"], value["service"])
+>>>>>>> upstream/master
             del value["site"]
             del value["host"]
             value["date"] = time.time()
@@ -918,6 +1587,7 @@ def edit_annotation():
         title += "/" + service
 
     html.body_start(title)
+<<<<<<< HEAD
     html.top_heading(title)
 
     html.begin_context_buttons()
@@ -929,6 +1599,14 @@ def edit_annotation():
 
     html.button("save", _("Save"))
 
+=======
+
+    breadcrumb = _edit_annotation_breadcrumb(breadcrumb, title)
+    html.top_heading(title, breadcrumb, _edit_annotation_page_menu(breadcrumb))
+
+    html.begin_form("editanno", method="GET")
+    _vs_annotation().render_input_as_form("_editanno", value)
+>>>>>>> upstream/master
     html.hidden_fields()
     html.end_form()
 
@@ -937,17 +1615,72 @@ def edit_annotation():
     return True
 
 
+<<<<<<< HEAD
 def _vs_annotation():
     extra_elements = []
     if not cmk.is_raw_edition():
+=======
+def _edit_annotation_breadcrumb(breadcrumb: Breadcrumb, title: str) -> Breadcrumb:
+    breadcrumb.append(BreadcrumbItem(
+        title=title,
+        url=makeuri(request, []),
+    ))
+    return breadcrumb
+
+
+def _edit_annotation_page_menu(breadcrumb: Breadcrumb) -> PageMenu:
+    return make_simple_form_page_menu(breadcrumb, form_name="editanno", button_name="save")
+
+
+def _validate_reclassify_of_states(value, varprefix):
+    host_state = value.get("host_state")
+    if host_state is not None:
+        if not value.get("host"):
+            raise MKUserError("_editanno_p_host",
+                              _('Please set a hostname for host state reclassification'))
+
+    service_state = value.get("service_state")
+    if service_state is not None:
+        if not value.get("service"):
+            raise MKUserError(
+                "_editanno_p_service_value",
+                _('Please set a service description for service state reclassification'))
+
+
+def _vs_annotation():
+    extra_elements: List[Tuple[str, ValueSpec]] = []
+    if not cmk_version.is_raw_edition():
+>>>>>>> upstream/master
         extra_elements.append(("hide_from_report", Checkbox(title=_("Hide annotation in report"))))
 
     return Dictionary(
         elements=[
             ("site", TextAscii(title=_("Site"))),
             ("host", TextUnicode(title=_("Hostname"))),
+<<<<<<< HEAD
             ("service", Optional(TextUnicode(allow_empty=False), sameline=True,
                                  title=_("Service"))),
+=======
+            ("host_state",
+             Optional(
+                 HostState(),
+                 sameline=True,
+                 title=_("Host state"),
+                 label=_("Reclassify host state of this period"),
+             )),
+            ("service",
+             Optional(TextUnicode(allow_empty=False),
+                      sameline=True,
+                      title=_("Service"),
+                      label=_("Service description"))),
+            ("service_state",
+             Optional(
+                 MonitoringState(),
+                 sameline=True,
+                 title=_("Service state"),
+                 label=_("Reclassify service state of this period"),
+             )),
+>>>>>>> upstream/master
             ("from", AbsoluteDate(title=_("Start-Time"), include_time=True)),
             ("until", AbsoluteDate(title=_("End-Time"), include_time=True)),
             ("downtime",
@@ -963,12 +1696,17 @@ def _vs_annotation():
         ] + extra_elements,
         title=_("Edit annotation"),
         optional_keys=[],
+<<<<<<< HEAD
+=======
+        validate=_validate_reclassify_of_states,
+>>>>>>> upstream/master
     )
 
 
 # Called at the beginning of every availability page
 def handle_delete_annotations():
     if html.request.var("_delete_annotation"):
+<<<<<<< HEAD
         site_id = html.request.var("anno_site") or ""
         hostname = html.request.var("anno_host")
         service = html.request.var("anno_service") or None
@@ -991,17 +1729,56 @@ def handle_delete_annotations():
 
 
 def handle_edit_annotations():
+=======
+        _site_id, _hostname, _service, host_state, service_state, fromtime, \
+                untiltime, site_host_svc = _handle_anno_request_vars()
+
+        annotations = availability.load_annotations()
+        annotation = availability.find_annotation(annotations, site_host_svc, host_state,
+                                                  service_state, fromtime, untiltime)
+        if not annotation:
+            return
+
+        availability.delete_annotation(annotations, site_host_svc, host_state, service_state,
+                                       fromtime, untiltime)
+        availability.save_annotations(annotations)
+
+
+def handle_edit_annotations(breadcrumb: Breadcrumb) -> bool:
+>>>>>>> upstream/master
     # Avoid reshowing edit form after edit and reload
     if html.is_transaction() and not html.transaction_valid():
         return False
     if html.request.var("anno_host") and not html.request.var("_delete_annotation"):
+<<<<<<< HEAD
         finished = edit_annotation()
+=======
+        finished = edit_annotation(breadcrumb)
+>>>>>>> upstream/master
     else:
         finished = False
 
     return finished
 
 
+<<<<<<< HEAD
+=======
+def _handle_anno_request_vars():
+    site_id = html.request.var("anno_site") or ""
+    hostname = html.request.get_str_input_mandatory("anno_host")
+    host_state = html.request.var("anno_host_state") or None
+    service = html.request.var("anno_service") or None
+    service_state = html.request.var("anno_service_state") or None
+    fromtime = html.request.get_float_input_mandatory("anno_from")
+    untiltime = html.request.get_float_input_mandatory("anno_until")
+
+    site_host_svc = (site_id, hostname, service)
+
+    return site_id, hostname, host_state, service, service_state, fromtime, \
+            untiltime, site_host_svc
+
+
+>>>>>>> upstream/master
 #.
 #   .--CSV Export----------------------------------------------------------.
 #   |         ____ ______     __  _____                       _            |
@@ -1015,9 +1792,69 @@ def handle_edit_annotations():
 #   '----------------------------------------------------------------------'
 
 
+<<<<<<< HEAD
 def output_availability_csv(what, av_data, avoptions):
     def cells_from_row(table, group_titles, group_cells, object_titles, cell_titles, row_object,
                        row_cells):
+=======
+def _output_csv(what: AVObjectType, av_mode: AVMode, av_data: AVData, avoptions: AVOptions) -> None:
+    if av_mode == "availability":
+        _output_availability_csv(what, av_data, avoptions)
+    elif av_mode == "timeline":
+        _output_availability_timelines_csv(what, av_data, avoptions)
+    else:
+        raise NotImplementedError("Unhandled availability mode: %r" % av_mode)
+
+
+def _output_availability_timelines_csv(what: AVObjectType, av_data: AVData,
+                                       avoptions: AVOptions) -> None:
+    _av_output_set_content_disposition("Checkmk-Availability-Timeline")
+    for timeline_nr, av_entry in enumerate(av_data):
+        _output_availability_timeline_csv(what, av_entry, avoptions, timeline_nr)
+
+
+def _output_availability_timeline_csv(what: AVObjectType, av_entry: AVEntry, avoptions: AVOptions,
+                                      timeline_nr: int) -> None:
+    timeline_layout = availability.layout_timeline(
+        what,
+        av_entry["timeline"],
+        av_entry["considered_duration"],
+        avoptions,
+        "standalone",
+    )
+
+    object_cells = availability.get_object_cells(what, av_entry, avoptions["labelling"])
+
+    with table_element("av_timeline", "", output_format="csv",
+                       omit_headers=timeline_nr != 0) as table:
+        for row in timeline_layout["table"]:
+            table.row()
+
+            table.text_cell("object_type", what)
+            for cell_index, objectcell in enumerate(object_cells):
+                table.text_cell("object_name_%d" % cell_index, objectcell[0])
+
+            table.text_cell("object_title", availability.object_title(what, av_entry))
+            table.text_cell("from", row["from"])
+            table.text_cell("from_text", row["from_text"])
+            table.text_cell("until", row["until"])
+            table.text_cell("until_text", row["until_text"])
+            table.text_cell("state", row["state"])
+            table.text_cell("state_name", row["state_name"])
+            table.text_cell("duration_text", row["duration_text"])
+
+            if "omit_timeline_plugin_output" not in avoptions["labelling"]:
+                table.text_cell("log_output", row.get("log_output", ""))
+
+            if "timeline_long_output" in avoptions["labelling"]:
+                table.text_cell("long_log_output", row.get("long_log_output", ""))
+
+
+def _output_availability_csv(what: AVObjectType, av_data: AVData, avoptions: AVOptions) -> None:
+    def cells_from_row(table: Table, group_titles: List[str], group_cells: List[str],
+                       object_titles: List[str], cell_titles: List[Tuple[str, str]],
+                       row_object: AVObjectCells, row_cells: AVRowCells) -> None:
+>>>>>>> upstream/master
         for column_title, group_title in zip(group_titles, group_cells):
             table.cell(column_title, group_title)
 
@@ -1027,7 +1864,11 @@ def output_availability_csv(what, av_data, avoptions):
         for (title, _help), (text, _css) in zip(cell_titles, row_cells):
             table.cell(title, text)
 
+<<<<<<< HEAD
     av_output_set_content_disposition(_("Check_MK-Availability"))
+=======
+    _av_output_set_content_disposition("Checkmk-Availability")
+>>>>>>> upstream/master
     availability_tables = availability.compute_availability_groups(what, av_data, avoptions)
     with table_element("av_items", output_format="csv") as table:
         for group_title, availability_table in availability_tables:
@@ -1056,22 +1897,38 @@ def output_availability_csv(what, av_data, avoptions):
             table.row()
 
             if "summary" in av_table:
+<<<<<<< HEAD
+=======
+                row_object: AVObjectCells = [(_("Summary"), "")]
+                row_object += [(u"", "")] * pad
+>>>>>>> upstream/master
                 cells_from_row(
                     table,
                     group_titles,
                     group_cells,
                     av_table["object_titles"],
                     av_table["cell_titles"],
+<<<<<<< HEAD
                     [(_("Summary"), "")] + [("", "")] * pad,
+=======
+                    row_object,
+>>>>>>> upstream/master
                     av_table["summary"],
                 )
 
 
+<<<<<<< HEAD
 def av_output_set_content_disposition(title):
+=======
+def _av_output_set_content_disposition(title: str) -> None:
+>>>>>>> upstream/master
     filename = '%s-%s.csv' % (
         title,
         time.strftime('%Y-%m-%d_%H-%M-%S', time.localtime(time.time())),
     )
+<<<<<<< HEAD
     if isinstance(filename, six.text_type):
         filename = filename.encode("utf-8")
+=======
+>>>>>>> upstream/master
     html.response.headers["Content-Disposition"] = "Attachment; filename=\"%s\"" % filename

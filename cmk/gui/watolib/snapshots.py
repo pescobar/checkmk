@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -45,16 +46,64 @@ var_dir = cmk.utils.paths.var_dir + "/wato/"
 snapshot_dir = var_dir + "snapshots/"
 
 backup_domains = {}
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+import errno
+import glob
+from hashlib import sha256
+import io
+import os
+from pathlib import Path
+import shutil
+import subprocess
+import tarfile
+import time
+import traceback
+from typing import Any, List, Dict, Optional, Union
+
+from six import ensure_binary
+
+import cmk.utils
+import cmk.utils.paths
+import cmk.utils.store as store
+
+import cmk.gui.config as config
+from cmk.gui.log import logger
+from cmk.gui.watolib.changes import log_audit
+from cmk.gui.exceptions import MKGeneralException
+from cmk.gui.i18n import _
+
+DomainSpec = Dict
+
+var_dir = cmk.utils.paths.var_dir + "/wato/"
+snapshot_dir = var_dir + "snapshots/"
+
+backup_domains: Dict[str, Dict[str, Any]] = {}
+>>>>>>> upstream/master
 
 
 # TODO: Remove once new changes mechanism has been implemented
 def create_snapshot(comment):
+<<<<<<< HEAD
+=======
+    logger.debug("Start creating backup snapshot")
+    start = time.time()
+>>>>>>> upstream/master
     store.mkdir(snapshot_dir)
 
     snapshot_name = "wato-snapshot-%s.tar" % time.strftime("%Y-%m-%d-%H-%M-%S",
                                                            time.localtime(time.time()))
 
+<<<<<<< HEAD
     data = {}
+=======
+    data: Dict[str, Any] = {}
+>>>>>>> upstream/master
     data["comment"] = _("Activated changes by %s.") % config.user.id
 
     if comment:
@@ -67,13 +116,22 @@ def create_snapshot(comment):
     _do_create_snapshot(data)
     _do_snapshot_maintenance()
 
+<<<<<<< HEAD
     return snapshot_name
+=======
+    log_audit(None, "snapshot-created", _("Created snapshot %s") % snapshot_name)
+    logger.debug("Backup snapshot creation took %.4f", time.time() - start)
+>>>>>>> upstream/master
 
 
 # TODO: Remove once new changes mechanism has been implemented
 def _do_create_snapshot(data):
     snapshot_name = data["snapshot_name"]
+<<<<<<< HEAD
     work_dir = snapshot_dir + "/workdir/%s" % snapshot_name
+=======
+    work_dir = snapshot_dir.rstrip('/') + "/workdir/%s" % snapshot_name
+>>>>>>> upstream/master
 
     try:
         if not os.path.exists(work_dir):
@@ -83,11 +141,20 @@ def _do_create_snapshot(data):
         filename_target = "%s/%s" % (snapshot_dir, snapshot_name)
         filename_work = "%s/%s.work" % (work_dir, snapshot_name)
 
+<<<<<<< HEAD
         open(filename_target, "w").close()
 
         def get_basic_tarinfo(name):
             tarinfo = tarfile.TarInfo(name)
             tarinfo.mtime = time.time()
+=======
+        with open(filename_target, "wb"):
+            pass
+
+        def get_basic_tarinfo(name):
+            tarinfo = tarfile.TarInfo(name)
+            tarinfo.mtime = int(time.time())
+>>>>>>> upstream/master
             tarinfo.uid = 0
             tarinfo.gid = 0
             tarinfo.mode = 0o644
@@ -101,7 +168,11 @@ def _do_create_snapshot(data):
             tarinfo = get_basic_tarinfo(key)
             encoded_value = data[key].encode("utf-8")
             tarinfo.size = len(encoded_value)
+<<<<<<< HEAD
             tar_in_progress.addfile(tarinfo, cStringIO.StringIO(encoded_value))
+=======
+            tar_in_progress.addfile(tarinfo, io.BytesIO(encoded_value))
+>>>>>>> upstream/master
 
         tar_in_progress.close()
 
@@ -118,6 +189,7 @@ def _do_create_snapshot(data):
                 "tar", "czf", path_subtar, "--ignore-failed-read", "--force-local", "-C", prefix
             ] + paths
 
+<<<<<<< HEAD
             proc = subprocess.Popen(command,
                                     stdin=None,
                                     close_fds=True,
@@ -126,21 +198,51 @@ def _do_create_snapshot(data):
                                     cwd=prefix)
             _stdout, stderr = proc.communicate()
             exit_code = proc.wait()
+=======
+            proc_create = subprocess.Popen(
+                command,
+                stdin=None,
+                close_fds=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                cwd=prefix,
+                encoding="utf-8",
+            )
+            _stdout, stderr = proc_create.communicate()
+            exit_code = proc_create.wait()
+>>>>>>> upstream/master
             # Allow exit codes 0 and 1 (files changed during backup)
             if exit_code not in [0, 1]:
                 raise MKGeneralException(
                     "Error while creating backup of %s (Exit Code %d) - %s.\n%s" %
                     (name, exit_code, stderr, command))
 
+<<<<<<< HEAD
             subtar_hash = sha256(open(path_subtar).read()).hexdigest()
             subtar_signed = sha256(subtar_hash + _snapshot_secret()).hexdigest()
+=======
+            with open(path_subtar, "rb") as subtar:
+                subtar_hash = sha256(subtar.read()).hexdigest()
+
+            subtar_signed = sha256(ensure_binary(subtar_hash) + _snapshot_secret()).hexdigest()
+>>>>>>> upstream/master
             subtar_info[filename_subtar] = (subtar_hash, subtar_signed)
 
             # Append tar.gz subtar to snapshot
             command = ["tar", "--append", "--file=" + filename_work, filename_subtar]
+<<<<<<< HEAD
             proc = subprocess.Popen(command, cwd=work_dir, close_fds=True)
             proc.communicate()
             exit_code = proc.wait()
+=======
+            proc_append = subprocess.Popen(
+                command,
+                cwd=work_dir,
+                close_fds=True,
+            )
+            proc_append.communicate()
+            exit_code = proc_append.wait()
+>>>>>>> upstream/master
 
             if os.path.exists(filename_subtar):
                 os.unlink(filename_subtar)
@@ -155,7 +257,11 @@ def _do_create_snapshot(data):
         tar_in_progress = tarfile.open(filename_work, "a")
         tarinfo = get_basic_tarinfo("checksums")
         tarinfo.size = len(info)
+<<<<<<< HEAD
         tar_in_progress.addfile(tarinfo, cStringIO.StringIO(info))
+=======
+        tar_in_progress.addfile(tarinfo, io.BytesIO(ensure_binary(info)))
+>>>>>>> upstream/master
         tar_in_progress.close()
 
         shutil.move(filename_work, filename_target)
@@ -190,7 +296,11 @@ def get_snapshot_status(snapshot, validate_checksums=False, check_correct_core=T
         file_stream = None
 
     # Defaults of available keys
+<<<<<<< HEAD
     status = {
+=======
+    status: Dict[str, Any] = {
+>>>>>>> upstream/master
         "name": "",
         "total_size": 0,
         "type": None,
@@ -216,8 +326,12 @@ def get_snapshot_status(snapshot, validate_checksums=False, check_correct_core=T
             size = statinfo.st_size
         if size < 256:
             raise MKGeneralException(_("Invalid snapshot (too small)"))
+<<<<<<< HEAD
         else:
             status["total_size"] = size
+=======
+        status["total_size"] = size
+>>>>>>> upstream/master
 
     def check_extension():
         # Check snapshot extension: tar or tar.gz
@@ -228,7 +342,11 @@ def get_snapshot_status(snapshot, validate_checksums=False, check_correct_core=T
             raise MKGeneralException(_("Invalid snapshot (incorrect file extension)"))
 
     def check_content():
+<<<<<<< HEAD
         status["files"] = access_snapshot(multitar.list_tar_content)
+=======
+        status["files"] = access_snapshot(_list_tar_content)
+>>>>>>> upstream/master
 
         if status.get("type") == "legacy":
             allowed_files = ["%s.tar" % x[1] for x in _get_default_backup_domains()]
@@ -241,7 +359,11 @@ def get_snapshot_status(snapshot, validate_checksums=False, check_correct_core=T
                 if entry in status["files"]:
 
                     def handler(x, entry=entry):
+<<<<<<< HEAD
                         return multitar.get_file_content(x, entry)
+=======
+                        return _get_file_content(x, entry).decode("utf-8")
+>>>>>>> upstream/master
 
                     status[entry] = access_snapshot(handler)
                 else:
@@ -251,9 +373,14 @@ def get_snapshot_status(snapshot, validate_checksums=False, check_correct_core=T
         if "check_mk.tar.gz" not in status["files"]:
             return
 
+<<<<<<< HEAD
         cmk_tar = cStringIO.StringIO(
             access_snapshot(lambda x: multitar.get_file_content(x, 'check_mk.tar.gz')))
         files = multitar.list_tar_content(cmk_tar)
+=======
+        cmk_tar = io.BytesIO(access_snapshot(lambda x: _get_file_content(x, 'check_mk.tar.gz')))
+        files = _list_tar_content(cmk_tar)
+>>>>>>> upstream/master
         using_cmc = os.path.exists(cmk.utils.paths.omd_root + '/etc/check_mk/conf.d/microcore.mk')
         snapshot_cmc = 'conf.d/microcore.mk' in files
         if using_cmc and not snapshot_cmc:
@@ -261,7 +388,11 @@ def get_snapshot_status(snapshot, validate_checksums=False, check_correct_core=T
                 _('You are currently using the Check_MK Micro Core, but this snapshot does not use the '
                   'Check_MK Micro Core. If you need to migrate your data, you could consider changing '
                   'the core, restoring the snapshot and changing the core back again.'))
+<<<<<<< HEAD
         elif not using_cmc and snapshot_cmc:
+=======
+        if not using_cmc and snapshot_cmc:
+>>>>>>> upstream/master
             raise MKGeneralException(
                 _('You are currently not using the Check_MK Micro Core, but this snapshot uses the '
                   'Check_MK Micro Core. If you need to migrate your data, you could consider changing '
@@ -284,7 +415,11 @@ def get_snapshot_status(snapshot, validate_checksums=False, check_correct_core=T
             return
 
         # Extract all available checksums from the snapshot
+<<<<<<< HEAD
         checksums_raw = access_snapshot(lambda x: multitar.get_file_content(x, 'checksums'))
+=======
+        checksums_raw = access_snapshot(lambda x: _get_file_content(x, 'checksums'))
+>>>>>>> upstream/master
         checksums = {}
         for l in checksums_raw.split('\n'):
             line = l.strip()
@@ -308,11 +443,19 @@ def get_snapshot_status(snapshot, validate_checksums=False, check_correct_core=T
 
             # Get hashes of file in question
             def handler(x, filename=filename):
+<<<<<<< HEAD
                 return multitar.get_file_content(x, filename)
 
             subtar = access_snapshot(handler)
             subtar_hash = sha256(subtar).hexdigest()
             subtar_signed = sha256(subtar_hash + _snapshot_secret()).hexdigest()
+=======
+                return _get_file_content(x, filename)
+
+            subtar = access_snapshot(handler)
+            subtar_hash = sha256(subtar).hexdigest()
+            subtar_signed = sha256(ensure_binary(subtar_hash) + _snapshot_secret()).hexdigest()
+>>>>>>> upstream/master
 
             status['files'][filename]['checksum'] = (checksum == subtar_hash and
                                                      signed == subtar_signed)
@@ -331,18 +474,35 @@ def get_snapshot_status(snapshot, validate_checksums=False, check_correct_core=T
 
             # Check if this process is still running
             if os.path.exists(path_pid):
+<<<<<<< HEAD
                 if os.path.exists(path_pid) \
                    and not os.path.exists("/proc/%s" % open(path_pid).read()):
+=======
+                with Path(path_pid).open(encoding="utf-8") as f:
+                    pid = int(f.read())
+
+                if not os.path.exists("/proc/%d" % pid):
+>>>>>>> upstream/master
                     status["progress_status"] = _("ERROR: Snapshot progress no longer running!")
                     raise MKGeneralException(
                         _("Error: The process responsible for creating the snapshot is no longer running!"
                          ))
+<<<<<<< HEAD
                 else:
                     status["progress_status"] = _("Snapshot build currently in progress")
 
             # Read snapshot status file (regularly updated by snapshot process)
             if os.path.exists(path_status):
                 lines = open(path_status, "r").readlines()
+=======
+                status["progress_status"] = _("Snapshot build currently in progress")
+
+            # Read snapshot status file (regularly updated by snapshot process)
+            if os.path.exists(path_status):
+                with Path(path_status).open(encoding="utf-8") as f:
+                    lines = f.readlines()
+
+>>>>>>> upstream/master
                 status["comment"] = lines[0].split(":", 1)[1]
                 file_info = {}
                 for filename in lines[1:]:
@@ -372,6 +532,38 @@ def get_snapshot_status(snapshot, validate_checksums=False, check_correct_core=T
     return status
 
 
+<<<<<<< HEAD
+=======
+def _list_tar_content(the_tarfile: Union[str, io.BytesIO]) -> Dict[str, Dict[str, int]]:
+    files = {}
+    try:
+        if not isinstance(the_tarfile, str):
+            the_tarfile.seek(0)
+            tar = tarfile.open("r", fileobj=the_tarfile)
+        else:
+            tar = tarfile.open(the_tarfile, "r")
+        for x in tar.getmembers():
+            files.update({x.name: {"size": x.size}})
+    except Exception:
+        return {}
+    return files
+
+
+def _get_file_content(the_tarfile: Union[str, io.BytesIO], filename: str) -> bytes:
+    if not isinstance(the_tarfile, str):
+        the_tarfile.seek(0)
+        tar = tarfile.open("r", fileobj=the_tarfile)
+    else:
+        tar = tarfile.open(the_tarfile, "r")
+
+    obj = tar.extractfile(filename)
+    if obj is None:
+        raise MKGeneralException(_('Failed to extract %s') % filename)
+
+    return obj.read()
+
+
+>>>>>>> upstream/master
 def _get_default_backup_domains():
     domains = {}
     for domain, value in backup_domains.items():
@@ -380,15 +572,244 @@ def _get_default_backup_domains():
     return domains
 
 
+<<<<<<< HEAD
 def _snapshot_secret():
     path = cmk.utils.paths.default_config_dir + '/snapshot.secret'
     try:
         return open(path).read()
+=======
+def _snapshot_secret() -> bytes:
+    path = cmk.utils.paths.default_config_dir + '/snapshot.secret'
+    try:
+        return open(path, "rb").read()
+>>>>>>> upstream/master
     except IOError:
         # create a secret during first use
         try:
             s = os.urandom(256)
         except NotImplementedError:
+<<<<<<< HEAD
             s = sha256(time.time())
         open(path, 'w').write(s)
         return s
+=======
+            s = ensure_binary(str(sha256(ensure_binary(str(time.time())))))
+        open(path, 'wb').write(s)
+        return s
+
+
+def extract_snapshot(tar: tarfile.TarFile, domains: Dict[str, DomainSpec]) -> None:
+    """Used to restore a configuration snapshot for "discard changes"""
+    tar_domains = {}
+    for member in tar.getmembers():
+        try:
+            if member.name.endswith(".tar.gz"):
+                tar_domains[member.name[:-7]] = member
+        except Exception:
+            pass
+
+    # We are using the var_dir, because tmp_dir might not have enough space
+    restore_dir = cmk.utils.paths.var_dir + "/wato/snapshots/restore_snapshot"
+    if not os.path.exists(restore_dir):
+        os.makedirs(restore_dir)
+
+    def check_domain(domain: DomainSpec, tar_member: tarfile.TarInfo) -> List[str]:
+        errors = []
+
+        prefix = domain["prefix"]
+
+        def check_exists_or_writable(path_tokens: List[str]) -> bool:
+            if not path_tokens:
+                return False
+            if os.path.exists("/".join(path_tokens)):
+                if os.access("/".join(path_tokens), os.W_OK):
+                    return True  # exists and writable
+
+                errors.append(_("Permission problem: Path not writable %s") % "/".join(path_tokens))
+                return False  # not writable
+
+            return check_exists_or_writable(path_tokens[:-1])
+
+        # The complete tar file never fits in stringIO buffer..
+        tar.extract(tar_member, restore_dir)
+
+        # Older versions of python tarfile handle empty subtar archives :(
+        # This won't work: subtar = tarfile.open("%s/%s" % (restore_dir, tar_member.name))
+        p = subprocess.Popen(
+            ["tar", "tzf", "%s/%s" % (restore_dir, tar_member.name)],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            encoding="utf-8",
+        )
+        stdout, stderr = p.communicate()
+        if stderr:
+            errors.append(_("Contains corrupt file %s") % tar_member.name)
+            return errors
+
+        for line in stdout:
+            full_path = prefix + "/" + line
+            path_tokens = full_path.split("/")
+            check_exists_or_writable(path_tokens)
+
+        # Cleanup
+        os.unlink("%s/%s" % (restore_dir, tar_member.name))
+
+        return errors
+
+    def cleanup_domain(domain: DomainSpec) -> List[str]:
+        # Some domains, e.g. authorization, do not get a cleanup
+        if domain.get("cleanup") is False:
+            return []
+
+        def path_valid(prefix: str, path: str) -> bool:
+            if path.startswith("/") or path.startswith(".."):
+                return False
+            return True
+
+        # Remove old stuff
+        for what, path in domain.get("paths", {}):
+            if not path_valid(domain["prefix"], path):
+                continue
+            full_path = "%s/%s" % (domain["prefix"], path)
+            if os.path.exists(full_path):
+                if what == "dir":
+                    exclude_files = []
+                    for pattern in domain.get("exclude", []):
+                        if "*" in pattern:
+                            exclude_files.extend(glob.glob("%s/%s" % (domain["prefix"], pattern)))
+                        else:
+                            exclude_files.append("%s/%s" % (domain["prefix"], pattern))
+                    _cleanup_dir(full_path, exclude_files)
+                else:
+                    os.remove(full_path)
+        return []
+
+    def extract_domain(domain: DomainSpec, tar_member: tarfile.TarInfo) -> List[str]:
+        try:
+            target_dir = domain.get("prefix")
+            if not target_dir:
+                return []
+            # The complete tar.gz file never fits in stringIO buffer..
+            tar.extract(tar_member, restore_dir)
+
+            command = ["tar", "xzf", "%s/%s" % (restore_dir, tar_member.name), "-C", target_dir]
+            p = subprocess.Popen(
+                command,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                encoding="utf-8",
+            )
+            _stdout, stderr = p.communicate()
+            exit_code = p.wait()
+            if exit_code:
+                return ["%s - %s" % (domain["title"], stderr)]
+        except Exception as e:
+            return ["%s - %s" % (domain["title"], str(e))]
+
+        return []
+
+    def execute_restore(domain: DomainSpec, is_pre_restore: bool = True) -> List[str]:
+        if is_pre_restore:
+            if "pre_restore" in domain:
+                return domain["pre_restore"]()
+        else:
+            if "post_restore" in domain:
+                return domain["post_restore"]()
+        return []
+
+    total_errors = []
+    logger.info("Restoring snapshot: %s", tar.name)
+    logger.info("Domains: %s", ", ".join(tar_domains.keys()))
+    for what, abort_on_error, handler in [
+        ("Permissions", True, check_domain),
+        ("Pre-Restore", True,
+         lambda domain, tar_member: execute_restore(domain, is_pre_restore=True)),
+        ("Cleanup", False, lambda domain, tar_member: cleanup_domain(domain)),
+        ("Extract", False, extract_domain),
+        ("Post-Restore", False,
+         lambda domain, tar_member: execute_restore(domain, is_pre_restore=False))
+    ]:
+        errors: List[str] = []
+        for name, tar_member in tar_domains.items():
+            if name in domains:
+                try:
+                    dom_errors = handler(domains[name], tar_member)
+                    errors.extend(dom_errors or [])
+                except Exception:
+                    # This should NEVER happen
+                    err_info = "Restore-Phase: %s, Domain: %s\nError: %s" % (what, name,
+                                                                             traceback.format_exc())
+                    errors.append(err_info)
+                    logger.critical(err_info)
+                    if not abort_on_error:
+                        # At this state, the restored data is broken.
+                        # We still try to apply the rest of the snapshot
+                        # Hopefully the log entry helps in identifying the problem..
+                        logger.critical("Snapshot restore FAILED! (possible loss of snapshot data)")
+                        continue
+                    break
+
+        if errors:
+            if what == "Permissions":
+                errors = list(set(errors))
+                errors.append(
+                    _("<br>If there are permission problems, please ensure the site user has write permissions."
+                     ))
+            if abort_on_error:
+                raise MKGeneralException(
+                    _("%s - Unable to restore snapshot:<br>%s") % (what, "<br>".join(errors)))
+            total_errors.extend(errors)
+
+    # Cleanup
+    _wipe_directory(restore_dir)
+
+    if total_errors:
+        raise MKGeneralException(
+            _("Errors on restoring snapshot:<br>%s") % "<br>".join(total_errors))
+
+
+# Try to cleanup everything starting from the root_path
+# except the specific exclude files
+def _cleanup_dir(root_path: str, exclude_files: Optional[List[str]] = None) -> None:
+    if exclude_files is None:
+        exclude_files = []
+
+    paths_to_remove = []
+    files_to_remove = []
+    for path, dirnames, filenames in os.walk(root_path):
+        for dirname in dirnames:
+            pathname = "%s/%s" % (path, dirname)
+            for entry in exclude_files:
+                if entry.startswith(pathname):
+                    break
+            else:
+                paths_to_remove.append(pathname)
+        for filename in filenames:
+            filepath = "%s/%s" % (path, filename)
+            if filepath not in exclude_files:
+                files_to_remove.append(filepath)
+
+    paths_to_remove.sort()
+    files_to_remove.sort()
+
+    for path in paths_to_remove:
+        if os.path.exists(path) and os.path.isdir(path):
+            shutil.rmtree(path, ignore_errors=True)
+
+    for filename in files_to_remove:
+        if os.path.dirname(filename) not in paths_to_remove:
+            os.remove(filename)
+
+
+def _wipe_directory(path: str) -> None:
+    for entry in os.listdir(path):
+        p = path + "/" + entry
+        if os.path.isdir(p):
+            shutil.rmtree(p, ignore_errors=True)
+        else:
+            try:
+                os.remove(p)
+            except OSError as e:
+                if e.errno != errno.ENOENT:
+                    raise
+>>>>>>> upstream/master

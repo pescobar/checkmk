@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/env python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -27,6 +28,16 @@
 import traceback
 
 import six
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+import traceback
+from typing import Any as _Any, Dict as _Dict
+>>>>>>> upstream/master
 
 import cmk.utils.regex
 
@@ -36,9 +47,15 @@ from cmk.gui.htmllib import HTML
 
 from cmk.utils.plugin_loader import load_plugins
 
+<<<<<<< HEAD
 from cmk.gui.plugins.views.icons.utils import (
     Icon,
     icon_and_action_registry,
+=======
+# Imported for plugins
+from cmk.gui.plugins.views.icons.utils import (  # noqa: F401
+    Icon, icon_and_action_registry,
+>>>>>>> upstream/master
 )
 
 #.
@@ -53,7 +70,11 @@ from cmk.gui.plugins.views.icons.utils import (
 
 # Use this structure for new icons
 # TODO: Move this to cmk.gui.views once this is only used by legacy view/icon plugins
+<<<<<<< HEAD
 multisite_icons_and_actions = {}
+=======
+multisite_icons_and_actions: _Dict[str, _Dict[str, _Any]] = {}
+>>>>>>> upstream/master
 
 
 def get_multisite_icons():
@@ -135,7 +156,11 @@ def _process_icon(what, row, tags, custom_vars, icon_id, icon):
         return
 
     title, url = None, None
+<<<<<<< HEAD
     if isinstance(result, six.string_types + (HTML,)):
+=======
+    if isinstance(result, (str, HTML)):
+>>>>>>> upstream/master
         # TODO: This is handling the deprecated API with 1.2.7. Remove this one day. But there
         # are icons that still use this API. These need to be cleaned up before.
         # LM: There are icons that still use this API
@@ -187,7 +212,11 @@ def iconpainter_columns(what, toplevel):
             'service_custom_variable_values',
         ])
 
+<<<<<<< HEAD
     for icon in get_multisite_icons().itervalues():
+=======
+    for icon in get_multisite_icons().values():
+>>>>>>> upstream/master
         if toplevel is None or toplevel == icon.toplevel():
             cols.update([what + '_' + c for c in icon.columns()])
             cols.update(["host_" + c for c in icon.host_columns()])

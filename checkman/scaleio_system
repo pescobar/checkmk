@@ -9,7 +9,14 @@ description:
  ruleset for filesystems can be used to set thresholds.
 
 item:
+<<<<<<< HEAD
  The system id is used as item
 
 inventory:
  One service for each system is created
+=======
+ The system id
+
+inventory:
+ One service is created for each system.
+>>>>>>> upstream/master

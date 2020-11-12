@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -27,6 +28,18 @@
 import cmk.gui.bi as bi
 from cmk.gui.i18n import _
 from cmk.gui.globals import html
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+from typing import Dict, Tuple, Any
+import cmk.gui.bi as bi
+from cmk.gui.i18n import _
+from cmk.gui.globals import html, request
+>>>>>>> upstream/master
 from cmk.gui.htmllib import HTML
 
 from cmk.gui.plugins.sidebar import (
@@ -35,10 +48,16 @@ from cmk.gui.plugins.sidebar import (
     bulletlink,
 )
 
+<<<<<<< HEAD
+=======
+from cmk.gui.utils.urls import makeuri_contextless
+
+>>>>>>> upstream/master
 
 @snapin_registry.register
 class SidebarSnapinAggregationGroupList(SidebarSnapin):
     @staticmethod
+<<<<<<< HEAD
     def type_name():
         return "biaggr_groups"
 
@@ -53,6 +72,22 @@ class SidebarSnapinAggregationGroupList(SidebarSnapin):
     def show(self):
         html.open_ul()
         for group in sorted(bi.get_aggregation_group_trees()):
+=======
+    def type_name() -> str:
+        return "biaggr_groups"
+
+    @classmethod
+    def title(cls) -> str:
+        return _("BI Aggregation Groups")
+
+    @classmethod
+    def description(cls) -> str:
+        return _("A direct link to all groups of BI aggregations")
+
+    def show(self) -> None:
+        html.open_ul()
+        for group in bi.get_aggregation_group_trees():
+>>>>>>> upstream/master
             bulletlink(group, "view.py?view_name=aggr_group&aggr_group=%s" % html.urlencode(group))
         html.close_ul()
 
@@ -60,6 +95,7 @@ class SidebarSnapinAggregationGroupList(SidebarSnapin):
 @snapin_registry.register
 class SidebarSnapinAggregationGroupTree(SidebarSnapin):
     @staticmethod
+<<<<<<< HEAD
     def type_name():
         return "biaggr_groups_tree"
 
@@ -73,6 +109,21 @@ class SidebarSnapinAggregationGroupTree(SidebarSnapin):
 
     def show(self):
         tree = {}
+=======
+    def type_name() -> str:
+        return "biaggr_groups_tree"
+
+    @classmethod
+    def title(cls) -> str:
+        return _("BI Aggregation Groups Tree")
+
+    @classmethod
+    def description(cls) -> str:
+        return _("A direct link to all groups of BI aggregations organized as tree")
+
+    def show(self) -> None:
+        tree: Dict[Tuple[str, ...], Dict[str, Any]] = {}
+>>>>>>> upstream/master
         for group in bi.get_aggregation_group_trees():
             self._build_tree(group.split("/"), tree, tuple())
         self._render_tree(tree)
@@ -87,11 +138,23 @@ class SidebarSnapinAggregationGroupTree(SidebarSnapin):
             self._build_tree(children, child, path)
 
     def _render_tree(self, tree):
+<<<<<<< HEAD
         for group, attrs in tree.iteritems():
             fetch_url = html.makeuri_contextless([
                 ("view_name", "aggr_all"),
                 ("aggr_group_tree", "/".join(attrs["__path__"])),
             ], "view.py")
+=======
+        for group, attrs in tree.items():
+            fetch_url = makeuri_contextless(
+                request,
+                [
+                    ("view_name", "aggr_all"),
+                    ("aggr_group_tree", "/".join(attrs["__path__"])),
+                ],
+                filename="view.py",
+            )
+>>>>>>> upstream/master
 
             if attrs.get('__children__'):
                 html.begin_foldable_container(

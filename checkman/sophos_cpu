@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: Sophos Device: CPU usage
+=======
+title: Sophos Device: CPU Usage
+>>>>>>> upstream/master
 agents: snmp
 catalog: hw/network/sophos
 license: GPL

@@ -4,6 +4,7 @@ catalog: hw/network/huawei
 license: GPL
 distribution: check_mk
 description:
+<<<<<<< HEAD
  This check measures the octets and packets sended/received by
  an interface. The check plugin will use the common interface check and
  parameters can be set for most values.
@@ -13,3 +14,14 @@ item:
 
 inventory:
  One service for each interface is created
+=======
+ This check monitors the octets and packets sent and received by the interfaces
+ of Huawei OSN devices. Levels can be configured using the rule "Network interfaces
+ and switch ports".
+
+item:
+ Name of the interface
+
+inventory:
+ One service is created for each interface.
+>>>>>>> upstream/master

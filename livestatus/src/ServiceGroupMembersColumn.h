@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // +------------------------------------------------------------------+
 // |             ____ _               _        __  __ _  __           |
 // |            / ___| |__   ___  ___| | __   |  \/  | |/ /           |
@@ -21,19 +22,37 @@
 // License along with GNU Make; see the file  COPYING.  If  not,  write
 // to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 // Boston, MA 02110-1301 USA.
+=======
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the
+// terms and conditions defined in the file COPYING, which is part of this
+// source code package.
+>>>>>>> upstream/master
 
 #ifndef ServiceGroupMembersColumn_h
 #define ServiceGroupMembersColumn_h
 
 #include "config.h"  // IWYU pragma: keep
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/master
 #include <chrono>
 #include <memory>
 #include <string>
 #include <utility>
 #include <vector>
+<<<<<<< HEAD
 #include "Filter.h"
 #include "ListColumn.h"
 #include "opids.h"
+=======
+
+#include "Filter.h"
+#include "ListColumn.h"
+#include "opids.h"
+class ColumnOffsets;
+>>>>>>> upstream/master
 class MonitoringCore;
 class Row;
 class RowRenderer;
@@ -49,18 +68,28 @@ class ServiceGroupMembersColumn : public ListColumn {
 public:
     ServiceGroupMembersColumn(const std::string &name,
                               const std::string &description,
+<<<<<<< HEAD
                               int indirect_offset, int extra_offset,
                               int extra_extra_offset, int offset,
                               MonitoringCore *mc, bool show_state)
         : ListColumn(name, description, indirect_offset, extra_offset,
                      extra_extra_offset, offset)
+=======
+                              const ColumnOffsets &offsets, MonitoringCore *mc,
+                              bool show_state)
+        : ListColumn(name, description, offsets)
+>>>>>>> upstream/master
         , _mc(mc)
         , _show_state(show_state) {}
 
     void output(Row row, RowRenderer &r, const contact *auth_user,
                 std::chrono::seconds timezone_offset) const override;
 
+<<<<<<< HEAD
     std::unique_ptr<Filter> createFilter(
+=======
+    [[nodiscard]] std::unique_ptr<Filter> createFilter(
+>>>>>>> upstream/master
         Filter::Kind kind, RelationalOperator relOp,
         const std::string &value) const override;
 

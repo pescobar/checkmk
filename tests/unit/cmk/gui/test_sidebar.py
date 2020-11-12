@@ -1,8 +1,23 @@
+<<<<<<< HEAD
 import pytest
 
 import cmk.gui.sidebar as sidebar
 import cmk.gui.config as config
 import cmk.gui.pages
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+from typing import Optional
+
+import pytest  # type: ignore[import]
+
+import cmk.gui.sidebar as sidebar
+import cmk.gui.config as config
+>>>>>>> upstream/master
 from cmk.gui.globals import html
 from cmk.gui.sidebar import UserSidebarSnapin
 
@@ -19,7 +34,15 @@ sidebar.load_plugins(True)
 
 
 @pytest.fixture(scope="function", autouse=True)
+<<<<<<< HEAD
 def user(monkeypatch):
+=======
+def user(module_wide_request_context, monkeypatch):
+    # We use the module wide request context because the monkeypatch would roll back the user
+    # stuff after the request context has already been ended and thus throwing an error. So we
+    # actually need to fix these tests and their user-handling because the natural way to test
+    # with a request-context is to have a fresh one for each function call.
+>>>>>>> upstream/master
     monkeypatch.setattr(config.user, "confdir", "")
     monkeypatch.setattr(config.user, "may", lambda x: True)
 
@@ -101,11 +124,18 @@ def test_user_config_move_snapin_before(mocker, move_id, before_id, result):
         if result is None:
             assert "does not exist" in "%s" % e
             return
+<<<<<<< HEAD
         else:
             raise
 
     try:
         before = user_config.get_snapin(before_id)
+=======
+        raise
+
+    try:
+        before: Optional[UserSidebarSnapin] = user_config.get_snapin(before_id)
+>>>>>>> upstream/master
     except KeyError:
         before = None
 
@@ -119,8 +149,11 @@ def test_load_default_config(monkeypatch):
     assert user_config.snapins == [
         UserSidebarSnapin.from_snapin_type_id('tactical_overview'),
         UserSidebarSnapin.from_snapin_type_id('search'),
+<<<<<<< HEAD
         UserSidebarSnapin.from_snapin_type_id('views'),
         UserSidebarSnapin.from_snapin_type_id('admin'),
+=======
+>>>>>>> upstream/master
         UserSidebarSnapin.from_snapin_type_id('bookmarks'),
         UserSidebarSnapin(sidebar.snapin_registry["master_control"],
                           sidebar.SnapinVisibility.CLOSED),
@@ -205,7 +238,11 @@ def test_save_user_config_denied(mocker, monkeypatch):
     save_user_file_mock.assert_not_called()
 
 
+<<<<<<< HEAD
 def test_save_user_config_allowed(mocker, monkeypatch):
+=======
+def test_save_user_config_allowed(register_builtin_html, mocker, monkeypatch):
+>>>>>>> upstream/master
     monkeypatch.setattr(config.user, "may", lambda x: x == "general.configure_sidebar")
     save_user_file_mock = mocker.patch.object(config.user, "save_file")
     user_config = sidebar.UserSidebarConfig(config.user, config.sidebar)
@@ -218,7 +255,11 @@ def test_save_user_config_allowed(mocker, monkeypatch):
     (False, "yes", True),
     (True, "", False),
 ])
+<<<<<<< HEAD
 def test_ajax_fold(register_builtin_html, mocker, origin_state, fold_var, set_state):
+=======
+def test_ajax_fold(module_wide_request_context, mocker, origin_state, fold_var, set_state):
+>>>>>>> upstream/master
     html.request.set_var("fold", fold_var)
     m_config = mocker.patch.object(config.user,
                                    "load_file",
@@ -248,7 +289,11 @@ def test_ajax_fold(register_builtin_html, mocker, origin_state, fold_var, set_st
     ("open", "off"),
     ("closed", "off"),
 ])
+<<<<<<< HEAD
 def test_ajax_openclose_close(register_builtin_html, mocker, origin_state, set_state):
+=======
+def test_ajax_openclose_close(module_wide_request_context, mocker, origin_state, set_state):
+>>>>>>> upstream/master
     html.request.set_var("name", "tactical_overview")
     html.request.set_var("state", set_state)
     m_config = mocker.patch.object(config.user,
@@ -283,7 +328,11 @@ def test_ajax_openclose_close(register_builtin_html, mocker, origin_state, set_s
     })
 
 
+<<<<<<< HEAD
 def test_move_snapin_not_permitted(monkeypatch, mocker, register_builtin_html):
+=======
+def test_move_snapin_not_permitted(monkeypatch, mocker, module_wide_request_context):
+>>>>>>> upstream/master
     monkeypatch.setattr(config.user, "may", lambda x: x != "general.configure_sidebar")
     m_load = mocker.patch.object(sidebar.UserSidebarConfig, "_load")
     sidebar.move_snapin()
@@ -294,7 +343,11 @@ def test_move_snapin_not_permitted(monkeypatch, mocker, register_builtin_html):
     ("tactical_overview", "views", True),
     ("not_existing", "admin", None),
 ])
+<<<<<<< HEAD
 def test_move_snapin(register_builtin_html, mocker, move, before, do_save):
+=======
+def test_move_snapin(module_wide_request_context, mocker, move, before, do_save):
+>>>>>>> upstream/master
     html.request.set_var("name", move)
     html.request.set_var("before", before)
     m_save = mocker.patch.object(sidebar.UserSidebarConfig, "save")

@@ -1,12 +1,24 @@
+<<<<<<< HEAD
 title: AWS/ApplicationELB Summary
+=======
+title: AWS ApplicationELB: Summary
+>>>>>>> upstream/master
 agents: aws
 catalog: cloud/aws
 license: GPL
 distribution: check_mk
 description:
  This check monitors all AWS Application ELB and reports a summary of their states.
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/master
  To make this check work you have to configure the related special agent
  {Amazon Web Services (AWS)}.
 
 inventory:
+<<<<<<< HEAD
  One summary service is created.
+=======
+ One service is created.
+>>>>>>> upstream/master

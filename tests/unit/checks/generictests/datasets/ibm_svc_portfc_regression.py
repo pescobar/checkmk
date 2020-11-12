@@ -1,4 +1,16 @@
+<<<<<<< HEAD
 # yapf: disable
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# yapf: disable
+# type: ignore
+
+>>>>>>> upstream/master
 
 
 checkname = 'ibm_svc_portfc'
@@ -114,4 +126,8 @@ checks = {'': [(u'Port 0',
                 [(0, u'Status: active, Speed: 8Gb, WWPN: 5005076803042127', [])]),
                (u'Port 9',
                 {},
+<<<<<<< HEAD
                 [(0, u'Status: active, Speed: 8Gb, WWPN: 5005076803082127', [])])]}
+=======
+                [(0, u'Status: active, Speed: 8Gb, WWPN: 5005076803082127', [])])]}
+>>>>>>> upstream/master

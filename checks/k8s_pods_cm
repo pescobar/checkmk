@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -27,13 +28,33 @@
 
 def parse_frac_prefix(value):
     # type: (str) -> float
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# NOTE: Careful when replacing the *-import below with a more specific import. This can cause
+# problems because it might remove variables from the check-context which are necessary for
+# resolving legacy discovery results such as [("SUMMARY", "diskstat_default_levels")]. Furthermore,
+# it might also remove variables needed for accessing discovery rulesets.
+from cmk.base.check_legacy_includes.k8s import *  # pylint: disable=wildcard-import,unused-wildcard-import
+
+
+def parse_frac_prefix(value: str) -> float:
+>>>>>>> upstream/master
     if value.endswith('m'):
         return 0.001 * float(value[:-1])
     return float(value)
 
 
+<<<<<<< HEAD
 def parse_mul_prefix(value):
     # type: (str) -> int
+=======
+def parse_mul_prefix(value: str) -> int:
+>>>>>>> upstream/master
     if value.endswith('k'):
         return 1000 * int(value[:-1])
     return int(value)
@@ -65,7 +86,10 @@ check_info['k8s_pods_memory'] = {
     'service_description': 'Memory usage for Pods in %s namespace',
     'group': 'k8s_pods_memory',
     'has_perfdata': True,
+<<<<<<< HEAD
     'includes': ['k8s.include'],
+=======
+>>>>>>> upstream/master
 }
 
 
@@ -89,7 +113,10 @@ check_info['k8s_pods_cpu'] = {
     'service_description': 'CPU usage for Pods in %s namespace',
     'group': 'k8s_pods_cpu',
     'has_perfdata': True,
+<<<<<<< HEAD
     'includes': ['k8s.include'],
+=======
+>>>>>>> upstream/master
 }
 
 
@@ -118,5 +145,8 @@ check_info['k8s_pods_fs'] = {
     'service_description': 'FS usage for Pods in %s namespace',
     'group': 'k8s_pods_fs',
     'has_perfdata': True,
+<<<<<<< HEAD
     'includes': ['k8s.include'],
+=======
+>>>>>>> upstream/master
 }

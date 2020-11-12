@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: NTI Enviromux 16D: SEMS temperature sensors
+=======
+title: NTI Enviromux SEMS: Temperature
+>>>>>>> upstream/master
 agents: snmp
 catalog: hw/environment/nti
 license: GPL
@@ -14,5 +18,9 @@ perfdata:
  One graph for the Temperature.
 
 inventory:
+<<<<<<< HEAD
  All available internal temperature sensors are automatically discovered.
+=======
+ One service is created for each available internal temperature sensor.
+>>>>>>> upstream/master
 

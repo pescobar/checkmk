@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: AVTECH Room Alert 32E: Sensor temperature
+=======
+title: AVTECH Room Alert 32E: Sensor Temperature
+>>>>>>> upstream/master
 agents: snmp
 catalog: hw/environment/avtech
 license: GPL
@@ -16,6 +20,11 @@ item:
  connected sensor.
 
 inventory:
+<<<<<<< HEAD
  One service for the internal sensor and one
  service for each sensor that delivers temperature
  data.
+=======
+ One service is created for the internal sensor and
+ one service is created for each sensor that delivers temperature data.
+>>>>>>> upstream/master

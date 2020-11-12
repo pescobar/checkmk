@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/env python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -26,12 +27,27 @@
 """Mode for trying out the logwatch patterns"""
 
 import re
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+"""Mode for trying out the logwatch patterns"""
+
+from typing import Optional, Type, Iterable
+import re
+from six import ensure_str
+
+from cmk.utils.type_defs import CheckPluginNameStr, HostName, ServiceName, Item
+>>>>>>> upstream/master
 
 import cmk.gui.watolib as watolib
 from cmk.gui.table import table_element
 import cmk.gui.forms as forms
 from cmk.gui.htmllib import HTML
 from cmk.gui.i18n import _
+<<<<<<< HEAD
 from cmk.gui.globals import html
 from cmk.gui.exceptions import MKUserError
 
@@ -43,6 +59,29 @@ from cmk.gui.plugins.wato import (
 )
 
 import cmk_base.export
+=======
+from cmk.gui.globals import html, request
+from cmk.gui.exceptions import MKUserError
+from cmk.gui.wato.pages.rulesets import ModeEditRuleset
+from cmk.gui.breadcrumb import Breadcrumb
+from cmk.gui.page_menu import (
+    PageMenu,
+    PageMenuDropdown,
+    PageMenuTopic,
+    PageMenuEntry,
+    make_simple_link,
+)
+from cmk.gui.plugins.wato import (
+    WatoMode,
+    mode_registry,
+    ConfigHostname,
+)
+from cmk.gui.utils.urls import makeuri_contextless
+
+# Tolerate this for 1.6. Should be cleaned up in future versions,
+# e.g. by trying to move the common code to a common place
+import cmk.base.export  # pylint: disable=cmk-module-layer-violation
+>>>>>>> upstream/master
 
 
 @mode_registry.register
@@ -55,13 +94,35 @@ class ModePatternEditor(WatoMode):
     def permissions(cls):
         return ["pattern_editor"]
 
+<<<<<<< HEAD
+=======
+    @classmethod
+    def parent_mode(cls) -> Optional[Type[WatoMode]]:
+        return ModeEditRuleset
+
+    def breadcrumb(self) -> Breadcrumb:
+        # The ModeEditRuleset.breadcrumb_item does not know anything about the fact that this mode
+        # is a child of the logwatch_rules ruleset. It can not construct the correct link to the
+        # logwatch_rules ruleset in the breadcrumb. We hand over the ruleset variable name that we
+        # are interested in to the mode. It's a bit hacky to do it this way, but it's currently the
+        # only way to get these information to the modes breadcrumb method.
+        with html.stashed_vars():
+            html.request.set_var("varname", "logwatch_rules")
+            return super().breadcrumb()
+
+>>>>>>> upstream/master
     def _from_vars(self):
         self._hostname = self._vs_host().from_html_vars("host")
         self._vs_host().validate_value(self._hostname, "host")
 
         # TODO: validate all fields
+<<<<<<< HEAD
         self._item = html.request.var('file', '')
         self._match_txt = html.request.var('match', '')
+=======
+        self._item = html.request.get_unicode_input_mandatory('file', u'')
+        self._match_txt = html.request.get_unicode_input_mandatory('match', u'')
+>>>>>>> upstream/master
 
         self._host = watolib.Folder.current().host(self._hostname)
 
@@ -73,6 +134,7 @@ class ModePatternEditor(WatoMode):
 
     def title(self):
         if not self._hostname and not self._item:
+<<<<<<< HEAD
             return _("Logfile Pattern Analyzer")
         elif not self._hostname:
             return _("Logfile Patterns of Logfile %s on all Hosts") % (self._item)
@@ -99,6 +161,55 @@ class ModePatternEditor(WatoMode):
                 ('mode', 'edit_ruleset'),
                 ('varname', 'logwatch_rules'),
             ]), 'edit')
+=======
+            return _("Logfile pattern analyzer")
+        if not self._hostname:
+            return _("Logfile patterns of logfile %s on all hosts") % (self._item)
+        if not self._item:
+            return _("Logfile patterns of Host %s") % (self._hostname)
+        return _("Logfile patterns of logfile %s on host %s") % (self._item, self._hostname)
+
+    def page_menu(self, breadcrumb: Breadcrumb) -> PageMenu:
+        menu = PageMenu(
+            dropdowns=[
+                PageMenuDropdown(
+                    name="related",
+                    title=_("Related"),
+                    topics=[
+                        PageMenuTopic(
+                            title=_("Monitoring"),
+                            entries=list(self._page_menu_entries_related()),
+                        ),
+                    ],
+                ),
+            ],
+            breadcrumb=breadcrumb,
+        )
+        return menu
+
+    def _page_menu_entries_related(self) -> Iterable[PageMenuEntry]:
+        if not self._host:
+            return
+
+        yield PageMenuEntry(
+            title=_("Host log files"),
+            icon_name="logwatch",
+            item=make_simple_link(
+                makeuri_contextless(request, [("host", self._hostname)], filename="logwatch.py")),
+        )
+
+        if self._item:
+            yield PageMenuEntry(
+                title=("Show log file"),
+                icon_name="logwatch",
+                item=make_simple_link(
+                    makeuri_contextless(
+                        request,
+                        [("host", self._hostname), ("file", self._item)],
+                        filename="logwatch.py",
+                    )),
+            )
+>>>>>>> upstream/master
 
     def page(self):
         html.help(
@@ -137,7 +248,11 @@ class ModePatternEditor(WatoMode):
         collection.load()
         ruleset = collection.get("logwatch_rules")
 
+<<<<<<< HEAD
         html.h3(_('Logfile Patterns'))
+=======
+        html.h3(_('Logfile patterns'))
+>>>>>>> upstream/master
         if ruleset.is_empty():
             html.open_div(class_="info")
             html.write_text('There are no logfile patterns defined. You may create '
@@ -154,8 +269,12 @@ class ModePatternEditor(WatoMode):
         for folder, rulenr, rule in ruleset.get_rules():
             # Check if this rule applies to the given host/service
             if self._hostname:
+<<<<<<< HEAD
                 service_desc = cmk_base.export.service_description(self._hostname, "logwatch",
                                                                    self._item)
+=======
+                service_desc = self._get_service_description(self._hostname, "logwatch", self._item)
+>>>>>>> upstream/master
 
                 # If hostname (and maybe filename) try match it
                 rule_matches = rule.matches_host_and_item(watolib.Folder.current(), self._hostname,
@@ -180,7 +299,11 @@ class ModePatternEditor(WatoMode):
                 # Each rule can hold no, one or several patterns. Loop them all here
                 for state, pattern, comment in pattern_list:
                     match_class = ''
+<<<<<<< HEAD
                     disp_match_txt = ''
+=======
+                    disp_match_txt = HTML('')
+>>>>>>> upstream/master
                     match_img = ''
                     if rule_matches:
                         # Applies to the given host/service
@@ -221,7 +344,11 @@ class ModePatternEditor(WatoMode):
 
                     table.row(css=reason_class)
                     table.cell(_('Match'))
+<<<<<<< HEAD
                     html.icon(match_title, "rule%s" % match_img)
+=======
+                    html.icon("rule%s" % match_img, match_title)
+>>>>>>> upstream/master
 
                     cls = ''
                     if match_class == 'match first':
@@ -238,9 +365,20 @@ class ModePatternEditor(WatoMode):
                     ("varname", "logwatch_rules"),
                     ("rulenr", rulenr),
                     ("host", self._hostname),
+<<<<<<< HEAD
                     ("item", watolib.mk_repr(self._item)),
+=======
+                    ("item", ensure_str(watolib.mk_repr(self._item))),
+>>>>>>> upstream/master
                     ("rule_folder", folder.path()),
                 ])
                 html.icon_button(edit_url, _("Edit this rule"), "edit")
 
             html.end_foldable_container()
+<<<<<<< HEAD
+=======
+
+    def _get_service_description(self, hostname: HostName, check_plugin_name: CheckPluginNameStr,
+                                 item: Item) -> ServiceName:
+        return cmk.base.export.service_description(hostname, check_plugin_name, item)
+>>>>>>> upstream/master

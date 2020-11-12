@@ -11,7 +11,14 @@ description:
  are configurable.
 
 item:
+<<<<<<< HEAD
  Instance name.
 
 inventory:
  One service per instance.
+=======
+ Name of the instance
+
+inventory:
+ One service is created for each instance.
+>>>>>>> upstream/master

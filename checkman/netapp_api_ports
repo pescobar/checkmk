@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: NetApp Ports
+=======
+title: NetApp Filer: Ports
+>>>>>>> upstream/master
 agents: netapp
 catalog: hw/storagehw/netapp
 license: GPL
@@ -7,5 +11,13 @@ description:
  The check monitors the health state of the Netapp ports. Different port types can be filtered out during discovery
  The check goes CRIT when a port is not in a "healthy" state
 
+<<<<<<< HEAD
 inventory:
  One check is created for every port.
+=======
+item:
+ Name of the port
+
+inventory:
+ One service is created for each port.
+>>>>>>> upstream/master

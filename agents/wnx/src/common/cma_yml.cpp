@@ -2,10 +2,18 @@
 
 #include "cma_yml.h"
 
+<<<<<<< HEAD
 #include <string>
 #include <string_view>
 
 #include "fmt/format.h"
+=======
+#include <fmt/format.h>
+
+#include <string>
+#include <string_view>
+
+>>>>>>> upstream/master
 #include "logger.h"
 
 namespace cma::yml {

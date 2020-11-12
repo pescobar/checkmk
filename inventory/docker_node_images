@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,6 +24,15 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+import cmk.base.plugins.agent_based.utils.docker as docker
+from cmk.base.check_legacy_includes.legacy_docker import *  # pylint: disable=wildcard-import,unused-wildcard-import
+>>>>>>> upstream/master
 
 
 def _split_subsections(info):
@@ -39,20 +49,33 @@ def _split_subsections(info):
 
 
 def parse_docker_node_images(info):
+<<<<<<< HEAD
     # pylint: disable=undefined-variable
     version = docker_get_version(info)
+=======
+    version = docker.get_version(info)
+>>>>>>> upstream/master
 
     if version is None:
         subsections = _split_subsections(info)
         return parse_legacy_docker_node_images(subsections)
 
     subsections = _split_subsections(info[1:])
+<<<<<<< HEAD
     i_images = (docker_json_get_obj(i) for i in subsections.get('images', []))
     images = {i["Id"]: i for i in i_images if i is not None}
     i_containers = (docker_json_get_obj(c) for c in subsections.get('containers', []))
     containers = {c["Id"]: c for c in i_containers if c is not None}
 
     running_images = [c['Image'] for c in containers.itervalues()]
+=======
+    i_images = (docker.json_get_obj(i) for i in subsections.get('images', []))
+    images = {i["Id"]: i for i in i_images if i is not None}
+    i_containers = (docker.json_get_obj(c) for c in subsections.get('containers', []))
+    containers = {c["Id"]: c for c in i_containers if c is not None}
+
+    running_images = [c['Image'] for c in containers.values()]
+>>>>>>> upstream/master
 
     for image_id in images:
         images[image_id]['amount_containers'] = running_images.count(image_id)
@@ -67,12 +90,17 @@ def inv_docker_node_images(info, inventory_tree, status_data_tree):
     inv_node = inventory_tree.get_list(path)
     status_node = status_data_tree.get_list(path)
 
+<<<<<<< HEAD
     for image_id, image in sorted(images.iteritems()):
+=======
+    for image_id, image in sorted(images.items()):
+>>>>>>> upstream/master
         repodigests = ", ".join(image.get("RepoDigests", []))
         fallback_repotag = repodigests.split('@', 1)[:1] if '@' in repodigests else []
         inv_node.append({
             "repotags": ", ".join(image.get("RepoTags", fallback_repotag)),
             "repodigests": repodigests,
+<<<<<<< HEAD
             "id": docker_get_short_id(image_id),  # pylint: disable=undefined-variable
             "creation": image["Created"],
             "size": image["VirtualSize"],
@@ -81,12 +109,23 @@ def inv_docker_node_images(info, inventory_tree, status_data_tree):
 
         status_node.append({
             "id": docker_get_short_id(image_id),  # pylint: disable=undefined-variable
+=======
+            "id": docker.get_short_id(image_id),
+            "creation": image["Created"],
+            "size": image["VirtualSize"],
+            "labels": docker.format_labels(image),
+        })
+
+        status_node.append({
+            "id": docker.get_short_id(image_id),
+>>>>>>> upstream/master
             "amount_containers": image["amount_containers"],
         })
 
     containers = parsed.get("containers", {})
     status_node = status_data_tree.get_list("software.applications.docker.containers:")
 
+<<<<<<< HEAD
     for container_id, container in sorted(containers.iteritems()):
         status_node.append({
             "id": docker_get_short_id(container_id),  # pylint: disable=undefined-variable
@@ -94,12 +133,25 @@ def inv_docker_node_images(info, inventory_tree, status_data_tree):
             "name": container["Name"],
             "creation": container["Created"],
             "labels": docker_format_labels(container),  # pylint: disable=undefined-variable
+=======
+    for container_id, container in sorted(containers.items()):
+        status_node.append({
+            "id": docker.get_short_id(container_id),
+            "image": docker.get_short_id(container["Image"]),
+            "name": container["Name"],
+            "creation": container["Created"],
+            "labels": docker.format_labels(container),
+>>>>>>> upstream/master
             "status": container.get("State", {}).get("Status"),
         })
 
 
+<<<<<<< HEAD
 inv_info['docker_node_images'] = {  # pylint: disable=undefined-variable
     'includes': ['legacy_docker.include', 'docker.include'],
+=======
+inv_info['docker_node_images'] = {
+>>>>>>> upstream/master
     'inv_function': inv_docker_node_images,
     'has_status_data': True,
 }

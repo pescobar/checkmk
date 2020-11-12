@@ -7,6 +7,10 @@
 #include "cma_core.h"
 #include "glob_match.h"
 #include "test-utf-names.h"
+<<<<<<< HEAD
+=======
+#include "test_tools.h"
+>>>>>>> upstream/master
 
 namespace cma::tools {
 TEST(CmaTools, All) {

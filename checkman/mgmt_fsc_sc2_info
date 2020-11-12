@@ -10,9 +10,14 @@ description:
 
  The Check is always in an OK state.
 
+<<<<<<< HEAD
 item:
  No item
 
 inventory:
  One service per host is created.
+=======
+inventory:
+ One service is created for each host.
+>>>>>>> upstream/master
 

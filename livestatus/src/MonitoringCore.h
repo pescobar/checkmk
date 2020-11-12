@@ -1,36 +1,25 @@
-// +------------------------------------------------------------------+
-// |             ____ _               _        __  __ _  __           |
-// |            / ___| |__   ___  ___| | __   |  \/  | |/ /           |
-// |           | |   | '_ \ / _ \/ __| |/ /   | |\/| | ' /            |
-// |           | |___| | | |  __/ (__|   <    | |  | | . \            |
-// |            \____|_| |_|\___|\___|_|\_\___|_|  |_|_|\_\           |
-// |                                                                  |
-// | Copyright Mathias Kettner 2014             mk@mathias-kettner.de |
-// +------------------------------------------------------------------+
-//
-// This file is part of Check_MK.
-// The official homepage is at http://mathias-kettner.de/check_mk.
-//
-// check_mk is free software;  you can redistribute it and/or modify it
-// under the  terms of the  GNU General Public License  as published by
-// the Free Software Foundation in version 2.  check_mk is  distributed
-// in the hope that it will be useful, but WITHOUT ANY WARRANTY;  with-
-// out even the implied warranty of  MERCHANTABILITY  or  FITNESS FOR A
-// PARTICULAR PURPOSE. See the  GNU General Public License for more de-
-// tails. You should have  received  a copy of the  GNU  General Public
-// License along with GNU Make; see the file  COPYING.  If  not,  write
-// to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
-// Boston, MA 02110-1301 USA.
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the
+// terms and conditions defined in the file COPYING, which is part of this
+// source code package.
 
 #ifndef MonitoringCore_h
 #define MonitoringCore_h
 
 #include "config.h"  // IWYU pragma: keep
+
 #include <chrono>
+#include <filesystem>
 #include <string>
 #include <tuple>
 #include <unordered_map>
 #include <vector>
+<<<<<<< HEAD
+=======
+
+#include "Metric.h"
+#include "RRDColumn.h"
+>>>>>>> upstream/master
 #include "StringUtils.h"
 #include "Triggers.h"
 #include "auth.h"
@@ -104,10 +93,19 @@ public:
                                                    const Contact *contact) = 0;
 
     virtual std::chrono::system_clock::time_point last_logfile_rotation() = 0;
+<<<<<<< HEAD
     virtual size_t maxLinesPerLogFile() const = 0;
 
     virtual Command find_command(const std::string &name) const = 0;
     virtual std::vector<Command> commands() const = 0;
+=======
+    virtual std::chrono::system_clock::time_point last_config_change() = 0;
+    [[nodiscard]] virtual size_t maxLinesPerLogFile() const = 0;
+
+    [[nodiscard]] virtual Command find_command(
+        const std::string &name) const = 0;
+    [[nodiscard]] virtual std::vector<Command> commands() const = 0;
+>>>>>>> upstream/master
 
     virtual std::vector<DowntimeData> downtimes_for_host(
         const Host *) const = 0;
@@ -119,6 +117,7 @@ public:
 
     virtual bool mkeventdEnabled() = 0;
 
+<<<<<<< HEAD
     virtual std::string mkeventdSocketPath() = 0;
     virtual std::string mkLogwatchPath() = 0;
     virtual std::string mkInventoryPath() = 0;
@@ -127,13 +126,32 @@ public:
     virtual std::string historyFilePath() = 0;
     virtual std::string logArchivePath() = 0;
     virtual std::string rrdcachedSocketPath() = 0;
+=======
+    [[nodiscard]] virtual std::filesystem::path mkeventdSocketPath() const = 0;
+    [[nodiscard]] virtual std::filesystem::path mkLogwatchPath() const = 0;
+    [[nodiscard]] virtual std::filesystem::path mkInventoryPath() const = 0;
+    [[nodiscard]] virtual std::filesystem::path structuredStatusPath()
+        const = 0;
+    [[nodiscard]] virtual std::filesystem::path crashReportPath() const = 0;
+    [[nodiscard]] virtual std::filesystem::path licenseUsageHistoryPath()
+        const = 0;
+    [[nodiscard]] virtual std::filesystem::path pnpPath() const = 0;
+    [[nodiscard]] virtual std::filesystem::path historyFilePath() const = 0;
+    [[nodiscard]] virtual std::filesystem::path logArchivePath() const = 0;
+    [[nodiscard]] virtual std::filesystem::path rrdcachedSocketPath() const = 0;
+>>>>>>> upstream/master
 
     virtual Encoding dataEncoding() = 0;
     virtual size_t maxResponseSize() = 0;
     virtual size_t maxCachedMessages() = 0;
 
+<<<<<<< HEAD
     virtual AuthorizationKind serviceAuthorization() const = 0;
     virtual AuthorizationKind groupAuthorization() const = 0;
+=======
+    [[nodiscard]] virtual AuthorizationKind serviceAuthorization() const = 0;
+    [[nodiscard]] virtual AuthorizationKind groupAuthorization() const = 0;
+>>>>>>> upstream/master
 
     virtual Logger *loggerLivestatus() = 0;
     virtual Logger *loggerRRD() = 0;
@@ -151,14 +169,29 @@ public:
     virtual Attributes customAttributes(const void *holder,
                                         AttributeKind kind) const = 0;
 
+<<<<<<< HEAD
     // Our escape hatch, this should die in the long run...
     template <typename T>
     T *impl() const {
+=======
+    [[nodiscard]] virtual MetricLocation metricLocation(
+        const std::string &host_name, const std::string &service_description,
+        const Metric::Name &var) const = 0;
+    [[nodiscard]] virtual bool pnp4nagiosEnabled() const = 0;
+
+    // Our escape hatch, this should die in the long run...
+    template <typename T>
+    [[nodiscard]] T *impl() const {
+>>>>>>> upstream/master
         return static_cast<T *>(implInternal());
     }
 
 private:
+<<<<<<< HEAD
     virtual void *implInternal() const = 0;
+=======
+    [[nodiscard]] virtual void *implInternal() const = 0;
+>>>>>>> upstream/master
 };
 
 #endif  // MonitoringCore_h

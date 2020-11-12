@@ -1,26 +1,6 @@
-# +------------------------------------------------------------------+
-# |             ____ _               _        __  __ _  __           |
-# |            / ___| |__   ___  ___| | __   |  \/  | |/ /           |
-# |           | |   | '_ \ / _ \/ __| |/ /   | |\/| | ' /            |
-# |           | |___| | | |  __/ (__|   <    | |  | | . \            |
-# |            \____|_| |_|\___|\___|_|\_\___|_|  |_|_|\_\           |
-# |                                                                  |
-# | Copyright Mathias Kettner 2014             mk@mathias-kettner.de |
-# +------------------------------------------------------------------+
-#
-# This file is part of Check_MK.
-# The official homepage is at http://mathias-kettner.de/check_mk.
-#
-# check_mk is free software;  you can redistribute it and/or modify it
-# under the  terms of the  GNU General Public License  as published by
-# the Free Software Foundation in version 2.  check_mk is  distributed
-# in the hope that it will be useful, but WITHOUT ANY WARRANTY;  with-
-# out even the implied warranty of  MERCHANTABILITY  or  FITNESS FOR A
-# PARTICULAR PURPOSE. See the  GNU General Public License for more de-
-# tails. You should have  received  a copy of the  GNU  General Public
-# License along with GNU Make; see the file  COPYING.  If  not,  write
-# to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
-# Boston, MA 02110-1301 USA.
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
 
 include ../defines.make
 
@@ -32,7 +12,10 @@ RPM_TOPDIR := $$(pwd)/.rpm.topdir
 RPM_BUILDROOT := $$(pwd)/.rpm.buildroot
 RPM_PACKAGE := $(DISTNAME)-1.noarch.rpm
 DEB_PACKAGE := check-mk-agent_$(VERSION)-1_all.deb
+<<<<<<< HEAD
 WIN_PACKAGE := windows/check_mk_agent.msi
+=======
+>>>>>>> upstream/master
 usage:
 	@echo "make waitmax  -- compile waitmax.c"
 	@echo "make build    -- create all files needed for \"make dist\" of Check_MK"
@@ -55,6 +38,7 @@ waitmax: waitmax.c
 	@echo "Fine. Typing 'make install' as root now will install into /usr/bin"
 
 setversion:
+<<<<<<< HEAD
 	sed -i 's/say "Version: .*"/say "Version: $(NEW_VERSION)"/' check_mk_agent.openvms ; \
 	for agent in check_mk_agent.*; do \
 	    if [ "$$agent" != windows -a "$$agent" != plugins -a "$$agent" != hpux ] ; then \
@@ -83,6 +67,29 @@ deb: $(DEB_PACKAGE)
 
 rpm: $(RPM_PACKAGE)
 
+=======
+	sed -i 's/$$VERSION = ".*/$$VERSION = "$(NEW_VERSION)"\r/' windows/plugins/*.ps1 ; \
+	sed -i 's/^set VERSION=".*/set VERSION="$(NEW_VERSION)"\r/' windows/plugins/*.bat ; \
+	sed -i 's/^Const CMK_VERSION = ".*/Const CMK_VERSION = "$(NEW_VERSION)"\r/' windows/plugins/*.vbs ; \
+	sed -i \
+	-e 's/^VERSION=".*/VERSION="$(NEW_VERSION)"/' \
+	-e 's/^__version__ = ".*/__version__ = "$(NEW_VERSION)"/' \
+	-e 's/^$$VERSION=".*/$$VERSION="$(NEW_VERSION)"/' \
+	-e 's/^$$VERSION = ".*/$$VERSION = "$(NEW_VERSION)"/' \
+	$(shell find plugins/ -maxdepth 1 -type f) ; \
+	sed -i 's/say "Version: .*"/say "Version: $(NEW_VERSION)"/' check_mk_agent.openvms
+	sed -i 's/echo "Version: [0-9.a-z-]*"/echo "Version: $(NEW_VERSION)"/g' check_mk_agent.*
+	sed -i "s/^#define CMK_WIN_AGENT_VERSION .*/#define CMK_WIN_AGENT_VERSION \"$(NEW_VERSION)\"/" wnx/src/common/wnx_version.h
+
+build: $(DEB_PACKAGE) $(RPM_PACKAGE) $(WIN_PACKAGE)
+
+packages: $(DEB_PACKAGE) $(RPM_PACKAGE)
+
+deb: $(DEB_PACKAGE)
+
+rpm: $(RPM_PACKAGE)
+
+>>>>>>> upstream/master
 $(RPM_PACKAGE): waitmax
 	rm -rf $(RPM_TOPDIR)
 	mkdir -p $(RPM_TOPDIR)/RPMS
@@ -115,7 +122,13 @@ $(RPM_PACKAGE): waitmax
 $(DEB_PACKAGE): $(RPM_PACKAGE)
 	@echo "Sorry. Debian packages currently via alien"
 	rm -f *.deb
-	fakeroot alien --scripts -k --to-deb $(RPM_PACKAGE)
+	set -e ; \
+	if [ -z "$$FAKEROOTKEY" ]; then \
+	    FAKEROOT=fakeroot ; \
+	else \
+	    FAKEROOT= ; \
+	fi ; \
+	$$FAKEROOT alien --scripts -k --to-deb $(RPM_PACKAGE)
 	DEB_PKG=$$(ls *.deb) ; \
 	echo "Repackaging $$DEB_PKG" ; \
 	rm -rf deb-unpack ; \

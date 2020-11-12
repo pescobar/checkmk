@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: Security Master smoke sensors
+=======
+title: Security Master: Smoke
+>>>>>>> upstream/master
 agents: snmp
 catalog: hw/environment/maykg
 license: GPL
@@ -8,7 +12,14 @@ description:
  If smoke is detected check will return {CRITICAL}.
 
 item:
+<<<<<<< HEAD
  The id and name of the sensor.
 
 inventory:
  One sensor is discovered for each smoke sensor.
+=======
+ The ID and name of the sensor.
+
+inventory:
+ One service is created for each smoke sensor.
+>>>>>>> upstream/master

@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: HPE StoreOnce: General information
+=======
+title: HPE StoreOnce: General Information
+>>>>>>> upstream/master
 agents: storeonce
 catalog: hw/storagehw/hpe
 license: GPL
@@ -9,7 +13,14 @@ description:
  informational and will not change his state.
 
 item:
+<<<<<<< HEAD
  The product class will be the item
 
 inventory:
  Only one service is created
+=======
+ The product class
+
+inventory:
+ One service is created.
+>>>>>>> upstream/master

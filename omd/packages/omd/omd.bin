@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 #!/omd/versions/###OMD_VERSION###/bin/python
+=======
+#!/omd/versions/###OMD_VERSION###/bin/python3
+>>>>>>> upstream/master
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # vim: tabstop=8 expandtab shiftwidth=4 softtabstop=4
 #
@@ -27,11 +31,14 @@
 
 isort:skip_file"""
 
+<<<<<<< HEAD
 # Disable YAPF for the moment. There is a larger commit pending that
 # needs to be merged before YAPFing this file.
 
 # yapf: disable
 
+=======
+>>>>>>> upstream/master
 import os
 import sys
 

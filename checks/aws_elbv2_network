@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -27,6 +28,23 @@
 
 def parse_aws_elbv2_network(info):
     metrics = _extract_aws_metrics_by_labels([
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# NOTE: Careful when replacing the *-import below with a more specific import. This can cause
+# problems because it might remove variables from the check-context which are necessary for
+# resolving legacy discovery results such as [("SUMMARY", "diskstat_default_levels")]. Furthermore,
+# it might also remove variables needed for accessing discovery rulesets.
+from cmk.base.check_legacy_includes.aws import *  # pylint: disable=wildcard-import,unused-wildcard-import
+
+
+def parse_aws_elbv2_network(info):
+    metrics = extract_aws_metrics_by_labels([
+>>>>>>> upstream/master
         'ConsumedLCUs',
         'ActiveFlowCount',
         'ActiveFlowCount_TLS',
@@ -45,7 +63,11 @@ def parse_aws_elbv2_network(info):
     # We get exactly one entry: {INST-ID: METRICS}
     # INST-ID is the piggyback host name
     try:
+<<<<<<< HEAD
         return metrics.values()[-1]
+=======
+        return list(metrics.values())[-1]
+>>>>>>> upstream/master
     except IndexError:
         return {}
 
@@ -61,12 +83,23 @@ def parse_aws_elbv2_network(info):
 
 
 def check_aws_elbv2_network_lcu(item, params, parsed):
+<<<<<<< HEAD
     lcus = parsed['ConsumedLCUs']
     yield check_levels(lcus,
                        'aws_consumed_lcus',
                        params.get('levels'),
                        human_readable_func=int,
                        infoname="Consumed")
+=======
+    lcus = parsed.get('ConsumedLCUs')
+    if lcus is None:
+        raise MKCounterWrapped("Currently no data from AWS")
+    yield check_levels(lcus,
+                       'aws_consumed_lcus',
+                       params.get('levels'),
+                       human_readable_func=aws_get_float_human_readable,
+                       infoname="Consumption")
+>>>>>>> upstream/master
 
 
 check_info['aws_elbv2_network'] = {
@@ -74,7 +107,10 @@ check_info['aws_elbv2_network'] = {
     'inventory_function': lambda p: inventory_aws_generic_single(p, ['ConsumedLCUs']),
     'check_function': check_aws_elbv2_network_lcu,
     'service_description': 'AWS/NetworkELB LCUs',
+<<<<<<< HEAD
     'includes': ['aws.include'],
+=======
+>>>>>>> upstream/master
     'group': 'aws_elbv2_lcu',
     'has_perfdata': True,
 }
@@ -97,6 +133,7 @@ _aws_elbv2_network_connection_types = [
 ]
 
 
+<<<<<<< HEAD
 def inventory_aws_elbv2_network_connections(parsed):
     for conn_ty in _aws_elbv2_network_connection_types:
         if conn_ty in parsed:
@@ -105,10 +142,20 @@ def inventory_aws_elbv2_network_connections(parsed):
 
 def check_aws_elbv2_network_connections(item, params, parsed):
     for conn_ty, (title, key) in zip(_aws_elbv2_network_connection_types, [
+=======
+def check_aws_elbv2_network_connections(item, params, parsed):
+    return check_aws_metrics([{
+        'metric_val': parsed.get(cw_metric_name),
+        'metric_name': 'aws_%s_connections' % key,
+        'info_name': info_name,
+        'human_readable_func': aws_get_counts_rate_human_readable
+    } for cw_metric_name, (info_name, key) in zip(_aws_elbv2_network_connection_types, [
+>>>>>>> upstream/master
         ('Active', 'active'),
         ('Active TLS', 'active_tls'),
         ('New', 'new'),
         ('New TLS', 'new_tls'),
+<<<<<<< HEAD
     ]):
         conns = parsed.get(conn_ty)
         if conns is None:
@@ -118,14 +165,24 @@ def check_aws_elbv2_network_connections(item, params, parsed):
                            None,
                            human_readable_func=int,
                            infoname=title)
+=======
+    ])])
+>>>>>>> upstream/master
 
 
 check_info['aws_elbv2_network.connections'] = {
     'parse_function': parse_aws_elbv2_network,
+<<<<<<< HEAD
     'inventory_function': inventory_aws_elbv2_network_connections,
     'check_function': check_aws_elbv2_network_connections,
     'service_description': 'AWS/NetworkELB Connections',
     'includes': ['aws.include'],
+=======
+    'inventory_function': lambda p: inventory_aws_generic_single(
+        p, _aws_elbv2_network_connection_types, requirement=any),
+    'check_function': check_aws_elbv2_network_connections,
+    'service_description': 'AWS/NetworkELB Connections',
+>>>>>>> upstream/master
     'has_perfdata': True,
 }
 
@@ -139,6 +196,7 @@ check_info['aws_elbv2_network.connections'] = {
 #   |                                 |___/                                |
 #   '----------------------------------------------------------------------'
 
+<<<<<<< HEAD
 
 def check_aws_elbv2_network_healthy_hosts(item, params, parsed):
     try:
@@ -183,6 +241,54 @@ check_info['aws_elbv2_network.healthy_hosts'] = {
     'group': 'aws_elb_healthy_hosts',
     'has_perfdata': True,
 }
+=======
+# This service is currently never discovered, because the AWS special agent does not deliver the
+# corresponding data. After fixing this issue in the special agent, probably the best solution is to
+# discover one service per target group.
+
+# def check_aws_elbv2_network_healthy_hosts(item, params, parsed):
+#     try:
+#         healthy_hosts = int(parsed["HealthyHostCount"])
+#     except (KeyError, ValueError):
+#         healthy_hosts = None
+#
+#     try:
+#         unhealthy_hosts = int(parsed["UnHealthyHostCount"])
+#     except (KeyError, ValueError):
+#         unhealthy_hosts = None
+#
+#     if healthy_hosts is not None:
+#         yield 0, 'Healthy hosts: %s' % healthy_hosts
+#
+#     if unhealthy_hosts is not None:
+#         yield 0, 'Unhealthy hosts: %s' % unhealthy_hosts
+#
+#     if healthy_hosts is not None and unhealthy_hosts is not None:
+#         total_hosts = unhealthy_hosts + healthy_hosts
+#         yield 0, 'Total: %s' % total_hosts
+#
+#         try:
+#             perc = 100.0 * healthy_hosts / total_hosts
+#         except ZeroDivisionError:
+#             perc = None
+#
+#         if perc is not None:
+#             yield check_levels(perc,
+#                                'aws_overall_hosts_health_perc',
+#                                params.get('levels_overall_hosts_health_perc'),
+#                                human_readable_func=get_percent_human_readable,
+#                                infoname="Proportion of healthy hosts")
+#
+#
+# check_info['aws_elbv2_network.healthy_hosts'] = {
+#     'inventory_function': lambda p: inventory_aws_generic_single(
+#         p, ['HealthyHostCount', 'UnHealthyHostCount']),
+#     'check_function': check_aws_elbv2_network_healthy_hosts,
+#     'service_description': 'AWS/NetworkELB Healthy Hosts',
+#     'group': 'aws_elb_healthy_hosts',
+#     'has_perfdata': True,
+# }
+>>>>>>> upstream/master
 
 #.
 #   .--TLS handshakes------------------------------------------------------.
@@ -206,6 +312,7 @@ _aws_elbv2_network_tls_types = [
 ]
 
 
+<<<<<<< HEAD
 def inventory_aws_elbv2_network_tls_handshakes(parsed):
     for metric in _aws_elbv2_network_tls_types:
         if metric in parsed:
@@ -232,6 +339,22 @@ check_info['aws_elbv2_network.tls_handshakes'] = {
     'check_function': check_aws_elbv2_network_tls_handshakes,
     'service_description': 'AWS/NetworkELB TLS Handshakes',
     'includes': ['aws.include'],
+=======
+def check_aws_elbv2_network_tls_handshakes(item, params, parsed):
+    return check_aws_metrics([{
+        'metric_val': parsed.get(cw_metric_name),
+        'metric_name': 'aws_failed_tls_%s_handshake' % info_name.lower(),
+        'info_name': info_name,
+        'human_readable_func': aws_get_counts_rate_human_readable
+    } for cw_metric_name, info_name in zip(_aws_elbv2_network_tls_types, ['Client', 'Target'])])
+
+
+check_info['aws_elbv2_network.tls_handshakes'] = {
+    'inventory_function': lambda p: inventory_aws_generic_single(
+        p, _aws_elbv2_network_tls_types, requirement=any),
+    'check_function': check_aws_elbv2_network_tls_handshakes,
+    'service_description': 'AWS/NetworkELB TLS Handshakes',
+>>>>>>> upstream/master
     'has_perfdata': True,
 }
 
@@ -252,6 +375,7 @@ _aws_elbv2_network_rst_packets_types = [
 ]
 
 
+<<<<<<< HEAD
 def inventory_aws_elbv2_network_rst_packets(parsed):
     for metric in _aws_elbv2_network_rst_packets_types:
         if metric in parsed:
@@ -275,6 +399,26 @@ check_info['aws_elbv2_network.rst_packets'] = {
     'check_function': check_aws_elbv2_network_rst_packets,
     'service_description': 'AWS/NetworkELB Reset Packets',
     'includes': ['aws.include'],
+=======
+def check_aws_elbv2_network_rst_packets(item, params, parsed):
+    return check_aws_metrics([{
+        'metric_val': parsed.get(cw_metric_name),
+        'metric_name': 'aws_%s' % key,
+        'info_name': info_name,
+        'human_readable_func': aws_get_counts_rate_human_readable
+    } for cw_metric_name, (info_name, key) in zip(_aws_elbv2_network_rst_packets_types, [
+        ('From client to target', 'tcp_client_rst'),
+        ('Generated by load balancer', 'tcp_elb_rst'),
+        ('From target to client', 'tcp_target_rst'),
+    ])])
+
+
+check_info['aws_elbv2_network.rst_packets'] = {
+    'inventory_function': lambda p: inventory_aws_generic_single(
+        p, _aws_elbv2_network_rst_packets_types, requirement=any),
+    'check_function': check_aws_elbv2_network_rst_packets,
+    'service_description': 'AWS/NetworkELB Reset Packets',
+>>>>>>> upstream/master
     'has_perfdata': True,
 }
 
@@ -288,6 +432,7 @@ check_info['aws_elbv2_network.rst_packets'] = {
 #   |                                                                      |
 #   '----------------------------------------------------------------------'
 
+<<<<<<< HEAD
 
 def inventory_aws_elbv2_network_statistics(parsed):
     for metric in [
@@ -321,5 +466,30 @@ check_info['aws_elbv2_network.statistics'] = {
     'check_function': check_aws_elbv2_network_statistics,
     'service_description': 'AWS/NetworkELB Statistics',
     'includes': ['aws.include'],
+=======
+_aws_elbv2_network_statistics_metric_names = [
+    'ProcessedBytes',
+    'ProcessedBytes_TLS',
+]
+
+
+def check_aws_elbv2_network_statistics(item, params, parsed):
+    return check_aws_metrics([{
+        'metric_val': parsed.get(cw_metric_name),
+        'metric_name': 'aws_%s' % key,
+        'info_name': info_name,
+        'human_readable_func': aws_get_bytes_rate_human_readable
+    } for cw_metric_name, (info_name, key) in zip(_aws_elbv2_network_statistics_metric_names, [
+        ('Processed bytes', 'proc_bytes'),
+        ('Processed bytes TLS', 'proc_bytes_tls'),
+    ])])
+
+
+check_info['aws_elbv2_network.statistics'] = {
+    'inventory_function': lambda p: inventory_aws_generic_single(
+        p, _aws_elbv2_network_statistics_metric_names, requirement=any),
+    'check_function': check_aws_elbv2_network_statistics,
+    'service_description': 'AWS/NetworkELB Statistics',
+>>>>>>> upstream/master
     'has_perfdata': True,
 }

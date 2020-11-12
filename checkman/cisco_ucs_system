@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: Cisco UCS: System operation status
+=======
+title: Cisco UCS: System Operation Status
+>>>>>>> upstream/master
 agents: snmp
 catalog: hw/network/cisco
 license: GPL

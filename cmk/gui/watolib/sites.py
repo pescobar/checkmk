@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,10 +24,18 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 import os
 import re
 import time
+<<<<<<< HEAD
 import shutil
 import traceback
 from typing import NamedTuple
@@ -39,6 +48,20 @@ import cmk.gui.sites
 import cmk.gui.multitar as multitar
 import cmk.gui.config as config
 import cmk.gui.userdb as userdb
+=======
+from typing import NamedTuple, Type
+from pathlib import Path
+
+from six import ensure_binary
+
+import cmk.utils.version as cmk_version
+import cmk.utils.store as store
+
+import cmk.gui.sites
+from cmk.gui.sites import SiteConfigurations
+import cmk.gui.config as config
+import cmk.gui.plugins.userdb.utils as userdb_utils
+>>>>>>> upstream/master
 import cmk.gui.hooks as hooks
 from cmk.gui.globals import html
 from cmk.gui.i18n import _
@@ -66,11 +89,16 @@ import cmk.gui.watolib.sidebar_reload
 from cmk.gui.watolib.config_domains import (
     ConfigDomainLiveproxy,
     ConfigDomainGUI,
+<<<<<<< HEAD
+=======
+    ConfigDomainCACertificates,
+>>>>>>> upstream/master
 )
 from cmk.gui.watolib.automation_commands import (
     AutomationCommand,
     automation_command_registry,
 )
+<<<<<<< HEAD
 from cmk.gui.watolib.global_settings import save_site_global_settings
 from cmk.gui.watolib.utils import (
     default_site,
@@ -92,6 +120,12 @@ class SiteManagementFactory(object):
 
 
 class SiteManagement(object):
+=======
+from cmk.gui.watolib.utils import multisite_dir
+
+
+class SiteManagement:
+>>>>>>> upstream/master
     @classmethod
     def connection_method_valuespec(cls):
         return CascadingDropdown(
@@ -132,7 +166,11 @@ class SiteManagement(object):
                          allow_empty=False,
                      )),
                  ],
+<<<<<<< HEAD
                  optional_keys=None,
+=======
+                 optional_keys=False,
+>>>>>>> upstream/master
              )),
         ]
         return conn_choices
@@ -163,7 +201,11 @@ class SiteManagement(object):
                  )),
                 ("tls", cls._tls_valuespec()),
             ],
+<<<<<<< HEAD
             optional_keys=None,
+=======
+            optional_keys=False,
+>>>>>>> upstream/master
         )
 
     @classmethod
@@ -192,7 +234,11 @@ class SiteManagement(object):
                                 "leave this enabled."),
                           )),
                      ],
+<<<<<<< HEAD
                      optional_keys=None,
+=======
+                     optional_keys=False,
+>>>>>>> upstream/master
                  )),
             ],
             help=
@@ -205,7 +251,11 @@ class SiteManagement(object):
         )
 
     @classmethod
+<<<<<<< HEAD
     def user_sync_valuespec(cls):
+=======
+    def user_sync_valuespec(cls, site_id):
+>>>>>>> upstream/master
         return CascadingDropdown(
             title=_("Sync with LDAP connections"),
             orientation="horizontal",
@@ -214,10 +264,18 @@ class SiteManagement(object):
                 ("all", _("Sync users with all connections")),
                 ("list", _("Sync with the following LDAP connections"),
                  ListChoice(
+<<<<<<< HEAD
                      choices=userdb.connection_choices,
                      allow_empty=False,
                  )),
             ],
+=======
+                     choices=userdb_utils.connection_choices,
+                     allow_empty=False,
+                 )),
+            ],
+            default_value="all" if config.site_is_local(site_id) else None,
+>>>>>>> upstream/master
             help=_(
                 'By default the users are synchronized automatically in the interval configured '
                 'in the connection. For example the LDAP connector synchronizes the users every '
@@ -294,6 +352,7 @@ class SiteManagement(object):
                                   _("You cannot do replication with the local site."))
 
         # User synchronization
+<<<<<<< HEAD
         user_sync_valuespec = cls.user_sync_valuespec()
         user_sync_valuespec.validate_value(site_configuration.get("user_sync"), "user_sync")
 
@@ -310,6 +369,22 @@ class SiteManagement(object):
 
         sites = config.migrate_old_site_config(config_vars["sites"])
         for site in sites.itervalues():
+=======
+        user_sync_valuespec = cls.user_sync_valuespec(site_id)
+        user_sync_valuespec.validate_value(site_configuration.get("user_sync"), "user_sync")
+
+    @classmethod
+    def load_sites(cls) -> SiteConfigurations:
+        if not os.path.exists(cls._sites_mk()):
+            return config.default_single_site_configuration()
+
+        raw_sites = store.load_from_mk_file(cls._sites_mk(), "sites", {})
+        if not raw_sites:
+            return config.default_single_site_configuration()
+
+        sites = config.migrate_old_site_config(raw_sites)
+        for site in sites.values():
+>>>>>>> upstream/master
             if site["proxy"] is not None:
                 site["proxy"] = cls.transform_old_connection_params(site["proxy"])
 
@@ -368,11 +443,19 @@ class SiteManagement(object):
         del all_sites[site_id]
         cls.save_sites(all_sites)
         cmk.gui.watolib.activate_changes.clear_site_replication_status(site_id)
+<<<<<<< HEAD
         cmk.gui.watolib.changes.add_change("edit-sites",
                                            _("Deleted site %s") % html.render_tt(site_id),
                                            domains=domains,
                                            sites=[default_site()])
         return None
+=======
+        cmk.gui.watolib.activate_changes.remove_site_config_directory(site_id)
+        cmk.gui.watolib.changes.add_change("edit-sites",
+                                           _("Deleted site %s") % site_id,
+                                           domains=domains,
+                                           sites=[config.omd_site()])
+>>>>>>> upstream/master
 
     @classmethod
     def _affected_config_domains(cls):
@@ -383,6 +466,20 @@ class SiteManagement(object):
         return value
 
 
+<<<<<<< HEAD
+=======
+class SiteManagementFactory:
+    @staticmethod
+    def factory() -> SiteManagement:
+        if cmk_version.is_raw_edition():
+            cls: Type[SiteManagement] = CRESiteManagement
+        else:
+            cls = CEESiteManagement
+
+        return cls()
+
+
+>>>>>>> upstream/master
 class CRESiteManagement(SiteManagement):
     pass
 
@@ -396,14 +493,21 @@ class CEESiteManagement(SiteManagement):
     def livestatus_proxy_valuespec(cls):
         return Alternative(
             title=_("Use Livestatus Proxy Daemon"),
+<<<<<<< HEAD
             style="dropdown",
             elements = [
                 FixedValue(None,
+=======
+            elements=[
+                FixedValue(
+                    None,
+>>>>>>> upstream/master
                     title=_("Connect directly, without Livestatus Proxy"),
                     totext="",
                 ),
                 Transform(
                     Dictionary(
+<<<<<<< HEAD
                 title=_("Use Livestatus Proxy Daemon"),
                 optional_keys = ["tcp"],
                 columns = 1,
@@ -438,12 +542,58 @@ class CEESiteManagement(SiteManagement):
             forth = cls.transform_old_connection_params,
         ),
         ],)
+=======
+                        title=_("Use Livestatus Proxy Daemon"),
+                        optional_keys=["tcp"],
+                        columns=1,
+                        elements=[
+                            ("params",
+                             Alternative(
+                                 title=_("Parameters"),
+                                 elements=[
+                                     FixedValue(
+                                         None,
+                                         title=_("Use global connection parameters"),
+                                         totext=
+                                         _("Use the <a href=\"%s\">global parameters</a> for this connection"
+                                          ) %
+                                         "wato.py?mode=edit_configvar&site=&varname=liveproxyd_default_connection_params",
+                                     ),
+                                     Dictionary(
+                                         title=_("Use custom connection parameters"),
+                                         elements=cls.liveproxyd_connection_params_elements(),
+                                     ),
+                                 ],
+                             )),
+                            ("tcp",
+                             LivestatusViaTCP(
+                                 title=_("Allow access via TCP"),
+                                 help=
+                                 _("This option can be useful to build a cascading distributed setup. "
+                                   "The Livestatus Proxy of this site connects to the site configured "
+                                   "here via Livestatus and opens up a TCP port for clients. The "
+                                   "requests of the clients are forwarded to the destination site. "
+                                   "You need to configure a TCP port here that is not used on the "
+                                   "local system yet."),
+                                 tcp_port=6560,
+                             )),
+                        ],
+                    ),
+                    forth=cls.transform_old_connection_params,
+                ),
+            ],
+        )
+>>>>>>> upstream/master
 
     # Duplicate code with cmk.cee.liveproxy.Channel._transform_old_socket_spec
     @classmethod
     def _transform_old_socket_spec(cls, sock_spec):
         """Transforms pre 1.6 socket configs"""
+<<<<<<< HEAD
         if isinstance(sock_spec, six.string_types):
+=======
+        if isinstance(sock_spec, str):
+>>>>>>> upstream/master
             return "unix", {
                 "path": sock_spec,
             }
@@ -560,6 +710,11 @@ class CEESiteManagement(SiteManagement):
                 "socket": siteconf["socket"],
             }
 
+<<<<<<< HEAD
+=======
+            conf[siteid]["connect_timeout"] = siteconf.get("timeout", 2)
+
+>>>>>>> upstream/master
             if "tcp" in proxy_params:
                 conf[siteid]["tcp"] = proxy_params["tcp"]
 
@@ -625,7 +780,11 @@ def _create_nagvis_backends(sites_config):
         if site == config.omd_site():
             continue  # skip local site, backend already added by omd
 
+<<<<<<< HEAD
         socket = cmk.gui.sites.encode_socket_for_livestatus(site_id, site)
+=======
+        socket = _encode_socket_for_nagvis(site_id, site)
+>>>>>>> upstream/master
 
         cfg += [
             '',
@@ -637,10 +796,28 @@ def _create_nagvis_backends(sites_config):
         if site.get("status_host"):
             cfg.append('statushost="%s"' % ':'.join(site['status_host']))
 
+<<<<<<< HEAD
+=======
+        if site["proxy"] is None and is_livestatus_encrypted(site):
+            address_spec = site["socket"][1]
+            tls_settings = address_spec["tls"][1]
+            cfg.append('verify_tls_peer=%d' % tls_settings["verify"])
+            cfg.append('verify_tls_ca_path=%s' % ConfigDomainCACertificates.trusted_cas_file)
+
+>>>>>>> upstream/master
     store.save_file('%s/etc/nagvis/conf.d/cmk_backends.ini.php' % cmk.utils.paths.omd_root,
                     '\n'.join(cfg))
 
 
+<<<<<<< HEAD
+=======
+def _encode_socket_for_nagvis(site_id, site):
+    if site["proxy"] is None and is_livestatus_encrypted(site):
+        return "tcp-tls:%s:%d" % site["socket"][1]["address"]
+    return cmk.gui.sites.encode_socket_for_livestatus(site_id, site)
+
+
+>>>>>>> upstream/master
 # Makes sure, that in distributed mode we monitor only
 # the hosts that are directly assigned to our (the local)
 # site.
@@ -653,7 +830,15 @@ def _update_distributed_wato_file(sites):
         if site.get("replication"):
             distributed = True
         if config.site_is_local(siteid):
+<<<<<<< HEAD
             create_distributed_wato_file(siteid, is_slave=False)
+=======
+            cmk.gui.watolib.activate_changes.create_distributed_wato_files(
+                base_dir=Path(cmk.utils.paths.omd_root),
+                site_id=siteid,
+                is_remote=False,
+            )
+>>>>>>> upstream/master
 
     # Remove the distributed wato file
     # a) If there is no distributed WATO setup
@@ -662,6 +847,7 @@ def _update_distributed_wato_file(sites):
         _delete_distributed_wato_file()
 
 
+<<<<<<< HEAD
 def create_distributed_wato_file(siteid, is_slave):
     output = wato_fileheader()
     output += ("# This file has been created by the master site\n"
@@ -671,6 +857,11 @@ def create_distributed_wato_file(siteid, is_slave):
     output += "is_wato_slave_site = %r\n" % is_slave
 
     store.save_file(cmk.utils.paths.check_mk_config_dir + "/distributed_wato.mk", output)
+=======
+def is_livestatus_encrypted(site):
+    family_spec, address_spec = site["socket"]
+    return family_spec in ["tcp", "tcp6"] and address_spec["tls"][0] != "plain_text"
+>>>>>>> upstream/master
 
 
 def _delete_distributed_wato_file():
@@ -682,11 +873,19 @@ def _delete_distributed_wato_file():
         store.save_file(p, "")
 
 
+<<<<<<< HEAD
 PushSnapshotRequest = NamedTuple("PushSnapshotRequest", [("site_id", str), ("tar_content", str)])
+=======
+PushSnapshotRequest = NamedTuple("PushSnapshotRequest", [
+    ("site_id", str),
+    ("tar_content", bytes),
+])
+>>>>>>> upstream/master
 
 
 @automation_command_registry.register
 class AutomationPushSnapshot(AutomationCommand):
+<<<<<<< HEAD
     def command_name(self):
         return "push-snapshot"
 
@@ -695,11 +894,25 @@ class AutomationPushSnapshot(AutomationCommand):
         site_id = html.request.var("siteid")
 
         self._verify_slave_site_config(site_id)
+=======
+    """Apply a config sync snapshot create by a pre 1.7 site
+
+    This is kept for compatibility of pre 1.7 central sites with 1.7 remote sites.
+    TODO: This call can be dropped with 1.8.
+    """
+    def command_name(self):
+        return "push-snapshot"
+
+    def get_request(self) -> PushSnapshotRequest:
+        site_id = html.request.get_ascii_input_mandatory("siteid")
+        cmk.gui.watolib.activate_changes.verify_remote_site_config(site_id)
+>>>>>>> upstream/master
 
         snapshot = html.request.uploaded_file("snapshot")
         if not snapshot:
             raise MKGeneralException(_('Invalid call: The snapshot is missing.'))
 
+<<<<<<< HEAD
         return PushSnapshotRequest(site_id=site_id, tar_content=snapshot[2])
 
     def execute(self, request):
@@ -742,3 +955,12 @@ class AutomationPushSnapshot(AutomationCommand):
             save_site_global_settings(site_globals)
         finally:
             shutil.rmtree(tmp_dir)
+=======
+        return PushSnapshotRequest(site_id=site_id, tar_content=ensure_binary(snapshot[2]))
+
+    def execute(self, request: PushSnapshotRequest) -> bool:
+        with store.lock_checkmk_configuration():
+            return cmk.gui.watolib.activate_changes.apply_pre_17_sync_snapshot(
+                request.site_id, request.tar_content, Path(cmk.utils.paths.omd_root),
+                cmk.gui.watolib.activate_changes.get_replication_paths())
+>>>>>>> upstream/master

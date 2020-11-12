@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,6 +24,13 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 from cmk.gui.i18n import _
 from cmk.gui.valuespec import (
@@ -34,7 +42,11 @@ from cmk.gui.valuespec import (
     Tuple,
 )
 from cmk.gui.plugins.wato import (
+<<<<<<< HEAD
     RulespecGroupManualChecksNetworking,
+=======
+    RulespecGroupEnforcedServicesNetworking,
+>>>>>>> upstream/master
     rulespec_registry,
     ManualCheckParameterRulespec,
 )
@@ -114,7 +126,11 @@ def _parameter_valuespec_tcp_connections():
 rulespec_registry.register(
     ManualCheckParameterRulespec(
         check_group_name="tcp_connections",
+<<<<<<< HEAD
         group=RulespecGroupManualChecksNetworking,
+=======
+        group=RulespecGroupEnforcedServicesNetworking,
+>>>>>>> upstream/master
         item_spec=_item_spec_tcp_connections,
         parameter_valuespec=_parameter_valuespec_tcp_connections,
         title=lambda: _("Monitor specific TCP/UDP connections and listeners"),

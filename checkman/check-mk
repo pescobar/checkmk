@@ -1,6 +1,12 @@
+<<<<<<< HEAD
 title: Check retrieval of information for Check_MK
 agents: linux, openvms, aix, netbsd, macosx, freebsd, openwrt, openbsd, hpux, solaris
 catalog: generic
+=======
+title: Checkmk: Retrieval of Information
+agents: linux, openvms, aix, netbsd, macosx, freebsd, openwrt, openbsd, hpux, solaris
+catalog: app/cmk
+>>>>>>> upstream/master
 license: GPL
 distribution: check_mk
 description:
@@ -9,7 +15,11 @@ description:
   The data sources can include configured agents, special agents, SNMP,
   piggyback data and management boards of hosts. Its overall service
   status depends on the success of these tasks. The resulting states
+<<<<<<< HEAD
   can be configured using the ruleset "Status of the Check_MK services".
+=======
+  can be configured using the ruleset "Status of the Checkmk services".
+>>>>>>> upstream/master
 
   Once the monitoring information is received, it executes the Checkmk
   checks and updates all passive services that are configured for the

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # encoding: utf-8
 # pylint: disable=redefined-outer-name
 import pytest  # type: ignore
@@ -10,6 +11,22 @@ from cmk.utils.rulesets.ruleset_matcher import RulesetMatchObject
 def test_ruleset_match_object_invalid_attribute_in_init():
     with pytest.raises(TypeError, match="unexpected keyword"):
         RulesetMatchObject(x=1)  # pylint: disable=unexpected-keyword-arg
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# pylint: disable=redefined-outer-name
+import pytest  # type: ignore[import]
+from testlib.base import Scenario
+
+from cmk.utils.type_defs import CheckPluginName
+from cmk.base.check_utils import Service
+from cmk.base.discovered_labels import DiscoveredServiceLabels, ServiceLabel
+from cmk.utils.rulesets.ruleset_matcher import RulesetMatchObject
+>>>>>>> upstream/master
 
 
 def test_ruleset_match_object_no_conditions():
@@ -18,12 +35,15 @@ def test_ruleset_match_object_no_conditions():
     assert x.service_description is None
 
 
+<<<<<<< HEAD
 def test_ruleset_match_object_set_invalid_attribute():
     x = RulesetMatchObject(host_name=None, service_description=None)
     with pytest.raises(AttributeError, match="object has no attribute"):
         x.xyz = 123  # pylint: disable=assigning-non-slot
 
 
+=======
+>>>>>>> upstream/master
 def test_ruleset_match_object_host_name():
     obj = RulesetMatchObject(host_name="abc", service_description=None)
     assert obj.host_name == "abc"
@@ -488,7 +508,11 @@ def test_ruleset_matcher_get_service_ruleset_values_labels(monkeypatch, hostname
 
     ts.add_host("host1")
     ts.set_autochecks("host1", [
+<<<<<<< HEAD
         Service("cpu.load",
+=======
+        Service(CheckPluginName("cpu_load"),
+>>>>>>> upstream/master
                 None,
                 "CPU load",
                 "{}",
@@ -501,7 +525,17 @@ def test_ruleset_matcher_get_service_ruleset_values_labels(monkeypatch, hostname
 
     ts.add_host("host2")
     ts.set_autochecks("host2", [
+<<<<<<< HEAD
         Service("cpu.load", None, "CPU load", "{}", service_labels=DiscoveredServiceLabels()),
+=======
+        Service(
+            CheckPluginName("cpu_load"),
+            None,
+            "CPU load",
+            "{}",
+            service_labels=DiscoveredServiceLabels(),
+        ),
+>>>>>>> upstream/master
     ])
 
     config_cache = ts.apply(monkeypatch)

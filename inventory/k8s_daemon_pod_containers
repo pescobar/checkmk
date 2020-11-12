@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/env python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -26,12 +27,28 @@
 
 
 def inv_k8s_daemon_pod_containers(info, inventory_tree, _status_data_tree):
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+from cmk.base.check_legacy_includes.k8s import *  # pylint: disable=wildcard-import,unused-wildcard-import
+
+
+def inv_k8s_daemon_pod_containers(info, inventory_tree):
+>>>>>>> upstream/master
     parsed = parse_k8s(info)
 
     path = "software.applications.kubernetes.daemon_pod_containers:"
     inv_node = inventory_tree.get_list(path)
 
+<<<<<<< HEAD
     for container_name, container_data in sorted(parsed.iteritems()):
+=======
+    for container_name, container_data in sorted(parsed.items()):
+>>>>>>> upstream/master
         inv_node.append({
             'name': container_name,
             'image': container_data['image'],
@@ -41,5 +58,8 @@ def inv_k8s_daemon_pod_containers(info, inventory_tree, _status_data_tree):
 
 inv_info['k8s_daemon_pod_containers'] = {
     'inv_function': inv_k8s_daemon_pod_containers,
+<<<<<<< HEAD
     'includes': ['k8s.include'],
+=======
+>>>>>>> upstream/master
 }

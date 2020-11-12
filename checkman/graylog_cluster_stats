@@ -4,10 +4,18 @@ catalog: app/graylog
 license: GPL
 distribution: check_mk
 description:
+<<<<<<< HEAD
  This check monitors the cluster stats of a graylog instance. It outputs the
+=======
+ This check monitors the cluster stats of a Graylog instance. It outputs the
+>>>>>>> upstream/master
  number of inputs, outputs, streams, stream rules, extractors and user.
 
  Needs the datasource "Check state of Graylog" to be configured.
 
 inventory:
+<<<<<<< HEAD
  One service {"Graylog Cluster Stats"} will be created
+=======
+ One service is created.
+>>>>>>> upstream/master

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,11 +24,24 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+from typing import List
+>>>>>>> upstream/master
 
 from cmk.gui.i18n import _
 from cmk.gui.valuespec import (
     Alternative,
     Dictionary,
+<<<<<<< HEAD
+=======
+    DictionaryEntry,
+>>>>>>> upstream/master
     Integer,
     Percentage,
     TextAscii,
@@ -45,6 +59,7 @@ from cmk.gui.plugins.wato.check_parameters.utils import (
 
 
 def _parameter_valuespec_cisco_mem():
+<<<<<<< HEAD
     return Transform(
         Dictionary(elements=[
             ("levels",
@@ -72,6 +87,36 @@ def _parameter_valuespec_cisco_mem():
                  ],
              )),
         ] + size_trend_elements),
+=======
+    elements: List[DictionaryEntry] = [
+        ("levels",
+         Alternative(
+             title=_("Levels for memory usage"),
+             elements=[
+                 Tuple(
+                     title=_("Specify levels in percentage of total RAM"),
+                     elements=[
+                         Percentage(title=_("Warning at a usage of"),
+                                    unit=_("% of RAM"),
+                                    maxvalue=None),
+                         Percentage(title=_("Critical at a usage of"),
+                                    unit=_("% of RAM"),
+                                    maxvalue=None)
+                     ],
+                 ),
+                 Tuple(
+                     title=_("Specify levels in absolute usage values"),
+                     elements=[
+                         Integer(title=_("Warning at"), unit=_("MB")),
+                         Integer(title=_("Critical at"), unit=_("MB"))
+                     ],
+                 ),
+             ],
+         )),
+    ]
+    return Transform(
+        Dictionary(elements=elements + size_trend_elements),
+>>>>>>> upstream/master
         forth=lambda spec: spec if isinstance(spec, dict) else {"levels": spec},
     )
 

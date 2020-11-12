@@ -1,28 +1,10 @@
-// +------------------------------------------------------------------+
-// |             ____ _               _        __  __ _  __           |
-// |            / ___| |__   ___  ___| | __   |  \/  | |/ /           |
-// |           | |   | '_ \ / _ \/ __| |/ /   | |\/| | ' /            |
-// |           | |___| | | |  __/ (__|   <    | |  | | . \            |
-// |            \____|_| |_|\___|\___|_|\_\___|_|  |_|_|\_\           |
-// |                                                                  |
-// | Copyright Mathias Kettner 2014             mk@mathias-kettner.de |
-// +------------------------------------------------------------------+
-//
-// This file is part of Check_MK.
-// The official homepage is at http://mathias-kettner.de/check_mk.
-//
-// check_mk is free software;  you can redistribute it and/or modify it
-// under the  terms of the  GNU General Public License  as published by
-// the Free Software Foundation in version 2.  check_mk is  distributed
-// in the hope that it will be useful, but WITHOUT ANY WARRANTY;  with-
-// out even the implied warranty of  MERCHANTABILITY  or  FITNESS FOR A
-// PARTICULAR PURPOSE. See the  GNU General Public License for more de-
-// tails. You should have  received  a copy of the  GNU  General Public
-// License along with GNU Make; see the file  COPYING.  If  not,  write
-// to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
-// Boston, MA 02110-1301 USA.
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the
+// terms and conditions defined in the file COPYING, which is part of this
+// source code package.
 
 #include "ServiceListColumn.h"
+<<<<<<< HEAD
 #include <algorithm>
 #include <iterator>
 #include "Renderer.h"
@@ -44,6 +26,32 @@
 #include "auth.h"
 #endif
 
+=======
+
+#include <algorithm>
+#include <iterator>
+
+#include "Renderer.h"
+#include "Row.h"
+
+#ifdef CMC
+#include <memory>
+#include <unordered_set>
+
+#include "Host.h"
+#include "LogEntry.h"
+#include "Service.h"
+#include "State.h"
+#include "Timeperiod.h"
+#else
+#include <unordered_map>
+
+#include "MonitoringCore.h"
+#include "TimeperiodsCache.h"
+#include "auth.h"
+#endif
+
+>>>>>>> upstream/master
 void ServiceListColumn::output(Row row, RowRenderer &r,
                                const contact *auth_user,
                                std::chrono::seconds /*timezone_offset*/) const {
@@ -82,8 +90,28 @@ std::vector<std::string> ServiceListColumn::getValue(
                    std::back_inserter(descriptions),
                    [](const auto &entry) { return entry.description; });
     return descriptions;
+<<<<<<< HEAD
+=======
 }
 
+#ifndef CMC
+extern TimeperiodsCache *g_timeperiods_cache;
+
+namespace {
+bool inCustomTimeperiod(MonitoringCore *mc, service *svc) {
+    auto attrs = mc->customAttributes(&svc->custom_variables,
+                                      AttributeKind::custom_variables);
+    auto it = attrs.find("SERVICE_PERIOD");
+    if (it != attrs.end()) {
+        return g_timeperiods_cache->inTimeperiod(it->second);
+    }
+    return true;  // assume 24X7
+>>>>>>> upstream/master
+}
+}  // namespace
+#endif
+
+<<<<<<< HEAD
 #ifndef CMC
 extern TimeperiodsCache *g_timeperiods_cache;
 
@@ -100,13 +128,20 @@ bool inCustomTimeperiod(MonitoringCore *mc, service *svc) {
 }  // namespace
 #endif
 
+=======
+>>>>>>> upstream/master
 std::vector<ServiceListColumn::Entry> ServiceListColumn::getEntries(
     Row row, const contact *auth_user) const {
     std::vector<Entry> entries;
 #ifdef CMC
     (void)_mc;  // HACK
+<<<<<<< HEAD
     if (auto mem = columnData<Host::services_t>(row)) {
         for (auto &svc : *mem) {
+=======
+    if (const auto *mem = columnData<Host::services_t>(row)) {
+        for (const auto &svc : *mem) {
+>>>>>>> upstream/master
             if (auth_user == nullptr || svc->hasContact(auth_user)) {
                 entries.emplace_back(
                     svc->name(),
@@ -122,7 +157,11 @@ std::vector<ServiceListColumn::Entry> ServiceListColumn::getEntries(
         }
     }
 #else
+<<<<<<< HEAD
     if (auto p = columnData<servicesmember *>(row)) {
+=======
+    if (const auto *const p = columnData<servicesmember *>(row)) {
+>>>>>>> upstream/master
         for (servicesmember *mem = *p; mem != nullptr; mem = mem->next) {
             service *svc = mem->service_ptr;
             if (auth_user == nullptr ||

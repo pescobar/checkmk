@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/env python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,6 +24,13 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 # TODO: Umbau: alle Funktionen perfometer_.. geben eine logische Struktur
 # zurück.
@@ -32,6 +40,10 @@
 # Darin die vertikalen Balken.
 
 import math
+<<<<<<< HEAD
+=======
+from typing import Dict as _Dict
+>>>>>>> upstream/master
 
 import cmk.gui.utils as utils
 import cmk.gui.metrics as metrics
@@ -53,7 +65,12 @@ from cmk.utils.plugin_loader import load_plugins
 #   |                         |___/                                        |
 #   '----------------------------------------------------------------------'
 
+<<<<<<< HEAD
 perfometers = {}
+=======
+# TODO: Is this unused?
+perfometers: _Dict = {}
+>>>>>>> upstream/master
 
 #   .--Old Style-----------------------------------------------------------.
 #   |                ___  _     _   ____  _         _                      |
@@ -69,7 +86,22 @@ perfometers = {}
 
 #helper function for perfometer tables
 def render_perfometer_td(perc, color):
+<<<<<<< HEAD
     style = ["width: %d%%;" % int(float(perc)), "background-color: %s" % color]
+=======
+    # the hex color can have additional information about opacity
+    # internet explorer has problems with the format of rgba, e.g.: #aaaaaa4d
+    # the solution is to set the background-color value to rgb ('#aaaaaa')
+    # and use the css opacity for the opacity hex value in float '4d' -> 0.3
+    opacity = None
+    if len(color) == 9:
+        opacity = int(color[7:], 16) / 255.0
+        color = color[:7]
+
+    style = ["width: %d%%;" % int(float(perc)), "background-color: %s" % color]
+    if opacity is not None:
+        style += ["opacity: %s" % opacity]
+>>>>>>> upstream/master
     return html.render_td('', class_="inner", style=style)
 
 
@@ -89,8 +121,13 @@ def perfometer_linear(perc, color):
 # displayed at 50% of the width
 def perfometer_logarithmic(value, half_value, base, color):
     return render_metricometer([
+<<<<<<< HEAD
         metrics.MetricometerRendererLogarithmic(None, None).get_stack_from_values(
             value, half_value, base, color)
+=======
+        metrics.MetricometerRendererLogarithmic.get_stack_from_values(value, half_value, base,
+                                                                      color)
+>>>>>>> upstream/master
     ])
 
 
@@ -99,7 +136,11 @@ def calculate_half_row_logarithmic(left_or_right, value, color, half_value, base
     value = float(value)
 
     if value == 0.0:
+<<<<<<< HEAD
         pos = 0
+=======
+        pos = 0.0
+>>>>>>> upstream/master
     else:
         half_value = float(half_value)
         h = math.log(half_value, base)  # value to be displayed at 50%
@@ -121,8 +162,13 @@ def perfometer_logarithmic_dual(value_left, color_left, value_right, color_right
     return render_perfometer(data)
 
 
+<<<<<<< HEAD
 def perfometer_logarithmic_dual_independent\
     (value_left, color_left, half_value_left, base_left, value_right, color_right, half_value_right, base_right):
+=======
+def perfometer_logarithmic_dual_independent(value_left, color_left, half_value_left, base_left,
+                                            value_right, color_right, half_value_right, base_right):
+>>>>>>> upstream/master
     data = []
     data.extend(
         calculate_half_row_logarithmic("left", value_left, color_left, half_value_left, base_left))
@@ -156,9 +202,12 @@ def render_metricometer(stack):
     return h
 
 
+<<<<<<< HEAD
 # Load the legacy plugins
 utils.load_web_plugins("perfometer", globals())
 
+=======
+>>>>>>> upstream/master
 #.
 #   .--Plugins-------------------------------------------------------------.
 #   |                   ____  _             _                              |

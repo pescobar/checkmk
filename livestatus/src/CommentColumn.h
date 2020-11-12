@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // +------------------------------------------------------------------+
 // |             ____ _               _        __  __ _  __           |
 // |            / ___| |__   ___  ___| | __   |  \/  | |/ /           |
@@ -21,14 +22,30 @@
 // License along with GNU Make; see the file  COPYING.  If  not,  write
 // to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 // Boston, MA 02110-1301 USA.
+=======
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the
+// terms and conditions defined in the file COPYING, which is part of this
+// source code package.
+>>>>>>> upstream/master
 
 #ifndef CommentColumn_h
 #define CommentColumn_h
 
 #include "config.h"  // IWYU pragma: keep
+<<<<<<< HEAD
 #include <chrono>
 #include <string>
 #include <vector>
+=======
+
+#include <chrono>
+#include <string>
+#include <utility>
+#include <vector>
+
+#include "Column.h"
+>>>>>>> upstream/master
 #include "ListColumn.h"
 #include "contact_fwd.h"
 struct CommentData;
@@ -39,11 +56,17 @@ class Row;
 class CommentColumn : public ListColumn {
 public:
     CommentColumn(const std::string &name, const std::string &description,
+<<<<<<< HEAD
                   int indirect_offset, int extra_offset, int extra_extra_offset,
                   int offset, MonitoringCore *mc, bool is_service,
                   bool with_info, bool with_extra_info)
         : ListColumn(name, description, indirect_offset, extra_offset,
                      extra_extra_offset, offset)
+=======
+                  ColumnOffsets offsets, MonitoringCore *mc, bool is_service,
+                  bool with_info, bool with_extra_info)
+        : ListColumn(name, description, std::move(offsets))
+>>>>>>> upstream/master
         , _mc(mc)
         , _is_service(is_service)
         , _with_info(with_info)
@@ -62,7 +85,11 @@ private:
     bool _with_info;
     bool _with_extra_info;
 
+<<<<<<< HEAD
     std::vector<CommentData> comments_for_row(Row row) const;
+=======
+    [[nodiscard]] std::vector<CommentData> comments_for_row(Row row) const;
+>>>>>>> upstream/master
 };
 
 #endif  // CommentColumn_h

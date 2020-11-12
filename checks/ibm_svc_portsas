@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -24,6 +25,19 @@
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
 
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# NOTE: Careful when replacing the *-import below with a more specific import. This can cause
+# problems because it might remove variables from the check-context which are necessary for
+# resolving legacy discovery results such as [("SUMMARY", "diskstat_default_levels")]. Furthermore,
+# it might also remove variables needed for accessing discovery rulesets.
+from cmk.base.check_legacy_includes.ibm_svc import *  # pylint: disable=wildcard-import,unused-wildcard-import
+>>>>>>> upstream/master
 # Example agent output:
 # <<<ibm_svc_portsas:sep(58)>>>
 # 0:1:6Gb:1:node1:500507680305D3C0:online::host:host_controller:0:1
@@ -46,6 +60,7 @@
 # the corresponding header line
 #id:port_id:port_speed:node_id:node_name:WWPN:status:switch_WWPN:attachment:type:adapter_location:adapter_port_id
 
+<<<<<<< HEAD
 
 def parse_ibm_svc_portsas(info):
     dflt_header = [
@@ -94,6 +109,55 @@ def check_ibm_svc_portsas(item, params, data):
 
     sasport_status = data['status']
 
+=======
+factory_settings["ibm_svc_portsas_default_levels"] = {
+    'current_state': 'offline',
+}
+
+
+def parse_ibm_svc_portsas(info):
+    dflt_header = [
+        'id',
+        'port_id',
+        'port_speed',
+        'node_id',
+        'node_name',
+        'WWPN',
+        'status',
+        'switch_WWPN',
+        'attachment',
+        'type',
+        'adapter_location',
+        'adapter_port_id',
+    ]
+    parsed = {}
+    for id_, rows in parse_ibm_svc_with_header(info, dflt_header).items():
+        try:
+            data = rows[0]
+        except IndexError:
+            continue
+        if "node_id" in data and "adapter_location" in data and "adapter_port_id" in data:
+            item_name = "Node %s Slot %s Port %s" % (data['node_id'], data['adapter_location'],
+                                                     data['adapter_port_id'])
+        else:
+            item_name = "Port %s" % id_
+        parsed.setdefault(item_name, data)
+    return parsed
+
+
+def inventory_ibm_svc_portsas(parsed):
+    for item_name, data in parsed.items():
+        status = data['status']
+        if status == 'offline_unconfigured':
+            continue
+        yield item_name, {'current_state': status}
+
+
+@get_parsed_item_data
+def check_ibm_svc_portsas(item, params, data):
+    sasport_status = data['status']
+
+>>>>>>> upstream/master
     infotext = "Status: %s" % sasport_status
     if sasport_status == params['current_state']:
         state = 0
@@ -110,5 +174,9 @@ check_info["ibm_svc_portsas"] = {
     "check_function": check_ibm_svc_portsas,
     "inventory_function": inventory_ibm_svc_portsas,
     "service_description": "SAS %s",
+<<<<<<< HEAD
     "includes": ["ibm_svc.include"],
+=======
+    "default_levels_variable": "ibm_svc_portsas_default_levels",
+>>>>>>> upstream/master
 }

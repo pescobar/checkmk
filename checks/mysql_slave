@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -25,12 +26,28 @@
 # Boston, MA 02110-1301 USA.
 
 
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# NOTE: Careful when replacing the *-import below with a more specific import. This can cause
+# problems because it might remove variables from the check-context which are necessary for
+# resolving legacy discovery results such as [("SUMMARY", "diskstat_default_levels")]. Furthermore,
+# it might also remove variables needed for accessing discovery rulesets.
+from cmk.base.check_legacy_includes.mysql import *  # pylint: disable=wildcard-import,unused-wildcard-import
+
+
+>>>>>>> upstream/master
 @mysql_parse_per_item
 def parse_mysql_slave(info):
     data = {}
     for line in info:
         if not line[0].endswith(':'):
             continue
+<<<<<<< HEAD
 
         key = line[0][:-1]
         val = ' '.join(line[1:])
@@ -65,6 +82,42 @@ def check_mysql_slave(_no_item, params, data):
     if data['Slave_SQL_Running']:
         output.append('Slave-SQL: running')
 
+=======
+
+        key = line[0][:-1]
+        val = ' '.join(line[1:])
+
+        # Parse some values
+        try:
+            val = int(val)
+        except ValueError:
+            val = {'Yes': True, 'No': False, 'None': None}.get(val, val)
+        data[key] = val
+
+    return data
+
+
+@get_parsed_item_data
+def check_mysql_slave(_no_item, params, data):
+    state = 0
+    perfdata = []
+    output = []
+
+    if data['Slave_IO_Running']:
+        output.append('Slave-IO: running')
+
+        if data['Relay_Log_Space']:
+            output.append('Relay Log: %s' % get_bytes_human_readable(data['Relay_Log_Space']))
+            perfdata.append(('relay_log_space', data['Relay_Log_Space']))
+
+    else:
+        output.append('Slave-IO: not running(!!)')
+        state = 2
+
+    if data['Slave_SQL_Running']:
+        output.append('Slave-SQL: running')
+
+>>>>>>> upstream/master
         # Makes only sense to monitor the age when the SQL slave is running
         if data['Seconds_Behind_Master'] == 'NULL':
             output.append('Time behind master: NULL (Lost connection?)(!!)')
@@ -94,5 +147,8 @@ check_info['mysql_slave'] = {
     "service_description": "MySQL DB Slave %s",
     "has_perfdata": True,
     "group": "mysql_slave",
+<<<<<<< HEAD
     "includes": ["mysql.include"],
+=======
+>>>>>>> upstream/master
 }

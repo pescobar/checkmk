@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import pytest
 import os
 import re
@@ -5,6 +6,21 @@ import re
 pytestmark = pytest.mark.checks
 
 exec (open(os.path.join(os.path.dirname(__file__), '../../../checks/legacy_docker.include')).read())
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+import os
+import re
+import pytest  # type: ignore[import]
+
+from cmk.base.check_legacy_includes.legacy_docker import *
+
+pytestmark = pytest.mark.checks
+>>>>>>> upstream/master
 
 regex = re.compile
 
@@ -125,5 +141,9 @@ regex = re.compile
     }),
 ])
 def test_parse_legacy_docker_system_df(indata, outdata):
+<<<<<<< HEAD
     parsed = parse_legacy_docker_system_df(indata)  # pylint: disable=undefined-variable
+=======
+    parsed = parse_legacy_docker_system_df(indata)  # type: ignore[name-defined] # pylint: disable=undefined-variable
+>>>>>>> upstream/master
     assert parsed == outdata, "expected: %r, got %r" % (outdata, parsed)

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // +------------------------------------------------------------------+
 // |             ____ _               _        __  __ _  __           |
 // |            / ___| |__   ___  ___| | __   |  \/  | |/ /           |
@@ -21,16 +22,33 @@
 // License along with GNU Make; see the file  COPYING.  If  not,  write
 // to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 // Boston, MA 02110-1301 USA.
+=======
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the
+// terms and conditions defined in the file COPYING, which is part of this
+// source code package.
+>>>>>>> upstream/master
 
 #ifndef DowntimeColumn_h
 #define DowntimeColumn_h
 
 #include "config.h"  // IWYU pragma: keep
+<<<<<<< HEAD
 #include <chrono>
 #include <string>
 #include <vector>
 #include "ListColumn.h"
 #include "contact_fwd.h"
+=======
+
+#include <chrono>
+#include <string>
+#include <vector>
+
+#include "ListColumn.h"
+#include "contact_fwd.h"
+class ColumnOffsets;
+>>>>>>> upstream/master
 struct DowntimeData;
 class MonitoringCore;
 class Row;
@@ -41,11 +59,17 @@ public:
     enum class info { none, medium, full };
 
     DowntimeColumn(const std::string &name, const std::string &description,
+<<<<<<< HEAD
                    int indirect_offset, int extra_offset,
                    int extra_extra_offset, int offset, MonitoringCore *mc,
                    bool is_service, info with_info)
         : ListColumn(name, description, indirect_offset, extra_offset,
                      extra_extra_offset, offset)
+=======
+                   const ColumnOffsets &offsets, MonitoringCore *mc,
+                   bool is_service, info with_info)
+        : ListColumn(name, description, offsets)
+>>>>>>> upstream/master
         , _mc(mc)
         , _is_service(is_service)
         , _with_info(with_info) {}
@@ -62,7 +86,11 @@ private:
     bool _is_service;
     info _with_info;
 
+<<<<<<< HEAD
     std::vector<DowntimeData> downtimes_for_row(Row row) const;
+=======
+    [[nodiscard]] std::vector<DowntimeData> downtimes_for_row(Row row) const;
+>>>>>>> upstream/master
 };
 
 #endif  // DowntimeColumn_h

@@ -2,7 +2,11 @@ DISTRO_CODE     = sles12sp3
 OS_PACKAGES     =
 OS_PACKAGES    += libcap-progs # needed for setting special file permissions
 OS_PACKAGES    += cronie # needed for sites cron jobs
+<<<<<<< HEAD
 OS_PACKAGES      += net-tools # traceroute is needed for Check_MK parent scan
+=======
+OS_PACKAGES      += net-tools # traceroute is needed for Checkmk parent scan
+>>>>>>> upstream/master
 OS_PACKAGES    += apache2
 OS_PACKAGES    += bind-utils # check_dns
 OS_PACKAGES    += curl
@@ -30,8 +34,13 @@ OS_PACKAGES    += unzip
 OS_PACKAGES    += xinetd
 OS_PACKAGES    += xorg-x11-fonts
 OS_PACKAGES    += freeradius-client-libs
+<<<<<<< HEAD
 OS_PACKAGES    += binutils # Needed by Check_MK Agent Bakery
 OS_PACKAGES    += rpm-build # Needed by Check_MK Agent Bakery
+=======
+OS_PACKAGES    += binutils # Needed by Checkmk Agent Bakery
+OS_PACKAGES    += rpm-build # Needed by Checkmk Agent Bakery
+>>>>>>> upstream/master
 OS_PACKAGES    += libgio-2_0-0 # needed by msitools/Agent Bakery
 OS_PACKAGES    += libgsf-1-114 # needed by msitools/Agent Bakery
 OS_PACKAGES    += cpio # needed for Agent bakery (solaris pkgs)

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,11 +24,24 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+import cmk.base.plugins.agent_based.utils.sap_hana as sap_hana
+>>>>>>> upstream/master
 
 
 def parse_sap_hana_ess(info):
     parsed = {}
+<<<<<<< HEAD
     for sid_instance, lines in parse_sap_hana(info).iteritems():
+=======
+    for sid_instance, lines in sap_hana.parse_sap_hana(info).items():
+>>>>>>> upstream/master
         inst_data = {}
         for line in lines:
             if len(line) < 2:
@@ -47,7 +61,11 @@ def parse_sap_hana_ess(info):
 
 
 def inventory_sap_hana_ess(parsed):
+<<<<<<< HEAD
     for item in parsed.iterkeys():
+=======
+    for item in parsed:
+>>>>>>> upstream/master
         yield item, {}
 
 
@@ -66,7 +84,11 @@ def check_sap_hana_ess(item, params, data):
     if started_threads is None or started_threads < 1:
         state = 2
     else:
+<<<<<<< HEAD
         state = 2
+=======
+        state = 0
+>>>>>>> upstream/master
     yield state, 'Started threads: %s' % started_threads, [('threads', started_threads)]
 
 
@@ -75,6 +97,9 @@ check_info['sap_hana_ess'] = {
     'inventory_function': inventory_sap_hana_ess,
     'check_function': check_sap_hana_ess,
     'service_description': 'SAP HANA ESS %s',
+<<<<<<< HEAD
     'includes': ['sap_hana.include'],
+=======
+>>>>>>> upstream/master
     "has_perfdata": True,
 }

@@ -8,7 +8,14 @@ description:
  can be used.
 
 item:
+<<<<<<< HEAD
  The folder number is the item
 
 inventory:
  One service for each folder is created
+=======
+ The folder number
+
+inventory:
+ One service is created for each folder.
+>>>>>>> upstream/master

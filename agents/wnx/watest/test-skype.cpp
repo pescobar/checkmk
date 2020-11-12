@@ -24,7 +24,12 @@ extern std::wstring SkypeAspSomeCounter;
 TEST(SectionProviderSkype, Construction) {
     SkypeProvider skype;
     EXPECT_EQ(skype.getUniqName(), cma::section::kSkype);
+<<<<<<< HEAD
     EXPECT_EQ(internal::GetSkypeCountersVector()->size(), 30);
+=======
+    auto vec = internal::GetSkypeCountersVector();
+    EXPECT_EQ(vec->size(), 30);
+>>>>>>> upstream/master
     for (auto entry : *SkypeCounters) {
         EXPECT_EQ(entry.substr(0, 3), L"LS:");
         EXPECT_TRUE(entry.find(L" - ") != std::string::npos);
@@ -39,11 +44,21 @@ TEST(SectionProviderSkype, Api) {
 
     // verify registry keys
     EXPECT_EQ(skype.getUniqName(), cma::section::kSkype);
+<<<<<<< HEAD
     EXPECT_EQ(SkypeCounters->size(), 29);
 
     // store old values
     auto save = SkypeCounters;
     ON_OUT_OF_SCOPE(SkypeCounters = save;);  // recover
+=======
+    EXPECT_EQ(SkypeCounters->size(), 30);
+
+    // store old values
+    auto save = *SkypeCounters;
+    ON_OUT_OF_SCOPE(*SkypeCounters = save;
+                    EXPECT_TRUE(internal::GetSkypeCountersVector()->size() ==
+                                30));  // recover
+>>>>>>> upstream/master
 
     // prepare testing keys array
     SkypeCounters->clear();

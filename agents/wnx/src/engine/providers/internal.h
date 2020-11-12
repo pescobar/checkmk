@@ -1,3 +1,10 @@
+<<<<<<< HEAD
+=======
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the
+// terms and conditions defined in the file COPYING, which is part of this
+// source code package.
+>>>>>>> upstream/master
 
 // provides basic api to start and stop service
 
@@ -24,6 +31,7 @@ namespace cma {
 namespace provider {
 
 // simple creator valid state name
+<<<<<<< HEAD
 // gtest [+]
 inline std::string MakeStateFileName(const std::string& Name,
                                      const std::string& Ext,
@@ -38,10 +46,34 @@ inline std::string MakeStateFileName(const std::string& Name,
                    [](char c) { return std::isalnum(c) ? c : L'_'; });
 
     auto out = Name + ip + Ext;
+=======
+inline std::string MakeStateFileName(const std::string& name,
+                                     const std::string& extension,
+                                     const std::string& ip_address) {
+    if (name.empty() || extension.empty()) {
+        XLOG::l("Invalid parameters to MakeStateFileName '{}' '{}'", name,
+                extension);
+        return {};
+    }
+
+    std::string ip = ip_address.empty() ? "" : " " + ip_address;
+    std::transform(ip.cbegin(), ip.cend(), ip.begin(),
+                   [](char c) { return std::isalnum(c) ? c : L'_'; });
+
+    auto out = name + ip + extension;
+>>>>>>> upstream/master
 
     return out;
 }
 
+<<<<<<< HEAD
+=======
+inline std::string MakeStateFileName(const std::string& name,
+                                     const std::string& extension) {
+    return MakeStateFileName(name, extension, "");
+}
+
+>>>>>>> upstream/master
 class Basic {
 public:
     Basic(const std::string_view& Name, char Separator = 0)
@@ -61,10 +93,17 @@ public:
         // asio - for TCP
         // grpc - for GRPC
         // rest - for Rest
+<<<<<<< HEAD
         const std::string& CommandLine,  // anything here
         std::chrono::milliseconds Period = std::chrono::milliseconds{0}) = 0;
 
     virtual bool stop(bool Wait = true) = 0;
+=======
+        const std::string& CommandLine  // anything here
+        ) = 0;
+
+    virtual bool stop(bool Wait) = 0;
+>>>>>>> upstream/master
 
     std::string getUniqName() const { return uniq_name_; }
     const std::string ip() const { return ip_; }
@@ -72,8 +111,13 @@ public:
     // implemented only for very special providers which has to change
     // itself during generation of output(like plugins)
     virtual void updateSectionStatus() {}
+<<<<<<< HEAD
     std::string generateContent(const std::string_view& SectionName,
                                 bool ForceGeneration);
+=======
+    std::string generateContent(const std::string_view& section_name,
+                                bool force_generation);
+>>>>>>> upstream/master
     std::string generateContent() {
         return generateContent(section::kUseEmbeddedName, false);
     }
@@ -91,6 +135,11 @@ public:
     int timeout() const { return timeout_; }
     virtual void registerCommandLine(const std::string& CmdLine);
 
+<<<<<<< HEAD
+=======
+    void registerOwner(cma::srv::ServiceProcessor* sp);
+
+>>>>>>> upstream/master
     virtual void preStart() noexcept {}
     uint64_t errorCount() const { return error_count_; }
     uint64_t resetError() { return error_count_.exchange(0); }
@@ -135,17 +184,32 @@ protected:
     // optional API to store info about errors used, for example by OHM
     uint64_t registerError() { return error_count_.fetch_add(1); }
 
+<<<<<<< HEAD
+=======
+    cma::srv::ServiceProcessor* getHostSp() const noexcept { return host_sp_; }
+
+>>>>>>> upstream/master
 private:
     bool headerless_;  // if true no makeHeader called during content generation
     std::string ip_;
     char separator_;
     std::atomic<uint64_t> error_count_ = 0;
+<<<<<<< HEAD
+=======
+    cma::srv::ServiceProcessor* host_sp_ = nullptr;
+>>>>>>> upstream/master
 
 #if defined(GTEST_INCLUDE_GTEST_GTEST_H_)
     friend class WmiProviderTest;
     FRIEND_TEST(WmiProviderTest, WmiAll);
     FRIEND_TEST(WmiProviderTest, BasicWmi);
     FRIEND_TEST(WmiProviderTest, BasicWmiDefaultsAndError);
+<<<<<<< HEAD
+=======
+
+    friend class SectionProviders;
+    FRIEND_TEST(SectionProviders, Basic);
+>>>>>>> upstream/master
 #endif
 };
 
@@ -163,9 +227,15 @@ public:
         // asio - for TCP
         // grpc - for GRPC
         // rest - for Rest
+<<<<<<< HEAD
         const std::string& CommandLine,  // format "id name whatever"
         std::chrono::milliseconds Period = std::chrono::milliseconds{0});
     virtual bool stop(bool Wait = true) { return true; }  // rather not possible
+=======
+        const std::string& CommandLine  // format "id name whatever"
+        ) override;
+    virtual bool stop(bool Wait) { return true; }  // rather not possible
+>>>>>>> upstream/master
 };
 
 // Reference *ASYNC* Class for internal Sections
@@ -195,10 +265,16 @@ public:
         // asio - for TCP
         // grpc - for GRPC
         // rest - for Rest
+<<<<<<< HEAD
         const std::string& CommandLine,
         std::chrono::milliseconds Period = std::chrono::milliseconds{0});
 
     bool stop(bool Wait = true);
+=======
+        const std::string& CommandLine) override;
+
+    bool stop(bool Wait);
+>>>>>>> upstream/master
 
 protected:
     // ASYNCHRONOUS PART:

@@ -1,3 +1,11 @@
+<<<<<<< HEAD
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 """
 Test the rrdtool python binding and CLI
 
@@ -26,6 +34,7 @@ v returned data rows, includes end y
       x---v---v---v---v---y
 """
 import subprocess
+<<<<<<< HEAD
 import pytest
 
 import rrdtool
@@ -33,6 +42,16 @@ import rrdtool
 
 @pytest.fixture(scope="session")
 def rrd_database(tmp_path_factory):
+=======
+import pytest  # type: ignore[import]
+
+# NOTE: rrdtool consists of a C part only, so mypy is clueless...
+import rrdtool  # type: ignore[import]
+
+
+@pytest.fixture(scope="session", name="rrd_database")
+def fixture_rrd_database(tmp_path_factory):
+>>>>>>> upstream/master
     "Create rrd database for integration test"
     database = tmp_path_factory.mktemp("databases") / "test.rrd"
 
@@ -165,6 +184,11 @@ def test_cli_xport(rrd_database, bounds, out_fmt, result):
         str(qstart),
         "-e",
         str(qend),
+<<<<<<< HEAD
     ] + out_fmt)
+=======
+    ] + out_fmt,
+                                     encoding="utf-8")
+>>>>>>> upstream/master
 
     assert stdout == result

@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: AWS/RDS Summary
+=======
+title: AWS RDS: Summary
+>>>>>>> upstream/master
 agents: aws
 catalog: cloud/aws
 license: GPL
@@ -6,8 +10,16 @@ distribution: check_mk
 description:
  This check monitors all AWS RDS databases and reports
  a summary of their states.
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/master
  To make this check work you have to configure the related
  special agent {Amazon Web Services (AWS)}.
 
 inventory:
+<<<<<<< HEAD
  One service will be created.
+=======
+ One service is created.
+>>>>>>> upstream/master

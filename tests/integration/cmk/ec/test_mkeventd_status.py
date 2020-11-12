@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/env python
 # encoding: utf-8
 
@@ -161,6 +162,32 @@ def ensure_core_and_get_connection(site, ec, core):
 def test_command_reload(site, ec, core):
     print("Checking core: %s" % core)
 
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+import time
+
+import pytest  # type: ignore[import]
+
+from testlib.fixtures import ec  # noqa: F401 # pylint: disable=unused-import
+
+
+def ensure_core_and_get_connection(site, ec, core):  # noqa: F811 # pylint: disable=redefined-outer-name
+    if core is None:
+        return ec.status
+    site.set_config("CORE", core, with_restart=True)
+    return site.live
+
+
+@pytest.mark.parametrize(("core"), ["nagios", "cmc"])
+@pytest.mark.skip("needs to be analyzed later...")
+def test_command_reload(site, ec, core):  # noqa: F811 # pylint: disable=redefined-outer-name
+    print("Checking core: %s" % core)
+>>>>>>> upstream/master
     live = ensure_core_and_get_connection(site, ec, core)
 
     old_t = live.query_value("GET eventconsolestatus\nColumns: status_config_load_time\n")
@@ -178,6 +205,7 @@ def test_command_reload(site, ec, core):
 
 # core is None means direct query to status socket
 @pytest.mark.parametrize(("core"), [None, "nagios", "cmc"])
+<<<<<<< HEAD
 def test_status_table_via_core(site, ec, core):
     print("Checking core: %s" % core)
 
@@ -187,6 +215,14 @@ def test_status_table_via_core(site, ec, core):
     else:
         result = live.query_table_assoc("GET eventconsolestatus\n")
 
+=======
+@pytest.mark.skip("needs to be analyzed later...")
+def test_status_table_via_core(site, ec, core):  # noqa: F811 # pylint: disable=redefined-outer-name
+    print("Checking core: %s" % core)
+    live = ensure_core_and_get_connection(site, ec, core)
+    prefix = "" if core is None else "eventconsole"
+    result = live.query_table_assoc("GET %sstatus\n" % prefix)
+>>>>>>> upstream/master
     assert len(result) == 1
 
     status = result[0]
@@ -231,6 +267,7 @@ def test_status_table_via_core(site, ec, core):
 
 # core is None means direct query to status socket
 @pytest.mark.parametrize(("core"), [None, "nagios", "cmc"])
+<<<<<<< HEAD
 def test_rules_table_via_core(site, ec, core):
     print("Checking core: %s" % core)
 
@@ -240,6 +277,14 @@ def test_rules_table_via_core(site, ec, core):
     else:
         result = live.query_table_assoc("GET eventconsolerules\n")
 
+=======
+@pytest.mark.skip("needs to be analyzed later...")
+def test_rules_table_via_core(site, ec, core):  # noqa: F811 # pylint: disable=redefined-outer-name
+    print("Checking core: %s" % core)
+    live = ensure_core_and_get_connection(site, ec, core)
+    prefix = "" if core is None else "eventconsole"
+    result = live.query_table_assoc("GET %srules\n" % prefix)
+>>>>>>> upstream/master
     assert isinstance(result, list)
     #assert len(result) == 0
     # TODO: Add some rule before the test and then check the existing

@@ -1,4 +1,16 @@
+<<<<<<< HEAD
 # yapf: disable
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# yapf: disable
+# type: ignore
+
+>>>>>>> upstream/master
 checkname = 'msexch_isclienttype'
 
 info = [
@@ -294,9 +306,15 @@ checks = {
         'clienttype_latency': {
             'upper': (40.0, 50.0)
         }
+<<<<<<< HEAD
     }, [(0, '0.49ms average latency', [('average_latency', 0.48712422193702626, 40.0, 50.0, None,
                                         None)]),
         (0, '0.00 RPC Requests', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+=======
+    }, [(0, 'Average latency: 0.49 ms', [('average_latency', 0.48712422193702626, 40.0, 50.0, None,
+                                        None)]),
+        (0, 'RPC Requests/sec: 0.00', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+>>>>>>> upstream/master
          (u'addriver', {
              'store_latency': {
                  'upper': (40.0, 50.0)
@@ -307,8 +325,13 @@ checks = {
              'clienttype_latency': {
                  'upper': (40.0, 50.0)
              }
+<<<<<<< HEAD
          }, [(0, '0.00ms average latency', [('average_latency', 0.0, 40.0, 50.0, None, None)]),
              (0, '0.00 RPC Requests', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+=======
+         }, [(0, 'Average latency: 0.00 ms', [('average_latency', 0.0, 40.0, 50.0, None, None)]),
+             (0, 'RPC Requests/sec: 0.00', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+>>>>>>> upstream/master
          (u'administrator', {
              'store_latency': {
                  'upper': (40.0, 50.0)
@@ -319,8 +342,13 @@ checks = {
              'clienttype_latency': {
                  'upper': (40.0, 50.0)
              }
+<<<<<<< HEAD
          }, [(0, '0.00ms average latency', [('average_latency', 0.0, 40.0, 50.0, None, None)]),
              (0, '0.00 RPC Requests', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+=======
+         }, [(0, 'Average latency: 0.00 ms', [('average_latency', 0.0, 40.0, 50.0, None, None)]),
+             (0, 'RPC Requests/sec: 0.00', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+>>>>>>> upstream/master
          (u'airsync', {
              'store_latency': {
                  'upper': (40.0, 50.0)
@@ -331,9 +359,15 @@ checks = {
              'clienttype_latency': {
                  'upper': (40.0, 50.0)
              }
+<<<<<<< HEAD
          }, [(0, '0.00ms average latency', [('average_latency', 2.6480752376567898e-05, 40.0, 50.0,
                                              None, None)]),
              (0, '0.00 RPC Requests', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+=======
+         }, [(0, 'Average latency: 0.00 ms', [('average_latency', 2.6480752376567898e-05, 40.0, 50.0,
+                                             None, None)]),
+             (0, 'RPC Requests/sec: 0.00', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+>>>>>>> upstream/master
          (u'anchorservice', {
              'store_latency': {
                  'upper': (40.0, 50.0)
@@ -344,8 +378,13 @@ checks = {
              'clienttype_latency': {
                  'upper': (40.0, 50.0)
              }
+<<<<<<< HEAD
          }, [(0, '0.00ms average latency', [('average_latency', 0.0, 40.0, 50.0, None, None)]),
              (0, '0.00 RPC Requests', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+=======
+         }, [(0, 'Average latency: 0.00 ms', [('average_latency', 0.0, 40.0, 50.0, None, None)]),
+             (0, 'RPC Requests/sec: 0.00', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+>>>>>>> upstream/master
          (u'approvalapi', {
              'store_latency': {
                  'upper': (40.0, 50.0)
@@ -356,8 +395,13 @@ checks = {
              'clienttype_latency': {
                  'upper': (40.0, 50.0)
              }
+<<<<<<< HEAD
          }, [(0, '0.00ms average latency', [('average_latency', 0.0, 40.0, 50.0, None, None)]),
              (0, '0.00 RPC Requests', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+=======
+         }, [(0, 'Average latency: 0.00 ms', [('average_latency', 0.0, 40.0, 50.0, None, None)]),
+             (0, 'RPC Requests/sec: 0.00', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+>>>>>>> upstream/master
          (u'availabilityservice', {
              'store_latency': {
                  'upper': (40.0, 50.0)
@@ -368,8 +412,13 @@ checks = {
              'clienttype_latency': {
                  'upper': (40.0, 50.0)
              }
+<<<<<<< HEAD
          }, [(0, '0.00ms average latency', [('average_latency', 0.0, 40.0, 50.0, None, None)]),
              (0, '0.00 RPC Requests', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+=======
+         }, [(0, 'Average latency: 0.00 ms', [('average_latency', 0.0, 40.0, 50.0, None, None)]),
+             (0, 'RPC Requests/sec: 0.00', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+>>>>>>> upstream/master
          (u'contentindexing', {
              'store_latency': {
                  'upper': (40.0, 50.0)
@@ -380,9 +429,15 @@ checks = {
              'clienttype_latency': {
                  'upper': (40.0, 50.0)
              }
+<<<<<<< HEAD
          }, [(0, '0.00ms average latency', [('average_latency', 2.4164853195197893e-05, 40.0, 50.0,
                                              None, None)]),
              (0, '0.00 RPC Requests', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+=======
+         }, [(0, 'Average latency: 0.00 ms', [('average_latency', 2.4164853195197893e-05, 40.0, 50.0,
+                                             None, None)]),
+             (0, 'RPC Requests/sec: 0.00', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+>>>>>>> upstream/master
          (u'contentindexingmovedestination', {
              'store_latency': {
                  'upper': (40.0, 50.0)
@@ -393,8 +448,13 @@ checks = {
              'clienttype_latency': {
                  'upper': (40.0, 50.0)
              }
+<<<<<<< HEAD
          }, [(0, '0.00ms average latency', [('average_latency', 0.0, 40.0, 50.0, None, None)]),
              (0, '0.00 RPC Requests', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+=======
+         }, [(0, 'Average latency: 0.00 ms', [('average_latency', 0.0, 40.0, 50.0, None, None)]),
+             (0, 'RPC Requests/sec: 0.00', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+>>>>>>> upstream/master
          (u'ediscoverysearch', {
              'store_latency': {
                  'upper': (40.0, 50.0)
@@ -405,8 +465,13 @@ checks = {
              'clienttype_latency': {
                  'upper': (40.0, 50.0)
              }
+<<<<<<< HEAD
          }, [(0, '0.00ms average latency', [('average_latency', 0.0, 40.0, 50.0, None, None)]),
              (0, '0.00 RPC Requests', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+=======
+         }, [(0, 'Average latency: 0.00 ms', [('average_latency', 0.0, 40.0, 50.0, None, None)]),
+             (0, 'RPC Requests/sec: 0.00', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+>>>>>>> upstream/master
          (u'elc', {
              'store_latency': {
                  'upper': (40.0, 50.0)
@@ -417,8 +482,13 @@ checks = {
              'clienttype_latency': {
                  'upper': (40.0, 50.0)
              }
+<<<<<<< HEAD
          }, [(0, '0.00ms average latency', [('average_latency', 0.0, 40.0, 50.0, None, None)]),
              (0, '0.00 RPC Requests', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+=======
+             }, [(0, 'Average latency: 0.00 ms', [('average_latency', 0.0, 40.0, 50.0, None, None)]),
+             (0, 'RPC Requests/sec: 0.00', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+>>>>>>> upstream/master
          (u'eventbasedassistants', {
              'store_latency': {
                  'upper': (40.0, 50.0)
@@ -429,9 +499,15 @@ checks = {
              'clienttype_latency': {
                  'upper': (40.0, 50.0)
              }
+<<<<<<< HEAD
          }, [(0, '0.00ms average latency', [('average_latency', 9.352801363450964e-07, 40.0, 50.0,
                                              None, None)]),
              (0, '0.00 RPC Requests', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+=======
+         }, [(0, 'Average latency: 0.00 ms', [('average_latency', 9.352801363450964e-07, 40.0, 50.0,
+                                             None, None)]),
+             (0, 'RPC Requests/sec: 0.00', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+>>>>>>> upstream/master
          (u'ha', {
              'store_latency': {
                  'upper': (40.0, 50.0)
@@ -442,8 +518,13 @@ checks = {
              'clienttype_latency': {
                  'upper': (40.0, 50.0)
              }
+<<<<<<< HEAD
          }, [(0, '0.00ms average latency', [('average_latency', 0.0, 40.0, 50.0, None, None)]),
              (0, '0.00 RPC Requests', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+=======
+         }, [(0, 'Average latency: 0.00 ms', [('average_latency', 0.0, 40.0, 50.0, None, None)]),
+             (0, 'RPC Requests/sec: 0.00', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+>>>>>>> upstream/master
          (u'hrc', {
              'store_latency': {
                  'upper': (40.0, 50.0)
@@ -454,8 +535,13 @@ checks = {
              'clienttype_latency': {
                  'upper': (40.0, 50.0)
              }
+<<<<<<< HEAD
          }, [(0, '0.00ms average latency', [('average_latency', 0.0, 40.0, 50.0, None, None)]),
              (0, '0.00 RPC Requests', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+=======
+         }, [(0, 'Average latency: 0.00 ms', [('average_latency', 0.0, 40.0, 50.0, None, None)]),
+             (0, 'RPC Requests/sec: 0.00', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+>>>>>>> upstream/master
          (u'imap', {
              'store_latency': {
                  'upper': (40.0, 50.0)
@@ -466,8 +552,13 @@ checks = {
              'clienttype_latency': {
                  'upper': (40.0, 50.0)
              }
+<<<<<<< HEAD
          }, [(0, '0.00ms average latency', [('average_latency', 0.0, 40.0, 50.0, None, None)]),
              (0, '0.00 RPC Requests', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+=======
+         }, [(0, 'Average latency: 0.00 ms', [('average_latency', 0.0, 40.0, 50.0, None, None)]),
+             (0, 'RPC Requests/sec: 0.00', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+>>>>>>> upstream/master
          (u'inference', {
              'store_latency': {
                  'upper': (40.0, 50.0)
@@ -478,8 +569,13 @@ checks = {
              'clienttype_latency': {
                  'upper': (40.0, 50.0)
              }
+<<<<<<< HEAD
          }, [(0, '0.00ms average latency', [('average_latency', 0.0, 40.0, 50.0, None, None)]),
              (0, '0.00 RPC Requests', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+=======
+         }, [(0, 'Average latency: 0.00 ms', [('average_latency', 0.0, 40.0, 50.0, None, None)]),
+             (0, 'RPC Requests/sec: 0.00', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+>>>>>>> upstream/master
          (u'liveidbasicauth', {
              'store_latency': {
                  'upper': (40.0, 50.0)
@@ -490,8 +586,13 @@ checks = {
              'clienttype_latency': {
                  'upper': (40.0, 50.0)
              }
+<<<<<<< HEAD
          }, [(0, '0.00ms average latency', [('average_latency', 0.0, 40.0, 50.0, None, None)]),
              (0, '0.00 RPC Requests', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+=======
+         }, [(0, 'Average latency: 0.00 ms', [('average_latency', 0.0, 40.0, 50.0, None, None)]),
+             (0, 'RPC Requests/sec: 0.00', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+>>>>>>> upstream/master
          (u'loadgen', {
              'store_latency': {
                  'upper': (40.0, 50.0)
@@ -502,8 +603,13 @@ checks = {
              'clienttype_latency': {
                  'upper': (40.0, 50.0)
              }
+<<<<<<< HEAD
          }, [(0, '0.00ms average latency', [('average_latency', 0.0, 40.0, 50.0, None, None)]),
              (0, '0.00 RPC Requests', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+=======
+         }, [(0, 'Average latency: 0.00 ms', [('average_latency', 0.0, 40.0, 50.0, None, None)]),
+             (0, 'RPC Requests/sec: 0.00', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+>>>>>>> upstream/master
          (u'mailboxloadbalance', {
              'store_latency': {
                  'upper': (40.0, 50.0)
@@ -514,8 +620,13 @@ checks = {
              'clienttype_latency': {
                  'upper': (40.0, 50.0)
              }
+<<<<<<< HEAD
          }, [(0, '0.00ms average latency', [('average_latency', 0.0, 40.0, 50.0, None, None)]),
              (0, '0.00 RPC Requests', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+=======
+         }, [(0, 'Average latency: 0.00 ms', [('average_latency', 0.0, 40.0, 50.0, None, None)]),
+             (0, 'RPC Requests/sec: 0.00', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+>>>>>>> upstream/master
          (u'maintenance', {
              'store_latency': {
                  'upper': (40.0, 50.0)
@@ -526,8 +637,13 @@ checks = {
              'clienttype_latency': {
                  'upper': (40.0, 50.0)
              }
+<<<<<<< HEAD
          }, [(0, '0.00ms average latency', [('average_latency', 0.0, 40.0, 50.0, None, None)]),
              (0, '0.00 RPC Requests', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+=======
+         }, [(0, 'Average latency: 0.00 ms', [('average_latency', 0.0, 40.0, 50.0, None, None)]),
+             (0, 'RPC Requests/sec: 0.00', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+>>>>>>> upstream/master
          (u'management', {
              'store_latency': {
                  'upper': (40.0, 50.0)
@@ -538,9 +654,15 @@ checks = {
              'clienttype_latency': {
                  'upper': (40.0, 50.0)
              }
+<<<<<<< HEAD
          }, [(0, '0.00ms average latency', [('average_latency', 1.4505348153995004e-07, 40.0, 50.0,
                                              None, None)]),
              (0, '0.00 RPC Requests', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+=======
+         }, [(0, 'Average latency: 0.00 ms', [('average_latency', 1.4505348153995004e-07, 40.0, 50.0,
+                                             None, None)]),
+             (0, 'RPC Requests/sec: 0.00', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+>>>>>>> upstream/master
          (u'migration', {
              'store_latency': {
                  'upper': (40.0, 50.0)
@@ -551,9 +673,15 @@ checks = {
              'clienttype_latency': {
                  'upper': (40.0, 50.0)
              }
+<<<<<<< HEAD
          }, [(0, '0.17ms average latency', [('average_latency', 0.17399333574210124, 40.0, 50.0,
                                              None, None)]),
              (0, '0.00 RPC Requests', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+=======
+         }, [(0, 'Average latency: 0.17 ms', [('average_latency', 0.17399333574210124, 40.0, 50.0,
+                                             None, None)]),
+             (0, 'RPC Requests/sec: 0.00', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+>>>>>>> upstream/master
          (u'momt', {
              'store_latency': {
                  'upper': (40.0, 50.0)
@@ -564,9 +692,15 @@ checks = {
              'clienttype_latency': {
                  'upper': (40.0, 50.0)
              }
+<<<<<<< HEAD
          }, [(0, '0.46ms average latency', [('average_latency', 0.45686453412547645, 40.0, 50.0,
                                              None, None)]),
              (0, '0.00 RPC Requests', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+=======
+         }, [(0, 'Average latency: 0.46 ms', [('average_latency', 0.45686453412547645, 40.0, 50.0,
+                                             None, None)]),
+             (0, 'RPC Requests/sec: 0.00', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+>>>>>>> upstream/master
          (u'monitoring', {
              'store_latency': {
                  'upper': (40.0, 50.0)
@@ -577,9 +711,15 @@ checks = {
              'clienttype_latency': {
                  'upper': (40.0, 50.0)
              }
+<<<<<<< HEAD
          }, [(0, '0.34ms average latency', [('average_latency', 0.33911634330519236, 40.0, 50.0,
                                              None, None)]),
              (0, '0.00 RPC Requests', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+=======
+         }, [(0, 'Average latency: 0.34 ms', [('average_latency', 0.33911634330519236, 40.0, 50.0,
+                                             None, None)]),
+             (0, 'RPC Requests/sec: 0.00', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+>>>>>>> upstream/master
          (u'notificationbroker', {
              'store_latency': {
                  'upper': (40.0, 50.0)
@@ -590,8 +730,13 @@ checks = {
              'clienttype_latency': {
                  'upper': (40.0, 50.0)
              }
+<<<<<<< HEAD
          }, [(0, '0.00ms average latency', [('average_latency', 0.0, 40.0, 50.0, None, None)]),
              (0, '0.00 RPC Requests', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+=======
+         }, [(0, 'Average latency: 0.00 ms', [('average_latency', 0.0, 40.0, 50.0, None, None)]),
+             (0, 'RPC Requests/sec: 0.00', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+>>>>>>> upstream/master
          (u'officegraph', {
              'store_latency': {
                  'upper': (40.0, 50.0)
@@ -602,8 +747,13 @@ checks = {
              'clienttype_latency': {
                  'upper': (40.0, 50.0)
              }
+<<<<<<< HEAD
          }, [(0, '0.00ms average latency', [('average_latency', 0.0, 40.0, 50.0, None, None)]),
              (0, '0.00 RPC Requests', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+=======
+         }, [(0, 'Average latency: 0.00 ms', [('average_latency', 0.0, 40.0, 50.0, None, None)]),
+             (0, 'RPC Requests/sec: 0.00', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+>>>>>>> upstream/master
          (u'outlookservice', {
              'store_latency': {
                  'upper': (40.0, 50.0)
@@ -614,8 +764,13 @@ checks = {
              'clienttype_latency': {
                  'upper': (40.0, 50.0)
              }
+<<<<<<< HEAD
          }, [(0, '0.00ms average latency', [('average_latency', 0.0, 40.0, 50.0, None, None)]),
              (0, '0.00 RPC Requests', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+=======
+         }, [(0, 'Average latency: 0.00 ms', [('average_latency', 0.0, 40.0, 50.0, None, None)]),
+             (0, 'RPC Requests/sec: 0.00', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+>>>>>>> upstream/master
          (u'owa', {
              'store_latency': {
                  'upper': (40.0, 50.0)
@@ -626,8 +781,13 @@ checks = {
              'clienttype_latency': {
                  'upper': (40.0, 50.0)
              }
+<<<<<<< HEAD
          }, [(0, '0.00ms average latency', [('average_latency', 0.0, 40.0, 50.0, None, None)]),
              (0, '0.00 RPC Requests', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+=======
+         }, [(0, 'Average latency: 0.00 ms', [('average_latency', 0.0, 40.0, 50.0, None, None)]),
+             (0, 'RPC Requests/sec: 0.00', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+>>>>>>> upstream/master
          (u'pop', {
              'store_latency': {
                  'upper': (40.0, 50.0)
@@ -638,8 +798,13 @@ checks = {
              'clienttype_latency': {
                  'upper': (40.0, 50.0)
              }
+<<<<<<< HEAD
          }, [(0, '0.00ms average latency', [('average_latency', 0.0, 40.0, 50.0, None, None)]),
              (0, '0.00 RPC Requests', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+=======
+         }, [(0, 'Average latency: 0.00 ms', [('average_latency', 0.0, 40.0, 50.0, None, None)]),
+             (0, 'RPC Requests/sec: 0.00', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+>>>>>>> upstream/master
          (u'publicfolderhierarchyreplication', {
              'store_latency': {
                  'upper': (40.0, 50.0)
@@ -650,8 +815,13 @@ checks = {
              'clienttype_latency': {
                  'upper': (40.0, 50.0)
              }
+<<<<<<< HEAD
          }, [(0, '0.00ms average latency', [('average_latency', 0.0, 40.0, 50.0, None, None)]),
              (0, '0.00 RPC Requests', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+=======
+         }, [(0, 'Average latency: 0.00 ms', [('average_latency', 0.0, 40.0, 50.0, None, None)]),
+             (0, 'RPC Requests/sec: 0.00', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+>>>>>>> upstream/master
          (u'publicfoldersystem', {
              'store_latency': {
                  'upper': (40.0, 50.0)
@@ -662,8 +832,13 @@ checks = {
              'clienttype_latency': {
                  'upper': (40.0, 50.0)
              }
+<<<<<<< HEAD
          }, [(0, '0.00ms average latency', [('average_latency', 0.0, 40.0, 50.0, None, None)]),
              (0, '0.00 RPC Requests', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+=======
+         }, [(0, 'Average latency: 0.00 ms', [('average_latency', 0.0, 40.0, 50.0, None, None)]),
+             (0, 'RPC Requests/sec: 0.00', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+>>>>>>> upstream/master
          (u'rpchttp', {
              'store_latency': {
                  'upper': (40.0, 50.0)
@@ -674,8 +849,13 @@ checks = {
              'clienttype_latency': {
                  'upper': (40.0, 50.0)
              }
+<<<<<<< HEAD
          }, [(0, '0.00ms average latency', [('average_latency', 0.0, 40.0, 50.0, None, None)]),
              (0, '0.00 RPC Requests', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+=======
+         }, [(0, 'Average latency: 0.00 ms', [('average_latency', 0.0, 40.0, 50.0, None, None)]),
+             (0, 'RPC Requests/sec: 0.00', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+>>>>>>> upstream/master
          (u'simplemigration', {
              'store_latency': {
                  'upper': (40.0, 50.0)
@@ -686,9 +866,15 @@ checks = {
              'clienttype_latency': {
                  'upper': (40.0, 50.0)
              }
+<<<<<<< HEAD
          }, [(0, '0.55ms average latency', [('average_latency', 0.5479212634542535, 40.0, 50.0,
                                              None, None)]),
              (0, '0.00 RPC Requests', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+=======
+         }, [(0, 'Average latency: 0.55 ms', [('average_latency', 0.5479212634542535, 40.0, 50.0,
+                                             None, None)]),
+             (0, 'RPC Requests/sec: 0.00', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+>>>>>>> upstream/master
          (u'sms', {
              'store_latency': {
                  'upper': (40.0, 50.0)
@@ -699,8 +885,13 @@ checks = {
              'clienttype_latency': {
                  'upper': (40.0, 50.0)
              }
+<<<<<<< HEAD
          }, [(0, '0.00ms average latency', [('average_latency', 0.0, 40.0, 50.0, None, None)]),
              (0, '0.00 RPC Requests', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+=======
+         }, [(0, 'Average latency: 0.00 ms', [('average_latency', 0.0, 40.0, 50.0, None, None)]),
+             (0, 'RPC Requests/sec: 0.00', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+>>>>>>> upstream/master
          (u'snackyservice', {
              'store_latency': {
                  'upper': (40.0, 50.0)
@@ -711,8 +902,13 @@ checks = {
              'clienttype_latency': {
                  'upper': (40.0, 50.0)
              }
+<<<<<<< HEAD
          }, [(0, '0.00ms average latency', [('average_latency', 0.0, 40.0, 50.0, None, None)]),
              (0, '0.00 RPC Requests', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+=======
+         }, [(0, 'Average latency: 0.00 ms', [('average_latency', 0.0, 40.0, 50.0, None, None)]),
+             (0, 'RPC Requests/sec: 0.00', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+>>>>>>> upstream/master
          (u'storeactivemonitoring', {
              'store_latency': {
                  'upper': (40.0, 50.0)
@@ -723,9 +919,15 @@ checks = {
              'clienttype_latency': {
                  'upper': (40.0, 50.0)
              }
+<<<<<<< HEAD
          }, [(0, '0.31ms average latency', [('average_latency', 0.3072515295977602, 40.0, 50.0,
                                              None, None)]),
              (0, '0.00 RPC Requests', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+=======
+         }, [(0, 'Average latency: 0.31 ms', [('average_latency', 0.3072515295977602, 40.0, 50.0,
+                                             None, None)]),
+             (0, 'RPC Requests/sec: 0.00', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+>>>>>>> upstream/master
          (u'system', {
              'store_latency': {
                  'upper': (40.0, 50.0)
@@ -736,8 +938,13 @@ checks = {
              'clienttype_latency': {
                  'upper': (40.0, 50.0)
              }
+<<<<<<< HEAD
          }, [(0, '0.00ms average latency', [('average_latency', 0.0, 40.0, 50.0, None, None)]),
              (0, '0.00 RPC Requests', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+=======
+         }, [(0, 'Average latency: 0.00 ms', [('average_latency', 0.0, 40.0, 50.0, None, None)]),
+             (0, 'RPC Requests/sec: 0.00', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+>>>>>>> upstream/master
          (u'teammailbox', {
              'store_latency': {
                  'upper': (40.0, 50.0)
@@ -748,8 +955,13 @@ checks = {
              'clienttype_latency': {
                  'upper': (40.0, 50.0)
              }
+<<<<<<< HEAD
          }, [(0, '0.00ms average latency', [('average_latency', 0.0, 40.0, 50.0, None, None)]),
              (0, '0.00 RPC Requests', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+=======
+         }, [(0, 'Average latency: 0.00 ms', [('average_latency', 0.0, 40.0, 50.0, None, None)]),
+             (0, 'RPC Requests/sec: 0.00', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+>>>>>>> upstream/master
          (u'timebasedassistants', {
              'store_latency': {
                  'upper': (40.0, 50.0)
@@ -760,9 +972,15 @@ checks = {
              'clienttype_latency': {
                  'upper': (40.0, 50.0)
              }
+<<<<<<< HEAD
          }, [(0, '0.00ms average latency', [('average_latency', 1.243283698179493e-05, 40.0, 50.0,
                                              None, None)]),
              (0, '0.00 RPC Requests', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+=======
+         }, [(0, 'Average latency: 0.00 ms', [('average_latency', 1.243283698179493e-05, 40.0, 50.0,
+                                             None, None)]),
+             (0, 'RPC Requests/sec: 0.00', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+>>>>>>> upstream/master
          (u'transport', {
              'store_latency': {
                  'upper': (40.0, 50.0)
@@ -773,9 +991,15 @@ checks = {
              'clienttype_latency': {
                  'upper': (40.0, 50.0)
              }
+<<<<<<< HEAD
          }, [(0, '0.00ms average latency', [('average_latency', 0.0001265842047257069, 40.0, 50.0,
                                              None, None)]),
              (0, '0.00 RPC Requests', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+=======
+         }, [(0, 'Average latency: 0.00 ms', [('average_latency', 0.0001265842047257069, 40.0, 50.0,
+                                             None, None)]),
+             (0, 'RPC Requests/sec: 0.00', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+>>>>>>> upstream/master
          (u'transportsync', {
              'store_latency': {
                  'upper': (40.0, 50.0)
@@ -786,8 +1010,13 @@ checks = {
              'clienttype_latency': {
                  'upper': (40.0, 50.0)
              }
+<<<<<<< HEAD
          }, [(0, '0.00ms average latency', [('average_latency', 0.0, 40.0, 50.0, None, None)]),
              (0, '0.00 RPC Requests', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+=======
+         }, [(0, 'Average latency: 0.00 ms', [('average_latency', 0.0, 40.0, 50.0, None, None)]),
+             (0, 'RPC Requests/sec: 0.00', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+>>>>>>> upstream/master
          (u'unifiedauditing', {
              'store_latency': {
                  'upper': (40.0, 50.0)
@@ -798,8 +1027,13 @@ checks = {
              'clienttype_latency': {
                  'upper': (40.0, 50.0)
              }
+<<<<<<< HEAD
          }, [(0, '0.00ms average latency', [('average_latency', 0.0, 40.0, 50.0, None, None)]),
              (0, '0.00 RPC Requests', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+=======
+         }, [(0, 'Average latency: 0.00 ms', [('average_latency', 0.0, 40.0, 50.0, None, None)]),
+             (0, 'RPC Requests/sec: 0.00', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+>>>>>>> upstream/master
          (u'unifiedmessaging', {
              'store_latency': {
                  'upper': (40.0, 50.0)
@@ -810,8 +1044,13 @@ checks = {
              'clienttype_latency': {
                  'upper': (40.0, 50.0)
              }
+<<<<<<< HEAD
          }, [(0, '0.00ms average latency', [('average_latency', 0.0, 40.0, 50.0, None, None)]),
              (0, '0.00 RPC Requests', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+=======
+         }, [(0, 'Average latency: 0.00 ms', [('average_latency', 0.0, 40.0, 50.0, None, None)]),
+             (0, 'RPC Requests/sec: 0.00', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+>>>>>>> upstream/master
          (u'unifiedpolicy', {
              'store_latency': {
                  'upper': (40.0, 50.0)
@@ -822,8 +1061,13 @@ checks = {
              'clienttype_latency': {
                  'upper': (40.0, 50.0)
              }
+<<<<<<< HEAD
          }, [(0, '0.00ms average latency', [('average_latency', 0.0, 40.0, 50.0, None, None)]),
              (0, '0.00 RPC Requests', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+=======
+         }, [(0, 'Average latency: 0.00 ms', [('average_latency', 0.0, 40.0, 50.0, None, None)]),
+             (0, 'RPC Requests/sec: 0.00', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+>>>>>>> upstream/master
          (u'user', {
              'store_latency': {
                  'upper': (40.0, 50.0)
@@ -834,9 +1078,15 @@ checks = {
              'clienttype_latency': {
                  'upper': (40.0, 50.0)
              }
+<<<<<<< HEAD
          }, [(0, '0.00ms average latency', [('average_latency', 0.0023127912843234713, 40.0, 50.0,
                                              None, None)]),
              (0, '0.00 RPC Requests', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+=======
+         }, [(0, 'Average latency: 0.00 ms', [('average_latency', 0.0023127912843234713, 40.0, 50.0,
+                                             None, None)]),
+             (0, 'RPC Requests/sec: 0.00', [('requests_per_sec', 0.0, 60, 70, None, None)])]),
+>>>>>>> upstream/master
          (u'webservices', {
              'store_latency': {
                  'upper': (40.0, 50.0)
@@ -847,6 +1097,11 @@ checks = {
              'clienttype_latency': {
                  'upper': (40.0, 50.0)
              }
+<<<<<<< HEAD
          }, [(0, '0.00ms average latency', [('average_latency', 0.0, 40.0, 50.0, None, None)]),
              (0, '0.00 RPC Requests', [('requests_per_sec', 0.0, 60, 70, None, None)])])]
+=======
+         }, [(0, 'Average latency: 0.00 ms', [('average_latency', 0.0, 40.0, 50.0, None, None)]),
+             (0, 'RPC Requests/sec: 0.00', [('requests_per_sec', 0.0, 60, 70, None, None)])])]
+>>>>>>> upstream/master
 }

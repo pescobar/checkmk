@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: Dell iDRAC: Status of power supply redundancy
+=======
+title: Dell iDRAC: Status of Power Supply Redundancy
+>>>>>>> upstream/master
 agents: snmp
 catalog: hw/server/dell
 license: GPL
@@ -9,4 +13,11 @@ description:
  if the state is "degraded" or "redundancy offline", {CRIT} if the state is "lost" and {OK} if the state is "full" or "not redundant".
 
 item:
+<<<<<<< HEAD
  One service for each redundancy group will be created
+=======
+ Index of the power unit
+
+inventory:
+ One service is created for each power supply.
+>>>>>>> upstream/master

@@ -1,6 +1,12 @@
+<<<<<<< HEAD
 title: State of BI aggregation
 agents: BI
 catalog: app/omd
+=======
+title: Checkmk: State of BI Aggregation
+agents: BI
+catalog: app/cmk
+>>>>>>> upstream/master
 license: GPL
 distribution: check_mk
 description:
@@ -8,5 +14,13 @@ description:
  The plugin output also shows, if the aggregation is currently
  in downtime or has been acknowledged.
 
+<<<<<<< HEAD
 inventory:
  Creates one check per BI aggregation
+=======
+item:
+ The name of the aggregation.
+
+inventory:
+ One service is created for each BI aggregation
+>>>>>>> upstream/master

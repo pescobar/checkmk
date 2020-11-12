@@ -20,12 +20,21 @@ if NOT "%sec_param%" == "both" powershell Write-Host "This is end of testing. QU
 powershell Write-Host "64-bit test" -Foreground Cyan
 if "%1" == "" set param=--gtest_filter=-PluginTest.Sync*:PluginTest.Async*
 %REMOTE_MACHINE%\watest64.exe %param%
+<<<<<<< HEAD
 if not %errorlevel% == 0 goto error
+=======
+if not %errorlevel% == 0 echo %level% && goto error
+>>>>>>> upstream/master
 popd
 powershell Write-Host "This is end of testing. FULL test was requested." -Foreground Cyan
 :success
 powershell Write-Host "Unit test SUCCESS" -Foreground Green && exit /b 0
 :error
 popd
+<<<<<<< HEAD
+=======
+echo %errorlevel%
+powershell Write-Host "%errorlevel%" -Foreground Red && exit /b 78
+>>>>>>> upstream/master
 powershell Write-Host "Unit test failed" -Foreground Red && exit /b 78
 :end

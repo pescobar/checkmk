@@ -1,3 +1,10 @@
+<<<<<<< HEAD
+=======
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+// conditions defined in the file COPYING, which is part of this source code package.
+
+>>>>>>> upstream/master
 #ifndef Configurable_h
 #define Configurable_h
 
@@ -80,6 +87,20 @@ private:
     ValueT _value;
 };
 
+<<<<<<< HEAD
+=======
+// This is a TMP, we want to convert filesystem path to std::string, but leave
+// all other types as is to prevent quotation!
+template <typename T, typename T2 = T>
+T2 RemoveFilesystemPath(const T &val) {
+    return val;
+}
+
+std::string RemoveFilesystemPath(const std::filesystem::path &val) {
+    return val.string<char, std::char_traits<char>>();
+}
+
+>>>>>>> upstream/master
 /**
  * regular list collector which allows multiple assignments to the same
  * variable. The addmode and block mode decide how these multiple assignments
@@ -125,7 +146,12 @@ public:
     virtual void output(const std::string &key,
                         std::ostream &out) const override {
         for (const DataT &data : _values) {
+<<<<<<< HEAD
             out << key << " = " << data << "\n";
+=======
+            auto v = RemoveFilesystemPath(data);
+            out << key << " = " << v << "\n";
+>>>>>>> upstream/master
         }
     }
 

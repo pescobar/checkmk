@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -24,6 +25,24 @@
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
 
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# NOTE: Careful when replacing the *-import below with a more specific import. This can cause
+# problems because it might remove variables from the check-context which are necessary for
+# resolving legacy discovery results such as [("SUMMARY", "diskstat_default_levels")]. Furthermore,
+# it might also remove variables needed for accessing discovery rulesets.
+from cmk.base.check_legacy_includes.filerdisks import *  # pylint: disable=wildcard-import,unused-wildcard-import
+# NOTE: Careful when replacing the *-import below with a more specific import. This can cause
+# problems because it might remove variables from the check-context which are necessary for
+# resolving legacy discovery results such as [("SUMMARY", "diskstat_default_levels")]. Furthermore,
+# it might also remove variables needed for accessing discovery rulesets.
+from cmk.base.check_legacy_includes.ibm_svc import *  # pylint: disable=wildcard-import,unused-wildcard-import
+>>>>>>> upstream/master
 # Agent output:
 # <<<ibm_svc_disk:sep(58)>>>
 # 0:online::member:sas_hdd:558.4GB:7:V7BRZ_mdisk08:4:1:24::
@@ -51,6 +70,7 @@
 # 0:online::member:sas_hdd:558.4GB:7:V7RZ_mdisk8:4:1:24:::inactive
 # 1:online::member:sas_hdd:558.4GB:7:V7RZ_mdisk8:3:1:23:::inactive
 
+<<<<<<< HEAD
 
 def parse_ibm_svc_disks(info):
     dflt_header = [
@@ -73,6 +93,32 @@ def parse_ibm_svc_disks(info):
         parsed.extend(rows)
     return parsed
 
+=======
+factory_settings['filer_disks_default_levels'] = FILER_DISKS_CHECK_DEFAULT_PARAMETERS
+
+
+def parse_ibm_svc_disks(info):
+    dflt_header = [
+        'id',
+        'status',
+        'error_sequence_number',
+        'use',
+        'tech_type',
+        'capacity',
+        'mdisk_id',
+        'mdisk_name',
+        'member_id',
+        'enclosure_id',
+        'slot_id',
+        'auto_manage',
+        'drive_class_id',
+    ]
+    parsed = []
+    for rows in parse_ibm_svc_with_header(info, dflt_header).values():
+        parsed.extend(rows)
+    return parsed
+
+>>>>>>> upstream/master
 
 def check_ibm_svc_disks(_no_item, params, parsed):
     disks = []
@@ -112,7 +158,10 @@ check_info["ibm_svc_disks"] = {
     'check_function': check_ibm_svc_disks,
     'inventory_function': discover_single,
     'service_description': 'Disk Summary',
+<<<<<<< HEAD
     'includes': ['ibm_svc.include', 'filerdisks.include'],
+=======
+>>>>>>> upstream/master
     'group': 'netapp_disks',
     'default_levels_variable': 'filer_disks_default_levels',
     'has_perfdata': True,

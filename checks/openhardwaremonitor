@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -24,6 +25,24 @@
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
 
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# NOTE: Careful when replacing the *-import below with a more specific import. This can cause
+# problems because it might remove variables from the check-context which are necessary for
+# resolving legacy discovery results such as [("SUMMARY", "diskstat_default_levels")]. Furthermore,
+# it might also remove variables needed for accessing discovery rulesets.
+from cmk.base.check_legacy_includes.fan import *  # pylint: disable=wildcard-import,unused-wildcard-import
+# NOTE: Careful when replacing the *-import below with a more specific import. This can cause
+# problems because it might remove variables from the check-context which are necessary for
+# resolving legacy discovery results such as [("SUMMARY", "diskstat_default_levels")]. Furthermore,
+# it might also remove variables needed for accessing discovery rulesets.
+from cmk.base.check_legacy_includes.temperature import *  # pylint: disable=wildcard-import,unused-wildcard-import
+>>>>>>> upstream/master
 # <<<openhardwaremonitor:sep(44)>>>
 # Index,Name,Parent,SensorType,Value
 # 1,Available Memory,/ram,Data,3.009140
@@ -144,7 +163,11 @@ def parse_openhardwaremonitor(info):
 
 def _create_openhardwaremonitor_full_name(parent, name):
     def dict_replace(input_, replacements):
+<<<<<<< HEAD
         pattern = regex(r'\b(' + '|'.join(replacements.keys()) + r')\b')
+=======
+        pattern = regex(r'\b(' + '|'.join(replacements) + r')\b')
+>>>>>>> upstream/master
         return pattern.sub(lambda x: replacements[x.group()], input_)
 
     parent = dict_replace(parent, {"intelcpu": "cpu", "amdcpu": "cpu", "genericcpu": "cpu"})
@@ -164,7 +187,7 @@ def _openhardwaremonitor_expect_order(*args):
 
 
 def inventory_openhardwaremonitor(sensor_type, parsed):
-    return [(key, {}) for key in parsed.get(sensor_type, {}).keys()]
+    return [(key, {}) for key in parsed.get(sensor_type, {})]
 
 
 def check_openhardwaremonitor(sensor_type, item, params, parsed):
@@ -227,7 +250,11 @@ check_info['openhardwaremonitor'] = {
 def check_openhardwaremonitor_temperature(item, params, parsed):
     if not 'levels' in params:
         found = False
+<<<<<<< HEAD
         for key in params.iterkeys():
+=======
+        for key in params:
+>>>>>>> upstream/master
             if key in item:
                 params = params[key]
                 found = True
@@ -248,7 +275,10 @@ check_info['openhardwaremonitor.temperature'] = {
     'service_description': "Temperature %s",
     'group': 'temperature',
     'default_levels_variable': 'openhardwaremonitor_temperature_default_levels',
+<<<<<<< HEAD
     'includes': ['temperature.include']
+=======
+>>>>>>> upstream/master
 }
 
 #.
@@ -299,7 +329,10 @@ check_info['openhardwaremonitor.fan'] = {
     'service_description': "Fan %s",
     'default_levels_variable': 'openhardwaremonitor_fan_default_levels',
     'group': 'hw_fans',
+<<<<<<< HEAD
     'includes': ['fan.include'],
+=======
+>>>>>>> upstream/master
 }
 
 #.
@@ -336,7 +369,11 @@ def inventory_openhardwaremonitor_smart(parsed):
 
 
 def check_openhardwaremonitor_smart(item, params, parsed):
+<<<<<<< HEAD
     for sensor_type, readings in openhardwaremonitor_smart_readings.iteritems():
+=======
+    for sensor_type, readings in openhardwaremonitor_smart_readings.items():
+>>>>>>> upstream/master
         for reading in readings:
             reading_name = "%s %s" % (item, reading['name'])
 

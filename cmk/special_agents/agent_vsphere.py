@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/env python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -25,16 +26,30 @@
 # Boston, MA 02110-1301 USA.
 """Check_MK vSphere Special Agent
 """
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+"""Check_MK vSphere Special Agent"""
+
+>>>>>>> upstream/master
 import argparse
 import collections
 import datetime
 import errno
+<<<<<<< HEAD
 import functools
 import os
+=======
+from pathlib import Path
+>>>>>>> upstream/master
 import re
 import socket
 import sys
 import time
+<<<<<<< HEAD
 from typing import Optional, Text  # pylint: disable=unused-import
 from xml.dom import minidom  # type: ignore
 import requests
@@ -44,10 +59,32 @@ import six
 
 from dateutil import tz
 from pathlib2 import Path
+=======
+from typing import Any, Counter, Dict, Iterable, List
+from xml.dom import minidom  # type: ignore[import]
+
+import requests
+import urllib3  # type: ignore[import]
+from dateutil import tz
+>>>>>>> upstream/master
 
 import cmk.utils.password_store
 import cmk.utils.paths
 
+<<<<<<< HEAD
+=======
+from cmk.special_agents.utils import vcrtrace
+
+#   .--defines-------------------------------------------------------------.
+#   |                      _       __ _                                    |
+#   |                   __| | ___ / _(_)_ __   ___  ___                    |
+#   |                  / _` |/ _ \ |_| | '_ \ / _ \/ __|                   |
+#   |                 | (_| |  __/  _| | | | |  __/\__ \                   |
+#   |                  \__,_|\___|_| |_|_| |_|\___||___/                   |
+#   |                                                                      |
+#   '----------------------------------------------------------------------'
+
+>>>>>>> upstream/master
 AGENT_TMP_PATH = Path(cmk.utils.paths.tmp_dir, "agents/agent_vsphere")
 
 REQUESTED_COUNTERS_KEYS = (
@@ -72,6 +109,12 @@ REQUESTED_COUNTERS_KEYS = (
     'net.errorsRx',
     'net.errorsTx',
     'net.unknownProtos',
+<<<<<<< HEAD
+=======
+    'mem.swapused',
+    'mem.swapin',
+    'mem.swapout',
+>>>>>>> upstream/master
     'sys.uptime',
     'sys.resourceMemConsumed',
     'datastore.read',
@@ -84,7 +127,11 @@ REQUESTED_COUNTERS_KEYS = (
 )
 
 
+<<<<<<< HEAD
 class SoapTemplates(object):
+=======
+class SoapTemplates:
+>>>>>>> upstream/master
     # yapf: disable
     SYSTEMINFO = (
         '<ns1:RetrieveServiceContent xsi:type="ns1:RetrieveServiceContentRequestType">'
@@ -108,7 +155,12 @@ class SoapTemplates(object):
         '  <ns1:_this type="PropertyCollector">%(propertyCollector)s</ns1:_this>'
         '  <ns1:specSet>'
         '    <ns1:propSet>'
+<<<<<<< HEAD
         '      <ns1:type>HostSystem</ns1:type><ns1:pathSet>name</ns1:pathSet>'
+=======
+        '      <ns1:type>HostSystem</ns1:type>'
+        '      <ns1:pathSet>name</ns1:pathSet>'
+>>>>>>> upstream/master
         '    </ns1:propSet>'
         '    <ns1:objectSet>'
         '      <ns1:obj type="Folder">%(rootFolder)s</ns1:obj>'
@@ -176,7 +228,12 @@ class SoapTemplates(object):
         '<ns1:RetrievePropertiesEx xsi:type="ns1:RetrievePropertiesExRequestType">'
         '  <ns1:_this type="PropertyCollector">%(propertyCollector)s</ns1:_this>'
         '  <ns1:specSet>'
+<<<<<<< HEAD
         '    <ns1:propSet><ns1:type>Datastore</ns1:type>'
+=======
+        '    <ns1:propSet>'
+        '      <ns1:type>Datastore</ns1:type>'
+>>>>>>> upstream/master
         '      <ns1:pathSet>name</ns1:pathSet>'
         '      <ns1:pathSet>summary.freeSpace</ns1:pathSet>'
         '      <ns1:pathSet>summary.capacity</ns1:pathSet>'
@@ -410,6 +467,10 @@ class SoapTemplates(object):
         '  <ns1:specSet>'
         '    <ns1:propSet>'
         '      <ns1:type>VirtualMachine</ns1:type>'
+<<<<<<< HEAD
+=======
+        '      <ns1:pathSet>summary.config.ftInfo.role</ns1:pathSet>'
+>>>>>>> upstream/master
         '      <ns1:pathSet>summary.quickStats.consumedOverheadMemory</ns1:pathSet>'
         '      <ns1:pathSet>config.hardware.numCPU</ns1:pathSet>'
         '      <ns1:pathSet>summary.quickStats.overallCpuDemand</ns1:pathSet>'
@@ -888,6 +949,20 @@ class SoapTemplates(object):
         self.esxhostsofcluster = SoapTemplates.ESXHOSTSOFCLUSTER % system_fields
 
 
+<<<<<<< HEAD
+=======
+#.
+#   .--args----------------------------------------------------------------.
+#   |                                                                      |
+#   |                          __ _ _ __ __ _ ___                          |
+#   |                         / _` | '__/ _` / __|                         |
+#   |                        | (_| | | | (_| \__ \                         |
+#   |                         \__,_|_|  \__, |___/                         |
+#   |                                   |___/                              |
+#   '----------------------------------------------------------------------'
+
+
+>>>>>>> upstream/master
 def parse_arguments(argv):
     parser = argparse.ArgumentParser(description=__doc__)
 
@@ -899,11 +974,14 @@ def parse_arguments(argv):
                         action="store_true",
                         help="""Disables the checking of the servers ssl certificate""")
     parser.add_argument(
+<<<<<<< HEAD
         "--pysphere",
         action="store_true",
         help="""Fallback to old pysphere based special agent. It supports ESX 4.1 but is
         very slow.""")
     parser.add_argument(
+=======
+>>>>>>> upstream/master
         "-D",
         "--direct",
         action="store_true",
@@ -924,9 +1002,15 @@ def parse_arguments(argv):
         Recovery Manager (SRM) and are identified by not having any assigned virtual disks.""")
 
     # optional arguments
+<<<<<<< HEAD
     parser.add_argument("--tracefile",
                         default=None,
                         help="""Log all outgoing and incoming data into the given tracefile""")
+=======
+    parser.add_argument("--vcrtrace",
+                        "--tracefile",
+                        action=vcrtrace(before_record_request=ESXConnection.filter_request))
+>>>>>>> upstream/master
     parser.add_argument(
         "-t",
         "--timeout",
@@ -1002,20 +1086,32 @@ def parse_arguments(argv):
                         metavar="HOST",
                         help="""Host name or IP address of VMWare HostSystem""")
 
+<<<<<<< HEAD
     return parser.parse_args(argv[1:])
 
 
 #   .--Connection----------------------------------------------------------+
+=======
+    return parser.parse_args(argv)
+
+
+#.
+#   .--Connection----------------------------------------------------------.
+>>>>>>> upstream/master
 #   |             ____                       _   _                         |
 #   |            / ___|___  _ __  _ __   ___| |_(_) ___  _ __              |
 #   |           | |   / _ \| '_ \| '_ \ / _ \ __| |/ _ \| '_ \             |
 #   |           | |__| (_) | | | | | | |  __/ |_| | (_) | | | |            |
 #   |            \____\___/|_| |_|_| |_|\___|\__|_|\___/|_| |_|            |
 #   |                                                                      |
+<<<<<<< HEAD
 #   +----------------------------------------------------------------------+
 #   |                                                                      |
 #   '----------------------------------------------------------------------'
 #.
+=======
+#   '----------------------------------------------------------------------'
+>>>>>>> upstream/master
 
 
 class ESXCookieInvalid(RuntimeError):
@@ -1058,11 +1154,25 @@ class ESXSession(requests.Session):
         return super(ESXSession, self).post(self._post_url, data=soapdata, verify=self.verify)
 
 
+<<<<<<< HEAD
 class ESXConnection(object):
+=======
+class ESXConnection:
+>>>>>>> upstream/master
     """Encapsulates the API calls to the ESX system"""
     ESCAPED_CHARS = {"&": "&amp;", ">": "&gt;", "<": "&lt;", "'": "&apos;", '"': "&quot;"}
 
     @staticmethod
+<<<<<<< HEAD
+=======
+    def filter_request(request):
+        """Used for VCR. Filter password"""
+        if b'<ns1:password>' in request.body:
+            request.body = b"login request filtered out"
+        return request
+
+    @staticmethod
+>>>>>>> upstream/master
     def _escape_xml(text):
         return ''.join(ESXConnection.ESCAPED_CHARS.get(c, c) for c in text)
 
@@ -1073,7 +1183,10 @@ class ESXConnection(object):
 
     def __init__(self, address, port, opt):
         super(ESXConnection, self).__init__()
+<<<<<<< HEAD
         self.tracefile = opt.tracefile
+=======
+>>>>>>> upstream/master
 
         AGENT_TMP_PATH.mkdir(parents=True, exist_ok=True)
 
@@ -1121,10 +1234,13 @@ class ESXConnection(object):
     def query_server(self, method, **kwargs):
         payload = getattr(self._soap_templates, method) % kwargs
 
+<<<<<<< HEAD
         if self.tracefile:
             self.tracefile.write("####   Sent  ####\n%s" % payload)
             time_sent = time.time()
 
+=======
+>>>>>>> upstream/master
         response_data = []
         while True:
             response = self._session.postsoap(payload)
@@ -1138,12 +1254,16 @@ class ESXConnection(object):
                 break
             payload = self._soap_templates.continuetoken % {"token": token[0]}
 
+<<<<<<< HEAD
         respose_text = "".join(response_data)
         if self.tracefile:
             timing_info = "Response took: %f" % (time.time() - time_sent)
             self.tracefile.write("\n#### Received #### %s\n%s\n" % (timing_info, respose_text))
 
         return respose_text
+=======
+        return "".join(response_data)
+>>>>>>> upstream/master
 
     @property
     def perf_samples(self):
@@ -1173,7 +1293,11 @@ class ESXConnection(object):
         auth = {"username": self._escape_xml(user), "password": self._escape_xml(password)}
         response = self._session.postsoap(self._soap_templates.login % auth)
 
+<<<<<<< HEAD
         server_cookie = response.headers.get("set-cookie", "").decode("utf-8")
+=======
+        server_cookie = response.headers.get("set-cookie")
+>>>>>>> upstream/master
 
         if response.status_code != 200 or not server_cookie:
             raise SystemExit("Cannot login to vSphere Server (reason: [%s] %s). Please check the "
@@ -1193,13 +1317,19 @@ class ESXConnection(object):
                 raise
 
 
+<<<<<<< HEAD
 #   .--Counters------------------------------------------------------------+
+=======
+#.
+#   .--Counters------------------------------------------------------------.
+>>>>>>> upstream/master
 #   |           ____                  _                                    |
 #   |          / ___|___  _   _ _ __ | |_ ___ _ __ ___                     |
 #   |         | |   / _ \| | | | '_ \| __/ _ \ '__/ __|                    |
 #   |         | |__| (_) | |_| | | | | ||  __/ |  \__ \                    |
 #   |          \____\___/ \__,_|_| |_|\__\___|_|  |___/                    |
 #   |                                                                      |
+<<<<<<< HEAD
 #   +----------------------------------------------------------------------+
 #   |                                                                      |
 #   '----------------------------------------------------------------------'
@@ -1208,6 +1338,13 @@ class ESXConnection(object):
 
 def fetch_available_counters(connection, hostsystems):
     counters_available_by_host = {}
+=======
+#   '----------------------------------------------------------------------'
+
+
+def fetch_available_counters(connection, hostsystems) -> Dict[str, Dict[str, List[str]]]:
+    counters_available_by_host: Dict[str, Dict[str, List[str]]] = {}
+>>>>>>> upstream/master
     for host in hostsystems:
         counter_avail_response = connection.query_server('perfcounteravail', esxhost=host)
         elements = get_pattern("<counterId>([0-9]*)</counterId><instance>([^<]*)",
@@ -1226,8 +1363,14 @@ def fetch_counters_syntax(connection, counter_ids):
 
     response_text = connection.query_server('perfcountersyntax', counters="".join(counters_list))
 
+<<<<<<< HEAD
     elements = get_pattern('<returnval><key>(.*?)</key>.*?<key>(.*?)</key>.*?'\
                            '<key>(.*?)</key>.*?<key>(.*?)</key>.*?', response_text)
+=======
+    elements = get_pattern(
+        '<returnval><key>(.*?)</key>.*?<key>(.*?)</key>.*?'
+        '<key>(.*?)</key>.*?<key>(.*?)</key>.*?', response_text)
+>>>>>>> upstream/master
 
     return {
         id_: {
@@ -1267,7 +1410,11 @@ def fetch_extra_interface_counters(connection, opt):
 
 
 def fetch_counters(connection, host, counters_selected):
+<<<<<<< HEAD
     counter_data = []
+=======
+    counter_data: List[str] = []
+>>>>>>> upstream/master
     for entry, instances in counters_selected:
         counter_data.extend(
             "<ns1:metricId><ns1:counterId>%s</ns1:counterId><ns1:instance>%s</ns1:instance>"
@@ -1298,8 +1445,17 @@ def fetch_counters(connection, host, counters_selected):
 def get_section_counters(connection, hostsystems, datastores, opt):
     section_lines = []
     counters_available_by_host = fetch_available_counters(connection, hostsystems)
+<<<<<<< HEAD
     counters_available_all = functools.reduce(lambda x, y: x.union(y),
                                               counters_available_by_host.itervalues(), set())
+=======
+    counters_available_all = {
+        counter  #
+        for by_host in counters_available_by_host.values()  #
+        for counter in by_host.keys()
+    }
+
+>>>>>>> upstream/master
     net_extra_info = fetch_extra_interface_counters(connection, opt)
     counters_description = fetch_counters_syntax(connection, counters_available_all)
 
@@ -1308,7 +1464,11 @@ def get_section_counters(connection, hostsystems, datastores, opt):
 
         counters_selected = [
             (id_, instances)
+<<<<<<< HEAD
             for id_, instances in counters_avail.iteritems()
+=======
+            for id_, instances in counters_avail.items()
+>>>>>>> upstream/master
             if counters_description.get(id_, {}).get("key") in REQUESTED_COUNTERS_KEYS
         ]
 
@@ -1341,6 +1501,10 @@ def get_section_counters(connection, hostsystems, datastores, opt):
     return section_lines
 
 
+<<<<<<< HEAD
+=======
+#.
+>>>>>>> upstream/master
 #   .--Hostsystem----------------------------------------------------------.
 #   |         _   _           _                 _                          |
 #   |        | | | | ___  ___| |_ ___ _   _ ___| |_ ___ _ __ ___           |
@@ -1348,10 +1512,14 @@ def get_section_counters(connection, hostsystems, datastores, opt):
 #   |        |  _  | (_) \__ \ |_\__ \ |_| \__ \ ||  __/ | | | | |         |
 #   |        |_| |_|\___/|___/\__|___/\__, |___/\__\___|_| |_| |_|         |
 #   |                                 |___/                                |
+<<<<<<< HEAD
 #   +----------------------------------------------------------------------+
 #   |                                                                      |
 #   '----------------------------------------------------------------------'
 #.
+=======
+#   '----------------------------------------------------------------------'
+>>>>>>> upstream/master
 
 
 def _iter_dicts(keys, data):
@@ -1374,7 +1542,12 @@ def eval_hardwarestatus_info(_hostname, _current_propname, propset):
 
 def eval_multipath_info(_hostname, current_propname, multipath_propset):
     multipath_infos = get_pattern("<id>(.*?)</id>.*?((?:<path>.*?</path>)+)", multipath_propset)
+<<<<<<< HEAD
     properties, sensors = {}, {}
+=======
+    properties: Dict[str, List[str]] = {}
+    sensors: Dict = {}
+>>>>>>> upstream/master
     for vml_id, xml_paths in multipath_infos:
         # The Lun ID is part of the VML ID: https://kb.vmware.com/s/article/2078730
         lun_id = vml_id[10:-12]
@@ -1386,7 +1559,11 @@ def eval_multipath_info(_hostname, current_propname, multipath_propset):
 
 
 def eval_propset_block(_hostname, current_propname, elements, id_key, propset):
+<<<<<<< HEAD
     properties = {}
+=======
+    properties: Dict[str, List[str]] = {}
+>>>>>>> upstream/master
     for entries in _iter_dicts(elements, propset):
         for key, value in entries.items():
             properties.setdefault("%s.%s.%s" % (current_propname, key, entries[id_key]),
@@ -1408,7 +1585,11 @@ def eval_pci_device(hostname, current_propname, pci_propset):
 def eval_systeminfo_other(_hostname, _current_propname, propset):
     data = get_pattern("<identifierValue>(.*?)</identifierValue>.*?<key>(.*?)</key>", propset)
 
+<<<<<<< HEAD
     keys_counter = collections.Counter()
+=======
+    keys_counter: Counter[str] = collections.Counter()
+>>>>>>> upstream/master
     properties = {}
     for value, key in data:
         idx = keys_counter[key]
@@ -1433,7 +1614,12 @@ def fetch_hostsystem_data(connection):
     esxhostdetails_response = connection.query_server('esxhostdetails')
     hostsystems_objects = get_pattern('<objects>(.*?)</objects>', esxhostdetails_response)
 
+<<<<<<< HEAD
     hostsystems_properties, hostsystems_sensors = {}, {}
+=======
+    hostsystems_properties: Dict[str, Dict[Any, Any]] = {}
+    hostsystems_sensors: Dict[str, Dict[Any, Any]] = {}
+>>>>>>> upstream/master
     for entry in hostsystems_objects:
         hostname = get_pattern('<obj type="HostSystem">(.*)</obj>', entry[:512])[0]
         hostsystems_properties[hostname] = {}
@@ -1455,16 +1641,28 @@ def fetch_hostsystem_data(connection):
 def get_sections_hostsystem_sensors(hostsystems_properties, hostsystems_sensors, opt):
     # TODO: improve error handling: check if multiple results
     section_lines = []
+<<<<<<< HEAD
     for hostname, properties in hostsystems_properties.iteritems():
+=======
+    for hostname, properties in hostsystems_properties.items():
+>>>>>>> upstream/master
         if not opt.direct:
             section_lines.append("<<<<%s>>>>" % convert_hostname(properties["name"][0], opt))
 
         section_lines.append("<<<esx_vsphere_hostsystem>>>")
+<<<<<<< HEAD
         for key, data in sorted(properties.iteritems()):
             section_lines.append("%s %s" % (key, " ".join(data)))
 
         section_lines.append("<<<esx_vsphere_sensors:sep(59)>>>")
         for key, data in sorted(hostsystems_sensors[hostname].iteritems()):
+=======
+        for key, data in sorted(properties.items()):
+            section_lines.append("%s %s" % (key, " ".join(data)))
+
+        section_lines.append("<<<esx_vsphere_sensors:sep(59)>>>")
+        for key, data in sorted(hostsystems_sensors[hostname].items()):
+>>>>>>> upstream/master
             if data["key"].lower() in ("green", "unknown"):
                 continue
             section_lines.append('%s;%s;%s;%s;%s;%s;%s;%s;%s' %
@@ -1479,6 +1677,10 @@ def get_sections_hostsystem_sensors(hostsystems_properties, hostsystems_sensors,
     return section_lines
 
 
+<<<<<<< HEAD
+=======
+#.
+>>>>>>> upstream/master
 #   .--Objects-------------------------------------------------------------.
 #   |                    ___  _     _           _                          |
 #   |                   / _ \| |__ (_) ___  ___| |_ ___                    |
@@ -1486,6 +1688,7 @@ def get_sections_hostsystem_sensors(hostsystems_properties, hostsystems_sensors,
 #   |                  | |_| | |_) | |  __/ (__| |_\__ \                   |
 #   |                   \___/|_.__// |\___|\___|\__|___/                   |
 #   |                            |__/                                      |
+<<<<<<< HEAD
 #   +----------------------------------------------------------------------+
 #   |                                                                      |
 #   '----------------------------------------------------------------------'
@@ -1495,6 +1698,14 @@ def get_sections_hostsystem_sensors(hostsystems_properties, hostsystems_sensors,
 def get_vm_power_states(vms, hostsystems, opt):
     piggy_data = {}
     for used_hostname, vm_data in vms.iteritems():
+=======
+#   '----------------------------------------------------------------------'
+
+
+def get_vm_power_states(vms, hostsystems, opt):
+    piggy_data: Dict[str, List[Any]] = {}
+    for used_hostname, vm_data in vms.items():
+>>>>>>> upstream/master
         runtime_host = vm_data.get("runtime.host")
         running_on = hostsystems.get(runtime_host, runtime_host)
         power_state = vm_data.get("runtime.powerState")
@@ -1510,8 +1721,13 @@ def get_vm_power_states(vms, hostsystems, opt):
 
 
 def _get_vms_by_hostsystem(vms, hostsystems):
+<<<<<<< HEAD
     vms_by_hostsys = {}
     for vm_name, vm_data in vms.iteritems():
+=======
+    vms_by_hostsys: Dict[str, List[Any]] = {}
+    for vm_name, vm_data in vms.items():
+>>>>>>> upstream/master
         runtime_host = vm_data.get("runtime.host")
         running_on = hostsystems.get(runtime_host, runtime_host)
         vms_by_hostsys.setdefault(running_on, []).append(vm_name)
@@ -1525,8 +1741,13 @@ def get_hostsystem_power_states(vms, hostsystems, hostsystems_properties, opt):
     if opt.hostname and opt.direct and opt.host_pwr_display != "vm":
         override_hostname = opt.hostname
 
+<<<<<<< HEAD
     piggy_data = {}
     for data in hostsystems_properties.itervalues():
+=======
+    piggy_data: Dict[str, List[str]] = {}
+    for data in hostsystems_properties.values():
+>>>>>>> upstream/master
         orig_hostname = data["name"][0]
         used_hostname = override_hostname or convert_hostname(orig_hostname, opt)
         power_state = data["runtime.powerState"][0]
@@ -1544,22 +1765,35 @@ def get_hostsystem_power_states(vms, hostsystems, hostsystems_properties, opt):
 
 def _format_piggybacked_objects_sections(piggy_data):
     output = []
+<<<<<<< HEAD
     for piggy_target, info in piggy_data.iteritems():
+=======
+    for piggy_target, info in piggy_data.items():
+>>>>>>> upstream/master
         output += ["<<<<%s>>>>" % piggy_target, "<<<esx_vsphere_objects:sep(9)>>>"] + info
     return output + ["<<<<>>>>"]
 
 
+<<<<<<< HEAD
 #   .--unsorted------------------------------------------------------------+
+=======
+#.
+#   .--unsorted------------------------------------------------------------.
+>>>>>>> upstream/master
 #   |                                       _           _                  |
 #   |            _   _ _ __  ___  ___  _ __| |_ ___  __| |                 |
 #   |           | | | | '_ \/ __|/ _ \| '__| __/ _ \/ _` |                 |
 #   |           | |_| | | | \__ \ (_) | |  | ||  __/ (_| |                 |
 #   |            \__,_|_| |_|___/\___/|_|   \__\___|\__,_|                 |
 #   |                                                                      |
+<<<<<<< HEAD
 #   +----------------------------------------------------------------------+
 #   |                                                                      |
 #   '----------------------------------------------------------------------'
 #.
+=======
+#   '----------------------------------------------------------------------'
+>>>>>>> upstream/master
 
 
 def convert_hostname(hostname, opt):
@@ -1568,6 +1802,7 @@ def convert_hostname(hostname, opt):
     return hostname.replace(" ", "_")
 
 
+<<<<<<< HEAD
 def write_output(lines, opt):
     if opt.agent:
         for chunk in get_agent_info_tcp(opt.host_address, opt.timeout, opt.debug):
@@ -1575,6 +1810,15 @@ def write_output(lines, opt):
 
     for line in lines:
         sys.stdout.write((line.encode("utf-8") if isinstance(line, six.text_type) else line) + "\n")
+=======
+def write_output(lines: Iterable[str], opt: argparse.Namespace) -> None:
+    if opt.agent:
+        for chunk in get_agent_info_tcp(opt.host_address, opt.timeout, opt.debug):
+            sys.stdout.write(chunk)
+        sys.stdout.write("\n")
+
+    sys.stdout.writelines("%s\n" % line for line in lines)
+>>>>>>> upstream/master
     sys.stdout.flush()
 
 
@@ -1594,7 +1838,11 @@ def get_agent_info_tcp(address, timeout, debug):
             pass  # some old Python versions lack settimeout(). Better ignore than fail
         soc.connect((ipaddress, 6556))
         try:
+<<<<<<< HEAD
             soc.setblocking(1)
+=======
+            soc.setblocking(True)
+>>>>>>> upstream/master
         except AttributeError:
             pass
         while True:
@@ -1612,10 +1860,16 @@ def get_pattern(pattern, line):
     return re.findall(pattern, line, re.DOTALL) if line else []
 
 
+<<<<<<< HEAD
 def get_sections_aggregated_snapshots(vms, hostsystems):
 
     aggregated = {}
     for data in vms.itervalues():
+=======
+def get_sections_aggregated_snapshots(vms, hostsystems, time_reference):
+    aggregated: Dict[str, List[Any]] = {}
+    for data in vms.values():
+>>>>>>> upstream/master
         if hostsystems is not None:
             running_on = hostsystems.get(data.get("runtime.host"), data.get("runtime.host"))
         else:
@@ -1625,10 +1879,18 @@ def get_sections_aggregated_snapshots(vms, hostsystems):
             aggregated.setdefault(running_on, []).append(snapshots)
 
     section_lines = []
+<<<<<<< HEAD
     for piggytarget, sn_list in aggregated.iteritems():
         section_lines += [
             '<<<<%s>>>>' % piggytarget, '<<<esx_vsphere_vm>>>',
             'snapshot.rootSnapshotList %s' % '|'.join(sn_list), '<<<<>>>>'
+=======
+    for piggytarget, sn_list in aggregated.items():
+        section_lines += [
+            '<<<<%s>>>>' % piggytarget, '<<<esx_vsphere_vm>>>',
+            'time_reference %d' % time_reference,
+            'snapshot.rootSnapshotList.summary %s' % '|'.join(sn_list), '<<<<>>>>'
+>>>>>>> upstream/master
         ]
     return section_lines
 
@@ -1641,7 +1903,11 @@ def get_section_systemtime(connection, opt):
             naive = datetime.datetime.strptime(elements[0], "%Y-%m-%dT%H:%M:%S.%fZ")
             utc = naive.replace(tzinfo=tz.tzutc())
             localtime = utc.astimezone(tz.tzlocal())
+<<<<<<< HEAD
             return ["<<<systemtime>>>", localtime.strftime("%s")]
+=======
+            return ["<<<systemtime>>>", localtime.strftime("%s") + " " + str(time.time())]
+>>>>>>> upstream/master
     except Exception:
         if opt.debug:
             raise
@@ -1670,8 +1936,13 @@ def eval_virtual_device(info, _datastores):
             device_info = get_pattern(search_pattern, virtual_device)[0]
         except IndexError:
             continue
+<<<<<<< HEAD
         device_pairs = zip(device_info[0::2], device_info[1::2])
         device_txt = "|".join("%s %s" % p for p in device_pairs)
+=======
+        device_txt = "|".join("%s %s" % p  #
+                              for p in zip(device_info[0::2], device_info[1::2]))
+>>>>>>> upstream/master
         response.append("virtualDeviceType %s|%s" % (type_info, device_txt))
 
     return "@@".join(response)
@@ -1733,7 +2004,11 @@ def fetch_datastores(connection):
     datastores_response = connection.query_server('datastores')
     elements = get_pattern('<objects><obj type="Datastore">(.*?)</obj>(.*?)</objects>',
                            datastores_response)
+<<<<<<< HEAD
     datastores = {}
+=======
+    datastores: Dict[str, Dict[str, Any]] = {}
+>>>>>>> upstream/master
     for datastore, content in elements:
         entries = get_pattern('<name>(.*?)</name><val xsi:type.*?>(.*?)</val>', content)
         datastores[datastore] = {}
@@ -1744,8 +2019,12 @@ def fetch_datastores(connection):
 
 def get_section_datastores(datastores):
     section_lines = ["<<<esx_vsphere_datastores:sep(9)>>>"]
+<<<<<<< HEAD
     for key in sorted(datastores.keys()):
         data = datastores[key]
+=======
+    for _key, data in sorted(datastores.items()):
+>>>>>>> upstream/master
         section_lines.append("[%s]" % data.get("name"))
         for ds_key in sorted(data.keys()):
             if ds_key == "name":
@@ -1770,7 +2049,12 @@ def get_section_licenses(connection):
 
 
 def fetch_virtual_machines(connection, hostsystems, datastores, opt):
+<<<<<<< HEAD
     vms, vm_esx_host = {}, {}
+=======
+    vms = {}
+    vm_esx_host: Dict[str, List[Any]] = {}
+>>>>>>> upstream/master
 
     # <objects><propSet><name>...</name><val ..>...</val></propSet></objects>
     vmdetails_response = connection.query_server('vmdetails')
@@ -1781,6 +2065,12 @@ def fetch_virtual_machines(connection, hostsystems, datastores, opt):
         if opt.skip_placeholder_vm and is_placeholder_vm(vm_data.get("config.hardware.device")):
             continue
 
+<<<<<<< HEAD
+=======
+        if vm_data.get("summary.config.ftInfo.role") == '2':
+            continue  # This response coming from the passive fault-tolerance node
+
+>>>>>>> upstream/master
         if "runtime.host" in vm_data:
             vm_data["runtime.host"] = hostsystems.get(vm_data["runtime.host"],
                                                       vm_data["runtime.host"])
@@ -1805,12 +2095,25 @@ def fetch_virtual_machines(connection, hostsystems, datastores, opt):
     return vms, vm_esx_host
 
 
+<<<<<<< HEAD
 def get_section_vm(vms):
     section_lines = []
     for vm_name, vm_data in sorted(vms.iteritems()):
         if vm_data.get("name"):
             section_lines += ["<<<<%s>>>>" % vm_name, "<<<esx_vsphere_vm>>>"]
             section_lines.extend("%s %s" % entry for entry in sorted(vm_data.iteritems()))
+=======
+def get_section_vm(vms, time_reference):
+    section_lines = []
+    for vm_name, vm_data in sorted(vms.items()):
+        if vm_data.get("name"):
+            section_lines += [
+                "<<<<%s>>>>" % vm_name, "<<<esx_vsphere_vm>>>",
+                'time_reference %d' % time_reference
+            ]
+            section_lines.extend("%s %s" % entry for entry in sorted(vm_data.items()))
+    section_lines += ["<<<<>>>>"]
+>>>>>>> upstream/master
     return section_lines
 
 
@@ -1833,15 +2136,32 @@ def get_sections_clusters(connection, vm_esx_host, opt):
                 response)
             for host in hosts:
                 cluster_vms.extend(vm_esx_host.get(host, []))
+<<<<<<< HEAD
             cluster_vms = (convert_hostname(cvm, opt) for cvm in cluster_vms)
             section_lines += [
                 "%s\thostsystems\t%s\t%s" % (datacenter, cluster[1], "\t".join(hosts)),
                 "%s\tvms\t%s\t%s" % (datacenter, cluster[1], "\t".join(cluster_vms)),
+=======
+            section_lines += [
+                "%s\thostsystems\t%s\t%s" % (datacenter, cluster[1], "\t".join(hosts)),
+                "%s\tvms\t%s\t%s" % (datacenter, cluster[1], "\t".join(
+                    convert_hostname(cvm, opt) for cvm in cluster_vms)),
+>>>>>>> upstream/master
             ]
 
     return section_lines
 
 
+<<<<<<< HEAD
+=======
+def _retrieve_system_time(connection):
+    response = connection.query_server('systemtime')
+    elements = get_pattern('<returnval>(.*)</returnval>', response)
+    return (int(datetime.datetime.strptime(elements[0], "%Y-%m-%dT%H:%M:%S.%fZ").timestamp())
+            if elements else 0)
+
+
+>>>>>>> upstream/master
 def fetch_data(connection, opt):
     output = []
 
@@ -1884,11 +2204,20 @@ def fetch_data(connection, opt):
     # Virtual machines
     ###########################
     if "virtualmachine" in opt.modules:
+<<<<<<< HEAD
         vms, vm_esx_host = fetch_virtual_machines(connection, hostsystems, datastores, opt)
         output += get_section_vm(vms)
 
         used_hostsystems = hostsystems if opt.snapshot_display == 'esxhost' else None
         output += get_sections_aggregated_snapshots(vms, used_hostsystems)
+=======
+        time_reference = _retrieve_system_time(connection)
+        vms, vm_esx_host = fetch_virtual_machines(connection, hostsystems, datastores, opt)
+        output += get_section_vm(vms, time_reference)
+
+        used_hostsystems = hostsystems if opt.snapshot_display == 'esxhost' else None
+        output += get_sections_aggregated_snapshots(vms, used_hostsystems, time_reference)
+>>>>>>> upstream/master
     else:
         vms, vm_esx_host = {}, {}
 
@@ -1907,6 +2236,7 @@ def fetch_data(connection, opt):
     return output
 
 
+<<<<<<< HEAD
 def call_legacy_pysphere():
     # TODO: Remove this, drop agent_vsphere.pysphere
     import subprocess
@@ -1916,6 +2246,9 @@ def call_legacy_pysphere():
     return subprocess.call(cmd)
 
 
+=======
+#.
+>>>>>>> upstream/master
 #   .--Main----------------------------------------------------------------.
 #   |                        __  __       _                                |
 #   |                       |  \/  | __ _(_)_ __                           |
@@ -1923,12 +2256,17 @@ def call_legacy_pysphere():
 #   |                       | |  | | (_| | | | | |                         |
 #   |                       |_|  |_|\__,_|_|_| |_|                         |
 #   |                                                                      |
+<<<<<<< HEAD
 #   +----------------------------------------------------------------------+
+=======
+#   '----------------------------------------------------------------------'
+>>>>>>> upstream/master
 
 
 def main(argv=None):
     if argv is None:
         cmk.utils.password_store.replace_passwords()
+<<<<<<< HEAD
         argv = sys.argv
 
     opt = parse_arguments(argv)
@@ -1951,6 +2289,14 @@ def main(argv=None):
         opt.tracefile.write("Tracefile %s Host address: %s\n" %
                             (datetime.datetime.now().strftime("%Y-%m-%d %H:%M"), opt.host_address))
 
+=======
+        argv = sys.argv[1:]
+
+    opt = parse_arguments(argv)
+
+    socket.setdefaulttimeout(opt.timeout)
+
+>>>>>>> upstream/master
     try:
         esx_connection = ESXConnection(opt.host_address, opt.port, opt)
 

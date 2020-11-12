@@ -5,7 +5,11 @@ Class: fix
 Compatible: compat
 Edition: cee
 State: unknown
+<<<<<<< HEAD
 Version: 1.7.0i1
+=======
+Version: 2.0.0i1
+>>>>>>> upstream/master
 Date: 1560938929
 
 When trying to add graphs with a larger number of metrics to a report or dashboard using

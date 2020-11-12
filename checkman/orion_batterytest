@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: Delta Energy Systems: Batter test
+=======
+title: Delta Energy Systems: Battery Test
+>>>>>>> upstream/master
 agents: snmp
 catalog: hw/environment/orion
 license: GPL
@@ -11,8 +15,13 @@ description:
  the test was 'aborted' and CRIT is reported in case of
  'failed' or 'load failure'.
 
+<<<<<<< HEAD
 item:
  The item is called 'Battery'.
 
 inventory:
  One service for each item is generated.
+=======
+inventory:
+ One service is created.
+>>>>>>> upstream/master

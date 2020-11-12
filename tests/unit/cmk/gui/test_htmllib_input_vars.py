@@ -1,12 +1,23 @@
+<<<<<<< HEAD
 #!/usr/bin/env python
 # encoding: utf-8
 
 import pytest
 
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+import pytest  # type: ignore
+>>>>>>> upstream/master
 from cmk.gui.exceptions import MKUserError
 from cmk.gui.globals import html
 
 
+<<<<<<< HEAD
 def test_get_ascii_input(register_builtin_html):
     html.request.set_var("xyz", "x")
     html.request.set_var("abc", "äbc")
@@ -48,6 +59,8 @@ def test_get_integer_input(register_builtin_html):
     assert "is not an integer" in "%s" % e
 
 
+=======
+>>>>>>> upstream/master
 @pytest.mark.parametrize("invalid_url", [
     "http://localhost/",
     "://localhost",

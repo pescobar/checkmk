@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // +------------------------------------------------------------------+
 // |             ____ _               _        __  __ _  __           |
 // |            / ___| |__   ___  ___| | __   |  \/  | |/ /           |
@@ -21,6 +22,11 @@
 // License along with GNU Make; see the file  COPYING.  If  not,  write
 // to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 // Boston, MA 02110-1301 USA.
+=======
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+// conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 import * as utils from "utils";
 import * as ajax from "ajax";
@@ -34,13 +40,18 @@ export function prepare(num) {
 
 export function start(siteid, est, progress_text) {
     ajax.call_ajax("wato_ajax_profile_repl.py", {
+<<<<<<< HEAD
         response_handler : function (handler_data, response_json) {
+=======
+        response_handler: function (handler_data, response_json) {
+>>>>>>> upstream/master
             var response = JSON.parse(response_json);
             var success = response.result_code === 0;
             var msg = response.result;
 
             set_result(handler_data["site_id"], success, msg);
         },
+<<<<<<< HEAD
         error_handler    : function (handler_data, status_code, error_msg) {
             set_result(handler_data["site_id"], false,
                 "Failed to perform profile replication [" + status_code + "]: " + error_msg);
@@ -57,6 +68,34 @@ export function start(siteid, est, progress_text) {
 
     profile_replication_progress[siteid] = 20; // 10 of 10 10ths
     setTimeout("cmk.profile_replication.step('"+siteid+"', "+est+", '"+progress_text+"');", est/20);
+=======
+        error_handler: function (handler_data, status_code, error_msg) {
+            set_result(
+                handler_data["site_id"],
+                false,
+                "Failed to perform profile replication [" + status_code + "]: " + error_msg
+            );
+        },
+        method: "POST",
+        post_data:
+            "request=" +
+            encodeURIComponent(
+                JSON.stringify({
+                    site: siteid,
+                })
+            ),
+        handler_data: {
+            site_id: siteid,
+        },
+        add_ajax_id: false,
+    });
+
+    profile_replication_progress[siteid] = 20; // 10 of 10 10ths
+    setTimeout(
+        "cmk.profile_replication.step('" + siteid + "', " + est + ", '" + progress_text + "');",
+        est / 20
+    );
+>>>>>>> upstream/master
 }
 
 function set_status(siteid, image, text) {
@@ -68,6 +107,7 @@ function set_status(siteid, image, text) {
 export function step(siteid, est, progress_text) {
     if (profile_replication_progress[siteid] > 0) {
         profile_replication_progress[siteid]--;
+<<<<<<< HEAD
         var perc = (20.0 - profile_replication_progress[siteid]) * 100 / 20;
         var img;
         if (perc >= 75)
@@ -80,6 +120,19 @@ export function step(siteid, est, progress_text) {
             img = "repl_pending";
         set_status(siteid, img, progress_text);
         setTimeout("cmk.profile_replication.step('"+siteid+"',"+est+", '"+progress_text+"');", est/20);
+=======
+        var perc = ((20.0 - profile_replication_progress[siteid]) * 100) / 20;
+        var img;
+        if (perc >= 75) img = "repl_75";
+        else if (perc >= 50) img = "repl_50";
+        else if (perc >= 25) img = "repl_25";
+        else img = "repl_pending";
+        set_status(siteid, img, progress_text);
+        setTimeout(
+            "cmk.profile_replication.step('" + siteid + "'," + est + ", '" + progress_text + "');",
+            est / 20
+        );
+>>>>>>> upstream/master
     }
 }
 
@@ -98,6 +151,10 @@ function set_result(site_id, success, msg) {
 
 function finish() {
     // check if we have a sidebar-main frame setup
+<<<<<<< HEAD
     if (this.parent && parent && parent.frames[1] == this)
         utils.reload_sidebar();
+=======
+    if (this.parent && parent && parent.frames[0] == this) utils.reload_sidebar();
+>>>>>>> upstream/master
 }

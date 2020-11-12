@@ -7,7 +7,11 @@ Edition: cee
 Knowledge: undoc
 Level: 1
 State: unknown
+<<<<<<< HEAD
 Version: 1.7.0i1
+=======
+Version: 2.0.0i1
+>>>>>>> upstream/master
 
 When the automatic update of the service configuration is enabled, the periodic
 service discovery was applying service discovery changes, but was not

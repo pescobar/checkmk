@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # encoding: utf-8
 
@@ -10,6 +11,27 @@ import shutil
 
 from testlib import cmk_path, cmc_path, cme_path, repo_path
 import testlib.pylint_cmk as pylint_cmk
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# pylint: disable=redefined-outer-name
+
+import contextlib
+import os
+import shutil
+import subprocess
+import sys
+import tempfile
+
+import pytest  # type: ignore[import]
+
+import testlib.pylint_cmk as pylint_cmk
+from testlib import is_enterprise_repo, repo_path
+>>>>>>> upstream/master
 
 
 @pytest.fixture(scope="function")
@@ -22,7 +44,11 @@ def pylint_test_dir():
     else:
         base_path = None
 
+<<<<<<< HEAD
     test_dir = tempfile.mkdtemp(prefix="cmk_pylint", dir=base_path)
+=======
+    test_dir = tempfile.mkdtemp(prefix="cmk_pylint_", dir=base_path)
+>>>>>>> upstream/master
 
     print("Prepare check in %s ..." % test_dir)
     yield test_dir
@@ -35,6 +61,7 @@ def pylint_test_dir():
     shutil.rmtree(test_dir)
 
 
+<<<<<<< HEAD
 def test_pylint(pylint_test_dir):
     # Only specify the path to python packages or modules here
     modules_or_packages = [
@@ -101,6 +128,77 @@ def _compile_check_and_inventory_plugins(pylint_test_dir):
         # Fake data structures where checks register (See cmk_base/checks.py)
         f.write("""
 # -*- encoding: utf-8 -*-
+=======
+def test_pylint(pylint_test_dir, capsys):
+    with capsys.disabled():
+        print("\n")
+        retcode = subprocess.call("python -m pylint --version".split(), shell=False)
+        print()
+        assert not retcode
+
+    exit_code = pylint_cmk.run_pylint(repo_path(), _get_files_to_check(pylint_test_dir))
+    assert exit_code == 0, "PyLint found an error"
+
+
+def _get_files_to_check(pylint_test_dir):
+    # Add the compiled files for things that are no modules yet
+    open(pylint_test_dir + "/__init__.py", "w")
+    _compile_check_and_inventory_plugins(pylint_test_dir)
+
+    # Not checking compiled check, inventory, bakery plugins with Python 3
+    files = [pylint_test_dir]
+
+    p = subprocess.Popen(
+        ["%s/scripts/find-python-files" % repo_path()],
+        stdout=subprocess.PIPE,
+        encoding="utf-8",
+        shell=False,
+        close_fds=True,
+    )
+    stdout = p.communicate()[0]
+
+    for fname in stdout.splitlines():
+        # Thin out these excludes some day...
+        rel_path = fname[len(repo_path()) + 1:]
+
+        # Can currently not be checked alone. Are compiled together below
+        if rel_path.startswith("checks/") or \
+           rel_path.startswith("inventory/"):
+            continue
+
+        # TODO: We should also test them...
+        if rel_path == "werk" \
+            or rel_path.startswith("tests/") \
+            or rel_path.startswith("scripts/") \
+            or rel_path.startswith("agents/wnx/integration/"):
+            continue
+
+        # TODO: disable random, not that important stuff
+        if rel_path.startswith("agents/windows/it/") \
+            or rel_path.startswith("agents/windows/msibuild/") \
+            or rel_path.startswith("doc/") \
+            or rel_path.startswith("livestatus/api/python/example") \
+            or rel_path.startswith("livestatus/api/python/make_"):
+            continue
+
+        files.append(fname)
+
+    return files
+
+
+@contextlib.contextmanager
+def stand_alone_template(file_name):
+
+    with open(file_name, "w") as file_handle:
+
+        # Fake data structures where checks register (See cmk/base/checks.py)
+        file_handle.write("""
+# -*- encoding: utf-8 -*-
+
+from cmk.base.check_api import *  # pylint: disable=wildcard-import,unused-wildcard-import
+
+
+>>>>>>> upstream/master
 check_info                         = {}
 check_includes                     = {}
 precompile_params                  = {}
@@ -123,6 +221,7 @@ def inv_tree(path, default_value=None):
         node = default_value
     else:
         node = {}
+<<<<<<< HEAD
 
     return node
 """)
@@ -155,3 +254,45 @@ def _compile_bakery_plugins(pylint_test_dir):
         # Also add bakery plugins
         for path in pylint_cmk.check_files(os.path.join(cmc_path(), "agents/bakery")):
             pylint_cmk.add_file(f, path)
+=======
+    return node
+""")
+
+        disable_pylint = [
+            'chained-comparison',
+            'consider-iterating-dictionary',
+            'consider-using-dict-comprehension',
+            'consider-using-in',
+            'function-redefined',
+            'no-else-break',
+            'no-else-continue',
+            'no-else-return',
+            'pointless-string-statement',
+            'redefined-outer-name',
+            'reimported',
+            'simplifiable-if-expression',
+            'ungrouped-imports',
+            'unnecessary-comprehension',
+            'unused-variable',
+            'useless-object-inheritance',
+            'wrong-import-order',
+            'wrong-import-position',
+        ]
+
+        # These pylint warnings are incompatible with our "concatenation technology".
+        file_handle.write("# pylint: disable=%s\n" % ','.join(disable_pylint))
+
+        yield file_handle
+
+
+def _compile_check_and_inventory_plugins(pylint_test_dir):
+
+    for idx, f_name in enumerate(pylint_cmk.check_files(repo_path() + "/checks")):
+        with stand_alone_template(pylint_test_dir + "/cmk_checks_%s.py" % idx) as file_handle:
+            pylint_cmk.add_file(file_handle, f_name)
+
+    with stand_alone_template(pylint_test_dir + "/cmk_checks.py") as file_handle:
+        pylint_cmk.add_file(file_handle, repo_path() + "/cmk/base/inventory_plugins.py")
+        for path in pylint_cmk.check_files(repo_path() + "/inventory"):
+            pylint_cmk.add_file(file_handle, path)
+>>>>>>> upstream/master

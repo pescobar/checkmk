@@ -21,7 +21,11 @@ std::string SystemTime::makeBody() {
     XLOG::t(XLOG_FUNC + " entering");
 
     const auto now = cma::tools::SecondsSinceEpoch();
+<<<<<<< HEAD
     return std::to_string(now);
+=======
+    return std::to_string(now) + "\n";
+>>>>>>> upstream/master
 }
 
 }  // namespace provider

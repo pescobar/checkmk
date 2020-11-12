@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: Cisco ASA Connections
+=======
+title: Cisco ASA: Connections
+>>>>>>> upstream/master
 agents: snmp
 catalog: hw/network/cisco
 distribution: check_mk
@@ -11,5 +15,9 @@ description:
  Upper levels for currently connections can be set. There are no default levels.
 
 inventory:
+<<<<<<< HEAD
  One service will be created.
+=======
+ One service is created.
+>>>>>>> upstream/master
 

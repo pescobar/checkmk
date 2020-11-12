@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,6 +24,13 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 # <<<systemd_units>>>
 #   UNIT                                   LOAD   ACTIVE SUB    DESCRIPTION
@@ -61,12 +69,35 @@ _SYSTEMD_UNITS = [
     '.scope ',  # Scope units are created automatically by systemd from information received from its bus interfaces. These are used to manage sets of system processes that are created externally.
 ]
 
+<<<<<<< HEAD
 
 def parse_systemd_units(info):
     parsed = {}
 
     if not info:
         return {}
+=======
+_SYSTEMD_UNIT_FILE_STATES = [
+    "enabled",
+    "enabled-runtime",
+    "linked",
+    "linked-runtime",
+    "masked",
+    "masked-runtime",
+    "static",
+    "indirect",
+    "disabled",
+    "generated",
+    "transient",
+    "bad",
+]
+
+
+def parse_systemd_units(info):
+    if not info:
+        return {}
+
+>>>>>>> upstream/master
     iter_info = iter(info)
     target_states = {}
 
@@ -76,9 +107,16 @@ def parse_systemd_units(info):
         for line in iter_info:
             if line[0].startswith('['):
                 break
+<<<<<<< HEAD
             if len(line) >= 2:
                 target_states[line[0]] = line[1]
 
+=======
+            if len(line) >= 2 and line[1] in _SYSTEMD_UNIT_FILE_STATES:
+                target_states[line[0]] = line[1]
+
+    parsed = {}
+>>>>>>> upstream/master
     if line[0] == '[all]':
         try:
             line = next(iter_info)
@@ -96,7 +134,11 @@ def parse_systemd_units(info):
             line = ' '.join(row)
             for unit_marker in _SYSTEMD_UNITS:
                 utype = unit_marker.strip(' ')
+<<<<<<< HEAD
                 if utype in row[0]:
+=======
+                if row[0].endswith(utype):
+>>>>>>> upstream/master
                     unit_type = unit_marker.strip('. ')
                     name, remains = line.split(unit_marker, 1)
                     if "@" in name:
@@ -137,6 +179,18 @@ factory_settings["systemd_services_default_levels"] = {
     "else": 2,  # missleading name, used if service vanishes
 }
 
+<<<<<<< HEAD
+=======
+factory_settings["systemd_services_summary_default_levels"] = {
+    "states": {
+        "active": 0,
+        "inactive": 0,
+        "failed": 2,
+    },
+    "states_default": 2,
+}
+
+>>>>>>> upstream/master
 discovery_systemd_units_services_rules = []
 
 
@@ -150,19 +204,32 @@ def discovery_systemd_units_services(parsed):
             if entry.startswith("~"):
                 if regex(entry[1:]).match(name):
                     return True
+<<<<<<< HEAD
                 else:
                     continue
+=======
+                continue
+>>>>>>> upstream/master
             elif entry == name:
                 return True
         return False
 
     def state_match(rule_states, state):
+<<<<<<< HEAD
+=======
+        if not rule_states:
+            return True
+>>>>>>> upstream/master
         return any(s in (None, state) for s in rule_states)
 
     for settings in host_extra_conf(host_name(), discovery_systemd_units_services_rules):
         descriptions = settings.get("descriptions", [])
         names = settings.get("names", [])
+<<<<<<< HEAD
         states = settings.get("states")
+=======
+        states = settings.get("states", [])
+>>>>>>> upstream/master
         for service in services.values():
             if (regex_match(descriptions, service.description) and
                     regex_match(names, service.name) and state_match(states, service.active)):
@@ -196,6 +263,7 @@ def discovery_systemd_units_services_summary(parsed):
 
 
 def _services_split(services, blacklist):
+<<<<<<< HEAD
     included = []
     excluded = []
     disabled = []
@@ -226,13 +294,53 @@ def _check_activating_state(activating_services, params):
         current_state[service.name] = activating_since
         elapsed_time = now - activating_since
         levels = params.get("activating_levels")
+=======
+    services_organised = {
+        "included": [],
+        "excluded": [],
+        "disabled": [],
+        "activating": [],
+        "reloading": [],
+        "static": []
+    }
+    compiled_patterns = [regex(p) for p in blacklist]
+    for service in services:
+        if any(expr.match(service.name) for expr in compiled_patterns):
+            services_organised["excluded"].append(service)
+            continue
+        if service.active == "activating":
+            services_organised["activating"].append(service)
+        elif service.state in ("reloading", "disabled", "static", "indirect"):
+            service_type = "disabled" if service.state == "indirect" else service.state
+            services_organised[service_type].append(service)
+        else:
+            services_organised["included"].append(service)
+    return services_organised
+
+
+def _check_temporary_state(services, params, service_state):
+    previous_state = get_item_state(service_state, {})
+    now = int(time.time())
+    current_state = {}
+    levels = params.get("%s_levels" % service_state)
+    for service in services:
+        state_since = previous_state.get(service.name, now)
+        current_state[service.name] = state_since
+        elapsed_time = now - state_since
+>>>>>>> upstream/master
         yield check_levels(elapsed_time,
                            None,
                            levels,
                            human_readable_func=get_age_human_readable,
+<<<<<<< HEAD
                            infoname="Service '%s' activating for" % service.name)
 
         set_item_state("activating", current_state)
+=======
+                           infoname="Service '%s' %s for" % (service.name, service_state))
+
+        set_item_state(service_state, current_state)
+>>>>>>> upstream/master
 
 
 def _check_non_ok_services(systemd_services, params, output_string):
@@ -240,7 +348,11 @@ def _check_non_ok_services(systemd_services, params, output_string):
     for service in systemd_services:
         servicenames_by_status.setdefault(service.active, []).append(service.name)
 
+<<<<<<< HEAD
     for status, service_names in sorted(servicenames_by_status.iteritems()):
+=======
+    for status, service_names in sorted(servicenames_by_status.items()):
+>>>>>>> upstream/master
         state = params["states"].get(status, params["states_default"])
         if state == 0:
             continue
@@ -255,6 +367,7 @@ def _check_non_ok_services(systemd_services, params, output_string):
 def check_systemd_units_services_summary(_no_item, params, parsed):
     services = parsed.get('service', {}).values()
     blacklist = params.get('ignored', [])
+<<<<<<< HEAD
     yield 0, "%d services in total" % len(services)
 
     included, excluded, disabled, static, activating = _services_split(services, blacklist)
@@ -274,14 +387,58 @@ def check_systemd_units_services_summary(_no_item, params, parsed):
         yield 0, "%d ignored services" % len(excluded)
     if disabled:
         yield 0, "%d disabled services" % len(disabled)
+=======
+    yield 0, "Total: %d" % len(services)
+
+    services_organised = _services_split(services, blacklist)
+
+    yield 0, "Disabled: %d" % len(services_organised["disabled"])
+    # some of the failed ones might be ignored, so this is OK:
+    yield 0, "Failed: %d" % sum(s.active == "failed" for s in services)
+
+    long_output = []
+
+    included_template = "%d service%s %s (%s)"
+    for subresult in _check_non_ok_services(services_organised["included"], params,
+                                            included_template):
+        if subresult[0]:
+            yield subresult
+        else:
+            long_output.append(subresult)
+
+    static_template = "%d static service%s %s (%s)"
+    for subresult in _check_non_ok_services(services_organised["static"], params, static_template):
+        if subresult[0]:
+            yield subresult
+        else:
+            long_output.append(subresult)
+
+    for temporary_type in ("activating", "reloading"):
+        for subresult in _check_temporary_state(services_organised[temporary_type], params,
+                                                temporary_type):
+            if subresult[0]:
+                yield subresult
+            else:
+                long_output.append(subresult)
+
+    if services_organised["excluded"]:
+        yield 0, "\nIgnored: %d" % len(services_organised["excluded"])
+
+    yield from long_output
+>>>>>>> upstream/master
 
 
 check_info['systemd_units.services_summary'] = {
     'inventory_function': discovery_systemd_units_services_summary,
     'check_function': check_systemd_units_services_summary,
     'service_description': 'Systemd Service %s',
+<<<<<<< HEAD
     'group': 'systemd_services',
     'default_levels_variable': 'systemd_services_default_levels',
+=======
+    'group': 'systemd_services_summary',
+    'default_levels_variable': 'systemd_services_summary_default_levels',
+>>>>>>> upstream/master
 }
 
 #.

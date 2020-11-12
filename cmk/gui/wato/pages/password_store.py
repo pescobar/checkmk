@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/env python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -28,6 +29,20 @@ import cmk.gui.config as config
 import cmk.gui.userdb as userdb
 from cmk.gui.i18n import _
 from cmk.gui.globals import html
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+from typing import List, Optional, Type
+
+import cmk.gui.config as config
+from cmk.gui.i18n import _
+from cmk.gui.globals import html
+from cmk.gui.valuespec import ValueSpec, DictionaryEntry
+>>>>>>> upstream/master
 from cmk.gui.valuespec import (
     FixedValue,
     PasswordSpec,
@@ -38,7 +53,13 @@ from cmk.gui.valuespec import (
 
 from cmk.gui.watolib.groups import load_contact_group_information
 from cmk.gui.watolib.password_store import PasswordStore
+<<<<<<< HEAD
 from cmk.gui.plugins.wato import (
+=======
+from cmk.gui.watolib.passwords import sorted_contact_group_choices
+from cmk.gui.plugins.wato import (
+    WatoMode,
+>>>>>>> upstream/master
     ConfigDomainCore,
     SimpleModeType,
     SimpleListMode,
@@ -135,6 +156,13 @@ class ModeEditPassword(SimpleEditMode):
     def permissions(cls):
         return ["passwords"]
 
+<<<<<<< HEAD
+=======
+    @classmethod
+    def parent_mode(cls) -> Optional[Type[WatoMode]]:
+        return ModePasswords
+
+>>>>>>> upstream/master
     def __init__(self):
         super(ModeEditPassword, self).__init__(
             mode_type=PasswordStoreModeType(),
@@ -143,7 +171,11 @@ class ModeEditPassword(SimpleEditMode):
 
     def _vs_individual_elements(self):
         if config.user.may("wato.edit_all_passwords"):
+<<<<<<< HEAD
             admin_element = [
+=======
+            admin_element: List[ValueSpec] = [
+>>>>>>> upstream/master
                 FixedValue(
                     None,
                     title=_("Administrators"),
@@ -154,7 +186,11 @@ class ModeEditPassword(SimpleEditMode):
         else:
             admin_element = []
 
+<<<<<<< HEAD
         return [
+=======
+        elements: List[DictionaryEntry] = [
+>>>>>>> upstream/master
             ("password", PasswordSpec(
                 title=_("Password"),
                 allow_empty=False,
@@ -164,11 +200,18 @@ class ModeEditPassword(SimpleEditMode):
                  title=_("Editable by"),
                  help=_("Each password is owned by a group of users which are able to edit, "
                         "delete and use existing passwords."),
+<<<<<<< HEAD
                  style="dropdown",
                  elements=admin_element + [
                      DropdownChoice(
                          title=_("Members of the contact group:"),
                          choices=lambda: self._contact_group_choices(only_own=True),
+=======
+                 elements=admin_element + [
+                     DropdownChoice(
+                         title=_("Members of the contact group:"),
+                         choices=lambda: sorted_contact_group_choices(only_own=True),
+>>>>>>> upstream/master
                          invalid_choice="complain",
                          empty_text=_(
                              "You need to be member of at least one contact group to be able to "
@@ -185,11 +228,16 @@ class ModeEditPassword(SimpleEditMode):
                  help=_("By default only the members of the owner contact group are permitted "
                         "to use a a configured password. It is possible to share a password with "
                         "other groups of users to make them able to use a password in checks."),
+<<<<<<< HEAD
                  choices=self._contact_group_choices,
+=======
+                 choices=sorted_contact_group_choices,
+>>>>>>> upstream/master
                  autoheight=False,
              )),
         ]
 
+<<<<<<< HEAD
     def _contact_group_choices(self, only_own=False):
         contact_groups = load_contact_group_information()
 
@@ -202,3 +250,6 @@ class ModeEditPassword(SimpleEditMode):
             (c, g['alias']) for c, g in contact_groups.items() if not only_own or c in user_groups
         ]
         return sorted(entries, key=lambda x: x[1])
+=======
+        return elements
+>>>>>>> upstream/master

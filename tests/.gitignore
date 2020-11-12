@@ -1,6 +1,10 @@
+<<<<<<< HEAD
 .cache
 __pycache__
 bandit.ini
 test.log
 tmp/
 var/
+=======
+bandit.ini
+>>>>>>> upstream/master

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,6 +24,19 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# NOTE: Careful when replacing the *-import below with a more specific import. This can cause
+# problems because it might remove variables from the check-context which are necessary for
+# resolving legacy discovery results such as [("SUMMARY", "diskstat_default_levels")]. Furthermore,
+# it might also remove variables needed for accessing discovery rulesets.
+from cmk.base.check_legacy_includes.jolokia import *  # pylint: disable=wildcard-import,unused-wildcard-import
+>>>>>>> upstream/master
 
 
 def parse_jolokia_generic(info):
@@ -30,6 +44,11 @@ def parse_jolokia_generic(info):
     for line in info:
         try:
             instance, mbean, value, type_ = jolokia_basic_split(line, 4)
+<<<<<<< HEAD
+=======
+            if type_ in ("rate", "number"):
+                value = float(value)
+>>>>>>> upstream/master
         except ValueError:
             continue
         item = "%s %s" % (instance, mbean)
@@ -49,6 +68,7 @@ def parse_jolokia_generic(info):
 #   '----------------------------------------------------------------------'
 
 
+<<<<<<< HEAD
 def inventory_jolokia_generic_string(parsed):
     for item in parsed:
         if parsed[item]["type"] == "string":
@@ -60,17 +80,30 @@ def check_jolokia_generic_string(item, params, parsed):
         return 3, "Item not found in agent output"
     value = parsed[item]["value"]
     default_status = params.get("default_status", 0)
+=======
+@get_parsed_item_data
+def check_jolokia_generic_string(_item, params, data):
+    value = data["value"]
+>>>>>>> upstream/master
 
     search_strings = params.get("match_strings", [])
     for search_string, status in search_strings:
         if search_string in value:
             return status, "%s: %s matches" % (value, search_string)
 
+<<<<<<< HEAD
     return default_status, value
 
 
 check_info["jolokia_generic.string"] = {
     "inventory_function": inventory_jolokia_generic_string,
+=======
+    return params.get("default_status", 0), value
+
+
+check_info["jolokia_generic.string"] = {
+    "inventory_function": discover(lambda key, data: data.get("type") == "string"),
+>>>>>>> upstream/master
     "check_function": check_jolokia_generic_string,
     "service_description": "JVM %s",
     "group": "generic_string",
@@ -87,6 +120,7 @@ check_info["jolokia_generic.string"] = {
 #   '----------------------------------------------------------------------'
 
 
+<<<<<<< HEAD
 def inventory_jolokia_generic_rate(parsed):
     for item, data in parsed.iteritems():
         if data.get("type") == "rate":
@@ -149,6 +183,17 @@ def check_jolokia_generic_rate(item, params, parsed):
 
 check_info["jolokia_generic.rate"] = {
     "inventory_function": inventory_jolokia_generic_rate,
+=======
+@get_parsed_item_data
+def check_jolokia_generic_rate(item, params, data):
+    rate = get_rate(item, time.time(), data["value"])
+    levels = params.get("levels", (None, None)) + params.get("levels_lower", (None, None))
+    return check_levels(rate, "generic_rate", levels)
+
+
+check_info["jolokia_generic.rate"] = {
+    "inventory_function": discover(lambda key, data: data.get("type") == "rate"),
+>>>>>>> upstream/master
     "check_function": check_jolokia_generic_rate,
     "service_description": "JVM %s",
     "has_perfdata": True,
@@ -166,6 +211,7 @@ check_info["jolokia_generic.rate"] = {
 #   '----------------------------------------------------------------------'
 
 
+<<<<<<< HEAD
 def inventory_jolokia_generic(parsed):
     for item, data in parsed.iteritems():
         if data.get("type") == "number":
@@ -229,6 +275,18 @@ check_info["jolokia_generic"] = {
     "parse_function": parse_jolokia_generic,
     "inventory_function": inventory_jolokia_generic,
     "check_function": check_jolokia_generic,
+=======
+@get_parsed_item_data
+def check_jolokia_generic(_item, params, data):
+    levels = params.get("levels", (None, None)) + params.get("levels_lower", (None, None))
+    return check_levels(data["value"], "generic_number", levels)
+
+
+check_info["jolokia_generic"] = {
+    "inventory_function": discover(lambda key, data: data.get("type") == "number"),
+    "check_function": check_jolokia_generic,
+    "parse_function": parse_jolokia_generic,
+>>>>>>> upstream/master
     "service_description": "JVM %s",
     "has_perfdata": True,
     "group": "generic_number",

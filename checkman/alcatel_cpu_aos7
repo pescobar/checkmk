@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: Alcatel switches (>=AOS7): CPU utilization
+=======
+title: Alcatel Switches (>=AOS7): CPU Utilization
+>>>>>>> upstream/master
 agents: snmp
 catalog: hw/network/alcatel
 license: GPL
@@ -16,7 +20,18 @@ description:
 
  - OmniSwitch 10K: AOS 8.3.1.377.R01 Service Release
 
+<<<<<<< HEAD
  The value is a average in percent over the last hour. This average is calculated by the device.
 
 inventory:
  One check is created
+=======
+ The check has configurable levels for {WARN}/{CRIT} (default: 45, 50).
+
+ The value is a average in percent over the last hour. This average is calculated by the device.
+
+ The check uses the ALCATEL-IND1-HEALTH-MIB.
+
+inventory:
+ One service is created
+>>>>>>> upstream/master

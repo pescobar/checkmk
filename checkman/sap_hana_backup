@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: SAP HANA Backup
+=======
+title: SAP HANA: Backup
+>>>>>>> upstream/master
 agents: linux
 catalog: app/sap_hana
 license: GPL
@@ -19,7 +23,18 @@ description:
  This check is also cluster-aware.
 
 item:
+<<<<<<< HEAD
  The instance name and backup type
 
 inventory:
  One service is created per instance and backup type.
+=======
+ The sid instance name and backup type seperated by a {{-}}
+
+inventory:
+ One service is created for each instance and backup type.
+
+cluster:
+  On a cluster the first dataset of a node that is encountered
+  is evaluated.
+>>>>>>> upstream/master

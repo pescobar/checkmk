@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: Temperature sensors (HWgroup Poseidon devices)
+=======
+title: HWgroup Poseidon Devices: Temperature
+>>>>>>> upstream/master
 agents: snmp
 catalog: hw/network/hwgroup
 license: GPL
@@ -7,9 +11,16 @@ description:
  This check monitors all temperature sensors from Poseidon devices.
 
 item:
+<<<<<<< HEAD
  The name of the sensors
 
 
 inventory:
  One separate service per sensor is being created.
+=======
+ The name of the sensor
+
+inventory:
+ One service is created for each sensor.
+>>>>>>> upstream/master
 

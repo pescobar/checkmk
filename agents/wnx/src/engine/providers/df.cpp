@@ -4,6 +4,7 @@
 
 #include "providers/df.h"
 
+<<<<<<< HEAD
 #include <iostream>
 #include <string>
 
@@ -13,10 +14,23 @@
 namespace cma {
 
 namespace provider {
+=======
+#include <array>
+#include <iostream>
+#include <string>
+
+#include "common/wtools.h"
+#include "tools/_raii.h"
+#include "tools/_win.h"
+#include "tools/_xlog.h"
+
+namespace cma::provider {
+>>>>>>> upstream/master
 
 namespace df {
 std::pair<std::string, std::string> GetNamesByVolumeId(
     std::string_view volume_id) {
+<<<<<<< HEAD
     char filesystem_name[128] = {0};
     char volume_name[512] = {0};
 
@@ -24,13 +38,28 @@ std::pair<std::string, std::string> GetNamesByVolumeId(
     if (!::GetVolumeInformationA(volume_id.data(), volume_name,
                                  sizeof(volume_name), 0, 0, &flags,
                                  filesystem_name, sizeof(filesystem_name))) {
+=======
+    constexpr DWORD kFileSystemSize = 128;
+    constexpr DWORD kVolumeNameSize = 512;
+    std::array<char, kFileSystemSize> filesystem_name = {};
+    std::array<char, kVolumeNameSize> volume_name = {};
+
+    DWORD flags = 0;
+    if (!::GetVolumeInformationA(volume_id.data(), volume_name.data(),
+                                 kVolumeNameSize, nullptr, nullptr, &flags,
+                                 filesystem_name.data(), kFileSystemSize)) {
+>>>>>>> upstream/master
         filesystem_name[0] =
             '\0';  // May be necessary if partial information returned
         XLOG::d("df: Information for volume '{}' is not available [{}]",
                 volume_id, ::GetLastError());
     }
 
+<<<<<<< HEAD
     return {filesystem_name, volume_name};
+=======
+    return {filesystem_name.data(), volume_name.data()};
+>>>>>>> upstream/master
 }
 
 std::pair<uint64_t, uint64_t> GetSpacesByVolumeId(std::string_view volume_id) {
@@ -86,7 +115,11 @@ std::vector<std::string> GetMountPointVector(std::string_view volume_id) {
     auto handle =
         ::FindFirstVolumeMountPointA(volume_id.data(), storage.get(), sz);
 
+<<<<<<< HEAD
     if (!handle || handle == INVALID_HANDLE_VALUE) return {};
+=======
+    if (wtools::IsBadHandle(handle)) return {};
+>>>>>>> upstream/master
     ON_OUT_OF_SCOPE(FindVolumeMountPointClose(handle));
 
     std::string vol(volume_id);
@@ -94,7 +127,11 @@ std::vector<std::string> GetMountPointVector(std::string_view volume_id) {
         result.emplace_back(vol + storage.get());
 
         auto success = ::FindNextVolumeMountPointA(handle, storage.get(), sz);
+<<<<<<< HEAD
         if (!success) {
+=======
+        if (FALSE == success) {
+>>>>>>> upstream/master
             auto error = ::GetLastError();
             if (error != ERROR_NO_MORE_FILES)
                 XLOG::l("df: Error  [{}] looking for volume '{}'", error,
@@ -115,7 +152,11 @@ std::string ProduceMountPointsOutput(const std::string& VolumeId) {
     auto handle =
         ::FindFirstVolumeMountPointA(VolumeId.c_str(), storage.get(), sz);
 
+<<<<<<< HEAD
     if (!handle || handle == INVALID_HANDLE_VALUE) return {};
+=======
+    if (wtools::IsBadHandle(handle)) return {};
+>>>>>>> upstream/master
     ON_OUT_OF_SCOPE(FindVolumeMountPointClose(handle));
 
     std::string out;
@@ -126,7 +167,11 @@ std::string ProduceMountPointsOutput(const std::string& VolumeId) {
         out += ProduceMountPointsOutput(combined_path);
 
         auto success = ::FindNextVolumeMountPointA(handle, storage.get(), sz);
+<<<<<<< HEAD
         if (!success) {
+=======
+        if (FALSE == success) {
+>>>>>>> upstream/master
             auto error = ::GetLastError();
             if (error != ERROR_NO_MORE_FILES)
                 XLOG::l("df: Error  [{}] looking for volume '{}'", error,
@@ -186,5 +231,9 @@ std::string Df::makeBody() {
     return out;
 }
 
+<<<<<<< HEAD
 }  // namespace provider
 };  // namespace cma
+=======
+};  // namespace cma::provider
+>>>>>>> upstream/master

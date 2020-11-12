@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: McAfee Email gateway: Entities
+=======
+title: McAfee Email Gateway: Entities
+>>>>>>> upstream/master
 agents: snmp
 catalog: app/mcafee
 license: GPL
@@ -21,5 +25,11 @@ description:
  corrupt configuration, requires immediate attention, critical and
  UNKNOWN otherwise.
 
+<<<<<<< HEAD
+=======
+item:
+ Title of the entity (e.g. {{RAID}}, {{Cooling}}, etc.)
+
+>>>>>>> upstream/master
 inventory:
  One service is created.

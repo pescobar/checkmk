@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: General state of Keepalived instances
+=======
+title: Keepalived Instances: General State
+>>>>>>> upstream/master
 agents: snmp
 catalog: os/networking
 license: GPL
@@ -7,5 +11,13 @@ description:
  This check monitors the state of keepalived VRRP instances.
  The checks also shows the IP Address of the VRRP instance.
 
+<<<<<<< HEAD
 inventory:
  One service for each VRRP is created.
+=======
+item:
+ The ID of the VRRP instance
+
+inventory:
+ One service is created for each VRRP.
+>>>>>>> upstream/master

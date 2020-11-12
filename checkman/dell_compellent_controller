@@ -9,7 +9,14 @@ description:
  and to {CRIT} if the controller is down.
 
 item:
+<<<<<<< HEAD
  The controller number is the item
 
 inventory:
  One service for each controller is created
+=======
+ The controller number
+
+inventory:
+ One service is created for each controller.
+>>>>>>> upstream/master

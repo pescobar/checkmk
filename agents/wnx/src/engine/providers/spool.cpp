@@ -4,6 +4,11 @@
 
 #include "providers/spool.h"
 
+<<<<<<< HEAD
+=======
+#include <fmt/format.h>
+
+>>>>>>> upstream/master
 #include <chrono>
 #include <filesystem>
 #include <regex>
@@ -14,7 +19,10 @@
 #include "cfg.h"
 #include "cma_core.h"
 #include "common/wtools.h"
+<<<<<<< HEAD
 #include "fmt/format.h"
+=======
+>>>>>>> upstream/master
 #include "glob_match.h"
 #include "logger.h"
 #include "read_file.h"

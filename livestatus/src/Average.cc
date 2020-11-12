@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // .------------------------------------------------------------------------.
 // |                ____ _               _        __  __ _  __              |
 // |               / ___| |__   ___  ___| | __   |  \/  | |/ /              |
@@ -29,11 +30,21 @@
 //  or write to the postal address provided at www.mathias-kettner.de
 
 #include "Average.h"
+=======
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the
+// terms and conditions defined in the file COPYING, which is part of this
+// source code package.
+
+#include "Average.h"
+
+>>>>>>> upstream/master
 #include <cmath>
 
 namespace {
 constexpr double percentile = 0.50;
 constexpr double horizon = 10;  // seconds
+<<<<<<< HEAD
 }  // namespace
 
 // Please look at check_mk_base.py:get_average for details on the averaging
@@ -51,6 +62,30 @@ void Average::update(double value) {
             timedif = 0.5;
         }
         double weight_per_second = pow(1.0 - percentile, 1.0 / horizon);
+=======
+const double weight_per_second = pow(1.0 - percentile, 1.0 / horizon);
+}  // namespace
+
+// TODO (sk): unit tests
+// Please look at check_mk_base.py:get_average for details on the averaging
+// algorithm. It's the same as here.
+void Average::update(double value) {
+    using std::chrono::duration;
+    using std::chrono::steady_clock;
+
+    auto now = steady_clock::now();
+
+    std::scoped_lock l(_lock);
+    if (_last_update == steady_clock::time_point()) {
+        _average = value;
+    } else {
+        auto timedif = duration<double>(now - _last_update).count();
+        if (timedif == 0) {
+            // Force at least half a second. Can happen e.g. for latency
+            // updates
+            timedif = 0.5;
+        }
+>>>>>>> upstream/master
         double weight = pow(weight_per_second, timedif);
         _average = _average * weight + value * (1 - weight);
     }

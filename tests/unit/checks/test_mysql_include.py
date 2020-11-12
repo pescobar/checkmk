@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import os
 import pytest
 
@@ -5,6 +6,20 @@ pytestmark = pytest.mark.checks
 
 exec (open(os.path.join(os.path.dirname(__file__), '../../../checks/mysql.include')).read())
 
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+import os
+import pytest  # type: ignore[import]
+
+from cmk.base.check_legacy_includes.mysql import *
+pytestmark = pytest.mark.checks
+
+>>>>>>> upstream/master
 
 @pytest.mark.parametrize('info,expected_items', [
     ([
@@ -15,7 +30,11 @@ exec (open(os.path.join(os.path.dirname(__file__), '../../../checks/mysql.includ
     ], ('mysql', 'some/other/socket/name')),
 ])
 def test_mysql_parse_per_item(info, expected_items):
+<<<<<<< HEAD
     @mysql_parse_per_item
+=======
+    @mysql_parse_per_item  # type: ignore[name-defined] # pylint: disable=undefined-variable
+>>>>>>> upstream/master
     def dummy_parse(info):
         return 'Whoop'
 

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /*
 +------------------------------------------------------------------+
 |             ____ _               _        __  __ _  __           |
@@ -24,6 +25,12 @@ to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 Boston, MA 02110-1301 USA.
 
 */
+=======
+@charset "UTF-8";
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+// conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 /* Global style used by all HTML pages, even by sidebar and
    mobile interface */
@@ -42,7 +49,12 @@ Boston, MA 02110-1301 USA.
 '-------------------------------------------------------------------------*/
 
 /* Change some general defaults of HTML that we do not like */
+<<<<<<< HEAD
 td, th {
+=======
+td,
+th {
+>>>>>>> upstream/master
   vertical-align: top;
 }
 
@@ -60,7 +72,16 @@ th {
 }
 
 /* Default font size for the complete Multisite GUI */
+<<<<<<< HEAD
 button, input, td, th, select, textarea {
+=======
+button,
+input,
+td,
+th,
+select,
+textarea {
+>>>>>>> upstream/master
   font-size: 12px;
 }
 
@@ -69,19 +90,31 @@ input.number {
 }
 
 /* Styling for input elements */
+<<<<<<< HEAD
 input, select, textarea {
+=======
+input,
+select,
+textarea {
+>>>>>>> upstream/master
   padding: 3px;
   margin-top: 0;
   font-family: arial, helvetica, sans-serif;
   vertical-align: middle;
+<<<<<<< HEAD
   background-color: #fff;
   border: 1px #73767a solid;
+=======
+  background-color: rgb(255, 255, 255);
+  border: none;
+>>>>>>> upstream/master
   outline-style: none;
   outline-width: medium;
 }
 
 /* consistent dropdown field styling for all browsers */
 select:not([multiple]) {
+<<<<<<< HEAD
   padding: 8px 16px;
   padding-right: 2.5em;
   background: $primary-bg-color url("images/select_arrow.png") right 50% / 20px 11px no-repeat;
@@ -91,21 +124,46 @@ select:not([multiple]) {
 
 div.popup_menu select:not([multiple]) {
   background: $popup-menu-select-bg-color url("images/select_arrow.png") right 10% / 20px 11px no-repeat;
+=======
+  padding-right: 2.5em;
+  background-image: url("images/select_arrow.png");
+  background-position: right 50%;
+  background-repeat: no-repeat;
+  background-size: 20px 11px;
+  -webkit-appearance: none; /* Removes default chrome and safari style */
+  -moz-appearance: none; /* Removes default style Firefox */
+}
+
+div.popup_menu select:not([multiple]) {
+  background: $popup-menu-select-bg-color url("images/select_arrow.png") right 10% / 20px 11px
+    no-repeat;
+>>>>>>> upstream/master
 }
 
 select::-ms-expand {
   display: none;
 }
 
+<<<<<<< HEAD
 input[type=file] {
   color: #000;
+=======
+input[type="file"] {
+  color: rgb(0, 0, 0);
+>>>>>>> upstream/master
 }
 
 form {
   margin: 0;
 }
 
+<<<<<<< HEAD
 input:hover, select:hover, textarea:hover,
+=======
+input:hover,
+select:hover,
+textarea:hover,
+>>>>>>> upstream/master
 input[type="checkbox"]:hover + label:before {
   background-color: $input-hover-bg-color;
 }
@@ -118,11 +176,15 @@ td.checkbox input[type="checkbox"] + label:before {
 input[type="checkbox"] {
   display: none;
 
+<<<<<<< HEAD
   &[disabled] + label:before {
     display: none;
   }
 
   + label:before {
+=======
+  + label::before {
+>>>>>>> upstream/master
     display: inline-block;
     width: 12.5px;
     height: 12.5px;
@@ -130,17 +192,26 @@ input[type="checkbox"] {
     margin: -2px 4px 0 0;
     font-size: 12px;
     vertical-align: middle;
+<<<<<<< HEAD
     background-color: $primary-bg-color;
     border: 1px $checkbox-border-color solid;
     content: "\00a0";
     box-shadow: 0.1px 1px 1.2px 0 $checkbox-shadow inset;
+=======
+    background-color: $checkbox-bg-color;
+    border: 1px $checkbox-bg-color solid;
+    content: "\00a0";
+>>>>>>> upstream/master
   }
 
   &:checked {
     + label:before {
       color: $checkbox-checked-color;
       text-align: center;
+<<<<<<< HEAD
       background-color: $checkbox-checked-bg-color;
+=======
+>>>>>>> upstream/master
       content: "\2716";
     }
 
@@ -159,6 +230,7 @@ select.icon option {
   background-size: 18px;
 }
 
+<<<<<<< HEAD
 
 // TODO : Figure out where these can be found in the front end
 input.button,
@@ -174,14 +246,28 @@ table.vs_duallist a.control,
   border-width: 1px;
   border-radius: 5px;
   box-shadow: 0 0 1.5px #000;
+=======
+// TODO : Figure out where these can be found in the front end
+input.button,
+table.vs_duallist a.control {
+  padding: 2px 6px;
+  margin-left: 5px;
+  color: rgb(255, 255, 255);
+  cursor: pointer;
+  border-radius: $theme-border-radius;
+>>>>>>> upstream/master
 }
 
 table.vs_duallist a.control,
 table.vs_duallist body.main .popup_menu span.control,
 body.main .popup_menu table.vs_duallist span.control {
+<<<<<<< HEAD
   background-color: $theme-color-table-border;
   border-color: $theme-color-nuance-1;
   border-style: solid;
+=======
+  background-color: $button-bg-color-default;
+>>>>>>> upstream/master
   box-shadow: none;
 }
 
@@ -190,6 +276,7 @@ table.vs_duallist a.control,
 .wato div.mainmenu a {
   &:hover {
     text-decoration: none;
+<<<<<<< HEAD
     background-color: #6da1b8;
   }
 
@@ -197,10 +284,17 @@ table.vs_duallist a.control,
     background-color: #3b6678;
     border-color:  #22414d #86a9b8 #86a9b8 #22404d;
     box-shadow: inset 0 0 0.5px #444;
+=======
+  }
+
+  &:active {
+    box-shadow: inset 0 0 0.5px rgb(68, 68, 68);
+>>>>>>> upstream/master
   }
 }
 
 input.button,
+<<<<<<< HEAD
 input.button:not([type=text]),
 input.button:not([type=password]) {
   &[disabled="disabled"], &:disabled {
@@ -213,11 +307,24 @@ input.button:not([type=password]) {
     &:active {
       border-color: #86a9b8 #22404d #22414d #86a9b8;
       box-shadow: 0 0 1.5px #000;
+=======
+input.button:not([type="text"]),
+input.button:not([type="password"]) {
+  &[disabled="disabled"],
+  &:disabled {
+    &,
+    &:hover,
+    &:active {
+      cursor: initial;
+      background-color: $input-button-hover-bg-color;
+      filter: grayscale(80%);
+>>>>>>> upstream/master
     }
   }
 }
 
 input.button.hot {
+<<<<<<< HEAD
   &, &:active {
     color: $hot-font-color;
     background-color: #11bd7b;
@@ -226,6 +333,16 @@ input.button.hot {
 
   &:hover {
     background-color: #13d389;
+=======
+  &,
+  &:active {
+    color: $hot-font-color;
+    background-color: rgb(17, 189, 123);
+  }
+
+  &:hover {
+    background-color: rgb(19, 211, 137);
+>>>>>>> upstream/master
   }
 }
 
@@ -234,8 +351,13 @@ input.button.hot {
   width: 56px;
   height: 22px;
   padding: 2px;
+<<<<<<< HEAD
   background: $primary_bg_color;
   border: 1px solid $theme-color-table-border;
+=======
+  background: $bg-color;
+  border: 1px solid $color-table-border;
+>>>>>>> upstream/master
   border-radius: 11px;
   box-shadow: none;
   box-sizing: border-box;
@@ -251,16 +373,27 @@ input.button.hot {
   body.main .popup_menu .wato div.globalvars & {
     height: $toggle-switch-height;
     font-size: 8px;
+<<<<<<< HEAD
     font-weight: $theme-font-weight-bold;
     line-height: $toggle-switch-height;
     letter-spacing: $theme-letter-spacing-table;
+=======
+    font-weight: $font-weight-bold;
+    line-height: $toggle-switch-height;
+    letter-spacing: $letter-spacing-table;
+>>>>>>> upstream/master
     text-transform: uppercase;
     border: none;
     border-radius: 8px;
     box-shadow: none;
   }
 
+<<<<<<< HEAD
   a, .wato div.globalvars & a {
+=======
+  a,
+  .wato div.globalvars & a {
+>>>>>>> upstream/master
     display: block;
     width: 30px;
     color: $toggle-switch-font-color;
@@ -270,7 +403,12 @@ input.button.hot {
   }
 
   &.on {
+<<<<<<< HEAD
     a, .wato div.globalvars & a {
+=======
+    a,
+    .wato div.globalvars & a {
+>>>>>>> upstream/master
       float: right;
       background-color: $toggle-switch-on-bg-color;
       border: $toggle-switch-on-border;
@@ -278,13 +416,23 @@ input.button.hot {
   }
 
   &.off {
+<<<<<<< HEAD
     a, .wato div.globalvars & a {
+=======
+    a,
+    .wato div.globalvars & a {
+>>>>>>> upstream/master
       background-color: $toggle-switch-off-bg-color;
       border: $toggle-switch-off-border;
     }
   }
 
+<<<<<<< HEAD
   a:hover, .wato div.globalvars & a:hover {
+=======
+  a:hover,
+  .wato div.globalvars & a:hover {
+>>>>>>> upstream/master
     /* TODO: create a better hover effect */
     text-decoration: none;
     opacity: 0.5;
@@ -292,10 +440,17 @@ input.button.hot {
   }
 
   table.data & {
+<<<<<<< HEAD
     background-color: #999;
 
     a {
       color: #fff;
+=======
+    background-color: rgb(153, 153, 153);
+
+    a {
+      color: rgb(255, 255, 255);
+>>>>>>> upstream/master
     }
   }
 }
@@ -305,6 +460,7 @@ a.button {
   padding: 0.1ex 1ex;
   margin: 2px;
   font-weight: normal;
+<<<<<<< HEAD
   color: #000;
   text-decoration: none;
   background-color: #cca;
@@ -313,6 +469,16 @@ a.button {
   border-width: 1px;
   -webkit-border-radius: 4px;
   border-radius: 4px;
+=======
+  color: rgb(0, 0, 0);
+  text-decoration: none;
+  background-color: rgb(204, 204, 170);
+  border-color: rgb(221, 221, 221) rgb(136, 136, 136) rgb(51, 51, 51) rgb(221, 221, 221);
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 4px;
+  -webkit-border-radius: 4px;
+>>>>>>> upstream/master
 }
 
 /*for IE8 */
@@ -329,7 +495,25 @@ img.icon {
   height: 20px;
 }
 
+<<<<<<< HEAD
 a.inline img.icon, img.icon.inline, div.icon {
+=======
+span.emblem {
+  position: relative;
+}
+
+img.emblem {
+  position: absolute;
+  right: 3px;
+  bottom: -3px;
+  width: 10px;
+  height: 10px;
+}
+
+a.inline img.icon,
+img.icon.inline,
+div.icon {
+>>>>>>> upstream/master
   width: 16px;
   height: 16px;
   vertical-align: middle;
@@ -340,7 +524,11 @@ h1 {
   margin-bottom: 5px;
   margin-left: 5px;
   font-size: 23px;
+<<<<<<< HEAD
   color: #fff;
+=======
+  color: rgb(255, 255, 255);
+>>>>>>> upstream/master
 }
 
 div.livestatus.message {
@@ -349,7 +537,11 @@ div.livestatus.message {
   left: 10px;
   z-index: 20;
   font-size: 11px;
+<<<<<<< HEAD
   color: #000;
+=======
+  color: rgb(0, 0, 0);
+>>>>>>> upstream/master
 }
 
 /*-------------------------------------------------------------------------.
@@ -364,12 +556,18 @@ div.livestatus.message {
 '-------------------------------------------------------------------------*/
 
 img.treeangle {
+<<<<<<< HEAD
   width: 13px;
   height: 12px;
+=======
+  width: 9px;
+  height: 8px;
+>>>>>>> upstream/master
   margin-top: 0;
   margin-right: 3px;
   vertical-align: middle;
   cursor: pointer;
+<<<<<<< HEAD
   filter: invert(20%);
   transition: transform .2s ease-in-out;
   -webkit-transition: -webkit-transform .2s ease-in-out;
@@ -379,6 +577,17 @@ img.treeangle {
     -webkit-transform: rotate(90deg);
     -moz-transform: rotate(90deg);
     transform: rotate(90deg);
+=======
+  filter: $treeangle-img-filter;
+  transition: transform 0.2s ease-in-out;
+  -webkit-transition: -webkit-transform 0.2s ease-in-out;
+  -moz-transition: -moz-transform 0.2s ease-in-out;
+
+  &.open {
+    transform: rotate(90deg);
+    -webkit-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+>>>>>>> upstream/master
   }
 
   &.nform {
@@ -390,11 +599,16 @@ img.treeangle {
     height: 16px;
     margin-right: 5px;
     vertical-align: middle;
+<<<<<<< HEAD
+=======
+    filter: none;
+>>>>>>> upstream/master
   }
 }
 
 b.treeangle.title {
   font-weight: bold;
+<<<<<<< HEAD
   color: #fff;
   cursor: pointer;
 
@@ -404,6 +618,17 @@ b.treeangle.title {
 }
 
 img.treeangle+.treeangle.title {
+=======
+  color: $font-color;
+  cursor: pointer;
+
+  table.data & {
+    color: rgb(0, 0, 0);
+  }
+}
+
+img.treeangle + .treeangle.title {
+>>>>>>> upstream/master
   display: inline-block;
 }
 
@@ -425,8 +650,11 @@ ul.closed {
   display: none;
 }
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> upstream/master
 /*-------------------------------------------------------------------------.
 |             __  __                                                       |
 |            |  \/  | ___  ___ ___  __ _  __ _  ___  ___                   |
@@ -438,6 +666,7 @@ ul.closed {
 | Styles for messages-boxes in various situations (called by htmllib.py)   |
 '-------------------------------------------------------------------------*/
 
+<<<<<<< HEAD
 div.really, div.success, div.error, div.message, div.warning {
   padding: 0.5em 1em;
   margin: 0.25em;
@@ -468,6 +697,42 @@ div.error {
 
   a {
     color: #fff;
+=======
+div.really,
+div.success,
+div.error,
+div.message,
+div.warning {
+  padding: 0.5em 1em;
+  margin: 0.25em;
+  border-radius: 1ex;
+  box-shadow: 0 0 3px rgb(68, 68, 68);
+}
+
+div.really {
+  background-color: rgb(253, 196, 0);
+  border-color: rgb(136, 0, 0);
+}
+
+div.success {
+  background-color: $base-color;
+}
+
+div.message {
+  color: rgb(0, 0, 0);
+  background-color: rgb(157, 190, 205);
+  border-color: rgb(0, 68, 136);
+}
+
+div.error {
+  color: $lightgrey;
+  background-color: $color-state-2-background;
+  border-color: rgb(238, 68, 0);
+
+  a,
+  a:link {
+    color: rgb(255, 255, 255);
+>>>>>>> upstream/master
   }
 
   tt {
@@ -477,11 +742,20 @@ div.error {
 
 .warning,
 body.main div.warning {
+<<<<<<< HEAD
   color: #000;
   background-color: $theme-color-main;
   border-color: #fc0;
 
   a, a:link {
+=======
+  color: rgb(0, 0, 0);
+  background-color: $yellow;
+  border-color: rgb(255, 204, 0);
+
+  a,
+  a:link {
+>>>>>>> upstream/master
     color: $black;
   }
 }
@@ -489,7 +763,12 @@ body.main div.warning {
 /* Warnings embedded in tables without margins and padding, those are
    just needed for body */
 
+<<<<<<< HEAD
 td div.warning, td > div.error {
+=======
+td div.warning,
+td > div.error {
+>>>>>>> upstream/master
   padding: 5px 10px;
   margin-top: 3px;
   margin-bottom: 3px;
@@ -551,10 +830,21 @@ td.dictleft div.dictelement {
     font-size: 11px;
   }
 
+<<<<<<< HEAD
   &.indent {
     padding-left: 10px;
     margin-left: 8px;
     border-left: 2px solid #ccc;
+=======
+  &:empty {
+    margin: 0;
+  }
+
+  &.indent {
+    padding-left: 10px;
+    margin-left: 8px;
+    border-left: 2px solid rgb(204, 204, 204);
+>>>>>>> upstream/master
 
     ul {
       margin-top: 1px;
@@ -614,8 +904,13 @@ table.valuespec_listof {
 
   &.regular {
     > tbody > tr > td {
+<<<<<<< HEAD
       padding: 3px 0 5px 0;
       border-bottom: 1px solid #9bc;
+=======
+      padding: 3px 0 5px;
+      border-bottom: 1px solid rgb(153, 187, 204);
+>>>>>>> upstream/master
 
       &:first-child {
         padding-bottom: 5px;
@@ -659,6 +954,7 @@ div.valuespec_listof_floating_container {
       vertical-align: top;
 
       &.vlof_buttons img {
+<<<<<<< HEAD
 	margin-top: 4px;
       }
 
@@ -678,12 +974,43 @@ div.valuespec_listof_floating_container {
 	span.tagify__input {
 	  margin: 3px 5px 2px 4px;
 	}
+=======
+        margin-top: 4px;
+      }
+
+      &.vlof_content .tagify {
+        tag {
+          margin: 4px 5px 2px 4px;
+
+          x {
+            display: none;
+          }
+
+          > div {
+            padding-right: 0.3em;
+          }
+        }
+
+        span.tagify__input {
+          margin: 3px 5px 2px 4px;
+        }
+>>>>>>> upstream/master
       }
     }
   }
 }
 
+<<<<<<< HEAD
 table.nform table.valuespec_listof div.valuespec_listof_floating_container > table > tbody > tr > td {
+=======
+table.nform
+  table.valuespec_listof
+  div.valuespec_listof_floating_container
+  > table
+  > tbody
+  > tr
+  > td {
+>>>>>>> upstream/master
   border-bottom: none;
 }
 
@@ -695,7 +1022,11 @@ table.valuespec_listof.regular > tbody > tr {
 
   > td {
     padding: 3px 0 5px;
+<<<<<<< HEAD
     border-bottom: 1px solid #9bc;
+=======
+    border-bottom: 1px solid rgb(153, 187, 204);
+>>>>>>> upstream/master
 
     &:first-child {
       padding-bottom: 5px;
@@ -705,7 +1036,11 @@ table.valuespec_listof.regular > tbody > tr {
 
 table.vs_duallist {
   td {
+<<<<<<< HEAD
   width: 50%;
+=======
+    width: 50%;
+>>>>>>> upstream/master
 
     select {
       width: 100%;
@@ -714,7 +1049,11 @@ table.vs_duallist {
     }
 
     &.head {
+<<<<<<< HEAD
       text-align:center;
+=======
+      text-align: center;
+>>>>>>> upstream/master
     }
   }
 
@@ -740,6 +1079,7 @@ table.vs_duallist {
   }
 }
 
+<<<<<<< HEAD
 div.vs_autocomplete {
   position: absolute;
   z-index: 20;
@@ -770,6 +1110,8 @@ div.vs_autocomplete {
   }
 }
 
+=======
+>>>>>>> upstream/master
 textarea.tt {
   font-family: monospace;
 }
@@ -801,11 +1143,16 @@ table.listchoice {
       height: 10px;
     }
 
+<<<<<<< HEAD
     input[type=checkbox] {
+=======
+    input[type="checkbox"] {
+>>>>>>> upstream/master
       height: 12px;
       margin: 0;
     }
   }
+<<<<<<< HEAD
 
   div.floatfilter.double > div.content > & {
     display: block;
@@ -813,6 +1160,8 @@ table.listchoice {
     overflow: hidden;
     overflow-y:scroll;
   }
+=======
+>>>>>>> upstream/master
 }
 
 div.popup_container {
@@ -826,17 +1175,30 @@ div.popup {
   z-index: 200;
   width: -moz-max-content;
   width: intrinsic;
+<<<<<<< HEAD
   padding:10px;
   color: #fff;
   background-color: #45829D;
   border: 1px solid #fff;
   -webkit-border-radius: 5px;
   border-radius: 5px;
+=======
+  padding: 10px;
+  color: rgb(255, 255, 255);
+  background-color: rgb(69, 130, 157);
+  border: 1px solid rgb(255, 255, 255);
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+>>>>>>> upstream/master
 
   span {
     display: block;
     margin-bottom: 5px;
+<<<<<<< HEAD
     color: #fff;
+=======
+    color: rgb(255, 255, 255);
+>>>>>>> upstream/master
   }
 }
 
@@ -846,16 +1208,28 @@ div#hover_menu {
      on the pages. In this case it was the perfometer which had 30. */
   z-index: 40;
   width: auto;
+<<<<<<< HEAD
   color: #000;
 
   div.error, div.message {
+=======
+  color: rgb(0, 0, 0);
+
+  div.error,
+  div.message {
+>>>>>>> upstream/master
     width: 350px;
     margin: 0;
   }
 
   div.message {
+<<<<<<< HEAD
     color: $primary-sidebar-font-color;
     background-color: $theme-color-black;
+=======
+    color: $font-color;
+    background-color: $bg-color;
+>>>>>>> upstream/master
   }
 
   .graph_container div.title {
@@ -881,7 +1255,11 @@ div.popup_trigger.colorpicker div.popup_menu {
 .cp-preview {
   width: 28px;
   height: 18px;
+<<<<<<< HEAD
   border: 1px solid $theme-color-darkgrey;
+=======
+  border: 1px solid $darkgrey;
+>>>>>>> upstream/master
   border-radius: $theme-border-radius;
   box-shadow: none;
 
@@ -918,7 +1296,11 @@ div.popup_trigger.colorpicker div.popup_menu {
   .picker {
     width: 150px;
     height: 150px;
+<<<<<<< HEAD
     background-color: #fff;
+=======
+    background-color: rgb(255, 255, 255);
+>>>>>>> upstream/master
   }
 
   .slide {
@@ -933,26 +1315,47 @@ div.popup_trigger.colorpicker div.popup_menu {
   .picker-indicator {
     width: 1px;
     height: 1px;
+<<<<<<< HEAD
     background-color: #fff;
     border: 1px solid #000;
+=======
+    background-color: rgb(255, 255, 255);
+    border: 1px solid rgb(0, 0, 0);
+>>>>>>> upstream/master
   }
 
   .slide-indicator {
     left: 0;
     width: 100%;
     height: 2px;
+<<<<<<< HEAD
     background-color: #000;
+=======
+    background-color: rgb(0, 0, 0);
+>>>>>>> upstream/master
   }
 }
 
 .cp-input {
   float: left;
   margin-top: 2px;
+<<<<<<< HEAD
   color: $theme-color-text;
 
   input, select, textarea,
   div.snapin select, div.snapin & select,
   div.snapin textarea, div.snapin & textarea,
+=======
+  color: $font-color;
+
+  input,
+  select,
+  textarea,
+  div.snapin select,
+  div.snapin & select,
+  div.snapin textarea,
+  div.snapin & textarea,
+>>>>>>> upstream/master
   #mk_side_search_field {
     margin: 0;
     margin-bottom: 8px;
@@ -979,14 +1382,27 @@ div.popup_trigger.colorpicker .popup_menu {
 | Pages showing the Check_MK change log (werks.py)                         |
 '-------------------------------------------------------------------------*/
 
+<<<<<<< HEAD
 tr.data td.werklevel, tr.data td.werkclass, tr.data td.werkcomp {
+=======
+tr.data td.werklevel,
+tr.data td.werkclass,
+tr.data td.werkcomp {
+>>>>>>> upstream/master
   width: 100px;
   text-align: center;
   white-space: nowrap;
 }
 
 table.data.werks {
+<<<<<<< HEAD
   td.werkclassfeature, td.werkclassfix, td.werklevel2, td.werklevel3,
+=======
+  td.werkclassfeature,
+  td.werkclassfix,
+  td.werklevel2,
+  td.werklevel3,
+>>>>>>> upstream/master
   td.werkcompincomp_ack {
     color: $dark-font-color;
   }
@@ -996,6 +1412,7 @@ table.data.werks {
   tr {
     &:nth-child(odd) {
       td.werklevel2 {
+<<<<<<< HEAD
         background-color: $theme-color-state-5-background;
       }
 
@@ -1021,11 +1438,39 @@ table.data.werks {
 
       td.werkcompincomp_ack {
         background-color: $theme-color-state-8-background;
+=======
+        background-color: $color-state-5-background;
+      }
+
+      td.werklevel3 {
+        background-color: $color-state-6-background;
+      }
+
+      td.werkclassfeature {
+        background-color: $color-state-success-background;
+      }
+
+      td.werkclassfix {
+        background-color: $yellow;
+      }
+
+      td.werkclasssecurity {
+        background-color: $color-state-2-background;
+      }
+
+      td.werkcompincomp_unack {
+        background-color: $color-state-7-background;
+      }
+
+      td.werkcompincomp_ack {
+        background-color: $color-state-8-background;
+>>>>>>> upstream/master
       }
     }
 
     &:nth-child(even) {
       td.werklevel2 {
+<<<<<<< HEAD
         background-color: $theme-color-state-5-background;
       }
 
@@ -1051,6 +1496,33 @@ table.data.werks {
 
       td.werkcompincomp_ack {
         background-color: $theme-color-state-8-background;
+=======
+        background-color: $color-state-5-background;
+      }
+
+      td.werklevel3 {
+        background-color: $color-state-6-background;
+      }
+
+      td.werkclassfeature {
+        background-color: $color-state-success-background;
+      }
+
+      td.werkclassfix {
+        background-color: $yellow;
+      }
+
+      td.werkclasssecurity {
+        background-color: $color-state-2-background;
+      }
+
+      td.werkcompincomp_unack {
+        background-color: $color-state-7-background;
+      }
+
+      td.werkcompincomp_ack {
+        background-color: $color-state-8-background;
+>>>>>>> upstream/master
       }
     }
   }
@@ -1062,7 +1534,11 @@ table.data.werks {
 
     &.werkclasssecurity {
       font-weight: bold;
+<<<<<<< HEAD
       color: #fff;
+=======
+      color: rgb(255, 255, 255);
+>>>>>>> upstream/master
     }
 
     &.werkcompincomp_unack {
@@ -1078,28 +1554,47 @@ table.data.werks {
 table.werks td a,
 table.werks td body.main .popup_menu span,
 body.main .popup_menu table.werks td span {
+<<<<<<< HEAD
   color: $theme-color-black;
   text-decoration: underline;
 }
 
 
+=======
+  color: $black;
+  text-decoration: underline;
+}
+
+>>>>>>> upstream/master
 /* NOWIKI formatting in Werks */
 td.nowiki {
   h3 {
     font-size: 13px;
     font-weight: bold;
+<<<<<<< HEAD
     color: #000;
+=======
+    color: rgb(0, 0, 0);
+>>>>>>> upstream/master
   }
 
   pre {
     padding: 3px 8px;
 
     &.code {
+<<<<<<< HEAD
       background-color: #fff;
     }
 
     &.file {
       background-color: #fff0b5;
+=======
+      background-color: rgb(255, 255, 255);
+    }
+
+    &.file {
+      background-color: rgb(255, 240, 181);
+>>>>>>> upstream/master
     }
   }
 
@@ -1108,16 +1603,29 @@ td.nowiki {
     margin-bottom: -12px;
     font-family: Hack, courier;
     font-weight: bold;
+<<<<<<< HEAD
     background-color: #e6d8a3;
+=======
+    background-color: rgb(230, 216, 163);
+>>>>>>> upstream/master
   }
 
   table {
     margin: 10px 0;
+<<<<<<< HEAD
     border: 1px solid #000;
     border-collapse: collapse;
 
     table td, table th {
       border: 1px solid #888;
+=======
+    border: 1px solid rgb(0, 0, 0);
+    border-collapse: collapse;
+
+    table td,
+    table th {
+      border: 1px solid rgb(136, 136, 136);
+>>>>>>> upstream/master
     }
   }
 }
@@ -1129,19 +1637,32 @@ table.modifydowntimes > tbody > tr {
     vertical-align: middle;
   }
 
+<<<<<<< HEAD
   &:nth-child(1) > td:nth-child(1)  {
+=======
+  &:nth-child(1) > td:nth-child(1) {
+>>>>>>> upstream/master
     padding-top: 0;
   }
 }
 
 .select2-container .select2-selection--single {
   height: 23px;
+<<<<<<< HEAD
 }
 
 .select2-container--default {
 
   .select2-results {
     color: #000;
+=======
+  border: none;
+}
+
+.select2-container--default {
+  .select2-results {
+    color: rgb(0, 0, 0);
+>>>>>>> upstream/master
   }
 
   .select2-selection--single {
@@ -1158,12 +1679,18 @@ table.modifydowntimes > tbody > tr {
   }
 
   .select2-dropdown {
+<<<<<<< HEAD
     background-color: $primary-bg-color;
     border: $primary-border;
+=======
+    background-color: $select2-dropdown-bg-color;
+    border: 1px solid $button-bg-color-default;
+>>>>>>> upstream/master
   }
 
   .select2-results__option {
     color: $select2-rendered-color;
+<<<<<<< HEAD
     background-color: $primary-bg-color;
   }
 
@@ -1176,15 +1703,88 @@ table.modifydowntimes > tbody > tr {
   }
 }
 
+=======
+    background-color: $select2-dropdown-bg-color;
+  }
+
+  .select2-results__option[aria-selected="true"] {
+    background-color: $select2-dropdown-bg-color;
+  }
+
+  .select2-results__option--highlighted[aria-selected] {
+    color: $success;
+    background-color: $select2-dropdown-bg-color;
+  }
+
+  .select2-search--dropdown .select2-search__field {
+    border: $select2-search-field-border;
+  }
+}
+
+div.vs_autocomplete {
+  height: 22px;
+
+  .error {
+    padding: 0.5em 2em;
+    margin: 0;
+  }
+
+  & > .select2-container--below > .selection > span {
+    display: none;
+  }
+}
+
+div.metricchoice div.vs_autocomplete .select2-dropdown--below {
+  top: -11px;
+}
+
+span.vs_autocomplete {
+  .select2-dropdown {
+    position: inherit;
+    border: none;
+  }
+
+  .select2-dropdown--below {
+    top: -7px;
+    border-radius: $theme-border-radius;
+  }
+
+  .select2-search--dropdown {
+    padding: 0;
+    margin: 0;
+  }
+
+  .select2-search__field {
+    height: 22px;
+    padding-left: 6px;
+    border-radius: 4px;
+  }
+
+  .select2-results__options {
+    border: 1px solid $button-bg-color-default;
+    border-radius: 4px;
+  }
+}
+
+div.vs_age.inline {
+  display: inline-block;
+}
+
+>>>>>>> upstream/master
 /* TODO: Go through these following styles and move them to specific scss
  *       where needed
  */
 * {
+<<<<<<< HEAD
   letter-spacing: $theme-letter-spacing;
+=======
+  letter-spacing: $letter-spacing-default;
+>>>>>>> upstream/master
   text-shadow: none;
 }
 
 html {
+<<<<<<< HEAD
   font-size: $theme-font-size-global;
 }
 
@@ -1209,6 +1809,28 @@ div.graph {
   box-shadow: none;
 
 
+=======
+  height: 100%;
+  font-size: $font-size-global;
+}
+
+.link,
+.title {
+  display: inline-block;
+  padding: 0 2px; /* affects spacing in sidebar plugins */
+  font-size: $font-size-default;
+  font-weight: $font-weight-default;
+  letter-spacing: $letter-spacing-table;
+  color: $font-color;
+  transition: color 0.15s ease-in-out;
+}
+
+div.graph {
+  border: 1px solid $color-table-border;
+  border-radius: $theme-border-radius;
+  box-shadow: none;
+
+>>>>>>> upstream/master
   &.preview {
     padding: 4px !important;
   }
@@ -1256,6 +1878,7 @@ div.graph_hover_popup {
 div.content {
   top: 64px;
   width: 100%;
+<<<<<<< HEAD
   padding: 16px;
   box-sizing: border-box;
 }
@@ -1264,11 +1887,18 @@ body.main img.treeangle {
   filter: invert($filter-inversion-percentage);
 }
 
+=======
+  padding: $spacing;
+  box-sizing: border-box;
+}
+
+>>>>>>> upstream/master
 /* TODO: Reproduce this element then get rid of important styles */
 .op {
   width: 60px !important;
 }
 
+<<<<<<< HEAD
 .bi_rule_tree img.treeangle, .invtree img.treeangle,
 .grouped_row_header img.treeangle.nform, .aggrtree img.treeangle {
   &, body.main & {
@@ -1277,12 +1907,27 @@ body.main img.treeangle {
     &.open, &.closed {
       margin: 1px 4px 0;
       filter: $tree-collapse-img-filter;
+=======
+.bi_rule_tree img.treeangle,
+.invtree img.treeangle,
+.grouped_row_header img.treeangle.nform,
+.aggrtree img.treeangle {
+  &,
+  body.main & {
+    &.open,
+    &.closed {
+      margin: 1px 4px 0;
+>>>>>>> upstream/master
     }
   }
 }
 
 table.report_contents td.preview img {
+<<<<<<< HEAD
   border: 1px solid $theme-color-nuance-3;
+=======
+  border: 1px solid $color-nuance-3;
+>>>>>>> upstream/master
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
 }
 
@@ -1295,7 +1940,11 @@ div.graph_with_timeranges {
   margin-bottom: 32px;
 
   div.graph {
+<<<<<<< HEAD
     border: 1px solid $theme-color-table-border;
+=======
+    border: 1px solid $color-table-border;
+>>>>>>> upstream/master
     box-shadow: none;
 
     div.title {
@@ -1314,8 +1963,13 @@ div.graph_with_timeranges {
       top: 12px;
       width: calc(100% - 16px);
       padding: 8px 0;
+<<<<<<< HEAD
       font-weight: $theme-font-weight-global;
       color: $theme-color-text;
+=======
+      font-weight: $font-weight-default;
+      color: $font-color;
+>>>>>>> upstream/master
       text-shadow: none;
       box-sizing: border-box;
     }
@@ -1335,7 +1989,11 @@ div.graph_with_timeranges {
 
   table.timeranges > tbody > tr > td {
     padding: 0 8px 4px;
+<<<<<<< HEAD
     border: none solid $theme-color-white;
+=======
+    border: none;
+>>>>>>> upstream/master
 
     &:first-child {
       border-right: none solid;
@@ -1355,8 +2013,16 @@ table.data td > div:last-child div.graph_with_timeranges {
   margin-bottom: 8px;
 }
 
+<<<<<<< HEAD
 div.metricchoice select, div.metricchoice input, div.metricchoice select,
 div.metricchoice textarea, div.metricchoice #mk_side_search_field {
+=======
+div.metricchoice select,
+div.metricchoice input,
+div.metricchoice select,
+div.metricchoice textarea,
+div.metricchoice #mk_side_search_field {
+>>>>>>> upstream/master
   margin: 4px 0;
 }
 
@@ -1364,6 +2030,7 @@ td.title {
   display: table-cell;
 }
 
+<<<<<<< HEAD
 /* Spezielle Snapins */
 table.cmc_stats {
   width: 100%;
@@ -1380,6 +2047,11 @@ table.cmc_stats {
 }
 
 #form_search input, #form_search select, #form_search textarea,
+=======
+#form_search input,
+#form_search select,
+#form_search textarea,
+>>>>>>> upstream/master
 #form_search #mk_side_search_field {
   width: auto;
   border: $primary-border;
@@ -1390,12 +2062,21 @@ select.vlof_filter {
 }
 
 div.timerange {
+<<<<<<< HEAD
   font-size: $theme-font-size-main;
   color: $theme-color-darkgrey;
 }
 
 body.main.visible div.foldable .title {
   color: $theme-color-text;
+=======
+  font-size: $font-size-default;
+  color: $darkgrey;
+}
+
+body.main.visible div.foldable .title {
+  color: $font-color;
+>>>>>>> upstream/master
 }
 
 div.color {
@@ -1406,7 +2087,11 @@ div.color {
 
 /* TODO: Reproduce this element then get rid of important styles */
 th.header_state {
+<<<<<<< HEAD
   color: $theme-color-text !important;
+=======
+  color: $font-color !important;
+>>>>>>> upstream/master
   background: transparent !important;
 
   &:hover {
@@ -1414,14 +2099,24 @@ th.header_state {
   }
 }
 
+<<<<<<< HEAD
 .hot a, .hot body.main .popup_menu span, body.main .popup_menu .hot span {
   color: $hot-font-color;
   background-color: $hot-bg-color;
   border-color: $theme-color-nuance-16;
+=======
+.hot a,
+.hot body.main .popup_menu span,
+body.main .popup_menu .hot span {
+  color: $hot-font-color;
+  background-color: $hot-bg-color;
+  border-color: $color-nuance-16;
+>>>>>>> upstream/master
 }
 
 div.info {
   margin: 16px 0 8px;
+<<<<<<< HEAD
   font-size: $theme-font-size-main;
   font-weight: 500;
   letter-spacing: $theme-letter-spacing;
@@ -1431,10 +2126,28 @@ div.info {
 .age {
   input, select, textarea, div.snapin select, div.snapin & select,
   div.snapin textarea, div.snapin & textarea, #mk_side_search_field {
+=======
+  font-size: $font-size-default;
+  font-weight: 500;
+  letter-spacing: $letter-spacing-default;
+  color: $font-color;
+}
+
+.age {
+  input,
+  select,
+  textarea,
+  div.snapin select,
+  div.snapin & select,
+  div.snapin textarea,
+  div.snapin & textarea,
+  #mk_side_search_field {
+>>>>>>> upstream/master
     box-sizing: content-box;
   }
 }
 
+<<<<<<< HEAD
 .filterform {
   input, select, textarea, div.snapin select, div.snapin & select,
   div.snapin textarea, div.snapin & textarea, #mk_side_search_field {
@@ -1445,6 +2158,14 @@ div.info {
 body.main a, body.main .popup_menu span, body.main .popup_menu a,
 body.main a:link, body.main a:visited {
   color: $theme-color-text;
+=======
+body.main a,
+body.main .popup_menu span,
+body.main .popup_menu a,
+body.main a:link,
+body.main a:visited {
+  color: $font-color;
+>>>>>>> upstream/master
 }
 
 img.glass {
@@ -1454,3 +2175,31 @@ img.glass {
 tr.hidden {
   display: none;
 }
+<<<<<<< HEAD
+=======
+
+.simplebar-scrollbar::before {
+  background: $simplebar-scrollbar-color;
+  border-radius: 2px;
+}
+
+.simplebar-track {
+  &.simplebar-vertical div.simplebar-scrollbar::before {
+    left: 3px;
+    width: $simplebar-scrollbar-width;
+  }
+
+  &.simplebar-horizontal div.simplebar-scrollbar {
+    top: 3px;
+    height: $simplebar-scrollbar-width;
+  }
+}
+
+.simplebar-scrollbar.simplebar-visible::before {
+  opacity: 1;
+}
+
+body.main a.delete_button img {
+  filter: $inpage-close-button-filter;
+}
+>>>>>>> upstream/master

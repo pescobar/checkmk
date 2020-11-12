@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: McAfee Email gateway: CPU load
+=======
+title: McAfee Email Gateway: CPU Load
+>>>>>>> upstream/master
 agents: snmp
 catalog: app/mcafee
 license: GPL

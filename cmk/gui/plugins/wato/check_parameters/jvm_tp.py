@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,6 +24,13 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 from cmk.gui.i18n import _
 from cmk.gui.valuespec import (
@@ -40,7 +48,11 @@ from cmk.gui.plugins.wato import (
 )
 
 
+<<<<<<< HEAD
 def _item_spec_jvm_tp():
+=======
+def _item_spec_jvm_tp() -> TextAscii:
+>>>>>>> upstream/master
     return TextAscii(
         title=_("Name of the virtual machine and/or<br>threadpool"),
         help=_("The name of the application server"),
@@ -48,7 +60,11 @@ def _item_spec_jvm_tp():
     )
 
 
+<<<<<<< HEAD
 def _parameter_valuespec_jvm_tp():
+=======
+def _parameter_valuespec_jvm_tp() -> Dictionary:
+>>>>>>> upstream/master
     return Dictionary(
         help=_("This ruleset also covers Tomcat, Jolokia and JMX. "),
         elements=[
@@ -59,8 +75,13 @@ def _parameter_valuespec_jvm_tp():
                      Tuple(
                          title=_("Percentage levels of current thread count in threadpool"),
                          elements=[
+<<<<<<< HEAD
                              Integer(title=_("Warning at"), unit=_(u"%")),
                              Integer(title=_("Critical at"), unit=_(u"%")),
+=======
+                             Integer(title=_("Warning at"), unit=_("%")),
+                             Integer(title=_("Critical at"), unit=_("%")),
+>>>>>>> upstream/master
                          ],
                      )
                  ],
@@ -72,8 +93,13 @@ def _parameter_valuespec_jvm_tp():
                      Tuple(
                          title=_("Percentage of current threads busy in threadpool"),
                          elements=[
+<<<<<<< HEAD
                              Integer(title=_("Warning at"), unit=_(u"%")),
                              Integer(title=_("Critical at"), unit=_(u"%")),
+=======
+                             Integer(title=_("Warning at"), unit=_("%")),
+                             Integer(title=_("Critical at"), unit=_("%")),
+>>>>>>> upstream/master
                          ],
                      )
                  ],

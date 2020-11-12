@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/env python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,6 +24,13 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 """
 Provides the user with hints about his setup. Performs different
 checks and tells the user what could be improved.
@@ -30,21 +38,35 @@ checks and tells the user what could be improved.
 
 import time
 import multiprocessing
+<<<<<<< HEAD
 import Queue
 import traceback
 import ast
+=======
+import traceback
+import ast
+from typing import Any, Dict, Tuple
+import queue
+
+from livestatus import SiteId
+>>>>>>> upstream/master
 
 import cmk.utils.paths
 import cmk.utils.store as store
 
 import cmk.gui.watolib as watolib
 import cmk.gui.config as config
+<<<<<<< HEAD
+=======
+import cmk.gui.escaping as escaping
+>>>>>>> upstream/master
 from cmk.gui.table import table_element
 import cmk.gui.log as log
 from cmk.gui.exceptions import MKUserError, MKGeneralException
 from cmk.gui.i18n import _
 from cmk.gui.log import logger
 from cmk.gui.globals import html
+<<<<<<< HEAD
 
 from cmk.gui.plugins.wato import (
     WatoMode,
@@ -54,6 +76,25 @@ from cmk.gui.plugins.wato import (
 from cmk.gui.watolib.changes import activation_sites
 from cmk.gui.watolib.analyze_configuration import (
     ACResult,
+=======
+from cmk.gui.breadcrumb import Breadcrumb
+from cmk.gui.page_menu import (
+    PageMenu,
+    PageMenuDropdown,
+    PageMenuTopic,
+    PageMenuEntry,
+    make_simple_link,
+)
+
+from cmk.gui.plugins.wato import WatoMode, ActionResult, mode_registry
+from cmk.gui.plugins.wato.ac_tests import ACTestConnectivity
+
+from cmk.gui.watolib.changes import activation_sites
+from cmk.gui.watolib.analyze_configuration import (
+    ACResult,
+    ACResultOK,
+    ACResultCRIT,
+>>>>>>> upstream/master
     ACTestCategories,
     AutomationCheckAnalyzeConfig,
 )
@@ -84,6 +125,7 @@ class ModeAnalyzeConfig(WatoMode):
     def title(self):
         return _("Analyze configuration")
 
+<<<<<<< HEAD
     def action(self):
         if not html.check_transaction():
             return
@@ -91,6 +133,38 @@ class ModeAnalyzeConfig(WatoMode):
         test_id = html.request.var("_test_id")
         site_id = html.request.var("_site_id")
         status_id = html.get_integer_input("_status_id", 0)
+=======
+    def page_menu(self, breadcrumb: Breadcrumb) -> PageMenu:
+        return PageMenu(
+            dropdowns=[
+                PageMenuDropdown(
+                    name="related",
+                    title=_("Related"),
+                    topics=[
+                        PageMenuTopic(
+                            title=_("Configure"),
+                            entries=[
+                                PageMenuEntry(
+                                    title=_("Support diagnostics"),
+                                    icon_name="diagnostics",
+                                    item=make_simple_link("wato.py?mode=diagnostics"),
+                                ),
+                            ],
+                        ),
+                    ],
+                ),
+            ],
+            breadcrumb=breadcrumb,
+        )
+
+    def action(self) -> ActionResult:
+        if not html.check_transaction():
+            return None
+
+        test_id = html.request.var("_test_id")
+        site_id = html.request.var("_site_id")
+        status_id = html.request.get_integer_input_mandatory("_status_id", 0)
+>>>>>>> upstream/master
 
         if not test_id:
             raise MKUserError("_ack_test_id", _("Needed variable missing"))
@@ -117,9 +191,17 @@ class ModeAnalyzeConfig(WatoMode):
         else:
             raise NotImplementedError()
 
+<<<<<<< HEAD
     def page(self):
         if not self._analyze_sites():
             html.show_info(
+=======
+        return None
+
+    def page(self):
+        if not self._analyze_sites():
+            html.show_message(
+>>>>>>> upstream/master
                 _("Analyze configuration can only be used with the local site and "
                   "distributed WATO slave sites. You currently have no such site configured."))
             return
@@ -243,7 +325,11 @@ class ModeAnalyzeConfig(WatoMode):
                     continue
 
                 html.open_tr()
+<<<<<<< HEAD
                 html.td(html.attrencode(site_id))
+=======
+                html.td(escaping.escape_attribute(site_id))
+>>>>>>> upstream/master
                 html.td("%s: %s" % (result.status_name(), result.text))
                 html.close_tr()
             html.close_table()
@@ -258,9 +344,16 @@ class ModeAnalyzeConfig(WatoMode):
         results_by_site = {}
 
         # Results are fetched simultaneously from the remote sites
+<<<<<<< HEAD
         result_queue = multiprocessing.JoinableQueue()
 
         processes = []
+=======
+        result_queue: multiprocessing.Queue[Tuple[SiteId, str]] = multiprocessing.JoinableQueue()
+
+        processes = []
+        site_id = SiteId("unknown_site")
+>>>>>>> upstream/master
         for site_id in test_sites:
             process = multiprocessing.Process(target=self._perform_tests_for_site,
                                               args=(site_id, result_queue))
@@ -268,7 +361,11 @@ class ModeAnalyzeConfig(WatoMode):
             processes.append((site_id, process))
 
         # Now collect the results from the queue until all processes are finished
+<<<<<<< HEAD
         while any([p.is_alive() for site_id, p in processes]):
+=======
+        while any(p.is_alive() for site_id, p in processes):
+>>>>>>> upstream/master
             try:
                 site_id, results_data = result_queue.get_nowait()
                 result_queue.task_done()
@@ -277,28 +374,58 @@ class ModeAnalyzeConfig(WatoMode):
                 if result["state"] == 1:
                     raise MKGeneralException(result["response"])
 
+<<<<<<< HEAD
                 elif result["state"] == 0:
+=======
+                if result["state"] == 0:
+>>>>>>> upstream/master
                     test_results = []
                     for result_data in result["response"]:
                         result = ACResult.from_repr(result_data)
                         test_results.append(result)
 
+<<<<<<< HEAD
+=======
+                    # Add general connectivity result
+                    result = ACResultOK(_("No connectivity problems"))
+                    result.from_test(ACTestConnectivity())
+                    result.site_id = site_id
+                    test_results.append(result)
+
+>>>>>>> upstream/master
                     results_by_site[site_id] = test_results
 
                 else:
                     raise NotImplementedError()
 
+<<<<<<< HEAD
             except Queue.Empty:
                 time.sleep(0.5)  # wait some time to prevent CPU hogs
 
             except Exception as e:
                 logger.exception("error analyzing configuration for site %s", site_id)
                 html.show_error("%s: %s" % (site_id, e))
+=======
+            except queue.Empty:
+                time.sleep(0.5)  # wait some time to prevent CPU hogs
+
+            except Exception as e:
+                result = ACResultCRIT("%s" % e)
+                result.from_test(ACTestConnectivity())
+                result.site_id = site_id
+                results_by_site[site_id] = [result]
+
+                logger.exception("error analyzing configuration for site %s", site_id)
+>>>>>>> upstream/master
 
         self._logger.debug("Got test results")
 
         # Group results by category in first instance and then then by test
+<<<<<<< HEAD
         results_by_category = {}
+=======
+        results_by_category: Dict[str, Dict[str, Dict[str, Any]]] = {}
+>>>>>>> upstream/master
         for site_id, results in results_by_site.items():
             for result in results:
                 category_results = results_by_category.setdefault(result.category, {})
@@ -319,7 +446,12 @@ class ModeAnalyzeConfig(WatoMode):
 
     # Executes the tests on the site. This method is executed in a dedicated
     # subprocess (One per site)
+<<<<<<< HEAD
     def _perform_tests_for_site(self, site_id, result_queue):
+=======
+    def _perform_tests_for_site(self, site_id: SiteId,
+                                result_queue: 'multiprocessing.Queue[Tuple[SiteId, str]]') -> None:
+>>>>>>> upstream/master
         self._logger.debug("[%s] Starting" % site_id)
         try:
             # Would be better to clean all open fds that are not needed, but we don't
@@ -343,7 +475,13 @@ class ModeAnalyzeConfig(WatoMode):
 
             else:
                 results_data = watolib.do_remote_automation(config.site(site_id),
+<<<<<<< HEAD
                                                             "check-analyze-config", [])
+=======
+                                                            "check-analyze-config", [],
+                                                            timeout=html.request.request_timeout -
+                                                            10)
+>>>>>>> upstream/master
 
             self._logger.debug("[%s] Finished" % site_id)
 
@@ -395,7 +533,14 @@ class ModeAnalyzeConfig(WatoMode):
         self._enable_test(test_id, False)
 
     def _save_acknowledgements(self, acknowledged_werks):
+<<<<<<< HEAD
         store.save_data_to_file(self._ack_path, acknowledged_werks)
 
     def _load_acknowledgements(self, lock=False):
         return store.load_data_from_file(self._ack_path, {}, lock=lock)
+=======
+        store.save_object_to_file(self._ack_path, acknowledged_werks)
+
+    def _load_acknowledgements(self, lock=False):
+        return store.load_object_from_file(self._ack_path, default={}, lock=lock)
+>>>>>>> upstream/master

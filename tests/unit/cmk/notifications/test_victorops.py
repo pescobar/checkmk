@@ -1,7 +1,18 @@
+<<<<<<< HEAD
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
 import pytest
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+import pytest  # type: ignore[import]
+
+>>>>>>> upstream/master
 from cmk.notification_plugins.victorops import victorops_msg
 
 
@@ -44,7 +55,11 @@ from cmk.notification_plugins.victorops import victorops_msg
         'entity_display_name': 'win7vm is UP',
         'entity_id': 'win7vm:10.3.1.239',
         'host_name': 'win7vm',
+<<<<<<< HEAD
         'message_type': 'OK',
+=======
+        'message_type': 'RECOVERY',
+>>>>>>> upstream/master
         'monitoring_tool': 'Check_MK notification',
         'state_message': 'Packet received via smart PING\n\nhttp://localhost/heute/check_mk/index.py?start_url=view.py%3Fview_name%3Dhoststatus%26host%3Dwin7vm%26site%3Dheute'
     })

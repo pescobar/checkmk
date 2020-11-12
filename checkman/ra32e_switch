@@ -14,4 +14,8 @@ item:
  sensor.
 
 inventory:
+<<<<<<< HEAD
  One service for each switch sensor.
+=======
+ One service is created for each switch sensor.
+>>>>>>> upstream/master

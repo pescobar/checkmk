@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,16 +24,34 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 """WATO LIBRARY
 
 This component contains classes, functions and globals that are being used by
 WATO. It does not contain any acutal page handlers or WATO modes. Nor complex
 HTML creation. This is all contained in cmk.gui.wato."""
 
+<<<<<<< HEAD
 import abc
 import ast
 import base64
 import cStringIO
+=======
+# NOTE: flake8 has no way to ignore just e.g. F401 for the whole file! :-P
+# flake8: noqa
+# pylint: disable=unused-import
+
+import sys
+import abc
+import ast
+import base64
+>>>>>>> upstream/master
 import copy
 import glob
 from hashlib import sha256
@@ -50,6 +69,7 @@ import tarfile
 import threading
 import time
 import traceback
+<<<<<<< HEAD
 from typing import NamedTuple, List  # pylint: disable=unused-import
 
 import requests
@@ -58,14 +78,26 @@ from pathlib2 import Path
 import six
 
 import cmk
+=======
+from typing import NamedTuple, List
+from pathlib import Path
+
+import requests
+import urllib3  # type: ignore[import]
+
+import cmk.utils.version as cmk_version
+>>>>>>> upstream/master
 import cmk.utils.daemon as daemon
 import cmk.utils.paths
 import cmk.utils.defines
 import cmk.utils
 import cmk.utils.store as store
 import cmk.utils.render as render
+<<<<<<< HEAD
 import cmk.ec.defaults
 import cmk.ec.export
+=======
+>>>>>>> upstream/master
 import cmk.utils.regex
 import cmk.utils.plugin_registry
 
@@ -75,15 +107,23 @@ import cmk.utils.tags
 import cmk.gui.config as config
 import cmk.gui.hooks as hooks
 import cmk.gui.userdb as userdb
+<<<<<<< HEAD
 import cmk.gui.multitar as multitar
 import cmk.gui.mkeventd as mkeventd
 import cmk.gui.werks as werks
+=======
+import cmk.gui.mkeventd as mkeventd
+>>>>>>> upstream/master
 import cmk.gui.log as log
 import cmk.gui.background_job as background_job
 import cmk.gui.weblib as weblib
 from cmk.gui.i18n import _u, _
 from cmk.gui.globals import html
+<<<<<<< HEAD
 from cmk.gui.htmllib import HTML, Encoder
+=======
+from cmk.gui.htmllib import HTML
+>>>>>>> upstream/master
 from cmk.gui.log import logger
 from cmk.gui.exceptions import MKGeneralException, MKAuthException, MKUserError, RequestTimeout
 from cmk.gui.valuespec import (
@@ -96,7 +136,11 @@ from cmk.gui.valuespec import (
     Transform,
     DropdownChoice,
     ListOf,
+<<<<<<< HEAD
     EmailAddressUnicode,
+=======
+    EmailAddress,
+>>>>>>> upstream/master
     DualListChoice,
     UserID,
     FixedValue,
@@ -124,6 +168,10 @@ from cmk.gui.config import (
 import cmk.gui.watolib.timeperiods
 import cmk.gui.watolib.git
 import cmk.gui.watolib.changes
+<<<<<<< HEAD
+=======
+import cmk.gui.watolib.auth_php
+>>>>>>> upstream/master
 # TODO: Cleanup all except declare_host_attribute which is still neded for pre 1.6 plugin
 # compatibility. For the others: Find the call sites and change to full module import
 from cmk.gui.watolib.notifications import save_notification_rules
@@ -162,10 +210,15 @@ from cmk.gui.watolib.sites import (
     SiteManagementFactory,
     CEESiteManagement,
     LivestatusViaTCP,
+<<<<<<< HEAD
     create_distributed_wato_file,
 )
 from cmk.gui.watolib.changes import (
     log_entry,
+=======
+)
+from cmk.gui.watolib.changes import (
+>>>>>>> upstream/master
     log_audit,
     add_change,
     add_service_change,
@@ -179,6 +232,11 @@ from cmk.gui.watolib.activate_changes import (
     confirm_all_local_changes,
     get_pending_changes_info,
     get_number_of_pending_changes,
+<<<<<<< HEAD
+=======
+    activate_changes_start,
+    activate_changes_wait,
+>>>>>>> upstream/master
 )
 from cmk.gui.watolib.groups import (
     edit_group,
@@ -193,7 +251,11 @@ from cmk.gui.watolib.rulespecs import (
     RulespecSubGroup,
     RulespecGroupRegistry,
     rulespec_group_registry,
+<<<<<<< HEAD
     RulespecGroupManualChecks,
+=======
+    RulespecGroupEnforcedServices,
+>>>>>>> upstream/master
     register_rulegroup,
     get_rulegroup,
     Rulespec,
@@ -213,8 +275,16 @@ from cmk.gui.watolib.rulesets import (
 )
 from cmk.gui.watolib.tags import TagConfigFile
 from cmk.gui.watolib.hosts_and_folders import (
+<<<<<<< HEAD
     Folder,
     Host,
+=======
+    CREFolder,
+    Folder,
+    CREHost,
+    Host,
+    collect_all_hosts,
+>>>>>>> upstream/master
     validate_all_hosts,
     call_hook_hosts_changed,
     folder_preserving_link,
@@ -228,6 +298,10 @@ from cmk.gui.watolib.sidebar_reload import (
     need_sidebar_reload,
 )
 from cmk.gui.watolib.analyze_configuration import (
+<<<<<<< HEAD
+=======
+    ACResult,
+>>>>>>> upstream/master
     ACResultNone,
     ACResultCRIT,
     ACResultWARN,
@@ -243,7 +317,11 @@ from cmk.gui.watolib.user_scripts import (
     user_script_title,
 )
 from cmk.gui.watolib.snapshots import backup_domains
+<<<<<<< HEAD
 from cmk.gui.watolib.automation_commands import (AutomationCommand, automation_command_registry)
+=======
+from cmk.gui.watolib.automation_commands import AutomationCommand, automation_command_registry
+>>>>>>> upstream/master
 from cmk.gui.watolib.global_settings import (
     load_configuration_settings,
     save_site_global_settings,
@@ -273,8 +351,13 @@ from cmk.gui.watolib.utils import (
     site_neutral_path,
 )
 from cmk.gui.watolib.wato_background_job import WatoBackgroundJob
+<<<<<<< HEAD
 if cmk.is_managed_edition():
     import cmk.gui.cme.managed as managed
+=======
+if cmk_version.is_managed_edition():
+    import cmk.gui.cme.managed as managed  # pylint: disable=no-name-in-module
+>>>>>>> upstream/master
 
 from cmk.gui.plugins.watolib.utils import (
     ABCConfigDomain,
@@ -287,8 +370,13 @@ from cmk.gui.plugins.watolib.utils import (
 
 import cmk.gui.plugins.watolib
 
+<<<<<<< HEAD
 if not cmk.is_raw_edition():
     import cmk.gui.cee.plugins.watolib
+=======
+if not cmk_version.is_raw_edition():
+    import cmk.gui.cee.plugins.watolib  # pylint: disable=no-name-in-module
+>>>>>>> upstream/master
 
 # Disable python warnings in background job output or logs like "Unverified
 # HTTPS request is being made". We warn the user using analyze configuration.
@@ -362,6 +450,7 @@ class ConfigGeneratorBasicWATOConfig(SampleConfigGenerator):
         return 10
 
     def generate(self):
+<<<<<<< HEAD
         save_global_settings({
             "use_new_descriptions_for": [
                 "df",
@@ -429,6 +518,9 @@ class ConfigGeneratorBasicWATOConfig(SampleConfigGenerator):
         content += 'df_use_fs_used_as_metric_name = True\n'
         store.save_file(os.path.join(cmk.utils.paths.omd_root, 'etc/check_mk/conf.d/fs_cap.mk'),
                         content)
+=======
+        save_global_settings(self._initial_global_settings())
+>>>>>>> upstream/master
 
         # A contact group for all hosts and services
         groups = {
@@ -515,6 +607,7 @@ class ConfigGeneratorBasicWATOConfig(SampleConfigGenerator):
                 },
             },],
 
+<<<<<<< HEAD
             # Enable HW/SW inventory + status data inventory for docker containers by default to
             # simplify the setup procedure of docker monitoring
             'active_checks': {
@@ -528,6 +621,33 @@ class ConfigGeneratorBasicWATOConfig(SampleConfigGenerator):
                         'status_data_inventory': True
                     },
                 },]
+=======
+            # Enable HW/SW inventory + status data inventory for docker containers and Check-MK servers by default to
+            # simplify the setup procedure for them
+            'active_checks': {
+                'cmk_inv': [
+                    {
+                        'condition': {
+                            'host_labels': {
+                                u'cmk/docker_object': u'node',
+                            }
+                        },
+                        'value': {
+                            'status_data_inventory': True
+                        },
+                    },
+                    {
+                        'condition': {
+                            'host_labels': {
+                                u'cmk/check_mk_server': u'yes',
+                            }
+                        },
+                        'value': {
+                            'status_data_inventory': True
+                        },
+                    },
+                ]
+>>>>>>> upstream/master
             },
 
             # Interval for HW/SW-Inventory check
@@ -566,6 +686,22 @@ class ConfigGeneratorBasicWATOConfig(SampleConfigGenerator):
                     'description': u'Perform every two hours a service discovery'
                 },
             },],
+<<<<<<< HEAD
+=======
+
+            # Include monitoring of checkmk's tmpfs
+            'inventory_df_rules': [{
+                'condition': {
+                    'host_labels': {
+                        u'cmk/check_mk_server': u'yes',
+                    },
+                },
+                'value': {
+                    'ignore_fs_types': ['tmpfs', 'nfs', 'smbfs', 'cifs', 'iso9660'],
+                    'never_ignore_mountpoints': [u'~.*/omd/sites/[^/]+/tmp$']
+                }
+            },],
+>>>>>>> upstream/master
         }
 
         rulesets = FolderRulesets(Folder.root_folder())
@@ -586,6 +722,101 @@ class ConfigGeneratorBasicWATOConfig(SampleConfigGenerator):
         ]
         save_notification_rules(notification_rules)
 
+<<<<<<< HEAD
+=======
+    def _initial_global_settings(self):
+        settings = {
+            "use_new_descriptions_for": [
+                "aix_memory",
+                "barracuda_mailqueues",
+                "brocade_sys_mem",
+                "casa_cpu_temp",
+                "cisco_mem",
+                "cisco_mem_asa",
+                "cisco_mem_asa64",
+                "cmciii_psm_current",
+                "cmciii_temp",
+                "cmciii_lcp_airin",
+                "cmciii_lcp_airout",
+                "cmciii_lcp_water",
+                "cmk_inventory",
+                "db2_mem",
+                "df",
+                "df_netapp",
+                "df_netapp32",
+                "docker_container_mem",
+                "enterasys_temp",
+                "esx_vsphere_datastores",
+                "esx_vsphere_hostsystem_mem_usage",
+                "esx_vsphere_hostsystem_mem_usage_cluster",
+                "etherbox_temp",
+                "fortigate_memory",
+                "fortigate_memory_base",
+                "fortigate_node_memory",
+                "hr_fs",
+                "hr_mem",
+                "http",
+                "huawei_switch_mem",
+                "hyperv_vms",
+                "ibm_svc_mdiskgrp",
+                "ibm_svc_system",
+                "ibm_svc_systemstats_cache",
+                "ibm_svc_systemstats_disk_latency",
+                "ibm_svc_systemstats_diskio",
+                "ibm_svc_systemstats_iops",
+                "innovaphone_mem",
+                "innovaphone_temp",
+                "juniper_mem",
+                "juniper_screenos_mem",
+                "juniper_trpz_mem",
+                "liebert_bat_temp",
+                "logwatch",
+                "logwatch_groups",
+                "mem_used",
+                "mem_win",
+                "mknotifyd",
+                "mknotifyd_connection",
+                "mssql_backup",
+                "mssql_counters_cache_hits",
+                "mssql_counters_file_sizes",
+                "mssql_counters_locks",
+                "mssql_counters_locks_per_batch",
+                "mssql_counters_pageactivity",
+                "mssql_counters_sqlstats",
+                "mssql_counters_transactions",
+                "mssql_databases",
+                "mssql_datafiles",
+                "mssql_tablespaces",
+                "mssql_transactionlogs",
+                "mssql_versions",
+                "netscaler_mem",
+                "nullmailer_mailq",
+                "nvidia_temp",
+                "postfix_mailq",
+                "ps",
+                "qmail_stats",
+                "raritan_emx",
+                "raritan_pdu_inlet",
+                "services",
+                "solaris_mem",
+                "sophos_memory",
+                "statgrab_mem",
+                "tplink_mem",
+                "ups_bat_temp",
+                "vms_diskstat_df",
+                "wmic_process",
+                "zfsget",
+            ],
+            "enable_rulebased_notifications": True,
+            "lock_on_logon_failures": 10,
+        }
+
+        if cmk_version.is_demo():
+            settings["cmc_cmk_helpers"] = 3
+
+        return settings
+
+>>>>>>> upstream/master
     def _initialize_tag_config(self):
         tag_config = cmk.utils.tags.TagConfig()
         tag_config.parse_config(cmk.utils.tags.sample_tag_config())
@@ -607,6 +838,11 @@ class ConfigGeneratorAcknowledgeInitialWerks(SampleConfigGenerator):
         return 40
 
     def generate(self):
+<<<<<<< HEAD
+=======
+        # Local import has been added to quick-fix an import cycle between cmk.gui.werks and watolib
+        import cmk.gui.werks as werks
+>>>>>>> upstream/master
         werks.acknowledge_all_werks(check_permission=False)
 
 

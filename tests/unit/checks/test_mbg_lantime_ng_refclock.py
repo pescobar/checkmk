@@ -1,4 +1,15 @@
+<<<<<<< HEAD
 import pytest  # type: ignore
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+import pytest  # type: ignore[import]
+from testlib import Check  # type: ignore[import]
+>>>>>>> upstream/master
 from checktestlib import DiscoveryResult, assertDiscoveryResultsEqual, \
                          BasicCheckResult, CheckResult, assertCheckResultsEqual
 
@@ -20,8 +31,14 @@ meinberg_lantime_6 = [[
         (meinberg_lantime_1, DiscoveryResult([])),  # GPS clocks are not covered here
         (meinberg_lantime_2, DiscoveryResult([('1', None)])),
     ])
+<<<<<<< HEAD
 def test_discovery_mbg_lantime_ng_refclock(check_manager, info, expected):
     check = check_manager.get_check("mbg_lantime_ng_refclock")
+=======
+@pytest.mark.usefixtures("config_load_all_checks")
+def test_discovery_mbg_lantime_ng_refclock(info, expected):
+    check = Check("mbg_lantime_ng_refclock")
+>>>>>>> upstream/master
     discovery = DiscoveryResult(check.run_discovery(info))
     assertDiscoveryResultsEqual(check, discovery, expected)
 
@@ -34,8 +51,14 @@ def test_discovery_mbg_lantime_ng_refclock(check_manager, info, expected):
          BasicCheckResult(0, 'Correlation: 62%', [('correlation', 62.0)]),
      ])),
 ])
+<<<<<<< HEAD
 def test_check_mbg_lantime_ng_refclock(check_manager, info, item, params, expected):
     check = check_manager.get_check("mbg_lantime_ng_refclock")
+=======
+@pytest.mark.usefixtures("config_load_all_checks")
+def test_check_mbg_lantime_ng_refclock(info, item, params, expected):
+    check = Check("mbg_lantime_ng_refclock")
+>>>>>>> upstream/master
     result = CheckResult(check.run_check(item, params, info))
     assertCheckResultsEqual(result, expected)
 
@@ -48,8 +71,14 @@ def test_check_mbg_lantime_ng_refclock(check_manager, info, item, params, expect
         (meinberg_lantime_5, DiscoveryResult([('1', 'mbg_lantime_refclock_default_levels')])),
         (meinberg_lantime_6, DiscoveryResult([('1', 'mbg_lantime_refclock_default_levels')])),
     ])
+<<<<<<< HEAD
 def test_discovery_mbg_lantime_ng_refclock_gps(check_manager, info, expected):
     check = check_manager.get_check("mbg_lantime_ng_refclock.gps")
+=======
+@pytest.mark.usefixtures("config_load_all_checks")
+def test_discovery_mbg_lantime_ng_refclock_gps(info, expected):
+    check = Check("mbg_lantime_ng_refclock.gps")
+>>>>>>> upstream/master
     discovery = DiscoveryResult(check.run_discovery(info))
     assertDiscoveryResultsEqual(check, discovery, expected)
 
@@ -93,7 +122,13 @@ def test_discovery_mbg_lantime_ng_refclock_gps(check_manager, info, expected):
             ]),
         ),
     ])
+<<<<<<< HEAD
 def test_check_mbg_lantime_ng_refclock_gps(check_manager, info, item, params, expected):
     check = check_manager.get_check("mbg_lantime_ng_refclock.gps")
+=======
+@pytest.mark.usefixtures("config_load_all_checks")
+def test_check_mbg_lantime_ng_refclock_gps(info, item, params, expected):
+    check = Check("mbg_lantime_ng_refclock.gps")
+>>>>>>> upstream/master
     result = CheckResult(check.run_check(item, params, info))
     assertCheckResultsEqual(result, expected)

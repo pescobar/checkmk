@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /*
 +------------------------------------------------------------------+
 |             ____ _               _        __  __ _  __           |
@@ -23,6 +24,12 @@ License along with GNU Make; see the file  COPYING.  If  not,  write
 to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 Boston, MA 02110-1301 USA.
 */
+=======
+@charset "UTF-8";
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+// conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 /*-------------------------------------------------------------------------.
 |                 ____  _     _      _                                     |
@@ -35,6 +42,7 @@ Boston, MA 02110-1301 USA.
 | Styling for the sidebar and its snapins.                                 |
 '-------------------------------------------------------------------------*/
 
+<<<<<<< HEAD
 
 body.side {
   width: 100%;
@@ -79,17 +87,141 @@ body.side {
   border-radius: 0;
   box-shadow: 0 0 0 rgba(0, 0, 0, 0.1);
   box-sizing: border-box;
+=======
+body.side {
+  width: 100vw;
+  height: 100vh;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+  font-family: $font-family-default;
+  font-size: 14px;
+  font-weight: $font-weight-default;
+  background: $navigation-bg-color;
+
+  p {
+    color: $darkgrey;
+  }
+
+  &.screenshotmode {
+    background-image: url("");
+  }
+
+  b.treeangle.title {
+    color: $font-color-sidebar;
+  }
+
+  img.treeangle {
+    filter: $treeangle-img-filter-sidebar;
+  }
+}
+
+#check_mk_navigation {
+  display: flex;
+  flex-direction: column;
+  float: left;
+  width: 64px;
+  height: 100%;
+}
+
+#check_mk_sidebar {
+  display: flex;
+  flex-direction: column;
+  float: right;
+  width: 280px;
+  height: 100%;
+
+  &.folded {
+    display: none;
+  }
+
+  &.left {
+    float: left;
+    border-left: 1px solid $sidebar-border-color;
+  }
+
+  div.shortcuts {
+    display: flex;
+    padding: $spacing $spacing (0.5 * $spacing);
+    border-bottom: 1px solid $sidebar-border-color;
+
+    a {
+      flex: 1 0 auto;
+      font-size: $font-size-small;
+      line-height: 1.7;
+      color: $font-color-sidebar;
+      text-align: center;
+      text-decoration: none;
+
+      &:hover img {
+        opacity: 0.5;
+      }
+
+      &:visited {
+        color: $font-color-sidebar;
+      }
+    }
+
+    img {
+      margin-bottom: 6px;
+    }
+  }
+
+  #side_content {
+    height: 100%;
+    overflow: auto;
+    color: rgb(0, 0, 0);
+
+    & > .snapin {
+      margin-top: 0;
+    }
+  }
+
+  // needed to place the add_snapin button always at the bottom
+  .simplebar-content {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+  }
+}
+
+#content_area {
+  width: auto;
+  height: 100%;
+  overflow: hidden;
+  background: #fff;
+}
+
+#content_area iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* Top logo part */
+#side_header {
+  height: 58px;
+>>>>>>> upstream/master
 
   > a {
     display: block;
     width: 100%;
     height: 100%;
+<<<<<<< HEAD
     margin: 0;
     text-decoration: none;
     background-image: url("images/mk-logo.png");
     background-position: 16px center;
     background-repeat: no-repeat;
     background-size: auto 30px;
+=======
+    text-decoration: none;
+    background-image: url("images/tribe29_icon.svg");
+    background-position: center 5px;
+    background-repeat: no-repeat;
+    background-size: auto 44px;
+    outline: none;
+>>>>>>> upstream/master
   }
 }
 
@@ -108,6 +240,7 @@ body.main .popup_menu #side_header > span {
 }
 
 #side_fold {
+<<<<<<< HEAD
   position: absolute;
   top: 0;
   left: 0;
@@ -236,19 +369,86 @@ body.main .popup_menu #side_footer div.copyright span {
   text-decoration: none;
 }
 
+=======
+  margin: $spacing 0;
+  font-size: $font-size-small;
+  color: $font-color-sidebar;
+  text-align: center;
+  cursor: pointer;
+
+  &:not(.folded) {
+    color: $success;
+  }
+
+  img {
+    margin-bottom: 8px;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  &:not(.folded) img.folded {
+    display: none;
+  }
+
+  &.folded img:not(.folded) {
+    display: none;
+  }
+}
+
+#side_version {
+  margin: $spacing;
+  font-size: 8px;
+  font-weight: $font-weight-bold;
+  letter-spacing: $letter-spacing-table;
+  color: $font-color-sidebar;
+  text-align: center;
+
+  a {
+    text-decoration: none;
+    text-rendering: optimizeLegibility;
+
+    &:hover {
+      text-decoration: underline;
+    }
+
+    &:visited {
+      color: $font-color-sidebar;
+    }
+  }
+
+  span.unack_werks {
+    padding: 2px;
+    margin-left: 2px;
+    color: $font-color;
+    cursor: pointer;
+    background-color: rgb(255, 0, 0);
+    border-radius: 6px;
+  }
+}
+
+>>>>>>> upstream/master
 span#msg_label {
   position: relative;
   top: -6px;
   left: -10px;
   z-index: 15;
   padding: 1px;
+<<<<<<< HEAD
   font-size: $theme-font-size-global;
   color: #f00;
   background-color: #fff;
+=======
+  font-size: $font-size-global;
+  color: rgb(255, 0, 0);
+  background-color: rgb(255, 255, 255);
+>>>>>>> upstream/master
   border-radius: 5px;
 }
 
 /* General layout of snapins */
+<<<<<<< HEAD
 body.side div.snapin, div.add_snapin div.snapin  {
   width: 100%;
   padding: 0;
@@ -278,6 +478,31 @@ div.snapin {
     padding: 8px;
     line-height: 10px; /* affects height of snapin title bar */
     color: $theme-color-text-light;
+=======
+body.side div.snapin,
+div.add_snapin div.snapin {
+  width: 100%;
+  padding: (0.75 * $spacing) (2 * $spacing);
+  overflow: hidden;
+  background: $navigation-bg-color;
+  border-radius: 4px;
+  box-shadow: none;
+  box-sizing: border-box;
+}
+
+div.snapin {
+  &.dragging {
+    position: absolute;
+    z-index: 200;
+  }
+
+  /* Header of the snapin */
+  div.head {
+    position: relative;
+    height: auto;
+    line-height: 10px; /* affects height of snapin title bar */
+    color: $font-color-sidebar;
+>>>>>>> upstream/master
     text-align: left;
     background: transparent;
 
@@ -286,6 +511,7 @@ div.snapin {
     }
 
     b.heading {
+<<<<<<< HEAD
       font-size: $theme-font-size-main;
       font-weight: 500;
       letter-spacing: $theme-letter-spacing-table;
@@ -293,10 +519,22 @@ div.snapin {
     }
 
     &.closed div.minisnapin {
+=======
+      padding-bottom: 3px;
+      font-size: $font-size-global;
+      font-weight: $font-weight-bold;
+      line-height: 16px;
+      letter-spacing: $letter-spacing-table;
+      border-bottom: 1px solid $snapin-heading-border-color;
+    }
+
+    &.closed span.minisnapin {
+>>>>>>> upstream/master
       background-image: url("images/icon_maxisnapin.png");
     }
   }
 
+<<<<<<< HEAD
   div.closesnapin {
     position: absolute;
     right: 5px;
@@ -322,19 +560,70 @@ div.snapin {
     line-height: 0;
     cursor: pointer;
     background-image: url("images/icon_minisnapin.png");
+=======
+  div.snapin_buttons {
+    position: absolute;
+    right: 5px;
+    opacity: 0;
+    transition: opacity 50ms ease-in 50ms;
+  }
+
+  &:hover div.snapin_buttons {
+    opacity: 1;
+    transition: opacity 0s;
+  }
+
+  span.moresnapin {
+    display: inline-block;
+    width: 16px; /* FIXME: get rid of the animation that uses 4 images */
+    margin-right: 4px;
+
+    img {
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  span.closesnapin {
+    display: inline-block;
+    width: 16px;
+
+    img {
+      width: 16px;
+      height: 16px;
+      padding: 0;
+      margin-top: -8px; /* HACK to align the button */
+    }
+  }
+
+  span.minisnapin {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    margin-right: 4px;
+    line-height: 0;
+    cursor: pointer;
+    background: no-repeat center / 100% url("images/icon_minisnapin.png");
+>>>>>>> upstream/master
   }
 
   div.content {
     top: 64px;
     width: 100%;
+<<<<<<< HEAD
     padding: 8px; /* Invisible spacing around hole snapin content */
     color: $primary-sidebar-font-color;
     background-color: $theme-color-sidebar-background;
+=======
+    padding: $spacing 0 0;
+    color: $font-color-sidebar;
+>>>>>>> upstream/master
     box-sizing: border-box;
   }
 
   select {
     width: 100%;
+<<<<<<< HEAD
     height: 100%;
     padding: 8px;
     font-size: 11px;
@@ -343,12 +632,18 @@ div.snapin {
     background-image: none;
     border: $primary-border;
     border-radius: $theme-border-radius;
+=======
+    height: 24px;
+    background-image: none;
+    border-radius: $popup-filters-border-radius;
+>>>>>>> upstream/master
     box-shadow: none;
   }
 
   /*
    * General styles for snapin contents
    */
+<<<<<<< HEAD
   .content_center {
     margin-right: auto;
     margin-left:  auto;
@@ -356,17 +651,27 @@ div.snapin {
 
   td {
     color: $primary-sidebar-font-color;
+=======
+
+  td {
+    color: $font-color-sidebar;
+>>>>>>> upstream/master
   }
 
   h3 {
     margin: 2px 0;
     font-size: 100%;
+<<<<<<< HEAD
     color: $primary-sidebar-font-color;
+=======
+    color: $font-color;
+>>>>>>> upstream/master
   }
 
   /* Normal link in snapins */
   a {
     font-weight: normal;
+<<<<<<< HEAD
     color: $primary-sidebar-font-color;
     text-decoration: none;
 
@@ -377,6 +682,17 @@ div.snapin {
 
     &.iconlink img {
       margin-right: 8px;
+=======
+    color: $font-color-sidebar;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+
+    &.iconlink img:not(.emblem) {
+      margin-right: 5px;
+>>>>>>> upstream/master
     }
   }
 
@@ -388,7 +704,11 @@ div.snapin {
   }
 
   li {
+<<<<<<< HEAD
     padding-left: 1px;
+=======
+    padding-left: 0;
+>>>>>>> upstream/master
     color: $snapin-list-color;
 
     &.sidebar {
@@ -411,24 +731,41 @@ div.snapin {
   div.snapinexception {
     width: 220px;
     padding: 3px;
+<<<<<<< HEAD
     background-color: #f88;
     border: 1px solid #f00;
+=======
+    background-color: rgb(255, 136, 136);
+    border: 1px solid rgb(255, 0, 0);
+>>>>>>> upstream/master
     border-radius: 4px;
 
     h2 {
       margin-top: 0;
       font-size: 12px;
+<<<<<<< HEAD
       color: #f00;
     }
 
     p {
       color: #800;
+=======
+      color: rgb(255, 0, 0);
+    }
+
+    p {
+      color: rgb(136, 0, 0);
+>>>>>>> upstream/master
     }
   }
 
   /* The right-aligned link at the bottom of some snapins like the "views" snapin. */
   div.footnotelink {
+<<<<<<< HEAD
     margin-top: 0px;
+=======
+    margin-top: 0;
+>>>>>>> upstream/master
     text-align: right;
 
     a {
@@ -466,6 +803,7 @@ div.snapin {
     height: 10px;
     margin-right: 6px;
     margin-left: 0;
+<<<<<<< HEAD
     border: 1px solid #123a4a;
     box-shadow: 0 0 1px #123a4a;
   }
@@ -483,6 +821,36 @@ div.snapin div.content div.foldable a.iconlink:last-of-type,
 div.snapin div.content div.foldable body.main .popup_menu span.iconlink:last-of-type,
 body.main .popup_menu div.snapin div.content div.foldable span.iconlink:last-of-type {
   padding-bottom: 12px;
+=======
+    border: 1px solid rgb(18, 58, 74);
+    box-shadow: 0 0 1px rgb(18, 58, 74);
+  }
+}
+
+#add_snapin {
+  margin-top: auto;
+  text-align: center;
+
+  a {
+    display: block;
+    padding: $spacing 0;
+    text-decoration: none;
+
+    img {
+      width: 28px;
+      height: 28px;
+    }
+
+    div.description {
+      margin-top: 6px;
+      color: #5a6782;
+    }
+  }
+}
+
+div.snapin div.content div.foldable ul.treeangle a.iconlink {
+  padding: 0;
+>>>>>>> upstream/master
 }
 
 div.snapin table.allhosts td a.link,
@@ -497,12 +865,21 @@ div.snapin div.footnotelink a.link,
 /* TODO: Reproduce these two html elements */
 div.snapin div.footnotelink body.main .popup_menu span.link,
 body.main .popup_menu div.snapin div.footnotelink span.link {
+<<<<<<< HEAD
   padding: 0 0;
   margin-right: 16px;
   margin-left: 0;
   font-size: $theme-font-size-small;
   font-weight: $theme-font-weight-bold;
   letter-spacing: $theme-letter-spacing-table;
+=======
+  padding: 0;
+  margin-right: 16px;
+  margin-left: 0;
+  font-size: $font-size-small;
+  font-weight: $font-weight-bold;
+  letter-spacing: $letter-spacing-table;
+>>>>>>> upstream/master
   color: $footnote-link-color;
   text-transform: uppercase;
   background: transparent;
@@ -527,12 +904,20 @@ div#snapinDragIndicator {
   margin: 0 0 0 11px;
   font-size: 1px;
   line-height: 1px;
+<<<<<<< HEAD
   background-color: #fff;
   border-radius: 3px;
   box-shadow: 0 0 3px #fff;
 }
 
 
+=======
+  background-color: rgb(255, 255, 255);
+  border-radius: 3px;
+  box-shadow: 0 0 3px rgb(255, 255, 255);
+}
+
+>>>>>>> upstream/master
 /*-------------------------------------------------------------------------.
 |          _       _     _                         _                       |
 |         / \   __| | __| |  ___ _ __   __ _ _ __ (_)_ __  ___             |
@@ -546,12 +931,18 @@ div#snapinDragIndicator {
 
 div.add_snapin {
   div.snapinadder {
+<<<<<<< HEAD
     &, &:hover {
+=======
+    &,
+    &:hover {
+>>>>>>> upstream/master
       float: left;
       width: 270px;
       height: 220px;
       padding: 8px;
       margin: 0 16px 16px 0;
+<<<<<<< HEAD
       background-color: $theme-color-sidebar-background;
       border: 1px solid $theme-color-table-border-dark;
       border-radius: 5px;
@@ -561,6 +952,18 @@ div.add_snapin {
 
     *, &:hover * {
       color: $theme-color-lightgrey;
+=======
+      background-color: $snapin-bg-color;
+      border: 1px solid $snapin-bg-color;
+      border-radius: 5px;
+      box-shadow: 0 0 0 rgba(0, 0, 0, 0.1);
+      transition: box-shadow 0.15s 0s ease-in-out;
+    }
+
+    *,
+    &:hover * {
+      color: $font-color-sidebar;
+>>>>>>> upstream/master
     }
 
     &:hover {
@@ -569,44 +972,85 @@ div.add_snapin {
 
     div.description {
       padding: 16px;
+<<<<<<< HEAD
       font-size: $theme-font-size-small;
       font-weight: $theme-font-weight-global;
       line-height: 1.333;
       letter-spacing: $theme-letter-spacing-table;
       color: $theme-color-nuance-8;
+=======
+      font-size: $font-size-small;
+      font-weight: $font-weight-default;
+      line-height: 1.333;
+      letter-spacing: $letter-spacing-table;
+>>>>>>> upstream/master
       text-rendering: optimizeLegibility;
     }
 
     div.snapin {
       height: 116px;
       padding-top: 0;
+<<<<<<< HEAD
       background-color: $theme-color-sidebar-background;
       border: none;
       border-bottom: 1px solid $theme-color-table-border-dark;
+=======
+      border: none;
+>>>>>>> upstream/master
       border-radius: 0;
     }
 
     .head {
       height: auto;
       padding: 8px;
+<<<<<<< HEAD
       color: $theme-color-text-light;
+=======
+      color: $font-color-sidebar;
+>>>>>>> upstream/master
       text-align: left;
       background: transparent;
 
       b.heading {
+<<<<<<< HEAD
         font-size: $theme-font-size-main;
         font-weight: 500;
         letter-spacing: $theme-letter-spacing-table;
+=======
+        font-size: $font-size-default;
+        font-weight: 500;
+        letter-spacing: $letter-spacing-table;
+>>>>>>> upstream/master
         text-transform: uppercase;
       }
     }
 
+<<<<<<< HEAD
     .snapin b, .head b {
       font-weight: $theme-font-weight-bold;
     }
 
     .content {
         color: $theme-color-text;
+=======
+    .snapin b,
+    .head b {
+      font-weight: $font-weight-bold;
+    }
+
+    .content {
+      color: $font-color-sidebar;
+    }
+
+    div.foldable {
+      b.treeangle {
+        color: $font-color-sidebar;
+      }
+
+      img.treeangle {
+        filter: $treeangle-img-filter-sidebar;
+      }
+>>>>>>> upstream/master
     }
   }
 
@@ -629,7 +1073,10 @@ div.add_snapin {
   }
 }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/master
 /*-Popup Msg-----------------------------------------------------------.
 |           ____                           __  __                      |
 |          |  _ \ ___  _ __  _   _ _ __   |  \/  |___  __ _            |
@@ -647,7 +1094,11 @@ div.popup_msg {
   left: 20px;
   width: 200px;
   padding: 3px;
+<<<<<<< HEAD
   background-color: #244452;
+=======
+  background-color: rgb(36, 68, 82);
+>>>>>>> upstream/master
 
   .close {
     display: block;
@@ -659,7 +1110,22 @@ span#msg_label {
   position: relative;
   z-index: 15;
   padding: 1px;
+<<<<<<< HEAD
   color: #ff0000;
   background-color: #fff;
   border-radius: 5px;
 }
+=======
+  color: rgb(255, 0, 0);
+  background-color: rgb(255, 255, 255);
+  border-radius: 5px;
+}
+
+div.head {
+  position: relative;
+
+  a.more img {
+    top: 0;
+  }
+}
+>>>>>>> upstream/master

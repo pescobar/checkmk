@@ -1,7 +1,18 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # "How to talk to the mkeventd", Python edition :-)
 
 from __future__ import print_function
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# "How to talk to the mkeventd", Python edition :-)
+
+>>>>>>> upstream/master
 import json
 import os
 import socket
@@ -14,8 +25,13 @@ class EventConsoleConnection(object):
         self._socket.connect(path)
         self._buffer = ""
 
+<<<<<<< HEAD
     def send_request(self, request):
         self._socket.sendall(request)
+=======
+    def send_request(self, r):
+        self._socket.sendall(r)
+>>>>>>> upstream/master
         self._socket.shutdown(socket.SHUT_WR)
 
     def read_response(self):
@@ -37,7 +53,11 @@ class EventConsoleConnection(object):
         """Return an iterator for reading the response as Unicode lines"""
         return self
 
+<<<<<<< HEAD
     def next(self):
+=======
+    def __next__(self):
+>>>>>>> upstream/master
         while True:
             parts = self._buffer.split("\n", 1)
             if len(parts) > 1:
@@ -49,8 +69,13 @@ class EventConsoleConnection(object):
                 parts = [self._buffer, ""]
                 break
             self._buffer += data
+<<<<<<< HEAD
         line, self._buffer = parts
         return line.decode("utf-8").splitlines()
+=======
+        line_, self._buffer = parts
+        return line_.decode("utf-8").splitlines()
+>>>>>>> upstream/master
 
     def __enter__(self):
         return self
@@ -68,6 +93,7 @@ def request(what, path):
 
 ################################################################################
 
+<<<<<<< HEAD
 path = os.getenv("OMD_ROOT") + "/tmp/run/mkeventd/status"
 
 # read the response line by line
@@ -85,3 +111,22 @@ with EventConsoleConnection(path) as c:
 print(request("GET status", path))
 print(request("COMMAND SYNC", path))
 print(request("REPLICATE 1488791495", path))
+=======
+status_path = os.getenv("OMD_ROOT") + "/tmp/run/mkeventd/status"
+
+# read the response line by line
+with EventConsoleConnection(status_path) as ec:
+    ec.send_request("GET status\nOutputFormat: plain")
+    for line in ec:
+        print(line)
+
+# read the whole response in one go
+with EventConsoleConnection(status_path) as ec:
+    ec.send_request("GET status\nOutputFormat: python")
+    print(ec.read_response())
+
+# use the convenience function
+print(request("GET status", status_path))
+print(request("COMMAND SYNC", status_path))
+print(request("REPLICATE 1488791495", status_path))
+>>>>>>> upstream/master

@@ -10,8 +10,13 @@ description:
  Note: This check is deprecated and replaced by newer checks.
  See werk 7100 for detailed information.
 
+<<<<<<< HEAD
 item:
  Instance and filesystem name.
 
 inventory:
  One service per filesystem is created.
+=======
+inventory:
+ One service is created for each filesystem.
+>>>>>>> upstream/master

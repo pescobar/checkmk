@@ -11,7 +11,14 @@ description:
  are configurable.
 
 item:
+<<<<<<< HEAD
  Tablespace name.
 
 inventory:
  One service per tablespace.
+=======
+ Name of the tablespace
+
+inventory:
+ One service is created for each tablespace.
+>>>>>>> upstream/master

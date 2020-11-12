@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -24,6 +25,24 @@
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
 
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# NOTE: Careful when replacing the *-import below with a more specific import. This can cause
+# problems because it might remove variables from the check-context which are necessary for
+# resolving legacy discovery results such as [("SUMMARY", "diskstat_default_levels")]. Furthermore,
+# it might also remove variables needed for accessing discovery rulesets.
+from cmk.base.check_legacy_includes.fan import *  # pylint: disable=wildcard-import,unused-wildcard-import
+# NOTE: Careful when replacing the *-import below with a more specific import. This can cause
+# problems because it might remove variables from the check-context which are necessary for
+# resolving legacy discovery results such as [("SUMMARY", "diskstat_default_levels")]. Furthermore,
+# it might also remove variables needed for accessing discovery rulesets.
+from cmk.base.check_legacy_includes.fsc import *  # pylint: disable=wildcard-import,unused-wildcard-import
+>>>>>>> upstream/master
 factory_settings['fsc_fans_default_levels'] = {
     'lower': (2000, 1000),
 }
@@ -41,7 +60,11 @@ def parse_fsc_fans(info):
 
 
 def inventory_fsc_fans(parsed):
+<<<<<<< HEAD
     return [(fan_name, {}) for fan_name in parsed.iterkeys()]
+=======
+    return [(fan_name, {}) for fan_name in parsed]
+>>>>>>> upstream/master
 
 
 @get_parsed_item_data
@@ -60,6 +83,9 @@ check_info["fsc_fans"] = {
     'snmp_scan_function': is_fsc_fans_prefer_sc2,
     'has_perfdata': True,
     'group': "hw_fans",
+<<<<<<< HEAD
     'includes': ['fan.include', 'fsc.include'],
+=======
+>>>>>>> upstream/master
     'default_levels_variable': 'fsc_fans_default_levels',
 }

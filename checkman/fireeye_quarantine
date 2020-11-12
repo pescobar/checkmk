@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: FireEye Appliances: Quarantine usage
+=======
+title: FireEye Appliances: Quarantine Usage
+>>>>>>> upstream/master
 agents: snmp
 catalog: hw/network/fireeye
 license: GPL
@@ -11,9 +15,12 @@ description:
  The check goes WARN or CRIT if the percentage
  exceeds configurable values.
 
+<<<<<<< HEAD
 item:
  No item.
 
+=======
+>>>>>>> upstream/master
 inventory:
  One service is created.
 

@@ -1,4 +1,15 @@
+<<<<<<< HEAD
 import cmk.gui.userdb as userdb
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+import cmk.gui.userdb as userdb
+from cmk.gui.plugins.userdb.utils import add_internal_attributes
+>>>>>>> upstream/master
 import cmk.gui.config as config
 import cmk.gui.mkeventd
 from cmk.gui.i18n import _
@@ -20,14 +31,22 @@ from cmk.gui.valuespec import (
     Age,
     FixedValue,
     Alternative,
+<<<<<<< HEAD
     EmailAddressUnicode,
+=======
+    EmailAddress,
+>>>>>>> upstream/master
 )
 from cmk.gui.watolib.changes import add_change
 from cmk.gui.watolib.user_scripts import (
     user_script_title,
     user_script_choices,
 )
+<<<<<<< HEAD
 from cmk.gui.watolib.global_settings import load_configuration_settings
+=======
+from cmk.gui.watolib.global_settings import rulebased_notifications_enabled
+>>>>>>> upstream/master
 
 
 def delete_users(users_to_delete):
@@ -62,6 +81,12 @@ def edit_users(changed_users):
         else:
             modified_users_info.append(user_id)
 
+<<<<<<< HEAD
+=======
+        if is_new_user:
+            add_internal_attributes(user_attrs)
+
+>>>>>>> upstream/master
         all_users[user_id] = user_attrs
 
     if new_users_info:
@@ -107,7 +132,11 @@ def _validate_user_attributes(all_users, user_id, user_attrs, is_new_user=True):
 
     # Email
     email = user_attrs.get("email")
+<<<<<<< HEAD
     vs_email = EmailAddressUnicode()
+=======
+    vs_email = EmailAddress()
+>>>>>>> upstream/master
     vs_email.validate_value(email, "email")
 
     # Idle timeout
@@ -116,8 +145,12 @@ def _validate_user_attributes(all_users, user_id, user_attrs, is_new_user=True):
     vs_user_idle_timeout.validate_value(idle_timeout, "idle_timeout")
 
     # Notification settings are only active if we do *not* have rule based notifications!
+<<<<<<< HEAD
     rulebased_notifications = load_configuration_settings().get("enable_rulebased_notifications")
     if not rulebased_notifications:
+=======
+    if not rulebased_notifications_enabled():
+>>>>>>> upstream/master
         # Notifications
         notifications_enabled = user_attrs.get("notification_enabled")
 
@@ -182,7 +215,10 @@ def get_vs_user_idle_timeout():
                 default_value=3600,
             ),
         ],
+<<<<<<< HEAD
         style="dropdown",
+=======
+>>>>>>> upstream/master
         orientation="horizontal",
     )
 
@@ -210,7 +246,10 @@ def get_vs_flexible_notifications():
                                 "match_sl"
                             ],
                             columns=1,
+<<<<<<< HEAD
                             headers=True,
+=======
+>>>>>>> upstream/master
                             elements=[
                                 (
                                     "plugin",

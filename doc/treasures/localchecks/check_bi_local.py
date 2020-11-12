@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,6 +24,13 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 # Example for creating real Nagios checks from BI aggregations.
 
@@ -33,7 +41,10 @@
 #    user with read access to Multisite.
 # 4. Add password OR automation secret of this user
 
+<<<<<<< HEAD
 from __future__ import print_function
+=======
+>>>>>>> upstream/master
 url_prefix = ""  # non-OMD installations
 # url_prefix = "mysite/" # with OMD site name
 
@@ -66,12 +77,13 @@ accept_any_certificate = False
 
 # Do not change anything below
 
-import os, sys
+import os
+import sys
 
 if protocol != "https":
     protocol = "http"
 
-if protocol == "https" and accept_any_certificate == True:
+if protocol == "https" and accept_any_certificate:
     cert_option = "--insecure"
 else:
     cert_option = ""
@@ -93,7 +105,7 @@ try:
                     (user, password, cert_option, url)
     output = os.popen(command).read()  # nosec
     data = eval(output)
-except:
+except Exception:
     sys.stderr.write("Invalid output from URL %s:\n" % url)
     sys.stderr.write(output)
     sys.stderr.write("Command was: %s\n" % command)

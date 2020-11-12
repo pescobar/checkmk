@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: Kubernetes nodes
+=======
+title: Kubernetes: Nodes
+>>>>>>> upstream/master
 agents: kubernetes
 catalog: containerization/kubernetes
 license: GPL

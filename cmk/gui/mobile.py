@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -25,16 +26,29 @@
 # Boston, MA 02110-1301 USA.
 
 import six
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+from typing import Set, Tuple, Union, Optional, List
+>>>>>>> upstream/master
 
 import cmk.gui.views as views
 import cmk.gui.config as config
 import cmk.gui.visuals as visuals
+<<<<<<< HEAD
 import cmk.gui.metrics as metrics
+=======
+>>>>>>> upstream/master
 import cmk.gui.utils
 import cmk.gui.view_utils
 from cmk.gui.plugins.views.utils import (
     PainterOptions,
     command_registry,
+<<<<<<< HEAD
 )
 
 from cmk.gui.i18n import _
@@ -45,17 +59,49 @@ from cmk.gui.log import logger
 
 
 def mobile_html_head(title, ready_code=""):
+=======
+    data_source_registry,
+)
+import cmk.gui.escaping as escaping
+from cmk.gui.i18n import _
+from cmk.gui.globals import html, request
+from cmk.gui.htmllib import HTML
+from cmk.gui.exceptions import MKUserError
+from cmk.gui.log import logger
+from cmk.gui.type_defs import (
+    Rows,)
+from cmk.gui.plugins.views.utils import (
+    Cell,
+    ABCDataSource,
+)
+from cmk.gui.plugins.visuals.utils import Filter
+from cmk.gui.page_menu import PageMenuEntry, PageMenuLink
+from cmk.gui.utils.urls import makeuri
+from cmk.gui.utils.confirm_with_preview import confirm_with_preview
+
+HeaderButton = Union[Tuple[str, str, str], Tuple[str, str, str, str]]
+Items = List[Tuple[str, str, str]]
+NavigationBar = List[Tuple[str, str, str, str]]
+
+
+def mobile_html_head(title: str) -> None:
+>>>>>>> upstream/master
     html.mobile = True
     html.write(
         """<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">"""
     )
     html.open_html()
     html.open_head()
+<<<<<<< HEAD
     html.meta(content="text/html;", charset="utf-8", **{"http-equiv": "Content-Type"})
+=======
+    html.default_html_headers()
+>>>>>>> upstream/master
     html.meta(name="viewport", content="initial-scale=1.0")
     html.meta(name="apple-mobile-web-app-capable", content="yes")
     html.meta(name="apple-mobile-web-app-title", content="Check_MK")
     html.title(title)
+<<<<<<< HEAD
     html.stylesheet(href="jquery/jquery.mobile-1.0.css")
     html.stylesheet(href="themes/classic/theme.css")
 
@@ -70,28 +116,56 @@ def mobile_html_head(title, ready_code=""):
         html.javascript_file(src='js/graphs.js')
 
     # Never allow the mobile page to be opened in a frameset. Redirect top page to the current content page.
+=======
+    html.stylesheet(href="jquery/jquery.mobile-1.2.1.css")
+    html.stylesheet(href="themes/classic/theme.css")
+
+    html.write(
+        html._render_start_tag("link",
+                               rel="apple-touch-icon",
+                               href="themes/classic/images/ios_logo.png",
+                               close_tag=True))
+    html.javascript_file(src='js/mobile_min.js')
+
+    # Never allow the mobile page to be opened in an iframe. Redirect top page to the current content page.
+>>>>>>> upstream/master
     # This will result in a full screen mobile interface page.
     html.javascript('''if(top != self) { window.top.location.href = location; }''')
 
     html.javascript("""
+<<<<<<< HEAD
       $(document).ready(function() { %s });
+=======
+>>>>>>> upstream/master
       $(document).ready(function() {
           $("a").click(function (event) {
             event.preventDefault();
             window.location = $(this).attr("href");
           });
+<<<<<<< HEAD
       });""" % ready_code)
+=======
+      });""")
+>>>>>>> upstream/master
 
     html.close_head()
     html.open_body(class_="mobile")
 
 
+<<<<<<< HEAD
 def mobile_html_foot():
+=======
+def mobile_html_foot() -> None:
+>>>>>>> upstream/master
     html.close_body()
     html.close_html()
 
 
+<<<<<<< HEAD
 def jqm_header_button(pos, url, title, icon=""):
+=======
+def jqm_header_button(pos: str, url: str, title: str, icon: str = "") -> None:
+>>>>>>> upstream/master
     html.a('',
            href=url,
            class_="ui-btn-%s" % pos,
@@ -103,9 +177,24 @@ def jqm_header_button(pos, url, title, icon=""):
            })
 
 
+<<<<<<< HEAD
 def jqm_page_header(title, id_=None, left_button=None, right_button=None):
     html.open_div(id_=id_ if id_ else None, **{"data-role": "page"})
     html.open_div(**{"data-role": "header", "data-position": "fixed"})
+=======
+def jqm_page_header(title: str,
+                    id_: Optional[str] = None,
+                    left_button: Optional[HeaderButton] = None,
+                    right_button: Optional[HeaderButton] = None) -> None:
+    html.open_div(id_=id_ if id_ else None, **{"data-role": "page"})
+    html.open_div(
+        **{
+            "data-role": "header",
+            "data-position": "fixed",
+            "data-tap-toggle": "false",
+            "data-hide-during-focus": "",
+        })
+>>>>>>> upstream/master
     if left_button:
         jqm_header_button("left", *left_button)
     html.h1(title)
@@ -115,6 +204,7 @@ def jqm_page_header(title, id_=None, left_button=None, right_button=None):
     html.open_div(**{"data-role": "content"})
 
 
+<<<<<<< HEAD
 def jqm_page_footer(content=""):
     html.close_div()  # close content-div
     html.close_div()
@@ -129,13 +219,28 @@ def jqm_page_footer(content=""):
 def jqm_page_navfooter(items, current, page_id):
     html.close_div()  # close content
     html.open_div(**{"data-role": "footer", "data-position": "fixed"})
+=======
+def jqm_page_navfooter(items: NavigationBar, current: str, page_id: str) -> None:
+    html.close_div()  # close content
+    html.open_div(
+        **{
+            "data-role": "footer",
+            "data-position": "fixed",
+            "data-tap-toggle": "false",
+            "data-hide-during-focus": "",
+        })
+>>>>>>> upstream/master
     html.open_div(**{"data-role": "navbar"})
     html.open_ul()
 
     for href, title, icon, custom_css in items:
+<<<<<<< HEAD
         href = html.makeuri([("page", href), ("search", "Search")])
         if custom_css is False:
             custom_css = ""
+=======
+        href = makeuri(request, [("page", href), ("search", "Search")])
+>>>>>>> upstream/master
         if current == href:
             custom_css += ' ui-state-persist ui-btn-active'
         else:
@@ -145,7 +250,11 @@ def jqm_page_navfooter(items, current, page_id):
                         **{
                             "data-transition": "slide",
                             "data-icon": icon,
+<<<<<<< HEAD
                             "data-iconpos": "bottom"
+=======
+                            "data-iconpos": "bottom",
+>>>>>>> upstream/master
                         })
             html.write(title)
             html.close_a()
@@ -156,7 +265,11 @@ def jqm_page_navfooter(items, current, page_id):
     html.close_div()  # close page-div
 
 
+<<<<<<< HEAD
 def jqm_page_index(title, items):
+=======
+def jqm_page_index(title: str, items: Items) -> None:
+>>>>>>> upstream/master
     manual_sort = [_("Hosts"), _("Services"), _("Events")]
 
     items.sort(key=lambda x: (x[0], x[2]))
@@ -169,7 +282,11 @@ def jqm_page_index(title, items):
         jqm_page_index_topic_renderer(topic, items)
 
 
+<<<<<<< HEAD
 def jqm_page_index_topic_renderer(topic, items):
+=======
+def jqm_page_index_topic_renderer(topic: str, items: Items) -> None:
+>>>>>>> upstream/master
     has_items_for_topic = any(i for i in items if i[0] == topic)
     if not has_items_for_topic:
         return
@@ -188,6 +305,7 @@ def jqm_page_index_topic_renderer(topic, items):
     html.close_ul()
 
 
+<<<<<<< HEAD
 def jqm_page(title, content, foot, id_=None):
     jqm_page_header(title, id_)
     html.write(content)
@@ -209,6 +327,25 @@ def page_login():
 
     html.text_input("_username", label=_("Username:"))
     html.password_input("_password", size=None, label=_("Password:"))
+=======
+def page_login() -> None:
+    title = _("Checkmk Mobile")
+    mobile_html_head(title)
+    jqm_page_header(title, id_="login")
+    html.div(_("Welcome to Checkmk Mobile."), id_="loginhead")
+
+    html.begin_form("login", method='POST', add_transid=False)
+    # Keep information about original target URL
+    default_origtarget = "index.py" if html.myfile in ["login", "logout"] else makeuri(request, [])
+    origtarget = html.get_url_input("_origtarget", default_origtarget)
+    html.hidden_field('_origtarget', escaping.escape_attribute(origtarget))
+
+    html.text_input("_username", label=_("Username:"), autocomplete="username")
+    html.password_input("_password",
+                        size=None,
+                        label=_("Password:"),
+                        autocomplete="current-password")
+>>>>>>> upstream/master
     html.br()
     html.button("_login", _('Login'))
     html.set_focus("_username")
@@ -217,13 +354,24 @@ def page_login():
     html.img("themes/classic/images/logo_cmk_small.png", class_="logomk")
     html.div(HTML(_("&copy; <a target=\"_blank\" href=\"https://checkmk.com\">tribe29 GmbH</a>")),
              class_="copyright")
+<<<<<<< HEAD
     jqm_page_footer()
+=======
+    html.close_div()  # close content-div
+    html.close_div()
+    html.close_div()  # close page-div
+>>>>>>> upstream/master
     mobile_html_foot()
 
 
 @cmk.gui.pages.register("mobile")
+<<<<<<< HEAD
 def page_index():
     title = _("Check_MK Mobile")
+=======
+def page_index() -> None:
+    title = _("Checkmk Mobile")
+>>>>>>> upstream/master
     mobile_html_head(title)
     jqm_page_header(title,
                     right_button=("javascript:document.location.reload();", _("Reload"), "refresh"),
@@ -231,22 +379,50 @@ def page_index():
     items = []
     for view_name, view_spec in views.get_permitted_views().items():
         if view_spec.get("mobile") and not view_spec.get("hidden"):
+<<<<<<< HEAD
             view = views.View(view_name, view_spec)
             view.row_limit = views.get_limit()
             view.only_sites = views.get_only_sites()
             view.user_sorters = views.get_user_sorters()
+=======
+
+            datasource = data_source_registry[view_spec["datasource"]]()
+            context = visuals.get_merged_context(
+                visuals.get_context_from_uri_vars(datasource.infos,
+                                                  single_infos=view_spec["single_infos"]),
+                view_spec["context"],
+            )
+
+            view = views.View(view_name, view_spec, context)
+            view.row_limit = views.get_limit()
+            view.only_sites = visuals.get_only_sites_from_context(context)
+            view.user_sorters = views.get_user_sorters()
+            view.want_checkboxes = views.get_want_checkboxes()
+>>>>>>> upstream/master
 
             url = "mobile_view.py?view_name=%s" % view_name
             count = ""
             if not view_spec.get("mustsearch"):
                 painter_options = PainterOptions.get_instance()
                 painter_options.load(view_name)
+<<<<<<< HEAD
                 view_renderer = MobileViewRenderer(view)
                 count = views.show_view(view, view_renderer, only_count=True)
                 count = '<span class="ui-li-count">%d</span>' % count
             items.append((view_spec.get("topic"), url,
                           '%s %s' % (view_spec.get("linktitle", view_spec["title"]), count)))
     jqm_page_index(_("Check_MK Mobile"), items)
+=======
+                count = '<span class="ui-li-count">%d</span>' % views.get_row_count(view)
+
+            topic = view_spec.get("topic")
+            if topic is None:
+                topic = ""
+            this_title = '%s %s' % (view_spec["title"], count)
+            items.append((topic, url, this_title))
+
+    jqm_page_index(_("Checkmk Mobile"), items)
+>>>>>>> upstream/master
     # Link to non-mobile GUI
 
     html.hr()
@@ -270,7 +446,11 @@ def page_index():
 
 
 @cmk.gui.pages.register("mobile_view")
+<<<<<<< HEAD
 def page_view():
+=======
+def page_view() -> None:
+>>>>>>> upstream/master
     view_name = html.request.var("view_name")
     if not view_name:
         return page_index()
@@ -279,10 +459,24 @@ def page_view():
     if not view_spec:
         raise MKUserError("view_name", "No view defined with the name '%s'." % view_name)
 
+<<<<<<< HEAD
     view = views.View(view_name, view_spec)
     view.row_limit = views.get_limit()
     view.only_sites = views.get_only_sites()
     view.user_sorters = views.get_user_sorters()
+=======
+    datasource = data_source_registry[view_spec["datasource"]]()
+    context = visuals.get_merged_context(
+        visuals.get_context_from_uri_vars(datasource.infos, single_infos=view_spec["single_infos"]),
+        view_spec["context"],
+    )
+
+    view = views.View(view_name, view_spec, context)
+    view.row_limit = views.get_limit()
+    view.only_sites = visuals.get_only_sites_from_context(context)
+    view.user_sorters = views.get_user_sorters()
+    view.want_checkboxes = views.get_want_checkboxes()
+>>>>>>> upstream/master
 
     title = views.view_title(view_spec)
     mobile_html_head(title)
@@ -292,19 +486,34 @@ def page_view():
 
     try:
         view_renderer = MobileViewRenderer(view)
+<<<<<<< HEAD
         views.show_view(view, view_renderer)
+=======
+        views.process_view(view, view_renderer)
+>>>>>>> upstream/master
     except Exception as e:
         logger.exception("error showing mobile view")
         if config.debug:
             raise
+<<<<<<< HEAD
         html.write("ERROR showing view: %s" % html.attrencode(e))
+=======
+        html.write("ERROR showing view: %s" % escaping.escape_attribute(str(e)))
+>>>>>>> upstream/master
 
     mobile_html_foot()
 
 
+<<<<<<< HEAD
 class MobileViewRenderer(views.ViewRenderer):
     def render(self, rows, group_cells, cells, show_checkboxes, layout, num_columns, show_filters,
                unfiltered_amount_of_rows):
+=======
+class MobileViewRenderer(views.ABCViewRenderer):
+    def render(self, rows: Rows, group_cells: List[Cell], cells: List[Cell], show_checkboxes: bool,
+               num_columns: int, show_filters: List[Filter],
+               unfiltered_amount_of_rows: int) -> None:
+>>>>>>> upstream/master
         view_spec = self.view.spec
         home = ("mobile.py", "Home", "home")
 
@@ -317,6 +526,7 @@ class MobileViewRenderer(views.ViewRenderer):
 
         title = views.view_title(view_spec)
         navbar = [("data", _("Results"), "grid", 'results_button'),
+<<<<<<< HEAD
                   ("filter", _("Filter"), "search", False)]
         if config.user.may("general.act"):
             navbar.append(("commands", _("Commands"), "gear", False))
@@ -326,11 +536,27 @@ class MobileViewRenderer(views.ViewRenderer):
 
         if context_links:
             navbar.append(("context", _("Context"), "arrow-r", False))
+=======
+                  ("filter", _("Filter"), "search", '')]
+        if config.user.may("general.act"):
+            navbar.append(("commands", _("Commands"), "gear", ''))
+
+        # Should we show a page with context links?
+        context_links = list(
+            views.collect_context_links(self.view, rows, mobile=True, only_types=['views']))
+
+        if context_links:
+            navbar.append(("context", _("Context"), "arrow-r", ''))
+>>>>>>> upstream/master
         page_id = "view_" + view_spec["name"]
 
         if page == "filter":
             jqm_page_header(_("Filter / Search"), left_button=home, id_="filter")
+<<<<<<< HEAD
             show_filter_form(show_filters)
+=======
+            _show_filter_form(show_filters)
+>>>>>>> upstream/master
             jqm_page_navfooter(navbar, 'filter', page_id)
 
         elif page == "commands":
@@ -340,6 +566,7 @@ class MobileViewRenderer(views.ViewRenderer):
                 show_commands = True
                 if html.request.has_var("_do_actions"):
                     try:
+<<<<<<< HEAD
                         show_commands = do_commands(view_spec, self.view.datasource.infos[0], rows)
                     except MKUserError as e:
                         html.show_error(e)
@@ -347,6 +574,15 @@ class MobileViewRenderer(views.ViewRenderer):
                         show_commands = True
                 if show_commands:
                     show_command_form(view_spec, self.view.datasource, rows)
+=======
+                        show_commands = do_commands(self.view.datasource.infos[0], rows)
+                    except MKUserError as e:
+                        html.show_error("%s" % e)
+                        html.add_user_error(e.varname, e)
+                        show_commands = True
+                if show_commands:
+                    _show_command_form(self.view.datasource, rows)
+>>>>>>> upstream/master
                 jqm_page_navfooter(navbar, 'commands', page_id)
 
         elif page == "data":
@@ -366,8 +602,13 @@ class MobileViewRenderer(views.ViewRenderer):
                         cmk.gui.view_utils.query_limit_exceeded_warn(self.view.row_limit,
                                                                      config.user)
                         del rows[self.view.row_limit:]
+<<<<<<< HEAD
                     layout.render(rows, view_spec, group_cells, cells, num_columns,
                                   show_checkboxes and not html.do_actions())
+=======
+                    self.view.layout.render(rows, view_spec, group_cells, cells, num_columns,
+                                            show_checkboxes and not html.do_actions())
+>>>>>>> upstream/master
                 except Exception as e:
                     logger.exception("error rendering mobile view")
                     html.write(_("Error showing view: %s") % e)
@@ -375,6 +616,7 @@ class MobileViewRenderer(views.ViewRenderer):
             jqm_page_navfooter(navbar, 'data', page_id)
 
         # Page: Context buttons
+<<<<<<< HEAD
         #if context_links:
         elif page == "context":
             jqm_page_header(_("Context"), left_button=home, id_="context")
@@ -383,6 +625,15 @@ class MobileViewRenderer(views.ViewRenderer):
 
 
 def show_filter_form(show_filters):
+=======
+        elif page == "context":
+            jqm_page_header(_("Context"), left_button=home, id_="context")
+            _show_context_links(context_links)
+            jqm_page_navfooter(navbar, 'context', page_id)
+
+
+def _show_filter_form(show_filters: List[Filter]) -> None:
+>>>>>>> upstream/master
     # Sort filters
     s = sorted([(f.sort_index, f.title, f) for f in show_filters if f.available()])
 
@@ -406,7 +657,11 @@ def show_filter_form(show_filters):
     """)
 
 
+<<<<<<< HEAD
 def show_command_form(view, datasource, rows):
+=======
+def _show_command_form(datasource: ABCDataSource, rows: Rows) -> None:
+>>>>>>> upstream/master
     what = datasource.infos[0]
     html.javascript("""
     $(document).ready(function() {
@@ -427,7 +682,11 @@ def show_command_form(view, datasource, rows):
             html.open_div(class_=["command_group"], **{"data-role": "collapsible"})
             html.h3(command.title)
             html.open_p()
+<<<<<<< HEAD
             command.render()
+=======
+            command.render(what)
+>>>>>>> upstream/master
             html.close_p()
             html.close_div()
             one_shown = True
@@ -437,32 +696,52 @@ def show_command_form(view, datasource, rows):
 
 
 # FIXME: Reduce ducplicate code with views.py
+<<<<<<< HEAD
 def do_commands(view, what, rows):
     command = None
     title, executor = views.core_command(what, rows[0], 0, len(rows))[1:3]  # just get the title
     title_what = _("hosts") if what == "host" else _("services")
     r = html.confirm(
+=======
+def do_commands(what: str, rows: Rows) -> bool:
+    command = None
+    title, executor = views.core_command(what, rows[0], 0, len(rows))[1:3]  # just get the title
+    title_what = _("hosts") if what == "host" else _("services")
+    r = confirm_with_preview(
+>>>>>>> upstream/master
         _("Do you really want to %(title)s the %(count)d %(what)s?") % {
             "title": title,
             "count": len(rows),
             "what": title_what,
         })
+<<<<<<< HEAD
     if r != True:
         return r is None  # Show commands on negative answer
 
     count = 0
     already_executed = set([])
+=======
+    if r is not True:
+        return r is None  # Show commands on negative answer
+
+    count = 0
+    already_executed: Set[str] = set()
+>>>>>>> upstream/master
     for nr, row in enumerate(rows):
         nagios_commands, title, executor = views.core_command(what, row, nr, len(rows))
         for command in nagios_commands:
             if command not in already_executed:
+<<<<<<< HEAD
                 if isinstance(command, six.text_type):
                     command = command.encode("utf-8")
+=======
+>>>>>>> upstream/master
                 executor(command, row["site"])
                 already_executed.add(command)
                 count += 1
 
     if count > 0:
+<<<<<<< HEAD
         html.message(_("Successfully sent %d commands.") % count)
     return True  # Show commands again
 
@@ -471,4 +750,16 @@ def show_context_links(context_links):
     items = []
     for title, uri, _icon, _buttonid in context_links:
         items.append(('Context', uri, title))
+=======
+        html.show_message(_("Successfully sent %d commands.") % count)
+    return True  # Show commands again
+
+
+def _show_context_links(context_links: List[PageMenuEntry]) -> None:
+    items = []
+    for entry in context_links:
+        if not isinstance(entry.item, PageMenuLink):
+            continue
+        items.append(('Context', entry.item.link.url or "", entry.title))
+>>>>>>> upstream/master
     jqm_page_index(_("Related Views"), items)

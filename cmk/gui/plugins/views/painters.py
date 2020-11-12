@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -29,17 +30,35 @@ import os
 import time
 import io
 import six
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+import abc
+from fnmatch import fnmatch
+import os
+import time
+import io
+>>>>>>> upstream/master
 
 import cmk.utils.paths
 import cmk.utils.render
 import cmk.utils.man_pages as man_pages
 from cmk.utils.defines import short_service_state_name, short_host_state_name
 
+<<<<<<< HEAD
+=======
+import cmk.gui.escaping as escaping
+>>>>>>> upstream/master
 import cmk.gui.config as config
 import cmk.gui.metrics as metrics
 import cmk.gui.sites as sites
 from cmk.gui.htmllib import HTML
 from cmk.gui.i18n import _
+<<<<<<< HEAD
 from cmk.gui.globals import g, html
 from cmk.gui.valuespec import (
     Timerange,
@@ -49,6 +68,21 @@ from cmk.gui.valuespec import (
     Dictionary,
     ListChoice,
 )
+=======
+from cmk.gui.globals import g, html, request
+from cmk.gui.valuespec import (
+    DateFormat,
+    Dictionary,
+    DictionaryElements,
+    DropdownChoice,
+    Integer,
+    ListChoice,
+    ListChoiceChoices,
+    TextAscii,
+    Timerange,
+)
+from cmk.gui.view_utils import CellContent
+>>>>>>> upstream/master
 
 from cmk.gui.plugins.views.icons import (
     get_icons,
@@ -60,16 +94,24 @@ from cmk.gui.plugins.views import (
     Painter,
     painter_option_registry,
     PainterOption,
+<<<<<<< HEAD
     PainterOptions,
+=======
+>>>>>>> upstream/master
     transform_action_url,
     is_stale,
     paint_stalified,
     paint_host_list,
     format_plugin_output,
+<<<<<<< HEAD
     display_options,
     link_to_view,
     get_perfdata_nth_value,
     get_graph_timerange_from_painter_options,
+=======
+    link_to_view,
+    get_perfdata_nth_value,
+>>>>>>> upstream/master
     paint_age,
     paint_nagiosflag,
     replace_action_url_macros,
@@ -81,6 +123,16 @@ from cmk.gui.plugins.views import (
     get_label_sources,
 )
 
+<<<<<<< HEAD
+=======
+from cmk.gui.plugins.views.graphs import (
+    paint_time_graph_cmk,
+    cmk_time_graph_params,
+)
+
+from cmk.gui.utils.urls import makeuri_contextless
+
+>>>>>>> upstream/master
 #   .--Painter Options-----------------------------------------------------.
 #   |                   ____       _       _                               |
 #   |                  |  _ \ __ _(_)_ __ | |_ ___ _ __                    |
@@ -127,6 +179,10 @@ class PainterOptionTimestampFormat(PainterOption):
         return DropdownChoice(
             title=_("Time stamp format"),
             default_value=config.default_ts_format,
+<<<<<<< HEAD
+=======
+            encode_value=False,
+>>>>>>> upstream/master
             choices=[
                 ("mixed", _("Mixed")),
                 ("abs", _("Absolute")),
@@ -189,7 +245,11 @@ def paint_custom_var(what, key, row, choices=None):
         custom_val = custom_vars[key]
         if choices:
             custom_val = dict(choices).get(int(custom_val), custom_val)
+<<<<<<< HEAD
         return key, html.attrencode(custom_val)
+=======
+        return key, escaping.escape_attribute(custom_val)
+>>>>>>> upstream/master
 
     return key, ""
 
@@ -223,7 +283,11 @@ def paint_icons(what, row):
     if html.output_format != 'html':
         return 'icons', ' '.join([i[1] for i in toplevel_icons])
 
+<<<<<<< HEAD
     output = ''
+=======
+    output = HTML()
+>>>>>>> upstream/master
     for icon in toplevel_icons:
         if len(icon) == 4:
             icon_name, title, url_spec = icon[1:]
@@ -256,12 +320,19 @@ class PainterServiceIcons(Painter):
     def ident(self):
         return "service_icons"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Service icons")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Service icons")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Icons")
 
     @property
@@ -285,12 +356,19 @@ class PainterHostIcons(Painter):
     def ident(self):
         return "host_icons"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Host icons")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Host icons")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Icons")
 
     @property
@@ -327,12 +405,19 @@ class PainterSiteIcon(Painter):
     def ident(self):
         return "site_icon"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Site icon")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Site icon")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return u""
 
     @property
@@ -355,12 +440,19 @@ class PainterSitenamePlain(Painter):
     def ident(self):
         return "sitename_plain"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Site ID")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Site ID")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Site")
 
     @property
@@ -381,8 +473,12 @@ class PainterSitealias(Painter):
     def ident(self):
         return "sitealias"
 
+<<<<<<< HEAD
     @property
     def title(self):
+=======
+    def title(self, cell):
+>>>>>>> upstream/master
         return _("Site alias")
 
     @property
@@ -390,7 +486,11 @@ class PainterSitealias(Painter):
         return ['site']
 
     def render(self, row, cell):
+<<<<<<< HEAD
         return (None, html.attrencode(config.site(row["site"])["alias"]))
+=======
+        return (None, escaping.escape_attribute(config.site(row["site"])["alias"]))
+>>>>>>> upstream/master
 
 
 #.
@@ -445,12 +545,19 @@ class PainterServiceState(Painter):
     def ident(self):
         return "service_state"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Service state")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Service state")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("State")
 
     @property
@@ -471,6 +578,7 @@ class PainterSvcPluginOutput(Painter):
     def ident(self):
         return "svc_plugin_output"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Output of check plugin")
@@ -478,6 +586,13 @@ class PainterSvcPluginOutput(Painter):
     @property
     def short_title(self):
         return _("Status detail")
+=======
+    def title(self, cell):
+        return _("Summary")
+
+    def list_title(self, cell):
+        return _("Summary (Previously named: Status details or plugin output)")
+>>>>>>> upstream/master
 
     @property
     def columns(self):
@@ -497,6 +612,7 @@ class PainterSvcLongPluginOutput(Painter):
     def ident(self):
         return "svc_long_plugin_output"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Long output of check plugin (multiline)")
@@ -504,16 +620,50 @@ class PainterSvcLongPluginOutput(Painter):
     @property
     def short_title(self):
         return _("Status detail")
+=======
+    def title(self, cell):
+        return _("Details")
+
+    def list_title(self, cell):
+        return _("Details (Previously named: long output)")
+>>>>>>> upstream/master
 
     @property
     def columns(self):
         return ['service_long_plugin_output', 'service_custom_variables']
 
+<<<<<<< HEAD
     def render(self, row, cell):
         return paint_stalified(
             row,
             format_plugin_output(row["service_long_plugin_output"],
                                  row).replace('\\n', '<br>').replace('\n', '<br>'))
+=======
+    @property
+    def parameters(self):
+        return Dictionary(elements=[
+            ('max_len',
+             Integer(
+                 title=_("Maximum number of characters in to show"),
+                 help=_("Truncate content at this amount of characters."
+                        "A zero value mean not to truncate"),
+                 default_value=0,
+                 minvalue=0,
+             )),
+        ])
+
+    def render(self, row, cell):
+        params = cell.painter_parameters()
+        max_len = params.get('max_len', 0)
+        long_output = row["service_long_plugin_output"]
+
+        if 0 < max_len < len(long_output):
+            long_output = long_output[:max_len] + "..."
+
+        return paint_stalified(
+            row,
+            format_plugin_output(long_output, row).replace('\\n', '<br>').replace('\n', '<br>'))
+>>>>>>> upstream/master
 
 
 @painter_registry.register
@@ -522,12 +672,19 @@ class PainterSvcPerfData(Painter):
     def ident(self):
         return "svc_perf_data"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Service performance data (source code)")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Service performance data (source code)")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Perfdata")
 
     @property
@@ -544,12 +701,19 @@ class PainterSvcMetrics(Painter):
     def ident(self):
         return "svc_metrics"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Service Metrics")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Service Metrics")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Metrics")
 
     @property
@@ -579,12 +743,19 @@ class PainterSvcPerfVal(Painter):
     def ident(self):
         return "svc_perf_val%02d" % self._num
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Service performance data - value number %2d") % self._num
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Service performance data - value number %2d") % self._num
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Val. %d") % self._num
 
     @property
@@ -651,12 +822,19 @@ class PainterSvcCheckCommand(Painter):
     def ident(self):
         return "svc_check_command"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Service check command")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Service check command")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Check command")
 
     @property
@@ -664,7 +842,11 @@ class PainterSvcCheckCommand(Painter):
         return ['service_check_command']
 
     def render(self, row, cell):
+<<<<<<< HEAD
         return (None, html.attrencode(row["service_check_command"]))
+=======
+        return (None, escaping.escape_attribute(row["service_check_command"]))
+>>>>>>> upstream/master
 
 
 @painter_registry.register
@@ -673,12 +855,19 @@ class PainterSvcCheckCommandExpanded(Painter):
     def ident(self):
         return "svc_check_command_expanded"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Service check command expanded")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Service check command expanded")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Check command expanded")
 
     @property
@@ -686,7 +875,11 @@ class PainterSvcCheckCommandExpanded(Painter):
         return ['service_check_command_expanded']
 
     def render(self, row, cell):
+<<<<<<< HEAD
         return html.attrencode(row["service_check_command_expanded"])
+=======
+        return (None, escaping.escape_attribute(row["service_check_command_expanded"]))
+>>>>>>> upstream/master
 
 
 @painter_registry.register
@@ -695,12 +888,19 @@ class PainterSvcContacts(Painter):
     def ident(self):
         return "svc_contacts"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Service contacts")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Service contacts")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Contacts")
 
     @property
@@ -717,12 +917,19 @@ class PainterSvcContactGroups(Painter):
     def ident(self):
         return "svc_contact_groups"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Service contact groups")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Service contact groups")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Contact groups")
 
     @property
@@ -739,12 +946,19 @@ class PainterServiceDescription(Painter):
     def ident(self):
         return "service_description"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Service description")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Service description")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Service")
 
     @property
@@ -765,12 +979,19 @@ class PainterServiceDisplayName(Painter):
     def ident(self):
         return "service_display_name"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Service alternative display name")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Service alternative display name")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Display name")
 
     @property
@@ -791,12 +1012,19 @@ class PainterSvcStateAge(Painter):
     def ident(self):
         return "svc_state_age"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("The age of the current service state")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("The age of the current service state")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Age")
 
     @property
@@ -835,12 +1063,19 @@ class PainterSvcCheckAge(Painter):
     def ident(self):
         return "svc_check_age"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("The time since the last check of the service")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("The time since the last check of the service")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Checked")
 
     @property
@@ -861,12 +1096,19 @@ class PainterSvcCheckCacheInfo(Painter):
     def ident(self):
         return "svc_check_cache_info"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Cached agent data")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Cached agent data")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Cached")
 
     @property
@@ -889,12 +1131,19 @@ class PainterSvcNextCheck(Painter):
     def ident(self):
         return "svc_next_check"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("The time of the next scheduled service check")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("The time of the next scheduled service check")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Next check")
 
     @property
@@ -911,12 +1160,19 @@ class PainterSvcLastTimeOk(Painter):
     def ident(self):
         return "svc_last_time_ok"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("The last time the service was OK")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("The last time the service was OK")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Last OK")
 
     @property
@@ -933,12 +1189,19 @@ class PainterSvcNextNotification(Painter):
     def ident(self):
         return "svc_next_notification"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("The time of the next service notification")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("The time of the next service notification")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Next notification")
 
     @property
@@ -980,12 +1243,19 @@ class PainterSvcNotificationPostponementReason(Painter):
     def ident(self):
         return "svc_notification_postponement_reason"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Notification postponement reason")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Notification postponement reason")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Notif. postponed")
 
     @property
@@ -1002,12 +1272,19 @@ class PainterSvcLastNotification(Painter):
     def ident(self):
         return "svc_last_notification"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("The time of the last service notification")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("The time of the last service notification")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("last notification")
 
     @property
@@ -1028,12 +1305,19 @@ class PainterSvcNotificationNumber(Painter):
     def ident(self):
         return "svc_notification_number"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Service notification number")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Service notification number")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("N#")
 
     @property
@@ -1050,12 +1334,19 @@ class PainterSvcCheckLatency(Painter):
     def ident(self):
         return "svc_check_latency"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Service check latency")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Service check latency")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Latency")
 
     @property
@@ -1072,12 +1363,19 @@ class PainterSvcCheckDuration(Painter):
     def ident(self):
         return "svc_check_duration"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Service check duration")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Service check duration")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Duration")
 
     @property
@@ -1094,12 +1392,19 @@ class PainterSvcAttempt(Painter):
     def ident(self):
         return "svc_attempt"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Current check attempt")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Current check attempt")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Att.")
 
     @property
@@ -1116,12 +1421,19 @@ class PainterSvcNormalInterval(Painter):
     def ident(self):
         return "svc_normal_interval"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Service normal check interval")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Service normal check interval")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Check int.")
 
     @property
@@ -1138,12 +1450,19 @@ class PainterSvcRetryInterval(Painter):
     def ident(self):
         return "svc_retry_interval"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Service retry check interval")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Service retry check interval")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Retry")
 
     @property
@@ -1160,12 +1479,19 @@ class PainterSvcCheckInterval(Painter):
     def ident(self):
         return "svc_check_interval"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Service normal/retry check interval")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Service normal/retry check interval")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Interval")
 
     @property
@@ -1186,12 +1512,19 @@ class PainterSvcCheckType(Painter):
     def ident(self):
         return "svc_check_type"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Service check type")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Service check type")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Type")
 
     @property
@@ -1208,12 +1541,19 @@ class PainterSvcInDowntime(Painter):
     def ident(self):
         return "svc_in_downtime"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Currently in downtime")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Currently in downtime")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Dt.")
 
     @property
@@ -1230,12 +1570,19 @@ class PainterSvcInNotifper(Painter):
     def ident(self):
         return "svc_in_notifper"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("In notification period")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("In notification period")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("in notif. p.")
 
     @property
@@ -1252,12 +1599,19 @@ class PainterSvcNotifper(Painter):
     def ident(self):
         return "svc_notifper"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Service notification period")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Service notification period")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("notif.")
 
     @property
@@ -1274,12 +1628,19 @@ class PainterSvcCheckPeriod(Painter):
     def ident(self):
         return "svc_check_period"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Service check period")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Service check period")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("check.")
 
     @property
@@ -1296,12 +1657,19 @@ class PainterSvcFlapping(Painter):
     def ident(self):
         return "svc_flapping"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Service is flapping")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Service is flapping")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Flap")
 
     @property
@@ -1318,12 +1686,19 @@ class PainterSvcNotificationsEnabled(Painter):
     def ident(self):
         return "svc_notifications_enabled"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Service notifications enabled")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Service notifications enabled")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Notif.")
 
     @property
@@ -1340,12 +1715,19 @@ class PainterSvcIsActive(Painter):
     def ident(self):
         return "svc_is_active"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Service is active")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Service is active")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Active")
 
     @property
@@ -1353,7 +1735,11 @@ class PainterSvcIsActive(Painter):
         return ['service_active_checks_enabled']
 
     def render(self, row, cell):
+<<<<<<< HEAD
         return paint_nagiosflag(row, "service_active_checks_enabled", None)
+=======
+        return paint_nagiosflag(row, "service_active_checks_enabled", False)
+>>>>>>> upstream/master
 
 
 @painter_registry.register
@@ -1362,12 +1748,19 @@ class PainterSvcGroupMemberlist(Painter):
     def ident(self):
         return "svc_group_memberlist"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Service groups the service is member of")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Service groups the service is member of")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Groups")
 
     @property
@@ -1382,6 +1775,7 @@ class PainterSvcGroupMemberlist(Painter):
         return "", HTML(", ").join(links)
 
 
+<<<<<<< HEAD
 def paint_time_graph(row, cell):
     if metrics.cmk_graphs_possible(row["site"]):
         import cmk.gui.cee.plugins.views.graphs  # pylint: disable=redefined-outer-name
@@ -1432,14 +1826,20 @@ def time_graph_params():
     return cmk.gui.cee.plugins.views.graphs.cmk_time_graph_params()
 
 
+=======
+>>>>>>> upstream/master
 @painter_registry.register
 class PainterSvcPnpgraph(Painter):
     @property
     def ident(self):
         return "svc_pnpgraph"
 
+<<<<<<< HEAD
     @property
     def title(self):
+=======
+    def title(self, cell):
+>>>>>>> upstream/master
         return _("Service Graphs")
 
     @property
@@ -1462,10 +1862,17 @@ class PainterSvcPnpgraph(Painter):
 
     @property
     def parameters(self):
+<<<<<<< HEAD
         return time_graph_params()
 
     def render(self, row, cell):
         return paint_time_graph(row, cell)
+=======
+        return cmk_time_graph_params()
+
+    def render(self, row, cell):
+        return paint_time_graph_cmk(row, cell)
+>>>>>>> upstream/master
 
 
 @painter_registry.register
@@ -1474,12 +1881,19 @@ class PainterCheckManpage(Painter):
     def ident(self):
         return "check_manpage"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Check manual (for Check_MK based checks)")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Check manual (for Checkmk based checks)")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Manual")
 
     @property
@@ -1516,7 +1930,12 @@ class PainterCheckManpage(Painter):
 
 def paint_comments(prefix, row):
     comments = row[prefix + "comments_with_info"]
+<<<<<<< HEAD
     text = ", ".join(["<i>%s</i>: %s" % (a, html.attrencode(c)) for _id, a, c in comments])
+=======
+    text = ", ".join(
+        ["<i>%s</i>: %s" % (a, escaping.escape_attribute(c)) for _id, a, c in comments])
+>>>>>>> upstream/master
     return "", text
 
 
@@ -1526,12 +1945,19 @@ class PainterSvcComments(Painter):
     def ident(self):
         return "svc_comments"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Service Comments")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Service Comments")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Comments")
 
     @property
@@ -1548,12 +1974,19 @@ class PainterSvcAcknowledged(Painter):
     def ident(self):
         return "svc_acknowledged"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Service problem acknowledged")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Service problem acknowledged")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Ack")
 
     @property
@@ -1565,15 +1998,22 @@ class PainterSvcAcknowledged(Painter):
 
 
 def notes_matching_pattern_entries(dirs, item):
+<<<<<<< HEAD
     from fnmatch import fnmatch
+=======
+>>>>>>> upstream/master
     matching = []
     for directory in dirs:
         if os.path.isdir(directory):
             entries = sorted([d for d in os.listdir(directory) if d[0] != '.'], reverse=True)
             for pattern in entries:
+<<<<<<< HEAD
                 if pattern[0] == '.':
                     continue
                 if fnmatch(item, pattern):
+=======
+                if pattern[0] != '.' and fnmatch(item, pattern):
+>>>>>>> upstream/master
                     matching.append(directory + "/" + pattern)
     return matching
 
@@ -1618,12 +2058,19 @@ class PainterSvcCustomNotes(Painter):
     def ident(self):
         return "svc_custom_notes"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Custom services notes")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Custom services notes")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Notes")
 
     @property
@@ -1640,12 +2087,19 @@ class PainterSvcStaleness(Painter):
     def ident(self):
         return "svc_staleness"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Service staleness value")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Service staleness value")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Staleness")
 
     @property
@@ -1668,12 +2122,19 @@ class PainterSvcIsStale(Painter):
     def ident(self):
         return "svc_is_stale"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Service is stale")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Service is stale")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Stale")
 
     @property
@@ -1694,12 +2155,19 @@ class PainterSvcServicelevel(Painter):
     def ident(self):
         return "svc_servicelevel"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Service service level")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Service service level")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Service Level")
 
     @property
@@ -1732,8 +2200,12 @@ class PainterServiceCustomVariables(Painter):
     def ident(self):
         return "svc_custom_vars"
 
+<<<<<<< HEAD
     @property
     def title(self):
+=======
+    def title(self, cell):
+>>>>>>> upstream/master
         return _("Service custom attributes")
 
     @property
@@ -1747,6 +2219,7 @@ class PainterServiceCustomVariables(Painter):
         return paint_custom_vars('service', row)
 
 
+<<<<<<< HEAD
 class ABCPainterCustomVariable(six.with_metaclass(abc.ABCMeta, Painter)):
     @property
     def title(self):
@@ -1754,6 +2227,13 @@ class ABCPainterCustomVariable(six.with_metaclass(abc.ABCMeta, Painter)):
 
     @property
     def short_title(self):
+=======
+class ABCPainterCustomVariable(Painter, metaclass=abc.ABCMeta):
+    def title(self, cell):
+        return self._dynamic_title
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return self._dynamic_title
 
     def _dynamic_title(self, params=None):
@@ -1865,12 +2345,19 @@ class PainterHostState(Painter):
     def ident(self):
         return "host_state"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Host state")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Host state")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("state")
 
     @property
@@ -1891,12 +2378,19 @@ class PainterHostStateOnechar(Painter):
     def ident(self):
         return "host_state_onechar"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Host state (first character)")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Host state (first character)")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("S.")
 
     @property
@@ -1917,6 +2411,7 @@ class PainterHostPluginOutput(Painter):
     def ident(self):
         return "host_plugin_output"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Output of host check plugin")
@@ -1924,6 +2419,13 @@ class PainterHostPluginOutput(Painter):
     @property
     def short_title(self):
         return _("Status detail")
+=======
+    def title(self, cell):
+        return _("Summary")
+
+    def list_title(self, cell):
+        return _("Summary (Previously named: Status details or plugin output)")
+>>>>>>> upstream/master
 
     @property
     def columns(self):
@@ -1939,12 +2441,19 @@ class PainterHostPerfData(Painter):
     def ident(self):
         return "host_perf_data"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Host performance data")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Host performance data")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Performance data")
 
     @property
@@ -1961,12 +2470,19 @@ class PainterHostCheckCommand(Painter):
     def ident(self):
         return "host_check_command"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Host check command")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Host check command")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Check command")
 
     @property
@@ -1983,12 +2499,19 @@ class PainterHostCheckCommandExpanded(Painter):
     def ident(self):
         return "host_check_command_expanded"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Host check command expanded")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Host check command expanded")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Check command expanded")
 
     @property
@@ -2005,12 +2528,19 @@ class PainterHostStateAge(Painter):
     def ident(self):
         return "host_state_age"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("The age of the current host state")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("The age of the current host state")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Age")
 
     @property
@@ -2031,12 +2561,19 @@ class PainterHostCheckAge(Painter):
     def ident(self):
         return "host_check_age"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("The time since the last check of the host")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("The time since the last check of the host")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Checked")
 
     @property
@@ -2057,12 +2594,19 @@ class PainterHostNextCheck(Painter):
     def ident(self):
         return "host_next_check"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("The time of the next scheduled host check")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("The time of the next scheduled host check")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Next check")
 
     @property
@@ -2079,12 +2623,19 @@ class PainterHostNextNotification(Painter):
     def ident(self):
         return "host_next_notification"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("The time of the next host notification")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("The time of the next host notification")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Next notification")
 
     @property
@@ -2101,12 +2652,19 @@ class PainterHostNotificationPostponementReason(Painter):
     def ident(self):
         return "host_notification_postponement_reason"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Notification postponement reason")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Notification postponement reason")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Notif. postponed")
 
     @property
@@ -2123,12 +2681,19 @@ class PainterHostLastNotification(Painter):
     def ident(self):
         return "host_last_notification"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("The time of the last host notification")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("The time of the last host notification")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("last notification")
 
     @property
@@ -2149,12 +2714,19 @@ class PainterHostCheckLatency(Painter):
     def ident(self):
         return "host_check_latency"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Host check latency")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Host check latency")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Latency")
 
     @property
@@ -2171,12 +2743,19 @@ class PainterHostCheckDuration(Painter):
     def ident(self):
         return "host_check_duration"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Host check duration")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Host check duration")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Duration")
 
     @property
@@ -2193,12 +2772,19 @@ class PainterHostAttempt(Painter):
     def ident(self):
         return "host_attempt"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Current host check attempt")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Current host check attempt")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Att.")
 
     @property
@@ -2215,12 +2801,19 @@ class PainterHostNormalInterval(Painter):
     def ident(self):
         return "host_normal_interval"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Normal check interval")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Normal check interval")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Check int.")
 
     @property
@@ -2237,12 +2830,19 @@ class PainterHostRetryInterval(Painter):
     def ident(self):
         return "host_retry_interval"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Retry check interval")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Retry check interval")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Retry")
 
     @property
@@ -2259,12 +2859,19 @@ class PainterHostCheckInterval(Painter):
     def ident(self):
         return "host_check_interval"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Normal/retry check interval")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Normal/retry check interval")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Interval")
 
     @property
@@ -2285,12 +2892,19 @@ class PainterHostCheckType(Painter):
     def ident(self):
         return "host_check_type"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Host check type")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Host check type")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Type")
 
     @property
@@ -2307,12 +2921,19 @@ class PainterHostInNotifper(Painter):
     def ident(self):
         return "host_in_notifper"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Host in notif. period")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Host in notif. period")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("in notif. p.")
 
     @property
@@ -2329,12 +2950,19 @@ class PainterHostNotifper(Painter):
     def ident(self):
         return "host_notifper"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Host notification period")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Host notification period")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("notif.")
 
     @property
@@ -2351,12 +2979,19 @@ class PainterHostNotificationNumber(Painter):
     def ident(self):
         return "host_notification_number"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Host notification number")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Host notification number")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("N#")
 
     @property
@@ -2373,12 +3008,19 @@ class PainterHostFlapping(Painter):
     def ident(self):
         return "host_flapping"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Host is flapping")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Host is flapping")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Flap")
 
     @property
@@ -2395,12 +3037,19 @@ class PainterHostIsActive(Painter):
     def ident(self):
         return "host_is_active"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Host is active")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Host is active")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Active")
 
     @property
@@ -2408,7 +3057,11 @@ class PainterHostIsActive(Painter):
         return ['host_active_checks_enabled']
 
     def render(self, row, cell):
+<<<<<<< HEAD
         return paint_nagiosflag(row, "host_active_checks_enabled", None)
+=======
+        return paint_nagiosflag(row, "host_active_checks_enabled", False)
+>>>>>>> upstream/master
 
 
 @painter_registry.register
@@ -2417,12 +3070,19 @@ class PainterHostNotificationsEnabled(Painter):
     def ident(self):
         return "host_notifications_enabled"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Host notifications enabled")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Host notifications enabled")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Notif.")
 
     @property
@@ -2439,12 +3099,19 @@ class PainterHostPnpgraph(Painter):
     def ident(self):
         return "host_pnpgraph"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Host graph")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Host graph")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Graph")
 
     @property
@@ -2461,10 +3128,17 @@ class PainterHostPnpgraph(Painter):
 
     @property
     def parameters(self):
+<<<<<<< HEAD
         return time_graph_params()
 
     def render(self, row, cell):
         return paint_time_graph(row, cell)
+=======
+        return cmk_time_graph_params()
+
+    def render(self, row, cell):
+        return paint_time_graph_cmk(row, cell)
+>>>>>>> upstream/master
 
 
 @painter_registry.register
@@ -2473,12 +3147,19 @@ class PainterHostBlack(Painter):
     def ident(self):
         return "host_black"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Hostname, red background if down or unreachable (Deprecated)")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Hostname, red background if down or unreachable (Deprecated)")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Host")
 
     @property
@@ -2502,12 +3183,19 @@ class PainterHostWithState(Painter):
     def ident(self):
         return "host_with_state"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Hostname, marked red if down (Deprecated)")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Hostname, marked red if down (Deprecated)")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Host")
 
     @property
@@ -2534,12 +3222,19 @@ class PainterHost(Painter):
     def ident(self):
         return "host"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Hostname")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Hostname")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Host")
 
     @property
@@ -2552,7 +3247,11 @@ class PainterHost(Painter):
 
     @property
     def parameters(self):
+<<<<<<< HEAD
         elements = [
+=======
+        elements: DictionaryElements = [
+>>>>>>> upstream/master
             ("color_choices",
              ListChoice(choices=[
                  ("colorize_up", _("Colorize background if host is up")),
@@ -2603,12 +3302,19 @@ class PainterAlias(Painter):
     def ident(self):
         return "alias"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Host alias")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Host alias")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Alias")
 
     @property
@@ -2616,7 +3322,11 @@ class PainterAlias(Painter):
         return ['host_alias']
 
     def render(self, row, cell):
+<<<<<<< HEAD
         return ("", html.attrencode(row["host_alias"]))
+=======
+        return ("", escaping.escape_attribute(row["host_alias"]))
+>>>>>>> upstream/master
 
 
 @painter_registry.register
@@ -2625,12 +3335,19 @@ class PainterHostAddress(Painter):
     def ident(self):
         return "host_address"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Host address (Primary)")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Host address (Primary)")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("IP address")
 
     @property
@@ -2647,12 +3364,19 @@ class PainterHostIpv4Address(Painter):
     def ident(self):
         return "host_ipv4_address"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Host address (IPv4)")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Host address (IPv4)")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("IPv4 address")
 
     @property
@@ -2669,12 +3393,19 @@ class PainterHostIpv6Address(Painter):
     def ident(self):
         return "host_ipv6_address"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Host address (IPv6)")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Host address (IPv6)")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("IPv6 address")
 
     @property
@@ -2691,12 +3422,19 @@ class PainterHostAddresses(Painter):
     def ident(self):
         return "host_addresses"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Host addresses (IPv4/IPv6)")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Host addresses (IPv4/IPv6)")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("IP addresses")
 
     @property
@@ -2725,12 +3463,19 @@ class PainterHostAddressesAdditional(Painter):
     def ident(self):
         return "host_addresses_additional"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Host addresses (additional)")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Host addresses (additional)")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Add. addresses")
 
     @property
@@ -2759,12 +3504,19 @@ class PainterHostAddressFamily(Painter):
     def ident(self):
         return "host_address_family"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Host address family (Primary)")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Host address family (Primary)")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Address family")
 
     @property
@@ -2781,12 +3533,19 @@ class PainterHostAddressFamilies(Painter):
     def ident(self):
         return "host_address_families"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Host address families")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Host address families")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Address families")
 
     @property
@@ -2830,12 +3589,19 @@ class PainterNumServices(Painter):
     def ident(self):
         return "num_services"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Number of services")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Number of services")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return u""
 
     @property
@@ -2852,12 +3618,19 @@ class PainterNumServicesOk(Painter):
     def ident(self):
         return "num_services_ok"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Number of services in state OK")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Number of services in state OK")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("OK")
 
     @property
@@ -2874,12 +3647,19 @@ class PainterNumProblems(Painter):
     def ident(self):
         return "num_problems"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Number of problems")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Number of problems")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Prob.")
 
     @property
@@ -2898,12 +3678,19 @@ class PainterNumServicesWarn(Painter):
     def ident(self):
         return "num_services_warn"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Number of services in state WARN")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Number of services in state WARN")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Wa")
 
     @property
@@ -2920,12 +3707,19 @@ class PainterNumServicesCrit(Painter):
     def ident(self):
         return "num_services_crit"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Number of services in state CRIT")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Number of services in state CRIT")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Cr")
 
     @property
@@ -2942,12 +3736,19 @@ class PainterNumServicesUnknown(Painter):
     def ident(self):
         return "num_services_unknown"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Number of services in state UNKNOWN")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Number of services in state UNKNOWN")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Un")
 
     @property
@@ -2964,12 +3765,19 @@ class PainterNumServicesPending(Painter):
     def ident(self):
         return "num_services_pending"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Number of services in state PENDING")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Number of services in state PENDING")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Pd")
 
     @property
@@ -2986,7 +3794,11 @@ def paint_service_list(row, columnname):
             return entry[0].lower(), entry[1].lower()
         return entry[0].lower()
 
+<<<<<<< HEAD
     h = ""
+=======
+    h = HTML()
+>>>>>>> upstream/master
     for entry in sorted(row[columnname], key=sort_key):
         if columnname.startswith("servicegroup"):
             host, svc, state, checked = entry
@@ -3013,20 +3825,66 @@ class PainterHostServices(Painter):
     def ident(self):
         return "host_services"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Services colored according to state")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Services colored according to state")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Services")
 
     @property
     def columns(self):
         return ['host_name', 'host_services_with_state']
 
+<<<<<<< HEAD
     def render(self, row, cell):
         return paint_service_list(row, "host_services_with_state")
+=======
+    @property
+    def parameters(self):
+        choices: ListChoiceChoices = [
+            (0, _("OK")),
+            (1, _("WARN")),
+            (2, _("CRIT")),
+            (3, _("UNKN")),
+            ("p", _("PEND")),
+        ]
+        elements: DictionaryElements = [
+            ("render_states",
+             ListChoice(choices=choices,
+                        toggle_all=True,
+                        default_value=[0, 1, 2, 3, 'p'],
+                        title=_("Only show services in this states"),
+                        help=_("Here you can configure which services are displayed depending on "
+                               "their state. This is a filter at display level not query level.")))
+        ]
+
+        return Dictionary(elements=elements, title=_("Options"))
+
+    def render(self, row, cell):
+        params = cell.painter_parameters()
+        render_states = params.get('render_states', [0, 1, 2, 3, 'p'])
+        render_pend = [1]
+        if "p" in render_states:
+            render_pend.append(0)
+
+        filtered_services = []
+        for svc, state, checked in row["host_services_with_state"]:
+            if state in render_states and checked in render_pend:
+                filtered_services.append([svc, state, checked])
+
+        row['host_services_with_state_filtered'] = filtered_services
+
+        return paint_service_list(row, "host_services_with_state_filtered")
+>>>>>>> upstream/master
 
 
 @painter_registry.register
@@ -3035,12 +3893,19 @@ class PainterHostParents(Painter):
     def ident(self):
         return "host_parents"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Host's parents")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Host's parents")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Parents")
 
     @property
@@ -3057,12 +3922,19 @@ class PainterHostChilds(Painter):
     def ident(self):
         return "host_childs"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Host's children")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Host's children")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("children")
 
     @property
@@ -3079,12 +3951,19 @@ class PainterHostGroupMemberlist(Painter):
     def ident(self):
         return "host_group_memberlist"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Host groups the host is member of")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Host groups the host is member of")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Groups")
 
     @property
@@ -3099,7 +3978,12 @@ class PainterHostGroupMemberlist(Painter):
         for group in row["host_groups"]:
             link = "view.py?view_name=hostgroup&hostgroup=" + group
             if html.request.var("display_options"):
+<<<<<<< HEAD
                 link += "&display_options=%s" % html.attrencode(html.request.var("display_options"))
+=======
+                link += "&display_options=%s" % escaping.escape_attribute(
+                    html.request.var("display_options"))
+>>>>>>> upstream/master
             links.append(html.render_a(group, link))
         return "", HTML(", ").join(links)
 
@@ -3110,12 +3994,19 @@ class PainterHostContacts(Painter):
     def ident(self):
         return "host_contacts"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Host contacts")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Host contacts")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Contacts")
 
     @property
@@ -3132,12 +4023,19 @@ class PainterHostContactGroups(Painter):
     def ident(self):
         return "host_contact_groups"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Host contact groups")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Host contact groups")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Contact groups")
 
     @property
@@ -3154,12 +4052,19 @@ class PainterHostCustomNotes(Painter):
     def ident(self):
         return "host_custom_notes"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Custom host notes")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Custom host notes")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Notes")
 
     @property
@@ -3176,12 +4081,19 @@ class PainterHostComments(Painter):
     def ident(self):
         return "host_comments"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Host comments")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Host comments")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Comments")
 
     @property
@@ -3198,12 +4110,19 @@ class PainterHostInDowntime(Painter):
     def ident(self):
         return "host_in_downtime"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Host in downtime")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Host in downtime")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Downtime")
 
     @property
@@ -3220,12 +4139,19 @@ class PainterHostAcknowledged(Painter):
     def ident(self):
         return "host_acknowledged"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Host problem acknowledged")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Host problem acknowledged")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Ack")
 
     @property
@@ -3242,12 +4168,19 @@ class PainterHostStaleness(Painter):
     def ident(self):
         return "host_staleness"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Host staleness value")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Host staleness value")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Staleness")
 
     @property
@@ -3264,12 +4197,19 @@ class PainterHostIsStale(Painter):
     def ident(self):
         return "host_is_stale"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Host is stale")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Host is stale")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Stale")
 
     @property
@@ -3290,12 +4230,19 @@ class PainterHostServicelevel(Painter):
     def ident(self):
         return "host_servicelevel"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Host service level")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Host service level")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Service Level")
 
     @property
@@ -3316,8 +4263,12 @@ class PainterHostCustomVariables(Painter):
     def ident(self):
         return "host_custom_vars"
 
+<<<<<<< HEAD
     @property
     def title(self):
+=======
+    def title(self, cell):
+>>>>>>> upstream/master
         return _("Host custom attributes")
 
     @property
@@ -3355,7 +4306,11 @@ def paint_discovery_output(field, row):
             "unmonitored": html.render_icon_button(discovery_url, 'Available (missing)', 'services')
                            + "Available (missing)"
         }.get(value, value)
+<<<<<<< HEAD
     elif field == "discovery_service" and row["discovery_state"] == "vanished":
+=======
+    if field == "discovery_service" and row["discovery_state"] == "vanished":
+>>>>>>> upstream/master
         link = "view.py?view_name=service&site=%s&host=%s&service=%s" % (html.urlencode(
             row["site"]), html.urlencode(row["host_name"]), html.urlencode(value))
         return None, html.render_div(html.render_a(value, link))
@@ -3368,12 +4323,19 @@ class PainterServiceDiscoveryState(Painter):
     def ident(self):
         return "service_discovery_state"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Service discovery: State")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Service discovery: State")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("State")
 
     @property
@@ -3390,12 +4352,19 @@ class PainterServiceDiscoveryCheck(Painter):
     def ident(self):
         return "service_discovery_check"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Service discovery: Check type")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Service discovery: Check type")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Check type")
 
     @property
@@ -3412,12 +4381,19 @@ class PainterServiceDiscoveryService(Painter):
     def ident(self):
         return "service_discovery_service"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Service discovery: Service description")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Service discovery: Service description")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Service description")
 
     @property
@@ -3441,12 +4417,19 @@ class PainterHostgroupHosts(Painter):
     def ident(self):
         return "hostgroup_hosts"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Hosts colored according to state (Host Group)")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Hosts colored according to state (Host Group)")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Hosts")
 
     @property
@@ -3454,7 +4437,11 @@ class PainterHostgroupHosts(Painter):
         return ['hostgroup_members_with_state']
 
     def render(self, row, cell):
+<<<<<<< HEAD
         h = ""
+=======
+        h = HTML()
+>>>>>>> upstream/master
         for host, state, checked in row["hostgroup_members_with_state"]:
             link = "view.py?view_name=host&site=%s&host=%s" % (html.urlencode(
                 row["site"]), html.urlencode(host))
@@ -3472,12 +4459,19 @@ class PainterHgNumServices(Painter):
     def ident(self):
         return "hg_num_services"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Number of services (Host Group)")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Number of services (Host Group)")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return u""
 
     @property
@@ -3494,12 +4488,19 @@ class PainterHgNumServicesOk(Painter):
     def ident(self):
         return "hg_num_services_ok"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Number of services in state OK (Host Group)")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Number of services in state OK (Host Group)")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("O")
 
     @property
@@ -3516,12 +4517,19 @@ class PainterHgNumServicesWarn(Painter):
     def ident(self):
         return "hg_num_services_warn"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Number of services in state WARN (Host Group)")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Number of services in state WARN (Host Group)")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("W")
 
     @property
@@ -3538,12 +4546,19 @@ class PainterHgNumServicesCrit(Painter):
     def ident(self):
         return "hg_num_services_crit"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Number of services in state CRIT (Host Group)")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Number of services in state CRIT (Host Group)")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("C")
 
     @property
@@ -3560,12 +4575,19 @@ class PainterHgNumServicesUnknown(Painter):
     def ident(self):
         return "hg_num_services_unknown"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Number of services in state UNKNOWN (Host Group)")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Number of services in state UNKNOWN (Host Group)")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("U")
 
     @property
@@ -3582,12 +4604,19 @@ class PainterHgNumServicesPending(Painter):
     def ident(self):
         return "hg_num_services_pending"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Number of services in state PENDING (Host Group)")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Number of services in state PENDING (Host Group)")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("P")
 
     @property
@@ -3604,12 +4633,19 @@ class PainterHgNumHostsUp(Painter):
     def ident(self):
         return "hg_num_hosts_up"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Number of hosts in state UP (Host Group)")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Number of hosts in state UP (Host Group)")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Up")
 
     @property
@@ -3626,12 +4662,19 @@ class PainterHgNumHostsDown(Painter):
     def ident(self):
         return "hg_num_hosts_down"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Number of hosts in state DOWN (Host Group)")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Number of hosts in state DOWN (Host Group)")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Dw")
 
     @property
@@ -3648,12 +4691,19 @@ class PainterHgNumHostsUnreach(Painter):
     def ident(self):
         return "hg_num_hosts_unreach"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Number of hosts in state UNREACH (Host Group)")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Number of hosts in state UNREACH (Host Group)")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Un")
 
     @property
@@ -3670,12 +4720,19 @@ class PainterHgNumHostsPending(Painter):
     def ident(self):
         return "hg_num_hosts_pending"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Number of hosts in state PENDING (Host Group)")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Number of hosts in state PENDING (Host Group)")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Pd")
 
     @property
@@ -3692,12 +4749,19 @@ class PainterHgName(Painter):
     def ident(self):
         return "hg_name"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Hostgroup name")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Hostgroup name")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Name")
 
     @property
@@ -3714,12 +4778,19 @@ class PainterHgAlias(Painter):
     def ident(self):
         return "hg_alias"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Hostgroup alias")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Hostgroup alias")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Alias")
 
     @property
@@ -3727,7 +4798,11 @@ class PainterHgAlias(Painter):
         return ['hostgroup_alias']
 
     def render(self, row, cell):
+<<<<<<< HEAD
         return (None, html.attrencode(row["hostgroup_alias"]))
+=======
+        return (None, escaping.escape_attribute(row["hostgroup_alias"]))
+>>>>>>> upstream/master
 
 
 #    ____                  _
@@ -3744,12 +4819,19 @@ class PainterSgServices(Painter):
     def ident(self):
         return "sg_services"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Services colored according to state (Service Group)")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Services colored according to state (Service Group)")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Services")
 
     @property
@@ -3766,12 +4848,19 @@ class PainterSgNumServices(Painter):
     def ident(self):
         return "sg_num_services"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Number of services (Service Group)")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Number of services (Service Group)")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return u""
 
     @property
@@ -3788,12 +4877,19 @@ class PainterSgNumServicesOk(Painter):
     def ident(self):
         return "sg_num_services_ok"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Number of services in state OK (Service Group)")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Number of services in state OK (Service Group)")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("O")
 
     @property
@@ -3810,12 +4906,19 @@ class PainterSgNumServicesWarn(Painter):
     def ident(self):
         return "sg_num_services_warn"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Number of services in state WARN (Service Group)")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Number of services in state WARN (Service Group)")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("W")
 
     @property
@@ -3832,12 +4935,19 @@ class PainterSgNumServicesCrit(Painter):
     def ident(self):
         return "sg_num_services_crit"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Number of services in state CRIT (Service Group)")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Number of services in state CRIT (Service Group)")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("C")
 
     @property
@@ -3854,12 +4964,19 @@ class PainterSgNumServicesUnknown(Painter):
     def ident(self):
         return "sg_num_services_unknown"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Number of services in state UNKNOWN (Service Group)")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Number of services in state UNKNOWN (Service Group)")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("U")
 
     @property
@@ -3876,12 +4993,19 @@ class PainterSgNumServicesPending(Painter):
     def ident(self):
         return "sg_num_services_pending"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Number of services in state PENDING (Service Group)")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Number of services in state PENDING (Service Group)")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("P")
 
     @property
@@ -3898,12 +5022,19 @@ class PainterSgName(Painter):
     def ident(self):
         return "sg_name"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Servicegroup name")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Servicegroup name")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Name")
 
     @property
@@ -3920,12 +5051,19 @@ class PainterSgAlias(Painter):
     def ident(self):
         return "sg_alias"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Servicegroup alias")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Servicegroup alias")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Alias")
 
     @property
@@ -3933,7 +5071,11 @@ class PainterSgAlias(Painter):
         return ['servicegroup_alias']
 
     def render(self, row, cell):
+<<<<<<< HEAD
         return (None, html.attrencode(row["servicegroup_alias"]))
+=======
+        return (None, escaping.escape_attribute(row["servicegroup_alias"]))
+>>>>>>> upstream/master
 
 
 #     ____                                     _
@@ -3950,12 +5092,19 @@ class PainterCommentId(Painter):
     def ident(self):
         return "comment_id"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Comment id")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Comment id")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("ID")
 
     @property
@@ -3972,12 +5121,19 @@ class PainterCommentAuthor(Painter):
     def ident(self):
         return "comment_author"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Comment author")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Comment author")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Author")
 
     @property
@@ -3994,8 +5150,12 @@ class PainterCommentComment(Painter):
     def ident(self):
         return "comment_comment"
 
+<<<<<<< HEAD
     @property
     def title(self):
+=======
+    def title(self, cell):
+>>>>>>> upstream/master
         return _("Comment text")
 
     @property
@@ -4012,12 +5172,19 @@ class PainterCommentWhat(Painter):
     def ident(self):
         return "comment_what"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Comment type (host/service)")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Comment type (host/service)")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Type")
 
     @property
@@ -4034,12 +5201,19 @@ class PainterCommentTime(Painter):
     def ident(self):
         return "comment_time"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Comment entry time")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Comment entry time")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Time")
 
     @property
@@ -4060,12 +5234,19 @@ class PainterCommentExpires(Painter):
     def ident(self):
         return "comment_expires"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Comment expiry time")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Comment expiry time")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Expires")
 
     @property
@@ -4089,12 +5270,19 @@ class PainterCommentEntryType(Painter):
     def ident(self):
         return "comment_entry_type"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Comment entry type (user/downtime/flapping/ack)")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Comment entry type (user/downtime/flapping/ack)")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("E.Type")
 
     @property
@@ -4123,7 +5311,11 @@ class PainterCommentEntryType(Painter):
             help_txt = _("Acknowledgement")
         else:
             return "", ""
+<<<<<<< HEAD
         code = html.render_icon(icon, help_txt)
+=======
+        code: CellContent = html.render_icon(icon, help_txt)
+>>>>>>> upstream/master
         if linkview:
             code = link_to_view(code, row, linkview)
         return "icons", code
@@ -4143,12 +5335,19 @@ class PainterDowntimeId(Painter):
     def ident(self):
         return "downtime_id"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Downtime id")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Downtime id")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("ID")
 
     @property
@@ -4165,12 +5364,19 @@ class PainterDowntimeAuthor(Painter):
     def ident(self):
         return "downtime_author"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Downtime author")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Downtime author")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Author")
 
     @property
@@ -4187,12 +5393,19 @@ class PainterDowntimeComment(Painter):
     def ident(self):
         return "downtime_comment"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Downtime comment")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Downtime comment")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Comment")
 
     @property
@@ -4209,12 +5422,19 @@ class PainterDowntimeFixed(Painter):
     def ident(self):
         return "downtime_fixed"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Downtime start mode")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Downtime start mode")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Mode")
 
     @property
@@ -4231,12 +5451,19 @@ class PainterDowntimeOrigin(Painter):
     def ident(self):
         return "downtime_origin"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Downtime origin")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Downtime origin")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Origin")
 
     @property
@@ -4253,12 +5480,19 @@ class PainterDowntimeRecurring(Painter):
     def ident(self):
         return "downtime_recurring"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Downtime recurring interval")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Downtime recurring interval")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Recurring")
 
     @property
@@ -4283,12 +5517,19 @@ class PainterDowntimeWhat(Painter):
     def ident(self):
         return "downtime_what"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Downtime for host/service")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Downtime for host/service")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("for")
 
     @property
@@ -4305,12 +5546,19 @@ class PainterDowntimeType(Painter):
     def ident(self):
         return "downtime_type"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Downtime active or pending")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Downtime active or pending")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("act/pend")
 
     @property
@@ -4327,12 +5575,19 @@ class PainterDowntimeEntryTime(Painter):
     def ident(self):
         return "downtime_entry_time"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Downtime entry time")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Downtime entry time")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Entry")
 
     @property
@@ -4353,12 +5608,19 @@ class PainterDowntimeStartTime(Painter):
     def ident(self):
         return "downtime_start_time"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Downtime start time")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Downtime start time")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Start")
 
     @property
@@ -4379,12 +5641,19 @@ class PainterDowntimeEndTime(Painter):
     def ident(self):
         return "downtime_end_time"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Downtime end time")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Downtime end time")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("End")
 
     @property
@@ -4405,12 +5674,19 @@ class PainterDowntimeDuration(Painter):
     def ident(self):
         return "downtime_duration"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Downtime duration (if flexible)")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Downtime duration (if flexible)")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Flex. Duration")
 
     @property
@@ -4437,12 +5713,19 @@ class PainterLogMessage(Painter):
     def ident(self):
         return "log_message"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Log: complete message")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Log: complete message")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Message")
 
     @property
@@ -4450,7 +5733,11 @@ class PainterLogMessage(Painter):
         return ['log_message']
 
     def render(self, row, cell):
+<<<<<<< HEAD
         return ("", html.attrencode(row["log_message"]))
+=======
+        return ("", escaping.escape_attribute(row["log_message"]))
+>>>>>>> upstream/master
 
 
 @painter_registry.register
@@ -4459,6 +5746,7 @@ class PainterLogPluginOutput(Painter):
     def ident(self):
         return "log_plugin_output"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Log: Output")
@@ -4472,10 +5760,22 @@ class PainterLogPluginOutput(Painter):
         return [
             'log_plugin_output', 'log_type', 'log_state_type', 'log_comment', 'custom_variables'
         ]
+=======
+    def title(self, cell):
+        return _("Log: Summary")
+
+    def short_title(self, cell):
+        return _("Summary")
+
+    @property
+    def columns(self):
+        return ['log_plugin_output', 'log_type', 'log_state_type', 'log_comment']
+>>>>>>> upstream/master
 
     def render(self, row, cell):
         output = row["log_plugin_output"]
         comment = row["log_comment"]
+<<<<<<< HEAD
 
         if output:
             return "", format_plugin_output(output, row)
@@ -4499,6 +5799,22 @@ class PainterLogPluginOutput(Painter):
                 return "", (lst + " - " + log_type)
             else:
                 return "", ""
+=======
+        if output:
+            return "", format_plugin_output(output, row)
+        if comment:
+            return "", escaping.escape_attribute(comment)
+        log_type = row["log_type"]
+        lst = row["log_state_type"]
+        if "FLAPPING" in log_type:
+            what = _("host") if "HOST" in log_type else _("service")
+            if lst == "STOPPED":
+                return "", _("The %s stopped flapping") % what
+            return "", _("The %s started flapping") % what
+        if lst:
+            return "", (lst + " - " + log_type)
+        return "", ""
+>>>>>>> upstream/master
 
 
 @painter_registry.register
@@ -4507,12 +5823,19 @@ class PainterLogWhat(Painter):
     def ident(self):
         return "log_what"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Log: host or service")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Log: host or service")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Host/Service")
 
     @property
@@ -4523,7 +5846,11 @@ class PainterLogWhat(Painter):
         lt = row["log_type"]
         if "HOST" in lt:
             return "", _("Host")
+<<<<<<< HEAD
         elif "SERVICE" in lt or "SVC" in lt:
+=======
+        if "SERVICE" in lt or "SVC" in lt:
+>>>>>>> upstream/master
             return "", _("Service")
         return "", _("Program")
 
@@ -4534,12 +5861,19 @@ class PainterLogAttempt(Painter):
     def ident(self):
         return "log_attempt"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Log: number of check attempt")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Log: number of check attempt")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Att.")
 
     @property
@@ -4556,12 +5890,19 @@ class PainterLogStateType(Painter):
     def ident(self):
         return "log_state_type"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Log: type of state (hard/soft/stopped/started)")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Log: state type (DEPRECATED: Use \"state information\")")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Type")
 
     @property
@@ -4573,17 +5914,53 @@ class PainterLogStateType(Painter):
 
 
 @painter_registry.register
+<<<<<<< HEAD
+=======
+class PainterLogStateInfo(Painter):
+    @property
+    def ident(self):
+        return "log_state_info"
+
+    def title(self, cell):
+        return _("Log: State information")
+
+    def short_title(self, cell):
+        return _("State info")
+
+    @property
+    def columns(self):
+        return ['log_state_info', 'log_state_type']
+
+    def render(self, row, cell):
+        info = row["log_state_info"]
+
+        # be compatible to <1.7 remote sites and show log_state_type content as fallback
+        if not info:
+            info = row["log_state_type"]
+
+        return ("", escaping.escape_attribute(info))
+
+
+@painter_registry.register
+>>>>>>> upstream/master
 class PainterLogType(Painter):
     @property
     def ident(self):
         return "log_type"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Log: event")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Log: event")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Event")
 
     @property
@@ -4600,12 +5977,19 @@ class PainterLogContactName(Painter):
     def ident(self):
         return "log_contact_name"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Log: contact name")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Log: contact name")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Contact")
 
     @property
@@ -4622,12 +6006,19 @@ class PainterLogCommand(Painter):
     def ident(self):
         return "log_command"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Log: command/plugin")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Log: command/plugin")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Command")
 
     @property
@@ -4644,12 +6035,19 @@ class PainterLogIcon(Painter):
     def ident(self):
         return "log_icon"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Log: event icon")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Log: event icon")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return u""
 
     @property
@@ -4748,12 +6146,19 @@ class PainterLogOptions(Painter):
     def ident(self):
         return "log_options"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Log: informational part of message")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Log: informational part of message")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Info")
 
     @property
@@ -4761,7 +6166,11 @@ class PainterLogOptions(Painter):
         return ['log_options']
 
     def render(self, row, cell):
+<<<<<<< HEAD
         return ("", html.attrencode(row["log_options"]))
+=======
+        return ("", escaping.escape_attribute(row["log_options"]))
+>>>>>>> upstream/master
 
 
 @painter_registry.register
@@ -4770,12 +6179,19 @@ class PainterLogComment(Painter):
     def ident(self):
         return "log_comment"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Log: comment")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Log: comment")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Comment")
 
     @property
@@ -4787,7 +6203,11 @@ class PainterLogComment(Painter):
         if ';' in msg:
             parts = msg.split(';')
             if len(parts) > 6:
+<<<<<<< HEAD
                 return ("", html.attrencode(parts[-1]))
+=======
+                return ("", escaping.escape_attribute(parts[-1]))
+>>>>>>> upstream/master
         return ("", "")
 
 
@@ -4797,12 +6217,19 @@ class PainterLogTime(Painter):
     def ident(self):
         return "log_time"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Log: entry time")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Log: entry time")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Time")
 
     @property
@@ -4823,12 +6250,19 @@ class PainterLogLineno(Painter):
     def ident(self):
         return "log_lineno"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Log: line number in log file")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Log: line number in log file")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Line")
 
     @property
@@ -4845,12 +6279,19 @@ class PainterLogDate(Painter):
     def ident(self):
         return "log_date"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Log: day of entry")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Log: day of entry")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Date")
 
     @property
@@ -4870,12 +6311,19 @@ class PainterLogState(Painter):
     def ident(self):
         return "log_state"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Log: state of host/service at log time")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Log: state of host/service at log time")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("State")
 
     @property
@@ -4906,12 +6354,19 @@ class PainterAlertStatsOk(Painter):
     def ident(self):
         return "alert_stats_ok"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Alert Statistics: Number of recoveries")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Alert Statistics: Number of recoveries")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("OK")
 
     @property
@@ -4928,12 +6383,19 @@ class PainterAlertStatsWarn(Painter):
     def ident(self):
         return "alert_stats_warn"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Alert Statistics: Number of warnings")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Alert Statistics: Number of warnings")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("WARN")
 
     @property
@@ -4950,12 +6412,19 @@ class PainterAlertStatsCrit(Painter):
     def ident(self):
         return "alert_stats_crit"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Alert Statistics: Number of critical alerts")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Alert Statistics: Number of critical alerts")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("CRIT")
 
     @property
@@ -4972,12 +6441,19 @@ class PainterAlertStatsUnknown(Painter):
     def ident(self):
         return "alert_stats_unknown"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Alert Statistics: Number of unknown alerts")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Alert Statistics: Number of unknown alerts")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("UNKN")
 
     @property
@@ -4994,12 +6470,19 @@ class PainterAlertStatsProblem(Painter):
     def ident(self):
         return "alert_stats_problem"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Alert Statistics: Number of problem alerts")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Alert Statistics: Number of problem alerts")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("PROB")
 
     @property
@@ -5021,12 +6504,19 @@ class PainterHostTags(Painter):
     def ident(self):
         return "host_tags"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Host tags")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Host tags")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Tags")
 
     @property
@@ -5041,7 +6531,11 @@ class PainterHostTags(Painter):
         return "", render_tag_groups(get_tag_groups(row, "host"), "host", with_links=True)
 
 
+<<<<<<< HEAD
 class ABCPainterTagsWithTitles(six.with_metaclass(abc.ABCMeta, Painter)):
+=======
+class ABCPainterTagsWithTitles(Painter, metaclass=abc.ABCMeta):
+>>>>>>> upstream/master
     @abc.abstractproperty
     def object_type(self):
         raise NotImplementedError()
@@ -5078,12 +6572,19 @@ class PainterHostTagsWithTitles(ABCPainterTagsWithTitles):
     def ident(self):
         return "host_tags_with_titles"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Host tags (with titles)")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Host tags (with titles)")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Tags")
 
     @property
@@ -5101,12 +6602,19 @@ class PainterServiceTags(Painter):
     def ident(self):
         return "service_tags"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Tags")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Tags")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Tags")
 
     @property
@@ -5131,12 +6639,19 @@ class PainterServiceTagsWithTitles(ABCPainterTagsWithTitles):
     def ident(self):
         return "service_tags_with_titles"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Tags (with titles)")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Tags (with titles)")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Tags")
 
     @property
@@ -5154,12 +6669,19 @@ class PainterHostLabels(Painter):
     def ident(self):
         return "host_labels"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Labels")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Labels")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Labels")
 
     @property
@@ -5171,6 +6693,12 @@ class PainterHostLabels(Painter):
         return "host_labels"
 
     def render(self, row, cell):
+<<<<<<< HEAD
+=======
+        if html.is_api_call():
+            return "", get_labels(row, "host")
+
+>>>>>>> upstream/master
         return "", render_labels(get_labels(row, "host"),
                                  "host",
                                  with_links=True,
@@ -5183,12 +6711,19 @@ class PainterServiceLabels(Painter):
     def ident(self):
         return "service_labels"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Labels")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Labels")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Labels")
 
     @property
@@ -5200,6 +6735,12 @@ class PainterServiceLabels(Painter):
         return "service_labels"
 
     def render(self, row, cell):
+<<<<<<< HEAD
+=======
+        if html.is_api_call():
+            return "", get_labels(row, "service")
+
+>>>>>>> upstream/master
         return "", render_labels(get_labels(row, "service"),
                                  "service",
                                  with_links=True,
@@ -5212,12 +6753,19 @@ class PainterHostDockerNode(Painter):
     def ident(self):
         return "host_docker_node"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Docker node")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Docker node")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Node")
 
     @property
@@ -5226,9 +6774,13 @@ class PainterHostDockerNode(Painter):
 
     def render(self, row, cell):
         source_hosts = [
+<<<<<<< HEAD
             k[21:]
             for k in get_labels(row, "host").iterkeys()
             if k.startswith("cmk/piggyback_source_")
+=======
+            k[21:] for k in get_labels(row, "host") if k.startswith("cmk/piggyback_source_")
+>>>>>>> upstream/master
         ]
 
         if not source_hosts:
@@ -5246,7 +6798,12 @@ class PainterHostDockerNode(Painter):
 
         content = []
         for host_name in docker_nodes:
+<<<<<<< HEAD
             url = html.makeuri_contextless(
+=======
+            url = makeuri_contextless(
+                request,
+>>>>>>> upstream/master
                 [
                     ("view_name", "host"),
                     ("host", host_name),
@@ -5265,10 +6822,15 @@ def _get_host_labels():
     """
     if 'host_labels' in g:
         return g.host_labels
+<<<<<<< HEAD
 
     query = "GET hosts\nColumns: name labels\nCache: reload\n"
     host_labels = {name: labels for name, labels in sites.live().query(query)}
 
+=======
+    query = "GET hosts\nColumns: name labels\nCache: reload\n"
+    host_labels = {row[0]: row[1] for row in sites.live().query(query)}
+>>>>>>> upstream/master
     g.host_labels = host_labels
     return host_labels
 
@@ -5278,6 +6840,7 @@ class AbstractPainterSpecificMetric(Painter):
     def ident(self):
         raise NotImplementedError()
 
+<<<<<<< HEAD
     @property
     def title(self):
         return lambda p=None: self.title_with_parameters(p)
@@ -5291,6 +6854,19 @@ class AbstractPainterSpecificMetric(Painter):
             if not parameters:
                 # Used in Edit-View
                 return "Show single metric"
+=======
+    def title(self, cell):
+        return self._title_with_parameters(cell.painter_parameters())
+
+    def short_title(self, cell):
+        return self._title_with_parameters(cell.painter_parameters())
+
+    def _title_with_parameters(self, parameters):
+        try:
+            if not parameters:
+                # Used in Edit-View
+                return _("Show single metric")
+>>>>>>> upstream/master
             return metrics.metric_info[parameters["metric"]]["title"]
         except KeyError:
             return _("Metric not found")
@@ -5305,7 +6881,11 @@ class AbstractPainterSpecificMetric(Painter):
             choices = g.painter_specific_metric_choices
         else:
             choices = []
+<<<<<<< HEAD
             for key, value in metrics.metric_info.iteritems():
+=======
+            for key, value in metrics.metric_info.items():
+>>>>>>> upstream/master
                 choices.append((key, value.get("title")))
             choices.sort(key=lambda x: x[1])
             g.painter_specific_metric_choices = choices

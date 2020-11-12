@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,11 +24,23 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+import cmk.base.plugins.agent_based.utils.sap_hana as sap_hana
+>>>>>>> upstream/master
 
 
 def parse_sap_hana_events(info):
     parsed = {}
+<<<<<<< HEAD
     for sid_instance, lines in parse_sap_hana(info).iteritems():
+=======
+    for sid_instance, lines in sap_hana.parse_sap_hana(info).items():
+>>>>>>> upstream/master
         inst_data = {}
         for line in lines:
             if len(line) < 2:
@@ -50,13 +63,21 @@ SAP_HANA_EVENTS_MAP = {
 
 
 def inventory_sap_hana_events(parsed):
+<<<<<<< HEAD
     for item in parsed.iterkeys():
+=======
+    for item in parsed:
+>>>>>>> upstream/master
         yield item, {}
 
 
 @get_parsed_item_data
 def check_sap_hana_events(item, params, data):
+<<<<<<< HEAD
     for event_key, event_count in data.iteritems():
+=======
+    for event_key, event_count in data.items():
+>>>>>>> upstream/master
         event_state, event_state_readable = SAP_HANA_EVENTS_MAP.get(event_key,
                                                                     (3, "unknown[%s]" % event_key))
         state = 0
@@ -71,6 +92,9 @@ check_info['sap_hana_events'] = {
     'inventory_function': inventory_sap_hana_events,
     'check_function': check_sap_hana_events,
     'service_description': 'SAP HANA Events %s',
+<<<<<<< HEAD
     'includes': ['sap_hana.include'],
+=======
+>>>>>>> upstream/master
     "has_perfdata": True,
 }

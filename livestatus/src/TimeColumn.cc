@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // +------------------------------------------------------------------+
 // |             ____ _               _        __  __ _  __           |
 // |            / ___| |__   ___  ___| | __   |  \/  | |/ /           |
@@ -26,6 +27,16 @@
 #include <chrono>
 #include "Aggregator.h"
 #include "Filter.h"
+=======
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the
+// terms and conditions defined in the file COPYING, which is part of this
+// source code package.
+
+#include "TimeColumn.h"
+
+#include "Aggregator.h"
+>>>>>>> upstream/master
 #include "Renderer.h"
 #include "Row.h"
 #include "TimeAggregator.h"

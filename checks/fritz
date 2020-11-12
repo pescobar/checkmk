@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -32,6 +33,19 @@ def parse_fritz(info):
 check_info["fritz"] = {
     'parse_function': parse_fritz,
 }
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# NOTE: Careful when replacing the *-import below with a more specific import. This can cause
+# problems because it might remove variables from the check-context which are necessary for
+# resolving legacy discovery results such as [("SUMMARY", "diskstat_default_levels")]. Furthermore,
+# it might also remove variables needed for accessing discovery rulesets.
+from cmk.base.check_legacy_includes.uptime import *  # pylint: disable=wildcard-import,unused-wildcard-import
+>>>>>>> upstream/master
 
 
 #
@@ -70,7 +84,10 @@ check_info['fritz.conn'] = {
     "inventory_function": inventory_fritz_conn,
     "check_function": check_fritz_conn,
     "service_description": "Connection",
+<<<<<<< HEAD
     "includes": ["uptime.include"],
+=======
+>>>>>>> upstream/master
     "has_perfdata": True,
 }
 
@@ -84,6 +101,7 @@ def inventory_fritz_config(parsed):
 
 
 def check_fritz_config(_unused, _no_params, parsed):
+<<<<<<< HEAD
 
     label_val = [
         ('Auto Disconnect Time', parsed.get('NewAutoDisconnectTime', '0.0.0.0')),
@@ -157,6 +175,29 @@ check_info["fritz.wan_if"] = {
     'group': 'if',
     'default_levels_variable': 'if_default_levels',
     'includes': ['if.include'],
+=======
+
+    label_val = [
+        ('Auto Disconnect Time', parsed.get('NewAutoDisconnectTime', '0.0.0.0')),
+        ('DNS-Server1', parsed.get('NewDNSServer1', '0.0.0.0')),
+        ('DNS-Server2', parsed.get('NewDNSServer2', '0.0.0.0')),
+        ('VoIP-DNS-Server1', parsed.get('NewVoipDNSServer1', '0.0.0.0')),
+        ('VoIP-DNS-Server2', parsed.get('NewVoipDNSServer2', '0.0.0.0')),
+        ('uPnP Config Enabled', parsed.get('NewUpnpControlEnabled', '0.0.0.0')),
+    ]
+
+    output = ['%s: %s' % (l, v) for l, v in label_val if v != '0.0.0.0']
+
+    if output:
+        return 0, ', '.join(output)
+    return 3, 'Configuration info is missing'
+
+
+check_info['fritz.config'] = {
+    "inventory_function": inventory_fritz_config,
+    "check_function": check_fritz_config,
+    "service_description": "Configuration",
+>>>>>>> upstream/master
 }
 
 

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // +------------------------------------------------------------------+
 // |             ____ _               _        __  __ _  __           |
 // |            / ___| |__   ___  ___| | __   |  \/  | |/ /           |
@@ -33,6 +34,29 @@ TableEventConsoleRules::TableEventConsoleRules(MonitoringCore *mc)
 
     addColumn(std::make_unique<IntEventConsoleColumn>(
         "rule_hits", "The times rule matched an incoming message"));
+=======
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the
+// terms and conditions defined in the file COPYING, which is part of this
+// source code package.
+
+#include "TableEventConsoleRules.h"
+
+#include <cstdint>
+
+#include "Column.h"
+#include "IntLambdaColumn.h"
+#include "StringLambdaColumn.h"
+
+TableEventConsoleRules::TableEventConsoleRules(MonitoringCore *mc)
+    : TableEventConsole(mc) {
+    ColumnOffsets offsets{};
+    addColumn(
+        ECRow::makeStringColumn("rule_id", "The ID of the rule", offsets));
+
+    addColumn(ECRow::makeIntColumn(
+        "rule_hits", "The times rule matched an incoming message", offsets));
+>>>>>>> upstream/master
 }
 
 std::string TableEventConsoleRules::name() const { return "eventconsolerules"; }

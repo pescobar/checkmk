@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/env python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -24,6 +25,19 @@
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
 
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# NOTE: Careful when replacing the *-import below with a more specific import. This can cause
+# problems because it might remove variables from the check-context which are necessary for
+# resolving legacy discovery results such as [("SUMMARY", "diskstat_default_levels")]. Furthermore,
+# it might also remove variables needed for accessing discovery rulesets.
+from cmk.base.check_legacy_includes.cpu_util import *  # pylint: disable=wildcard-import,unused-wildcard-import
+>>>>>>> upstream/master
 # exemplary output of special agent agent_ucs_bladecenter (separator is <TAB> and means tabulator):
 #
 #<<<ucs_c_rack_server_util:sep(9)>>>
@@ -50,6 +64,7 @@ def parse_ucs_c_rack_server_util(info):
         rack = dn.replace("dn ", "").replace("sys/",
                                              "").replace("rack-unit-",
                                                          "Rack unit ").replace("/utilization", "")
+<<<<<<< HEAD
         parsed.setdefault(rack, {})
         for ds_key, ds in (('overallUtilization', overall_util), ('cpuUtilization', cpu_util),
                            ('memoryUtilization', memory_util), ('ioUtilization', pci_io_util)):
@@ -59,6 +74,17 @@ def parse_ucs_c_rack_server_util(info):
                 # The default value set by setdefault is None. These values are handled in the
                 # check function via check_levels() appropriatelly.
                 pass
+=======
+
+        for ds_key, ds in (('overallUtilization', overall_util), ('cpuUtilization', cpu_util),
+                           ('memoryUtilization', memory_util), ('ioUtilization', pci_io_util)):
+            try:
+                value = float(ds.replace(ds_key + " ", ""))
+            except ValueError:
+                continue
+            parsed.setdefault(rack, {})[ds_key] = value
+
+>>>>>>> upstream/master
     return parsed
 
 
@@ -66,7 +92,11 @@ def inventory_ucs_c_rack_server_util(parsed):
     """
     Yields indexed racks as items (e.g. Rack Unit 1).
     """
+<<<<<<< HEAD
     for key in parsed.keys():
+=======
+    for key in parsed:
+>>>>>>> upstream/master
         yield key, {}
 
 
@@ -81,7 +111,11 @@ factory_settings["ucs_c_rack_server_util_overall_default_levels"] = {
 
 @get_parsed_item_data
 def check_ucs_c_rack_server_util(item, params, data):
+<<<<<<< HEAD
     # None values passed to check_levels(value, ...) are handled by Check_MK internals appropriatelly.
+=======
+    # None values passed to check_levels(value, ...) are handled by Checkmk internals appropriatelly.
+>>>>>>> upstream/master
     yield check_levels(data['overallUtilization'],
                        'overall_util',
                        params['upper_levels'],
@@ -109,7 +143,11 @@ factory_settings["ucs_c_rack_server_util_cpu_default_levels"] = {
 
 @get_parsed_item_data
 def check_ucs_c_rack_server_util_cpu(item, params, data):
+<<<<<<< HEAD
     # None values passed to check_levels(value, ...) are handled by Check_MK internals appropriatelly.
+=======
+    # None values passed to check_levels(value, ...) are handled by Checkmk internals appropriatelly.
+>>>>>>> upstream/master
     return check_cpu_util(data['cpuUtilization'], params['upper_levels'])
 
 
@@ -120,7 +158,10 @@ check_info["ucs_c_rack_server_util.cpu"] = {
     'service_description': 'CPU Utilization %s',
     'default_levels_variable': 'ucs_c_rack_server_util_cpu_default_levels',
     'has_perfdata': True,
+<<<<<<< HEAD
     'includes': ['cpu_util.include'],
+=======
+>>>>>>> upstream/master
 }
 
 #################################

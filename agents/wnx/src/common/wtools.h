@@ -1,3 +1,11 @@
+<<<<<<< HEAD
+=======
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the
+// terms and conditions defined in the file COPYING, which is part of this
+// source code package.
+
+>>>>>>> upstream/master
 // wtools.h
 //
 // Windows Specific Tools
@@ -8,6 +16,12 @@
 #define wtools_h__
 #if defined(_WIN32)
 #define WIN32_LEAN_AND_MEAN
+<<<<<<< HEAD
+=======
+#include <aclapi.h>
+#include <comdef.h>
+
+>>>>>>> upstream/master
 #include "windows.h"
 #include "winperf.h"
 
@@ -29,10 +43,42 @@
 #include "datablock.h"
 #include "tools/_process.h"
 #include "tools/_tgt.h"
+<<<<<<< HEAD
+=======
+#include "tools/_win.h"
+>>>>>>> upstream/master
 
 namespace wtools {
 constexpr const wchar_t* kWToolsLogName = L"check_mk_wtools.log";
 
+<<<<<<< HEAD
+=======
+// this is functor to kill any pointer allocated with ::LocalAlloc
+// usually this pointer comes from Windows API
+template <typename T>
+struct LocalAllocDeleter {
+    void operator()(T* r) noexcept {
+        if (r != nullptr) ::LocalFree(reinterpret_cast<HLOCAL>(r));
+    }
+};
+
+// usage
+#if (0)
+LocalResource<SERVICE_FAILURE_ACTIONS> actions(
+    ::WindowsApiToGetActions(handle_to_service));
+#endif
+//
+template <typename T>
+using LocalResource = std::unique_ptr<T, LocalAllocDeleter<T>>;
+
+// returns <exit_code, 0>, <0, error> or <-1, error>
+std::pair<uint32_t, uint32_t> GetProcessExitCode(uint32_t pid);
+
+[[nodiscard]] std::wstring GetProcessPath(uint32_t pid) noexcept;
+
+[[nodiscard]] int KillProcessesByDir(const std::filesystem::path& dir) noexcept;
+
+>>>>>>> upstream/master
 uint32_t GetParentPid(uint32_t pid);
 
 //
@@ -203,7 +249,11 @@ private:
     HANDLE read_;
     HANDLE write_;
     bool sa_initialized_;
+<<<<<<< HEAD
     SECURITY_DESCRIPTOR sd_;
+=======
+    SECURITY_DESCRIPTOR sd_ = {0};
+>>>>>>> upstream/master
     SECURITY_ATTRIBUTES sa_;
 };
 
@@ -258,6 +308,13 @@ public:
     uint32_t goExecAsJob(std::wstring_view CommandLine) noexcept;
 
     // returns process id
+<<<<<<< HEAD
+=======
+    uint32_t goExecAsJobAndUser(std::wstring_view user,
+                                std::wstring_view password,
+                                std::wstring_view CommandLine) noexcept;
+    // returns process id
+>>>>>>> upstream/master
     uint32_t goExecAsUpdater(std::wstring_view CommandLine) noexcept;
 
     void kill(bool KillTreeToo) {
@@ -467,7 +524,11 @@ private:
 
         // Take a snapshot of all processes in the system.
         auto hProcessSnap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+<<<<<<< HEAD
         if (hProcessSnap == INVALID_HANDLE_VALUE) {
+=======
+        if (wtools::IsInvalidHandle(hProcessSnap)) {
+>>>>>>> upstream/master
             return {};
         };
 
@@ -523,7 +584,11 @@ inline std::string ConvertToUTF8(const std::wstring_view Src) noexcept {
 #else
     // standard but deprecated
     try {
+<<<<<<< HEAD
         return wstring_convert<codecvt_utf8<wchar_t> >().to_bytes(Src);
+=======
+        return wstring_convert<codecvt_utf8<wchar_t>>().to_bytes(Src);
+>>>>>>> upstream/master
     } catch (const exception& e) {
         xlog::l("Failed to convert %ls", Src.c_str());
         return "";
@@ -531,6 +596,13 @@ inline std::string ConvertToUTF8(const std::wstring_view Src) noexcept {
 #endif  // endif
 }
 
+<<<<<<< HEAD
+=======
+inline std::string ConvertToUTF8(const std::string_view src) noexcept {
+    return std::string(src);
+}
+
+>>>>>>> upstream/master
 // standard Windows converter from Microsoft
 // WINDOWS ONLY
 // gtest [+] in yaml
@@ -791,7 +863,11 @@ inline int64_t WmiGetInt64_KillNegatives(const VARIANT& Var) noexcept {
         case VT_I2:
             return Var.intVal & 0xFFFF;
         case VT_I4:
+<<<<<<< HEAD
             return Var.llVal & 0xFFFF'FFFF; // we have seen 0x00DD'0000'0000
+=======
+            return Var.llVal & 0xFFFF'FFFF;  // we have seen 0x00DD'0000'0000
+>>>>>>> upstream/master
 
             // 8 bits values
         case VT_UI1:
@@ -954,6 +1030,7 @@ HMODULE LoadWindowsLibrary(const std::wstring& DllPath);
 std::vector<std::string> EnumerateAllRegistryKeys(const char* RegPath);
 
 // returns data from the root machine registry
+<<<<<<< HEAD
 uint32_t GetRegistryValue(const std::wstring& Key, const std::wstring& Value,
                           uint32_t Default) noexcept;
 
@@ -968,6 +1045,30 @@ bool SetRegistryValue(const std::wstring& Key, const std::wstring& Value,
 std::wstring GetRegistryValue(const std::wstring& Key,
                               const std::wstring& Value,
                               const std::wstring& Default) noexcept;
+=======
+uint32_t GetRegistryValue(std::wstring_view path, std::wstring_view value_name,
+                          uint32_t dflt) noexcept;
+
+// deletes registry value by path
+bool DeleteRegistryValue(std::wstring_view path,
+                         std::wstring_view value_name) noexcept;
+
+// returns true on success
+bool SetRegistryValue(std::wstring_view path, std::wstring_view value_name,
+                      std::wstring_view value);
+
+bool SetRegistryValueExpand(std::wstring_view path,
+                            std::wstring_view value_name,
+                            std::wstring_view value);
+
+// returns true on success
+bool SetRegistryValue(std::wstring_view path, std::wstring_view value_name,
+                      uint32_t value) noexcept;
+
+std::wstring GetRegistryValue(std::wstring_view path,
+                              std::wstring_view value_name,
+                              std::wstring_view dflt) noexcept;
+>>>>>>> upstream/master
 std::wstring GetArgv(uint32_t index) noexcept;
 
 size_t GetOwnVirtualSize() noexcept;
@@ -977,6 +1078,106 @@ constexpr size_t kMaxMemoryAllowed = 200'000'000;
 bool IsAgentHealthy() noexcept;
 }  // namespace monitor
 
+<<<<<<< HEAD
+=======
+class ACLInfo {
+public:
+    struct AceList {
+        ACE_HEADER* ace;
+        BOOL allowed;
+        AceList* next;
+    };
+
+    // construction / destruction
+
+    // constructs a new CACLInfo object
+    // bstrPath - path for which ACL info should be queried
+    ACLInfo(_bstr_t path);
+    virtual ~ACLInfo();
+
+    // Queries NTFS for ACL Info of the file/directory
+    HRESULT query();
+
+    // Outputs ACL info in Human-readable format
+    // to supplied output stream
+    std::string output();
+
+private:
+    // Private methods
+    void clearAceList();
+    HRESULT addAceToList(ACE_HEADER* pAce);
+
+private:
+    // Member variables
+    _bstr_t path_;       // path
+    AceList* ace_list_;  // list of Access Control Entries
+};
+
+std::string ReadWholeFile(const std::filesystem::path& fname) noexcept;
+
+bool PatchFileLineEnding(const std::filesystem::path& fname) noexcept;
+
+using InternalUser = std::pair<std::wstring, std::wstring>;  // name,pwd
+
+InternalUser CreateCmaUserInGroup(const std::wstring& group_name) noexcept;
+bool RemoveCmaUser(const std::wstring& user_name) noexcept;
+std::wstring GenerateRandomString(size_t max_length) noexcept;
+std::wstring GenerateCmaUserNameInGroup(std::wstring_view group) noexcept;
+
+class Bstr {
+public:
+    Bstr(const Bstr&) = delete;
+    Bstr(Bstr&&) = delete;
+    Bstr& operator=(const Bstr&) = delete;
+    Bstr& operator=(Bstr&&) = delete;
+
+    Bstr(std::wstring_view str) { data_ = ::SysAllocString(str.data()); }
+    ~Bstr() { ::SysFreeString(data_); }
+    operator BSTR() { return data_; }
+
+public:
+    BSTR data_;
+};
+
+/// \brief Set correct access rights for the path
+///
+///  Normally called once on the start of the service.
+///  Removes Users write access from the specified path(usually it is
+///  %ProgramData%/checkmk)
+bool ProtectPathFromUserWrite(const std::filesystem::path& path);
+
+/// \brief Remove user access to the path
+///
+///  Normally called once on the start of the service.
+///  Removes Users Access to the specified path
+bool ProtectPathFromUserAccess(const std::filesystem::path& entry);
+
+/// \brief Remove user access to the file
+///
+///  Normally called once on the start of the service.
+///  Removes Users Access Writes to the specified file
+bool ProtectFileFromUserWrite(const std::filesystem::path& path);
+
+/// \brief Changes Access Rights in Windows crazy manner
+///
+/// Example of usage is
+/// ChangeAccessRights( L"c:\\txt", SE_FILE_OBJECT,        // what
+///                     L"a1", TRUSTEE_IS_NAME,            // who
+///                     STANDARD_RIGHTS_ALL | GENERIC_ALL, // how
+///                     GRANT_ACCESS, OBJECT_INHERIT_ACE);
+bool ChangeAccessRights(
+    const wchar_t* object_name,   // name of object
+    SE_OBJECT_TYPE object_type,   // type of object
+    const wchar_t* trustee_name,  // trustee for new ACE
+    TRUSTEE_FORM trustee_form,    // format of trustee structure
+    DWORD access_rights,          // access mask for new ACE
+    ACCESS_MODE access_mode,      // type of ACE
+    DWORD inheritance             // inheritance flags for new ACE ???
+);
+
+std::wstring ExpandStringWithEnvironment(std::wstring_view str);
+
+>>>>>>> upstream/master
 }  // namespace wtools
 
 #endif  // wtools_h__

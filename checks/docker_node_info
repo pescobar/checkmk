@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -37,12 +38,28 @@ def parse_docker_node_info(info):
     for line in info[1:]:
         loaded.update(docker_json_get_obj(line) or {})  # pylint: disable=undefined-variable
     return loaded
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+# NOTE: Careful when replacing the *-import below with a more specific import. This can cause
+# problems because it might remove variables from the check-context which are necessary for
+# resolving legacy discovery results such as [("SUMMARY", "diskstat_default_levels")]. Furthermore,
+# it might also remove variables needed for accessing discovery rulesets.
+from cmk.base.check_legacy_includes.legacy_docker import *  # pylint: disable=wildcard-import,unused-wildcard-import
+>>>>>>> upstream/master
 
 
 def discover_docker_node_info(info):
     if info:
+<<<<<<< HEAD
         yield HostLabel(u"cmk/docker_object", u"node")
         yield (None, {})
+=======
+        yield None, {}
+>>>>>>> upstream/master
 
 
 @append_deprecation_warning  # pylint: disable=undefined-variable
@@ -55,8 +72,12 @@ def check_docker_node_info(_no_item, _no_params, parsed):
 
 
 check_info['docker_node_info'] = {
+<<<<<<< HEAD
     'includes': ['docker.include', 'legacy_docker.include'],
     'parse_function': parse_docker_node_info,
+=======
+    # section is already migrated!
+>>>>>>> upstream/master
     'inventory_function': discover_docker_node_info,
     'check_function': check_docker_node_info,
     'service_description': 'Docker node info',
@@ -88,10 +109,17 @@ def check_docker_node_containers(_no_item, params, parsed):
 
 
 check_info["docker_node_info.containers"] = {
+<<<<<<< HEAD
+=======
+    # section is already migrated!
+>>>>>>> upstream/master
     "inventory_function": discover_single,
     "check_function": check_docker_node_containers,
     "service_description": "Docker containers",
     "has_perfdata": True,
     "group": "docker_node_containers",
+<<<<<<< HEAD
     'includes': ['docker.include', 'legacy_docker.include'],
+=======
+>>>>>>> upstream/master
 }

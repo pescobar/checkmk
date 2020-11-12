@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,11 +24,22 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 """A helper module providing simple caching mechanism (without invalidation).
 It provides a decorator that can be used to cache function results based on the
 given function arguments."""
 
+<<<<<<< HEAD
 from typing import Type, Union, Callable, Tuple, Dict, Set, Any  # pylint: disable=unused-import
+=======
+from typing import Type, Union, Callable, Tuple, Dict, Set, Any
+>>>>>>> upstream/master
 
 # The functions that violate this checker are borrowed from official python
 # code and are done for performance reasons.
@@ -37,8 +49,17 @@ from typing import Type, Union, Callable, Tuple, Dict, Set, Any  # pylint: disab
 # Algorithm borrowed from Python 3 functools
 # + Add support for "list" args
 # pylint: disable=dangerous-default-value
+<<<<<<< HEAD
 def _make_key(args, kwds, kwd_mark=(object(),), fasttypes={int, str}, type=type, len=len):
     # type: (Tuple, Dict, Tuple, Set[Type], Callable, Callable) -> Union[int, str, _HashedSeq]
+=======
+def _make_key(args: Tuple,
+              kwds: Dict,
+              kwd_mark: Tuple = (object(),),
+              fasttypes: Set[Type] = {int, str},
+              type: Callable = type,
+              len: Callable = len) -> 'Union[int, str, _HashedSeq]':
+>>>>>>> upstream/master
     """Make a cache key from optionally typed positional and keyword arguments
     The key is constructed in a way that is flat as possible rather than
     as a nested structure that would take more memory.
@@ -80,7 +101,11 @@ class _HashedSeq(list):
 
 
 # TODO: This may be replaced by @functools.lru_cache() in Python 3
+<<<<<<< HEAD
 class MemoizeCache(object):
+=======
+class MemoizeCache:
+>>>>>>> upstream/master
     """Simple unbound in memory cache
 
 This decorator can be used to remember the results of single functions. These
@@ -91,6 +116,7 @@ Examples:
 """
     __slots__ = ["_logger", "_cache", "mem_func"]
 
+<<<<<<< HEAD
     def __init__(self, function):
         # type: (Callable) -> None
         self.mem_func = function
@@ -98,6 +124,13 @@ Examples:
 
     def __call__(self, *args, **kwargs):
         # type: (Any, Any) -> Any
+=======
+    def __init__(self, function: Callable) -> None:
+        self.mem_func = function
+        self._cache: Dict[Union[int, str, _HashedSeq], Any] = {}
+
+    def __call__(self, *args: Any, **kwargs: Any) -> Any:
+>>>>>>> upstream/master
         cache_id = _make_key(args, kwargs)
 
         if cache_id in self._cache:
@@ -109,3 +142,10 @@ Examples:
 
     def clear(self):
         self._cache.clear()
+<<<<<<< HEAD
+=======
+
+    def clear_cache(self):
+        # naming compatible with lru_cache
+        return self.clear()
+>>>>>>> upstream/master

@@ -4,15 +4,29 @@ catalog: os/networking
 license: GPL
 distribution: check_mk
 description:
+<<<<<<< HEAD
   This check evaluates the output of the {netstat} command on Linux, AIX and Solaris
   and checks if there are established connections or listeners matching a
   given criteria.
+=======
+ This check evaluates the output of the {netstat} command on Linux, AIX and Solaris
+ and checks if there are established connections or listeners matching a
+ given criteria.
+>>>>>>> upstream/master
 
-  The check returns {OK} state if the specified connection/listener is present,
-  and {CRIT} if not.
+ The check returns {OK} state if the specified connection/listener is present,
+ and {CRIT} if not.
 
+<<<<<<< HEAD
   This check needs the respective agent plugin {netstat.linux}, {netstat.aix} or {netstat.solaris} to
   be installed.
 
 item:
   A user defined identifier of the connection.
+=======
+ This check needs the respective agent plugin {netstat.linux}, {netstat.aix} or {netstat.solaris} to
+ be installed.
+
+item:
+ The name of the connection
+>>>>>>> upstream/master

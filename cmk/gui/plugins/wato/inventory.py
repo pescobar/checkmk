@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,11 +24,19 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 import cmk.utils.paths
 import cmk.utils.defines as defines
 
 from cmk.gui.valuespec import (
+<<<<<<< HEAD
     DualListChoice,
     Age,
     Dictionary,
@@ -36,6 +45,19 @@ from cmk.gui.valuespec import (
     TextAscii,
     MonitoringState,
 )
+=======
+    Age,
+    Dictionary,
+    DropdownChoice,
+    DualListChoice,
+    ListOfStrings,
+    MonitoringState,
+    RegExp,
+    TextAscii,
+    Transform,
+)
+
+>>>>>>> upstream/master
 from cmk.gui.i18n import _
 
 from cmk.gui.plugins.wato import (
@@ -58,7 +80,11 @@ class RulespecGroupInventory(RulespecGroup):
 
     @property
     def help(self):
+<<<<<<< HEAD
         return _("Configuration of the Check_MK Hardware and Software Inventory System")
+=======
+        return _("Configuration of the Checkmk Hardware and Software Inventory System")
+>>>>>>> upstream/master
 
 
 def _valuespec_active_checks_cmk_inv():
@@ -133,9 +159,15 @@ def _valuespec_inv_exports_software_csv():
             ("filename",
              TextAscii(
                  title=_(
+<<<<<<< HEAD
                      "Export file to create, containing <tt>&ly;HOST&gt;</tt> for the hostname"),
                  help=_(
                      "Please specify the path to the export file. The text <tt>&lt;HOST&gt;</tt> "
+=======
+                     "Export file to create, containing <tt>&lt;HOST&gt;</tt> for the hostname"),
+                 help=_(
+                     "Please specify the path to the export file. The text <tt><HOST></tt> "
+>>>>>>> upstream/master
                      "will be replaced with the host name the inventory has been done for. "
                      "If you use a relative path then that will be relative to Check_MK's directory "
                      "for variable data, which is <tt>%s</tt>.") % cmk.utils.paths.var_dir,
@@ -214,3 +246,47 @@ rulespec_registry.register(
         name="inv_parameters:inv_if",
         valuespec=_valuespec_inv_parameters_inv_if,
     ))
+<<<<<<< HEAD
+=======
+
+
+def _valuespec_inv_parameters_lnx_sysctl():
+    return Dictionary(
+        title=_("Inventory of Linux kernel configuration (sysctl)"),
+        help=_("This rule allows for defining regex-patterns for in- and excluding kernel "
+               "configuration parameters in the inventory. By default, no parameters are included. "
+               "Note that some kernel configuration parameters change frequently. Inventorizing "
+               "one of these parameters will lead to frequent changes in the HW/SW inventory, "
+               "which can quickly fill up the temporary file system."),
+        elements=[
+            (
+                "include_patterns",
+                ListOfStrings(
+                    valuespec=RegExp(RegExp.prefix),
+                    title=_("Inclusion patterns"),
+                    help=_("Define patterns for including kernel configuration parameters in the "
+                           "inventory."),
+                ),
+            ),
+            (
+                "exclude_patterns",
+                ListOfStrings(
+                    valuespec=RegExp(RegExp.prefix),
+                    title=_("Exclusion patterns"),
+                    help=_("Define patterns for excluding kernel configuration parameters from the "
+                           "inventory."),
+                ),
+            ),
+        ],
+        optional_keys=False,
+    )
+
+
+rulespec_registry.register(
+    HostRulespec(
+        group=RulespecGroupInventory,
+        match_type="dict",
+        name="inv_parameters:lnx_sysctl",
+        valuespec=_valuespec_inv_parameters_lnx_sysctl,
+    ))
+>>>>>>> upstream/master

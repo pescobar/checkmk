@@ -1,4 +1,9 @@
+<<<<<<< HEAD
 # tnsnames.ora Network Configuration File:
+=======
+# tnsnames.ora
+# Network Configuration File:
+>>>>>>> upstream/master
 
 # example with the following values:
 # SID = XE

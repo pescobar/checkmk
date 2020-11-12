@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 // +------------------------------------------------------------------+
 // |             ____ _               _        __  __ _  __           |
@@ -22,6 +23,11 @@
 // License along with GNU Make; see the file  COPYING.  If  not,  write
 // to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 // Boston, MA 02110-1301 USA.
+=======
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+// conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 import "forms";
 import * as ajax from "ajax";
@@ -31,6 +37,11 @@ import * as sidebar from "sidebar";
 import * as quicksearch from "quicksearch";
 import * as visibility_detection from "visibility_detection";
 import * as valuespecs from "valuespecs";
+<<<<<<< HEAD
+=======
+import * as popup_menu from "popup_menu";
+import * as search from "search";
+>>>>>>> upstream/master
 
 export const cmk_export = {
     get_url: ajax.get_url,
@@ -43,6 +54,13 @@ export const cmk_export = {
         foldable_container: foldable_container,
         quicksearch: quicksearch,
         visibility_detection: visibility_detection,
+<<<<<<< HEAD
         valuespecs: valuespecs
     }
+=======
+        valuespecs: valuespecs,
+        popup_menu: popup_menu,
+        search: search,
+    },
+>>>>>>> upstream/master
 };

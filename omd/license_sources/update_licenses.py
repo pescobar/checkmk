@@ -1,4 +1,11 @@
 #!/usr/bin/env python
+<<<<<<< HEAD
+=======
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 """
 usage: ./update_licenses [-h] [-v] cmk_path
 
@@ -69,8 +76,13 @@ def print_separator():
 
 def dir_from_zipped(file_string):
     for ending in ZIP_ENDINGS:
+<<<<<<< HEAD
         if ending in file_string:
             return file_string.rstrip(ending) + "/"
+=======
+        if file_string.endswith(ending):
+            return file_string[:-len(ending)] + "/"
+>>>>>>> upstream/master
     return file_string
 
 
@@ -224,11 +236,18 @@ def parse_arguments():
             "given CheckMK source repository",
         usage="./update_licenses [-h] [-v] cmk_path")
     parser.add_argument("cmk_path", help="path to a CheckMK source repository")
+<<<<<<< HEAD
     parser.add_argument(
         "-v",
         "--verbose",
         action="store_true",
         help="display found package paths that could not be matched")
+=======
+    parser.add_argument("-v",
+                        "--verbose",
+                        action="store_true",
+                        help="display found package paths that could not be matched")
+>>>>>>> upstream/master
     return parser.parse_args()
 
 
@@ -278,8 +297,13 @@ def main(args):
             [name, _, _, _, path] = line.split(",")[:5]
             [name, path] = [i.strip() for i in [name, path]]
             # Needle to look for within the haystack of package paths
+<<<<<<< HEAD
             needle = name.replace("Perl module: ", "").replace("Python module: ", "").replace(
                 " ", "")
+=======
+            needle = name.replace("Perl module: ", "").replace("Python module: ",
+                                                               "").replace(" ", "")
+>>>>>>> upstream/master
 
             # Match the exceptional package paths first
             if name in exceptions and exceptions[name] in found_paths:

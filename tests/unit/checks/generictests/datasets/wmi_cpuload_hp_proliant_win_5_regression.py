@@ -1,4 +1,16 @@
+<<<<<<< HEAD
 # yapf: disable
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# yapf: disable
+# type: ignore
+
+>>>>>>> upstream/master
 checkname = 'wmi_cpuload'
 
 info = [
@@ -55,7 +67,11 @@ checks = {
         {},
         [(
             0,
+<<<<<<< HEAD
             "15 min load: 0.00 at 16 Cores (0.00 per Core)",
+=======
+            "15 min load: 0.00 at 16 logical cores (0.00 per core)",
+>>>>>>> upstream/master
             [('load1', 0, None, None, 0, 16), ('load5', 0, None, None, 0, 16),
              ('load15', 0, None, None, 0, 16)],
         )],

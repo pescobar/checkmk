@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -24,6 +25,19 @@
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
 
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# NOTE: Careful when replacing the *-import below with a more specific import. This can cause
+# problems because it might remove variables from the check-context which are necessary for
+# resolving legacy discovery results such as [("SUMMARY", "diskstat_default_levels")]. Furthermore,
+# it might also remove variables needed for accessing discovery rulesets.
+from cmk.base.check_legacy_includes.wmi import *  # pylint: disable=wildcard-import,unused-wildcard-import
+>>>>>>> upstream/master
 # checks for is store and is clienttype
 # as I understand it, these are logically related but the performance
 # counters are completely separate
@@ -43,6 +57,7 @@ factory_settings['msexch_isclienttype_defaultlevels'] = {
 }
 
 
+<<<<<<< HEAD
 def check_msexch_isclienttype(item, params, parsed):
     yield wmi_yield_raw_average(parsed[""],
                                 item,
@@ -54,17 +69,48 @@ def check_msexch_isclienttype(item, params, parsed):
                                item,
                                "RPCRequests",
                                label=" RPC Requests",
+=======
+def discover_msexch_isclienttype(parsed):
+    return inventory_wmi_table_instances(parsed)
+
+
+def check_msexch_isclienttype(item, params, parsed):
+    try:
+        average = wmi_calculate_raw_average(parsed[""], item, "RPCAverageLatency", 1)
+    except KeyError:
+        yield 3, "item not present anymore", []
+    else:
+        yield check_levels(
+            average,
+            "average_latency",
+            params['clienttype_latency'].get('upper'),
+            infoname="Average latency",
+            unit="ms",
+        )
+
+    yield wmi_yield_raw_persec(parsed[""],
+                               item,
+                               "RPCRequests",
+                               infoname="RPC Requests/sec",
+>>>>>>> upstream/master
                                perfvar="requests_per_sec",
                                levels=params['clienttype_requests'])
 
 
 check_info['msexch_isclienttype'] = {
+<<<<<<< HEAD
     'inventory_function': inventory_wmi_table,
+=======
+    'inventory_function': discover_msexch_isclienttype,
+>>>>>>> upstream/master
     'check_function': check_msexch_isclienttype,
     'parse_function': parse_wmi_table,
     'has_perfdata': True,
     'service_description': "Exchange IS Client Type %s",
+<<<<<<< HEAD
     'includes': ['wmi.include'],
+=======
+>>>>>>> upstream/master
     'group': 'msx_info_store',
     'default_levels_variable': 'msexch_isclienttype_defaultlevels'
 }

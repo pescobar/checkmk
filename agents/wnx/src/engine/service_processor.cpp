@@ -3,6 +3,10 @@
 
 #include "service_processor.h"
 
+<<<<<<< HEAD
+=======
+#include <sensapi.h>
+>>>>>>> upstream/master
 #include <shlobj_core.h>
 
 #include <chrono>
@@ -11,11 +15,20 @@
 #include "commander.h"
 #include "common/mailslot_transport.h"
 #include "common/wtools.h"
+<<<<<<< HEAD
+=======
+#include "common/wtools_service.h"
+#include "common/yaml.h"
+>>>>>>> upstream/master
 #include "external_port.h"
 #include "realtime.h"
 #include "tools/_process.h"
 #include "upgrade.h"
+<<<<<<< HEAD
 #include "yaml-cpp/yaml.h"
+=======
+#include "windows_service_api.h"
+>>>>>>> upstream/master
 
 namespace cma::srv {
 extern bool global_stop_signaled;  // semi-hidden global variable for global
@@ -255,6 +268,10 @@ void ServiceProcessor::preStartBinaries() {
     ohm_started_ = conditionallyStartOhm();
 
     auto& plugins = plugins_provider_.getEngine();
+<<<<<<< HEAD
+=======
+    plugins.registerOwner(this);
+>>>>>>> upstream/master
     plugins.preStart();
     plugins.detachedStart();
 
@@ -481,6 +498,11 @@ ServiceProcessor::Signal ServiceProcessor::mainWaitLoop() {
     auto ipv6 = groups::global.ipv6();
     auto port = groups::global.port();
     auto uniq_cfg_id = GetCfg().uniqId();
+<<<<<<< HEAD
+=======
+    ProcessServiceConfiguration(kServiceName);
+
+>>>>>>> upstream/master
     while (1) {
         using namespace std::chrono;
 
@@ -504,22 +526,91 @@ ServiceProcessor::Signal ServiceProcessor::mainWaitLoop() {
             XLOG::l.t("Stop request is set");
             break;  // signaled stop
         }
+<<<<<<< HEAD
+=======
+
+        if (SERVICE_DISABLED ==
+            wtools::WinService::ReadUint32(cma::srv::kServiceName,
+                                           wtools::WinService::kRegStart)) {
+            XLOG::l("Service is disabled in config, leaving...");
+
+            cma::tools::RunDetachedCommand(std::string("net stop ") +
+                                           wtools::ConvertToUTF8(kServiceName));
+            break;
+        }
+
+>>>>>>> upstream/master
         restartBinariesIfCfgChanged(uniq_cfg_id);
     }
     XLOG::l.t("main Wait Loop END");
     return Signal::quit;
 }
 
+<<<<<<< HEAD
+=======
+namespace {
+
+void WaitForNetwork(std::chrono::seconds period) {
+    using namespace std::chrono;
+    DWORD networks = NETWORK_ALIVE_LAN | NETWORK_ALIVE_WAN;
+    for (int i = 0; i < period.count(); i += 2) {
+        auto ret = ::IsNetworkAlive(&networks);
+        auto error = ::GetLastError();
+        if (error == 0 && ret == TRUE) {
+            XLOG::l.i("The network is available");
+            break;
+        }
+
+        XLOG::l.i("Check network failed [{}] {}", error, ret);
+        std::this_thread::sleep_for(2s);
+    }
+}
+}  // namespace
+
+namespace {
+void ReProtectFiles() {
+    // Some secret files may be installed during start/update/upgrade.
+    // We must protect them.
+    try {
+        auto app_data_folder =
+            cma::tools::win::GetSomeSystemFolder(FOLDERID_ProgramData);
+        cma::security::ProtectFiles(std::filesystem::path(app_data_folder) /
+                                    cma::cfg::kAppDataCompanyName);
+    } catch (const std::exception& e) {
+        // no crashes allowed
+        XLOG::l.crit("Unexpected exception '{}' during re-protect files call",
+                     e.what());
+    }
+}
+}  // namespace
+
+>>>>>>> upstream/master
 // <HOSTING THREAD>
 // ex_port may be nullptr(command line test, for example)
 // makes a mail slot + starts IO on TCP
 void ServiceProcessor::mainThread(world::ExternalPort* ex_port) noexcept {
+<<<<<<< HEAD
     using namespace std::chrono;
     // Periodically checks if the service is stopping.
     // mail slot name selector "service" or "not service"
     auto mailslot_name = cma::IsService() ? cma::cfg::kServiceMailSlot
                                           : cma::cfg::kTestingMailSlot;
 
+=======
+    // Periodically checks if the service is stopping.
+    // mail slot name selector "service" or "not service"
+    using namespace std::chrono;
+    using namespace cma::cfg;
+    auto mailslot_name = cma::IsService() ? kServiceMailSlot : kTestingMailSlot;
+
+    if (cma::IsService()) {
+        ReProtectFiles();
+
+        auto wait_period = GetVal(groups::kSystem, vars::kWaitNetwork,
+                                  defaults::kServiceWaitNetwork);
+        WaitForNetwork(seconds{wait_period});
+    }
+>>>>>>> upstream/master
 #if 0
     // ARtificial memory allocator in thread
     std::vector<std::string> z;
@@ -551,6 +642,16 @@ void ServiceProcessor::mainThread(world::ExternalPort* ex_port) noexcept {
 
         // preparation if any
         ReloadConfigInServiceMode();
+<<<<<<< HEAD
+=======
+
+        // module commander loading(and install if service)
+        if (cma::IsService()) {
+            mc_.InstallDefault(cma::cfg::modules::InstallMode::normal);
+        } else
+            mc_.LoadDefault();
+
+>>>>>>> upstream/master
         preStartBinaries();
         // *******************
 
@@ -675,7 +776,12 @@ bool SystemMailboxCallback(const cma::MailSlot*, const void* data, int len,
             std::string cmd(static_cast<const char*>(dt->data()),
                             static_cast<size_t>(dt->length()));
             std::string peer(cma::commander::kMainPeer);
+<<<<<<< HEAD
             cma::commander::RunCommand(peer, cmd);
+=======
+            auto rcp = cma::commander::ObtainRunCommandProcessor();
+            if (rcp) rcp(peer, cmd);
+>>>>>>> upstream/master
 
             break;
         }
@@ -695,7 +801,11 @@ HANDLE CreateDevNull() {
 // This Function is safe
 bool TheMiniProcess::start(const std::wstring& exe_name) {
     std::unique_lock lk(lock_);
+<<<<<<< HEAD
     if (process_handle_ != INVALID_HANDLE_VALUE) {
+=======
+    if (!wtools::IsInvalidHandle(process_handle_)) {
+>>>>>>> upstream/master
         // check status and reset handle if required
         DWORD exit_code = STILL_ACTIVE;
         if (!::GetExitCodeProcess(process_handle_,
@@ -705,11 +815,19 @@ bool TheMiniProcess::start(const std::wstring& exe_name) {
                 XLOG::l.i("Finished with {} code", exit_code);
             }
             CloseHandle(process_handle_);
+<<<<<<< HEAD
             process_handle_ = INVALID_HANDLE_VALUE;
         }
     }
 
     if (process_handle_ == INVALID_HANDLE_VALUE) {
+=======
+            process_handle_ = wtools::InvalidHandle();
+        }
+    }
+
+    if (wtools::IsInvalidHandle(process_handle_)) {
+>>>>>>> upstream/master
         auto null_handle = CreateDevNull();
         STARTUPINFO si{0};
         si.cb = sizeof(STARTUPINFO);
@@ -737,7 +855,11 @@ bool TheMiniProcess::start(const std::wstring& exe_name) {
 // returns true when killing occurs
 bool TheMiniProcess::stop() {
     std::unique_lock lk(lock_);
+<<<<<<< HEAD
     if (process_handle_ == INVALID_HANDLE_VALUE) return false;
+=======
+    if (wtools::IsInvalidHandle(process_handle_)) return false;
+>>>>>>> upstream/master
 
     auto name = process_name_;
     auto pid = process_id_;
@@ -746,7 +868,11 @@ bool TheMiniProcess::stop() {
     process_id_ = 0;
     process_name_.clear();
     CloseHandle(handle);
+<<<<<<< HEAD
     process_handle_ = INVALID_HANDLE_VALUE;
+=======
+    process_handle_ = wtools::InvalidHandle();
+>>>>>>> upstream/master
 
     // check status and reset handle if required
     DWORD exit_code = STILL_ACTIVE;

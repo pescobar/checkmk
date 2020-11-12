@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -27,6 +28,16 @@
 import abc
 import time
 import six
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+import abc
+import time
+>>>>>>> upstream/master
 
 import cmk.gui.config as config
 import cmk.gui.utils as utils
@@ -162,7 +173,11 @@ class SorterSitealias(Sorter):
             r1["site"])["alias"] < config.site(r2["site"])["alias"])
 
 
+<<<<<<< HEAD
 class ABCTagSorter(six.with_metaclass(abc.ABCMeta, Sorter)):
+=======
+class ABCTagSorter(Sorter, metaclass=abc.ABCMeta):
+>>>>>>> upstream/master
     @abc.abstractproperty
     def object_type(self):
         raise NotImplementedError()
@@ -211,7 +226,11 @@ class SorterServiceTags(ABCTagSorter):
         return ["service_tags"]
 
 
+<<<<<<< HEAD
 class ABCLabelSorter(six.with_metaclass(abc.ABCMeta, Sorter)):
+=======
+class ABCLabelSorter(Sorter, metaclass=abc.ABCMeta):
+>>>>>>> upstream/master
     @abc.abstractproperty
     def object_type(self):
         raise NotImplementedError()
@@ -279,8 +298,14 @@ class SorterServicelevel(Sorter):
 
 
 def cmp_service_name(column, r1, r2):
+<<<<<<< HEAD
     return  (cmp_service_name_equiv(r1[column])> cmp_service_name_equiv(r2[column]))-(cmp_service_name_equiv(r1[column])< cmp_service_name_equiv(r2[column])) or \
            cmp_num_split(column, r1, r2)
+=======
+    return ((cmp_service_name_equiv(r1[column]) > cmp_service_name_equiv(r2[column])) -
+            (cmp_service_name_equiv(r1[column]) < cmp_service_name_equiv(r2[column])) or
+            cmp_num_split(column, r1, r2))
+>>>>>>> upstream/master
 
 
 #                      name                      title                              column                       sortfunction
@@ -534,6 +559,10 @@ declare_simple_sorter("downtime_entry_time", _("Downtime entry time"), "downtime
 declare_1to1_sorter("log_plugin_output", cmp_simple_string)
 declare_1to1_sorter("log_attempt", cmp_simple_string)
 declare_1to1_sorter("log_state_type", cmp_simple_string)
+<<<<<<< HEAD
+=======
+declare_1to1_sorter("log_state_info", cmp_simple_string)
+>>>>>>> upstream/master
 declare_1to1_sorter("log_type", cmp_simple_string)
 declare_1to1_sorter("log_contact_name", cmp_simple_string)
 declare_1to1_sorter("log_time", cmp_simple_number)
@@ -547,7 +576,11 @@ def cmp_log_what(col, a, b):
 def log_what(t):
     if "HOST" in t:
         return 1
+<<<<<<< HEAD
     elif "SERVICE" in t or "SVC" in t:
+=======
+    if "SERVICE" in t or "SVC" in t:
+>>>>>>> upstream/master
         return 2
     return 0
 
@@ -585,3 +618,9 @@ declare_simple_sorter("alerts_problem", _("Number of problem alerts"), "log_aler
 # Aggregations
 declare_simple_sorter("aggr_name", _("Aggregation name"), "aggr_name", cmp_simple_string)
 declare_simple_sorter("aggr_group", _("Aggregation group"), "aggr_group", cmp_simple_string)
+<<<<<<< HEAD
+=======
+
+# Crash reports
+declare_simple_sorter("crash_time", _("Crash time"), "crash_time", cmp_simple_number)
+>>>>>>> upstream/master

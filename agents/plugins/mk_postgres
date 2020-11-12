@@ -1,4 +1,5 @@
 #!/bin/bash
+<<<<<<< HEAD
 # +------------------------------------------------------------------+
 # |             ____ _               _        __  __ _  __           |
 # |            / ___| |__   ___  ___| | __   |  \/  | |/ /           |
@@ -26,6 +27,30 @@
 
 # TODO postgres_connections output format
 
+=======
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# TODO postgres_connections output format
+
+# Disable unused variable error (needed to keep track of version)
+# shellcheck disable=SC2034
+VERSION="2.0.0i2"
+
+function print_sections() {
+    echo "<<<postgres_instances>>>"
+    echo "<<<postgres_sessions>>>"
+    echo "<<<postgres_stat_database>>>"
+    echo "<<<postgres_locks>>>"
+    echo "<<<postgres_query_duration>>>"
+    echo "<<<postgres_connections>>>"
+    echo "<<<postgres_stats>>>"
+    echo "<<<postgres_version>>>"
+    echo "<<<postgres_conn_time>>>"
+    echo "<<<postgres_bloat>>>"
+}
+>>>>>>> upstream/master
 
 #   .--common funcs--------------------------------------------------------.
 #   |                                             __                       |
@@ -67,6 +92,7 @@ function postgres_instances() {
     if [ ! -z "${1}" ]; then
         echo "[[[${1}]]]"
     fi
+<<<<<<< HEAD
 
     # shellcheck disable=SC2009
     # The pgrep command would be different for older distros. Newer distros
@@ -88,6 +114,30 @@ function postgres_sessions() {
               SELECT $CONDITION, count(*) FROM pg_stat_activity WHERE $ROW IS NOT NULL GROUP BY ($CONDITION);" |\
               su - "$DBUSER" -c "$export_PGPASSFILE $psql -X --variable ON_ERROR_STOP=1 ${EXTRA_ARGS} -A -t -F' '" 2>/dev/null)"
 
+=======
+
+    # shellcheck disable=SC2009
+    # The pgrep command would be different for older distros. Newer distros
+    # need the -a option, but older ones need the -f option. The first idea
+    # was to use:
+    #   pgrep -af bin/postgres 2>/dev/null || pgrep -lf bin/postgres
+    # but SLES 11 returns the exit code 0 for a wrong command line.
+    # Newer versions of postgres are started with postmaster instead of postgres
+    ps -eo pid,command | grep -E "bin/postgres|bin/postmaster|bin/edb-postgres" | grep -vE '^[ ]*[0-9]+ grep '
+}
+
+
+function postgres_sessions() {
+    local OUTPUT
+
+    # In postgresql 9.2 the column state was introduced, which has to be queried to
+    # find the state of the sessions. The column state can be NULL.
+    CONDITION="$ROW = $IDLE"
+    OUTPUT="$(echo "\echo '<<<postgres_sessions>>>${INSTANCE_SECTION}'
+              SELECT $CONDITION, count(*) FROM pg_stat_activity WHERE $ROW IS NOT NULL GROUP BY ($CONDITION);" |\
+              su - "$DBUSER" -c "$export_PGPASSFILE $psql -X --variable ON_ERROR_STOP=1 ${EXTRA_ARGS} -A -t -F' '" 2>/dev/null)"
+
+>>>>>>> upstream/master
     echo "$OUTPUT"
     # line with number of idle sessions is sometimes missing on Postgres 8.x. This can lead
     # to an altogether empty section and thus the check disappearing.
@@ -115,6 +165,7 @@ function postgres_simple_queries() {
     # Here the order of the columns did not match with what the server side expects,
     # with the result, that there was never any active connection shown in the
     # web-gui.
+<<<<<<< HEAD
     CONDITION="$ROW <> $IDLE"
     CONNECTIONS_QUERY="SELECT d.datname, COUNT(datid) AS current,
           (SELECT setting AS mc FROM pg_settings WHERE name = 'max_connections') AS mc
@@ -122,6 +173,13 @@ function postgres_simple_queries() {
         LEFT JOIN pg_stat_activity s ON (s.datid = d.oid) WHERE $CONDITION
         GROUP BY 1
         ORDER BY datname;"
+=======
+    CONNECTIONS_QUERY="SELECT datname,
+          (SELECT setting AS mc FROM pg_settings WHERE name = 'max_connections') AS mc,
+        COUNT(state) FILTER (WHERE state='idle') AS idle,
+        COUNT(state) FILTER (WHERE state='active') AS active
+        FROM pg_stat_activity group by 1;"
+>>>>>>> upstream/master
 
     echo "\pset footer off
           \echo '<<<postgres_stat_database:sep(59)>>>${INSTANCE_SECTION}'
@@ -152,7 +210,11 @@ function postgres_stats() {
     # Contains last vacuum time and analyze time
     local LASTVACUUM="SELECT current_database() AS datname, nspname AS sname, relname AS tname,
                           CASE WHEN v IS NULL THEN -1 ELSE round(extract(epoch FROM v)) END AS vtime,
+<<<<<<< HEAD
                           CASE WHEN g IS NULL THEN -1 ELSE round(extract(epoch FROM v)) END AS atime
+=======
+                          CASE WHEN g IS NULL THEN -1 ELSE round(extract(epoch FROM g)) END AS atime
+>>>>>>> upstream/master
                       FROM (SELECT nspname, relname, GREATEST(pg_stat_get_last_vacuum_time(c.oid), pg_stat_get_last_autovacuum_time(c.oid)) AS v,
                                 GREATEST(pg_stat_get_last_analyze_time(c.oid), pg_stat_get_last_autoanalyze_time(c.oid)) AS g
                             FROM pg_class c, pg_namespace n
@@ -445,7 +507,11 @@ function postgres_set_condition_vars() {
     fi
 }
 
+<<<<<<< HEAD
 
+=======
+print_sections
+>>>>>>> upstream/master
 MK_CONFFILE=$MK_CONFDIR/postgres.cfg
 if [ -e "$MK_CONFFILE" ]; then
 

@@ -1,3 +1,10 @@
+<<<<<<< HEAD
+=======
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the
+// terms and conditions defined in the file COPYING, which is part of this
+// source code package.
+>>>>>>> upstream/master
 
 // provides basic api to start and stop service
 
@@ -11,6 +18,10 @@
 #include <cstdint>  // wchar_t when compiler options set weird
 #include <functional>
 
+<<<<<<< HEAD
+=======
+#include "common/wtools_service.h"
+>>>>>>> upstream/master
 #include "tools/_raii.h"
 #include "tools/_xlog.h"
 
@@ -20,6 +31,7 @@ namespace cma {
 // Related to Service Agent Logic
 namespace srv {
 enum class StdioLog { no, yes, extended };
+<<<<<<< HEAD
 class ServiceProcessor;
 int InstallMainService();                  // on install
 int RemoveMainService();                   // on remove
@@ -28,10 +40,29 @@ int TestMt();                              // on check -mt
 int TestMainServiceSelf(int Interval);     // on check self
 int TestLegacy();                          // on test
 int RestoreWATOConfig();                   // on restore
+=======
+enum class FwMode { show, configure, clear };
+class ServiceProcessor;
+int InstallMainService();               // on install
+int RemoveMainService();                // on remove
+int TestIo();                           // on check -io
+int TestMt();                           // on check -mt
+int TestMainServiceSelf(int Interval);  // on check self
+int TestLegacy();                       // on test
+int RestoreWATOConfig();                // on restore
+int ExecFirewall(srv::FwMode fw_mode, std::wstring_view app_name,
+                 std::wstring_view name);  // on fw
+>>>>>>> upstream/master
 int ExecMainService(StdioLog stdio_log);   // on exec
 int ExecStartLegacy();                     // on start_legacy
 int ExecStopLegacy();                      // on stop_legacy
 int ExecCap();                             // on cap
+<<<<<<< HEAD
+=======
+
+int ExecCmkUpdateAgent(const std::vector<std::wstring>& params);  // updater
+
+>>>>>>> upstream/master
 int ExecVersion();                         // on version
 int ExecPatchHash();                       // on patch_hash
 int ExecShowConfig(std::string_view sec);  // on showconfig
@@ -41,12 +72,19 @@ int ExecSkypeTest();  // on skype :hidden
 int ExecResetOhm();   // on resetohm :hidden
 
 int ExecReloadConfig();
+<<<<<<< HEAD
 int ExecRemoveLegacyAgent();
+=======
+int ExecUninstallAlert();
+int ExecRemoveLegacyAgent();
+void ExecUninstallClean();
+>>>>>>> upstream/master
 
 int ExecRealtimeTest(bool Print);  // on rt
 int ExecCvtIniYaml(std::filesystem::path IniFile,
                    std::filesystem::path YamlFile,
                    StdioLog stdio_log);  // on cvt
+<<<<<<< HEAD
 int ExecSection(const std::wstring& SecName,
                 int RepeatPause,      // if 0 no repeat
                 StdioLog stdio_log);  // on section
@@ -54,6 +92,25 @@ int ServiceAsService(std::chrono::milliseconds Delay,
                      std::function<bool(const void* Processor)>
                          InternalCallback) noexcept;  // service execution
 
+=======
+int ExecExtractCap(std::wstring_view cap_file,
+                   std::wstring_view to);  //
+int ExecSection(const std::wstring& SecName,
+                int RepeatPause,      // if 0 no repeat
+                StdioLog stdio_log);  // on section
+int ServiceAsService(std::wstring_view app_name,
+                     std::chrono::milliseconds Delay,
+                     std::function<bool(const void* Processor)>
+                         InternalCallback) noexcept;  // service execution
+
+void ProcessFirewallConfiguration(std::wstring_view app_name);
+[[maybe_unused]] bool ProcessServiceConfiguration(std::wstring_view app_name);
+
+// Converter API from YML language to wtools
+wtools::WinService::ErrorMode GetServiceErrorModeFromCfg(std::string_view text);
+wtools::WinService::StartMode GetServiceStartModeFromCfg(std::string_view text);
+
+>>>>>>> upstream/master
 // NAMES
 constexpr const wchar_t* kServiceName = L"CheckMkService";
 constexpr const wchar_t* kServiceDisplayName =
@@ -65,6 +122,12 @@ constexpr const wchar_t* kServiceDependencies = L"";
 constexpr const wchar_t* kServiceAccount = L"NT AUTHORITY\\LocalService";
 constexpr const wchar_t* kServicePassword = nullptr;
 
+<<<<<<< HEAD
+=======
+constexpr std::wstring_view kSrvFirewallRuleName = L"CheckMk Service Rule";
+constexpr std::wstring_view kAppFirewallRuleName = L"CheckMk Application Rule";
+
+>>>>>>> upstream/master
 // service configuration
 // main call
 // sets service to restart on error.

@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: FireEye Appliances: SMTP connections
+=======
+title: FireEye Appliances: SMTP Connections
+>>>>>>> upstream/master
 agents: snmp
 catalog: hw/network/fireeye
 license: GPL
@@ -10,9 +14,12 @@ description:
  The check goes WARN or CRIT if the number of
  SMTP connections exceeds configurable values.
 
+<<<<<<< HEAD
 item:
  No item.
 
+=======
+>>>>>>> upstream/master
 inventory:
  One service is created.
 

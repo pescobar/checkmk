@@ -1,4 +1,16 @@
+<<<<<<< HEAD
 # yapf: disable
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# yapf: disable
+# type: ignore
+
+>>>>>>> upstream/master
 checkname = 'lparstat_aix'
 
 info = [[
@@ -32,8 +44,13 @@ checks = {
         (0, 'System: 0.4%', [('system', 0.4)]),
         (0, 'Wait: 0%', [('wait', 0.0)]),
         (0, 'Total CPU: 0.6%', [('util', 0.6000000000000001, None, None, 0, None)]),
+<<<<<<< HEAD
         (0, '100% corresponding to entitled processing capacity: 1.00 CPUs', [('cpu_entitlement',
                                                                                1.0)]),
         (0, "", [('cpu_entitlement_util', 0.006000000000000001)]),
+=======
+        (0, 'Physical CPU consumption: 0.02 CPUs', [('cpu_entitlement_util', 0.02)]),
+        (0, "Entitlement: 1.00 CPUs", [('cpu_entitlement', 1.00)]),
+>>>>>>> upstream/master
     ]),],
 }

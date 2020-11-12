@@ -5,7 +5,11 @@ Class: feature
 Compatible: compat
 Edition: cre
 State: unknown
+<<<<<<< HEAD
 Version: 1.7.0i1
+=======
+Version: 2.0.0i1
+>>>>>>> upstream/master
 Date: 1566458596
 
 When a view is being filtered, a filter can add some text to the view title,

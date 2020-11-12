@@ -12,9 +12,13 @@
 #include "logger.h"
 #include "tools/_raii.h"
 
+<<<<<<< HEAD
 namespace cma {
 
 namespace provider {
+=======
+namespace cma::provider {
+>>>>>>> upstream/master
 
 std::string UptimeSync::makeBody() {
     auto count = GetTickCount64();
@@ -60,7 +64,11 @@ const wchar_t* GetNextMultiSz(const std::vector<wchar_t>& Data,
                               size_t& Offset) {
     if (Data.size() < Offset + 1) return nullptr;  // sanity check
 
+<<<<<<< HEAD
     auto str = &Data[Offset];
+=======
+    const auto* str = &Data[Offset];
+>>>>>>> upstream/master
     auto len = wcslen(str);
 
     if ((len == 0) ||  // end of data
@@ -74,7 +82,11 @@ const wchar_t* GetNextMultiSz(const std::vector<wchar_t>& Data,
 }
 
 std::string MakeWinPerfInstancesLine(const PERF_OBJECT_TYPE* Object) {
+<<<<<<< HEAD
     if (Object && Object->NumInstances > 0) {
+=======
+    if (Object != nullptr && Object->NumInstances > 0) {
+>>>>>>> upstream/master
         // this is as in 'LWA'
         // negative count is skipped
         std::string out = std::to_string(Object->NumInstances) + " instances:";
@@ -107,13 +119,18 @@ wtools::perf::DataSequence LoadWinPerfData(const std::wstring& Key,
     if (ret.has_value()) {
         result = wtools::perf::ReadPerformanceDataFromRegistry(Key);
         if (result.len_ == 0) {
+<<<<<<< HEAD
             XLOG::t.t("Obtained no data from counter {}", ConvertToUTF8(Key));
+=======
+            XLOG::d.t("Obtained no data from counter {}", ConvertToUTF8(Key));
+>>>>>>> upstream/master
             return {};
         }
 
     } else {
         // attempt to get named parameter
         XLOG::t("Key Index {} is not found, looking in registry",
+<<<<<<< HEAD
                 wtools::ConvertToUTF8(Key));
         ret = wtools::perf::FindPerfIndexInRegistry(Key);
         if (!ret.has_value()) {
@@ -123,12 +140,27 @@ wtools::perf::DataSequence LoadWinPerfData(const std::wstring& Key,
 
         result = wtools::perf::ReadPerformanceDataFromRegistry(
             std::to_wstring(ret.value()));
+=======
+                ConvertToUTF8(Key));
+        ret = perf::FindPerfIndexInRegistry(Key);
+        if (!ret.has_value()) {
+            XLOG::d.t("Key value cannot be processed '{}'", ConvertToUTF8(Key));
+            return {};
+        }
+
+        result =
+            perf::ReadPerformanceDataFromRegistry(std::to_wstring(ret.value()));
+>>>>>>> upstream/master
     }
 
     // read registry
     KeyIndex = ret.value();  // must be available
 
+<<<<<<< HEAD
     return std::move(result);
+=======
+    return result;
+>>>>>>> upstream/master
 }
 
 // build Check MK formatted list of counters
@@ -139,7 +171,12 @@ std::string MakeWinPerfNakedList(const PERF_OBJECT_TYPE* Object,
     using namespace wtools;
 
     if (Object == nullptr) {
+<<<<<<< HEAD
         XLOG::t("Object is null for index [{}]", KeyIndex);
+=======
+        // can't happen - still defensive programming for Windows Agent
+        XLOG::l.crit("Object is null for index [{}]", KeyIndex);
+>>>>>>> upstream/master
         return {};
     }
 
@@ -156,17 +193,28 @@ std::string MakeWinPerfNakedList(const PERF_OBJECT_TYPE* Object,
         accu += std::to_string(first_column);
 
         // 2. Value(s)
+<<<<<<< HEAD
         if (instances.size() > 0) {
+=======
+        if (instances.empty()) {
+            auto value = perf::GetValueFromBlock(*counter, block);
+            accu += ' ';
+            accu += std::to_string(value);
+        } else {
+>>>>>>> upstream/master
             auto values = perf::GenerateValues(*counter, instances);
 
             for (auto value : values) {
                 accu += ' ';
                 accu += std::to_string(value);
             }
+<<<<<<< HEAD
         } else {
             auto value = perf::GetValueFromBlock(*counter, block);
             accu += ' ';
             accu += std::to_string(value);
+=======
+>>>>>>> upstream/master
         }
 
         // 3 or Last. Name
@@ -193,8 +241,17 @@ std::string BuildWinPerfSection(std::wstring_view prefix,
     uint32_t key_index = 0;
     auto result = details::LoadWinPerfData(std::wstring(key), key_index);
 
+<<<<<<< HEAD
     auto object = wtools::perf::FindPerfObject(result, key_index);
     if (!object) return {};
+=======
+    const auto* object = perf::FindPerfObject(result, key_index);
+    if (object == nullptr) {
+        XLOG::d("Winperf Object name '{}' index [{}] is not found",
+                ConvertToUTF8(key), key_index);
+        return {};
+    }
+>>>>>>> upstream/master
 
     // now we have data and we are building body
 
@@ -220,5 +277,9 @@ std::string BuildWinPerfSection(std::wstring_view prefix,
     return accu;
 }
 
+<<<<<<< HEAD
 }  // namespace provider
 };  // namespace cma
+=======
+}  // namespace cma::provider
+>>>>>>> upstream/master

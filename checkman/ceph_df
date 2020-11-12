@@ -14,4 +14,8 @@ item:
  The pool name.
 
 inventory:
+<<<<<<< HEAD
  One service per pool is created.
+=======
+ One service is created for each pool.
+>>>>>>> upstream/master

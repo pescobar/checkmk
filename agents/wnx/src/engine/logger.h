@@ -1,8 +1,19 @@
+<<<<<<< HEAD
+=======
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+// conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 // simple logging
 // see logger.cpp to understand how it works
 
 #pragma once
+<<<<<<< HEAD
+=======
+#include <fmt/format.h>
+
+>>>>>>> upstream/master
 #include <mutex>
 #include <string>
 #include <string_view>
@@ -11,7 +22,10 @@
 #include "common/cfg_info.h"
 #include "common/wtools.h"
 #include "fmt/color.h"
+<<<<<<< HEAD
 #include "fmt/format.h"
+=======
+>>>>>>> upstream/master
 #include "tools/_xlog.h"
 
 // User defined converter required to logging correctly data from wstring
@@ -56,12 +70,37 @@ void WriteToLogFileWithBackup(std::string_view filename, size_t max_size,
 // check status of duplication
 bool IsDuplicatedOnStdio();
 bool IsColoredOnStdio();
+<<<<<<< HEAD
+=======
+
+unsigned short LoggerEventLevelToWindowsEventType(EventLevel level);
+
+void WriteToWindowsEventLog(unsigned short type, int code,
+                            std::string_view log_name, std::string_view text);
+
+// main engine to write something in the Windows Event Log
+template <typename... Args>
+void LogWindowsEventAlways(EventLevel Level, int Code, const char* Format,
+                           Args&&... args) {
+    auto type = LoggerEventLevelToWindowsEventType(Level);
+    std::string x;
+    try {
+        x = fmt::format(Format, args...);
+    } catch (...) {
+        x = Format;
+    }
+
+    WriteToWindowsEventLog(type, Code, cma::cfg::kDefaultEventLogName, x);
+}
+
+>>>>>>> upstream/master
 template <typename... Args>
 void LogWindowsEvent(EventLevel Level, int Code, const char* Format,
                      Args&&... args) {
     auto allowed_level = cma::cfg::GetCurrentEventLevel();
     if (Level > allowed_level) return;
 
+<<<<<<< HEAD
     auto eventSource =
         RegisterEventSourceA(nullptr, cma::cfg::kDefaultEventLogName);
     if (eventSource) {
@@ -102,6 +141,9 @@ void LogWindowsEvent(EventLevel Level, int Code, const char* Format,
                      nullptr);     // No binary data
         DeregisterEventSource(eventSource);
     }
+=======
+    LogWindowsEventAlways(Level, Code, Format, std::forward<Args>(args)...);
+>>>>>>> upstream/master
 }
 
 template <typename... Args>
@@ -163,7 +205,11 @@ inline std::string formatString(int Fl, const char* Prefix,
     try {
         s.reserve(length);
         if (prefix != nullptr) s = prefix;
+<<<<<<< HEAD
         s += String;
+=======
+        if (String != nullptr) s += String;
+>>>>>>> upstream/master
     } catch (const std::exception&) {
         return {};
     }
@@ -387,9 +433,15 @@ public:
     template <>
     std::ostream& operator<<(const std::wstring& Value) {
         auto s_wide = fmt::format(L"{}", Value);
+<<<<<<< HEAD
         std::string s(s_wide.begin(), s_wide.end());
         if (!constructed()) {
             xlog::l("Attempt to log too early '%s'", s.c_str());
+=======
+        auto s = wtools::ConvertToUTF8(Value);
+        if (!constructed()) {
+            auto _ = xlog::l("Attempt to log too early '%s'", s.c_str());
+>>>>>>> upstream/master
             return os_;
         }
 
@@ -399,9 +451,15 @@ public:
 
     std::ostream& operator<<(const wchar_t* Value) {
         auto s_wide = fmt::format(L"{}", Value);
+<<<<<<< HEAD
         std::string s(s_wide.begin(), s_wide.end());
         if (!constructed()) {
             xlog::l("Attempt to log too early '%s'", s.c_str());
+=======
+        auto s = wtools::ConvertToUTF8(Value);
+        if (!constructed()) {
+            auto _ = xlog::l("Attempt to log too early '%s'", s.c_str());
+>>>>>>> upstream/master
             return os_;
         }
         std::lock_guard lk(lock_);
@@ -409,10 +467,32 @@ public:
     }
     // **********************************
 
+<<<<<<< HEAD
     // **********************************
     // STREAM OUTPUT
     template <typename... T>
     auto operator()(const std::string& Format, T... args) {
+=======
+    inline std::string SafePrintToDebuggerAndEventLog(
+        const std::string& text) noexcept {
+        std::string s;
+        try {
+            s = fmt::format(
+                "[ERROR] [CRITICAL] Invalid parameters for log string \"{}\"\n",
+                text);
+            return s;
+        } catch (...) {
+            s = "[ERROR] [CRITICAL] Failed Print\n";
+        }
+        xlog::internal_PrintStringDebugger(s.c_str());
+        return s;
+    }
+
+    // **********************************
+    // STREAM OUTPUT
+    template <typename... T>
+    auto operator()(const std::string& Format, T... args) noexcept {
+>>>>>>> upstream/master
         try {
             auto s = fmt::format(Format, args...);
             if (!constructed()) {
@@ -424,18 +504,26 @@ public:
             postProcessAndPrint(s);
             return s;
         } catch (...) {
+<<<<<<< HEAD
             auto s =
                 fmt::format("Invalid parameters for log string \"{}\"", Format);
             auto e = *this;
             e.mods_ = XLOG::kCritError;
             e.postProcessAndPrint(s);
             return s;
+=======
+            return SafePrintToDebuggerAndEventLog(Format);
+>>>>>>> upstream/master
         }
     }
 
     // #TODO make more versatile
     template <typename... T>
+<<<<<<< HEAD
     auto operator()(int Flags, const std::string& Format, T... args) {
+=======
+    auto operator()(int Flags, const std::string& Format, T... args) noexcept {
+>>>>>>> upstream/master
         try {
             auto s = fmt::format(Format, args...);
             if (!constructed()) {
@@ -448,23 +536,31 @@ public:
             e.postProcessAndPrint(s);
             return s;
         } catch (...) {
+<<<<<<< HEAD
             auto s =
                 fmt::format("Invalid parameters for log string \"{}\"", Format);
             auto e = *this;
             e.mods_ = XLOG::kCritError;
             e.postProcessAndPrint(s);
             return s;
+=======
+            return SafePrintToDebuggerAndEventLog(Format);
+>>>>>>> upstream/master
         }
     }
     // **********************************
 
+<<<<<<< HEAD
     // this if for stream operations
+=======
+>>>>>>> upstream/master
     void bp() {
         if (bp_allowed_) {
             xdbg::bp();
         }
     }
 
+<<<<<<< HEAD
     XLOG::Emitter operator()(int Flags = kCopy) {
         auto e = *this;
         e.mods_ = Flags;
@@ -472,6 +568,8 @@ public:
         return e;
     }
 
+=======
+>>>>>>> upstream/master
     // Bunch of functions to provide special output
     // Main use case
     // write to log important data, which are not error
@@ -497,12 +595,17 @@ public:
         try {
             auto s = fmt::format(Format, args...);
             // check construction
+<<<<<<< HEAD
             if (this == nullptr || !this->constructed_) return s;
+=======
+            if (!this->constructed_) return s;
+>>>>>>> upstream/master
             auto e = *this;
             e.mods_ |= Modifications;
             e.postProcessAndPrint(s);
             return s;
         } catch (...) {
+<<<<<<< HEAD
             // we do not want any exceptions during logging
             auto s =
                 fmt::format("Invalid parameters for log string \"{}\"", Format);
@@ -517,72 +620,139 @@ public:
     // [Trace]
     template <typename... T>
     auto t(const std::string& Format, T... args) {
+=======
+            return SafePrintToDebuggerAndEventLog(Format);
+        }
+    }
+
+#pragma warning(push)
+#pragma warning(disable : 26444)
+    // [Trace]
+    template <typename... T>
+    [[maybe_unused]] auto t(const std::string& Format, T... args) {
+>>>>>>> upstream/master
         return exec(XLOG::kTrace, Format, args...);
     }
 
     // no prefix, just informational
     template <typename... T>
+<<<<<<< HEAD
     auto i(const std::string& Format, T... args) {
+=======
+    [[maybe_unused]] auto i(const std::string& Format, T... args) {
+>>>>>>> upstream/master
         return exec(XLOG::kInfo, Format, args...);
     }
 
     template <typename... T>
+<<<<<<< HEAD
     auto i(int Mods, const std::string& Format, T... args) {
+=======
+    [[maybe_unused]] auto i(int Mods, const std::string& Format, T... args) {
+>>>>>>> upstream/master
         return exec(XLOG::kInfo | Mods, Format, args...);
     }
 
     // [Err  ]
     template <typename... T>
+<<<<<<< HEAD
     auto e(const std::string& Format, T... args) {
+=======
+    [[maybe_unused]] auto e(const std::string& Format, T... args) {
+>>>>>>> upstream/master
         return exec(XLOG::kError, Format, args...);
     }
 
     // [Warn ]
     template <typename... T>
+<<<<<<< HEAD
     auto w(const std::string& Format, T... args) {
+=======
+    [[maybe_unused]] auto w(const std::string& Format, T... args) {
+>>>>>>> upstream/master
         return exec(XLOG::kWarning, Format, args...);
     }
 
     template <typename... T>
+<<<<<<< HEAD
     auto crit(const std::string& Format, T... args) {
+=======
+    [[maybe_unused]] auto crit(const std::string& Format, T... args) {
+>>>>>>> upstream/master
         return exec(XLOG::kCritError, Format, args...);
     }
     // [ERROR:CRITICAL] +  breakpoint
     template <typename... T>
+<<<<<<< HEAD
     auto bp(const std::string& Format, T... args) {
         return exec(XLOG::kCritError | XLOG::kBp, Format, args...);
     }
 
     Emitter t() {
+=======
+    [[maybe_unused]] auto bp(const std::string& Format, T... args) {
+        return exec(XLOG::kCritError | XLOG::kBp, Format, args...);
+    }
+
+    // this if for stream operations
+    [[maybe_unused]] XLOG::Emitter operator()(int Flags = kCopy) {
+        auto e = *this;
+        e.mods_ = Flags;
+
+        return e;
+    }
+
+    [[maybe_unused]] Emitter t() {
+>>>>>>> upstream/master
         auto e = *this;
         e.mods_ = XLOG::kTrace;
         return e;
     }
 
+<<<<<<< HEAD
     Emitter w() {
+=======
+    [[maybe_unused]] Emitter w() {
+>>>>>>> upstream/master
         auto e = *this;
         e.mods_ = XLOG::kWarning;
         return e;
     }
 
+<<<<<<< HEAD
     Emitter i() {
+=======
+    [[maybe_unused]] Emitter i() {
+>>>>>>> upstream/master
         auto e = *this;
         e.mods_ = XLOG::kInfo;
         return e;
     }
 
+<<<<<<< HEAD
     Emitter e() {
+=======
+    [[maybe_unused]] Emitter e() {
+>>>>>>> upstream/master
         auto e = *this;
         e.mods_ = XLOG::kError;
         return e;
     }
 
+<<<<<<< HEAD
     Emitter crit() {
+=======
+    [[maybe_unused]] Emitter crit() {
+>>>>>>> upstream/master
         auto e = *this;
         e.mods_ = XLOG::kCritError;
         return e;
     }
+<<<<<<< HEAD
 
+=======
+#pragma warning(pop)
+>>>>>>> upstream/master
     // set filename to log
     void configFile(const std::string& LogFile) {
         if (LogFile.empty()) {
@@ -720,7 +890,11 @@ bool IsEventLogEnabled();
 
 namespace internal {
 int Type2Marker(xlog::Type Lt) noexcept;
+<<<<<<< HEAD
 int Mods2Directions(const xlog::LogParam& lp, int mods) noexcept;
+=======
+uint32_t Mods2Directions(const xlog::LogParam& lp, uint32_t mods) noexcept;
+>>>>>>> upstream/master
 }  // namespace internal
 
 }  // namespace XLOG

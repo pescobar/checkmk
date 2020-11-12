@@ -1,3 +1,10 @@
+<<<<<<< HEAD
+=======
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the
+// terms and conditions defined in the file COPYING, which is part of this
+// source code package.
+>>>>>>> upstream/master
 
 // provides basic api to start and stop service
 
@@ -5,6 +12,11 @@
 #ifndef service_processor_h__
 #define service_processor_h__
 
+<<<<<<< HEAD
+=======
+#include <fmt/format.h>
+
+>>>>>>> upstream/master
 #include <chrono>      // timestamps
 #include <cstdint>     // wchar_t when compiler options set weird
 #include <functional>  // callback in the main function
@@ -20,8 +32,13 @@
 #include "common/mailslot_transport.h"
 #include "common/wtools.h"
 #include "external_port.h"
+<<<<<<< HEAD
 #include "fmt/format.h"
 #include "logger.h"
+=======
+#include "logger.h"
+#include "modules.h"
+>>>>>>> upstream/master
 #include "providers/check_mk.h"
 #include "providers/df.h"
 #include "providers/fileinfo.h"
@@ -39,16 +56,24 @@
 #include "providers/wmi.h"
 #include "read_file.h"
 #include "realtime.h"
+<<<<<<< HEAD
+=======
+#include "tools/_win.h"
+>>>>>>> upstream/master
 #include "tools/_xlog.h"
 
 namespace cma::srv {
 // mini processes of the global type
 class TheMiniProcess {
 public:
+<<<<<<< HEAD
     TheMiniProcess()
         : process_handle_(INVALID_HANDLE_VALUE)
         , thread_handle_(INVALID_HANDLE_VALUE)
         , process_id_(0) {}
+=======
+    TheMiniProcess() = default;
+>>>>>>> upstream/master
 
     TheMiniProcess(const TheMiniProcess&) = delete;
     TheMiniProcess& operator=(const TheMiniProcess&) = delete;
@@ -65,9 +90,15 @@ public:
 
 private:
     mutable std::mutex lock_;
+<<<<<<< HEAD
     HANDLE process_handle_;
     HANDLE thread_handle_;
     uint32_t process_id_;
+=======
+    HANDLE process_handle_{wtools::InvalidHandle()};
+    HANDLE thread_handle_{wtools::InvalidHandle()};
+    uint32_t process_id_{0};
+>>>>>>> upstream/master
     std::string process_name_;  // for debug purposes
 
 #if defined(GTEST_INCLUDE_GTEST_GTEST_H_)
@@ -84,6 +115,10 @@ bool SystemMailboxCallback(const cma::MailSlot*, const void* data, int len,
 
 class ServiceProcessor;
 
+<<<<<<< HEAD
+=======
+//
+>>>>>>> upstream/master
 // wrapper to use section engine ASYNCHRONOUS by default
 //
 template <typename T>
@@ -106,15 +141,26 @@ public:
         const AnswerId Tp,            // expected id
         ServiceProcessor* processor   // hosting object
     ) {
+<<<<<<< HEAD
         engine_.loadConfig();
+=======
+        engine_.registerOwner(processor);
+        engine_.loadConfig();
+
+>>>>>>> upstream/master
         section_expected_timeout_ = engine_.timeout();
         return std::async(
             mode,
             [this](const std::string CommandLine,  //
                    const AnswerId Tp,              //
                    const ServiceProcessor* Proc) {
+<<<<<<< HEAD
                 engine_.updateSectionStatus();  // actual data gathering is here
                                                 // for plugins and local
+=======
+                engine_.updateSectionStatus();  // actual data gathering is
+                                                // here for plugins and local
+>>>>>>> upstream/master
 
                 engine_.registerCommandLine(CommandLine);
                 auto port_name = Proc->getInternalPort();
@@ -236,6 +282,17 @@ public:
     static void resetOhm() noexcept;
     bool isOhmStarted() const noexcept { return ohm_started_; }
 
+<<<<<<< HEAD
+=======
+    cma::cfg::modules::ModuleCommander& getModuleCommander() noexcept {
+        return mc_;
+    }
+    const cma::cfg::modules::ModuleCommander& getModuleCommander()
+        const noexcept {
+        return mc_;
+    }
+
+>>>>>>> upstream/master
 private:
     std::vector<uint8_t> makeTestString(const char* Text) {
         const std::string answer_test = Text;
@@ -247,12 +304,22 @@ private:
     // controlled exclusively by mainThread
     std::string internal_port_;
 
+<<<<<<< HEAD
+=======
+    cma::cfg::modules::ModuleCommander mc_;
+
+>>>>>>> upstream/master
     // called by external port BEFORE starting context run
     // on this phase we are starting our async plugins
     void preContextCall() {}
 
+<<<<<<< HEAD
     void informDevice(cma::rt::Device& Device, std::string_view Ip) const
         noexcept;
+=======
+    void informDevice(cma::rt::Device& Device,
+                      std::string_view Ip) const noexcept;
+>>>>>>> upstream/master
 
     // used to start OpenHardwareMonitor if conditions are ok
     bool stopRunningOhmProcess() noexcept;
@@ -448,9 +515,14 @@ private:
                   answer_.getStopWatch().getUsCount() / 1000);
     }
 
+<<<<<<< HEAD
     // We wait here for all answers from all providers, internal and external.
     // The call is *blocking*
     // #TODO break waiting
+=======
+    // We wait here for all answers from all providers, internal and
+    // external. The call is *blocking* #TODO break waiting
+>>>>>>> upstream/master
     cma::srv::AsyncAnswer::DataBlock getAnswer(int Count) {
         using namespace std::chrono;
         XLOG::t.i("waiting futures(only start)");

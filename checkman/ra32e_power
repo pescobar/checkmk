@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: AVTECH Room Alert 32E: Internal power status
+=======
+title: AVTECH Room Alert 32E: Internal Power Status
+>>>>>>> upstream/master
 agents: snmp
 catalog: hw/environment/avtech
 license: GPL
@@ -10,8 +14,13 @@ description:
  the unit runs on battery backup power the status
  {WARN} is returned.
 
+<<<<<<< HEAD
 item:
  No item.
 
 inventory:
  One service per device.
+=======
+inventory:
+ One service is created for each device.
+>>>>>>> upstream/master

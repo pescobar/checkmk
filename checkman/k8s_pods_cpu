@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: Kubernetes pods CPU resources
+=======
+title: Kubernetes: Pods CPU Resources
+>>>>>>> upstream/master
 agents: kubernetes
 catalog: containerization/kubernetes
 license: GPL
@@ -10,4 +14,8 @@ item:
  The namespace whose cpu resources are monitored
 
 inventory:
+<<<<<<< HEAD
  One service per namespace is created.
+=======
+ One service is created for each namespace.
+>>>>>>> upstream/master

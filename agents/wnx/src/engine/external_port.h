@@ -1,3 +1,10 @@
+<<<<<<< HEAD
+=======
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+// conditions defined in the file COPYING, which is part of this source code package.
+
+>>>>>>> upstream/master
 #pragma once
 #if !defined(external_port_h__)
 #define external_port_h__
@@ -96,7 +103,11 @@ private:
         return {};
     }
     void do_read();
+<<<<<<< HEAD
     size_t allocCryptBuffer(const cma::encrypt::Commander* Crypt) noexcept;
+=======
+    size_t allocCryptBuffer(const cma::encrypt::Commander* Crypt);
+>>>>>>> upstream/master
     void do_write(const void* Data, std::size_t Length,
                   cma::encrypt::Commander* Crypt);
 
@@ -104,7 +115,11 @@ private:
     enum { kMaxLength = 1024 };
     char data_[kMaxLength];
     const size_t segment_size_ = 48 * 1024;
+<<<<<<< HEAD
     std::unique_ptr<char> crypt_buf_;
+=======
+    std::vector<char> crypt_buf_;
+>>>>>>> upstream/master
 };
 
 }  // namespace cma::world
@@ -314,7 +329,11 @@ private:
 protected:
     // asio sessions API
     std::shared_ptr<AsioSession> getSession();
+<<<<<<< HEAD
     void processQueue(cma::world::ReplyFunc reply) noexcept;
+=======
+    void processQueue(const cma::world::ReplyFunc& reply);
+>>>>>>> upstream/master
     void wakeThread();
     void timedWaitForSession();
 
@@ -347,7 +366,11 @@ protected:
 
     uint16_t default_port_ = 0;  // work port
 
+<<<<<<< HEAD
     void ioThreadProc(cma::world::ReplyFunc Reply);
+=======
+    void ioThreadProc(const cma::world::ReplyFunc& Reply);
+>>>>>>> upstream/master
 
     // probably overkill, but we want to restart and want to be sure that
     // everything is going smooth

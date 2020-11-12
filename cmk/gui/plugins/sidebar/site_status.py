@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/env python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,6 +24,13 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 import json
 
@@ -31,7 +39,11 @@ from cmk.gui.globals import html
 import cmk.gui.sites as sites
 import cmk.gui.config as config
 
+<<<<<<< HEAD
 from . import (
+=======
+from cmk.gui.plugins.sidebar import (
+>>>>>>> upstream/master
     SidebarSnapin,
     snapin_registry,
     render_link,
@@ -57,15 +69,24 @@ class SiteStatus(SidebarSnapin):
         return _("Connection state of each site and button for enabling "
                  "and disabling the site connection")
 
+<<<<<<< HEAD
     def show(self):
         html.open_table(cellspacing=0, class_="sitestate")
+=======
+    def show(self) -> None:
+        html.open_table(cellspacing="0", class_="sitestate")
+>>>>>>> upstream/master
 
         sites.update_site_states_from_dead_sites()
 
         for sitename, _sitealias in config.sorted_sites():
             site = config.site(sitename)
 
+<<<<<<< HEAD
             state = sites.states().get(sitename, {}).get("state")
+=======
+            state = sites.states().get(sitename, sites.SiteStatus({})).get("state")
+>>>>>>> upstream/master
 
             if state is None:
                 state = "missing"
@@ -126,7 +147,15 @@ class SiteStatus(SidebarSnapin):
                 if sitename not in config.sitenames():
                     continue
 
+<<<<<<< HEAD
                 d = config.user.siteconf.get(sitename, {})
                 d["disabled"] = onoff != "on"
                 config.user.siteconf[sitename] = d
+=======
+                if onoff == "on":
+                    config.user.enable_site(sitename)
+                else:
+                    config.user.disable_site(sitename)
+
+>>>>>>> upstream/master
             config.user.save_site_config()

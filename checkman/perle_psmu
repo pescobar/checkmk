@@ -1,6 +1,10 @@
-title: Perle Mediaconverter: Power supplies
+title: Perle Mediaconverter: Power Supplies
 agents: snmp
+<<<<<<< HEAD
 catalog: hw/app/perle
+=======
+catalog: hw/network/perle
+>>>>>>> upstream/master
 license: GPL
 distribution: check_mk
 description:
@@ -16,4 +20,4 @@ item:
  The power supply identifier.
 
 inventory:
- One service per power supply is created
+ One service is created for each power supply.

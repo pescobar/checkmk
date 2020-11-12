@@ -2,6 +2,11 @@
 
 #include "logger.h"
 
+<<<<<<< HEAD
+=======
+#include "cfg.h"
+#include "cma_core.h"
+>>>>>>> upstream/master
 #include "common/cfg_info.h"
 
 namespace XLOG {
@@ -16,6 +21,45 @@ Emitter bp(LogType::log, true);
 bool Emitter::bp_allowed_ = tgt::IsDebug();
 
 namespace details {
+<<<<<<< HEAD
+=======
+
+void WriteToWindowsEventLog(unsigned short type, int code,
+                            std::string_view log_name, std::string_view text) {
+    auto eventSource =
+        RegisterEventSourceA(nullptr, cma::cfg::kDefaultEventLogName);
+    if (eventSource == nullptr) return;
+
+    const char *strings[2] = {log_name.data(), text.data()};
+    ReportEventA(eventSource,  // Event log handle
+                 type,         // Event type
+                 0,            // Event category
+                 code,         // Event identifier
+                 nullptr,      // No security identifier
+                 2,            // Size of lpszStrings array
+                 0,            // No binary data
+                 strings,      // Array of strings
+                 nullptr);     // No binary data
+    DeregisterEventSource(eventSource);
+}
+
+unsigned short LoggerEventLevelToWindowsEventType(EventLevel level) {
+    switch (level) {
+        case EventLevel::success:
+            return EVENTLOG_SUCCESS;
+        case EventLevel::information:
+            return EVENTLOG_INFORMATION_TYPE;
+        case EventLevel::warning:
+            return EVENTLOG_WARNING_TYPE;
+        case EventLevel::error:
+        case EventLevel::critical:
+            return EVENTLOG_ERROR_TYPE;
+        default:
+            return EVENTLOG_INFORMATION_TYPE;
+    }
+}
+
+>>>>>>> upstream/master
 static std::atomic<bool> LogDuplicatedOnStdio = false;
 static std::atomic<bool> LogColoredOnStdio = false;
 static DWORD LogOldMode = -1;
@@ -98,7 +142,11 @@ int Type2Marker(xlog::Type Lt) noexcept {
 
 // converter from low level log type
 // to some default mark
+<<<<<<< HEAD
 int Mods2Directions(const xlog::LogParam &lp, int mods) noexcept {
+=======
+uint32_t Mods2Directions(const xlog::LogParam &lp, uint32_t mods) noexcept {
+>>>>>>> upstream/master
     int directions = lp.directions_;
 
     if (mods & Mods::kStdio) directions |= xlog::kStdioPrint;
@@ -286,6 +334,7 @@ void ColoredOutputOnStdio(bool On) {
 
     if (old == On) return;
 
+<<<<<<< HEAD
     auto hStdin = GetStdHandle(STD_INPUT_HANDLE);
     DWORD old_mode = 0;
     if (On) {
@@ -299,6 +348,19 @@ void ColoredOutputOnStdio(bool On) {
     } else {
         if (details::LogOldMode != -1)
             SetConsoleMode(hStdin, details::LogOldMode);
+=======
+    auto std_input = GetStdHandle(STD_INPUT_HANDLE);
+    if (On) {
+        GetConsoleMode(std_input, &details::LogOldMode);  // store old mode
+
+        //  set color output
+        DWORD old_mode =
+            ENABLE_PROCESSED_OUTPUT | ENABLE_VIRTUAL_TERMINAL_PROCESSING;
+        SetConsoleMode(std_input, old_mode);
+    } else {
+        if (details::LogOldMode != -1)
+            SetConsoleMode(std_input, details::LogOldMode);
+>>>>>>> upstream/master
     }
 }
 

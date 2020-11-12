@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // +------------------------------------------------------------------+
 // |             ____ _               _        __  __ _  __           |
 // |            / ___| |__   ___  ___| | __   |  \/  | |/ /           |
@@ -21,20 +22,37 @@
 // License along with GNU Make; see the file  COPYING.  If  not,  write
 // to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 // Boston, MA 02110-1301 USA.
+=======
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the
+// terms and conditions defined in the file COPYING, which is part of this
+// source code package.
+>>>>>>> upstream/master
 
 #ifndef TableEventConsoleRules_h
 #define TableEventConsoleRules_h
 
 #include "config.h"  // IWYU pragma: keep
+<<<<<<< HEAD
 #include <string>
+=======
+
+#include <string>
+
+>>>>>>> upstream/master
 #include "TableEventConsole.h"
 class MonitoringCore;
 
 class TableEventConsoleRules : public TableEventConsole {
 public:
     explicit TableEventConsoleRules(MonitoringCore *mc);
+<<<<<<< HEAD
     std::string name() const override;
     std::string namePrefix() const override;
+=======
+    [[nodiscard]] std::string name() const override;
+    [[nodiscard]] std::string namePrefix() const override;
+>>>>>>> upstream/master
 };
 
 #endif  // TableEventConsoleRules_h

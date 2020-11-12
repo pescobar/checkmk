@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/env python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,6 +24,13 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 from collections import namedtuple
 import argparse
@@ -30,6 +38,11 @@ import json
 import sys
 import requests
 
+<<<<<<< HEAD
+=======
+from cmk.special_agents.utils import vcrtrace
+
+>>>>>>> upstream/master
 Section = namedtuple('Section', ['name', 'key', 'uri'])
 
 
@@ -54,7 +67,11 @@ def main(argv=None):
             name="nodes",
             key="computer",
             uri=
+<<<<<<< HEAD
             "/computer/api/json?tree=displayName,busyExecutors,totalExecutors,computer[description,displayName,idle,jnlpAgent,numExecutors,offline,offlineCause,offlineCause,temporarilyOffline,monitorData[*]]"
+=======
+            "/computer/api/json?tree=displayName,busyExecutors,totalExecutors,computer[description,displayName,idle,jnlpAgent,numExecutors,assignedLabels[busyExecutors,idleExecutors,nodes[mode],name],offline,offlineCause,temporarilyOffline,monitorData[*]]"
+>>>>>>> upstream/master
         ),
         Section(
             name="queue",
@@ -68,13 +85,21 @@ def main(argv=None):
         handle_request(args, sections)
     except Exception:
         if args.debug:
+<<<<<<< HEAD
             return 1
+=======
+            raise
+>>>>>>> upstream/master
 
     return 0
 
 
 def handle_request(args, sections):
     url_base = "%s://%s:%s" % (args.proto, args.hostname, args.port)
+<<<<<<< HEAD
+=======
+    #labels = {}
+>>>>>>> upstream/master
 
     for section in sections:
         if section.name not in args.sections:
@@ -95,8 +120,35 @@ def handle_request(args, sections):
         else:
             value = response.json()[section.key]
 
+<<<<<<< HEAD
         sys.stdout.write("%s\n" % json.dumps(value))
 
+=======
+        # if piggyback for nodes is implemented,
+        # use this section for Host labels
+        #
+        #if section.name == "nodes":
+        #    for line in value:
+        #        node_name = line.get("displayName")
+        #        label_data = line.get("assignedLabels")
+        #        if label_data is None or node_name is None:
+        #            continue
+        #
+        #        for label in label_data:
+        #            label_name = label.get("name")
+        #            if label_name is None:
+        #                continue
+        #
+        #            if label_name != node_name:
+        #                labels.update({"cmk/jenkins_node_label_%s" % label_name: "yes"})
+
+        sys.stdout.write("%s\n" % json.dumps(value))
+
+    #if labels:
+    #    sys.stdout.write("<<<labels:sep(0)>>>\n")
+    #    sys.stdout.write("%s\n" % json.dumps(labels))
+
+>>>>>>> upstream/master
 
 def parse_arguments(argv):
     sections = ["instance", "jobs", "nodes", "queue"]
@@ -104,6 +156,10 @@ def parse_arguments(argv):
     parser = argparse.ArgumentParser(description=__doc__,
                                      formatter_class=argparse.RawTextHelpFormatter)
 
+<<<<<<< HEAD
+=======
+    parser.add_argument("--vcrtrace", action=vcrtrace(filter_headers=[('authorization', '****')]))
+>>>>>>> upstream/master
     parser.add_argument("-u", "--user", default=None, help="Username for jenkins login")
     parser.add_argument("-s", "--password", default=None, help="Password for jenkins login")
     parser.add_argument("-P",
@@ -129,7 +185,11 @@ def parse_arguments(argv):
                         metavar="HOSTNAME",
                         help="Name of the jenkins instance to query.")
 
+<<<<<<< HEAD
     return parser.parse_args()
+=======
+    return parser.parse_args(argv)
+>>>>>>> upstream/master
 
 
 if __name__ == "__main__":

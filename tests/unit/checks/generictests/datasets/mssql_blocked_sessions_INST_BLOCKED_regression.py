@@ -1,5 +1,17 @@
+<<<<<<< HEAD
 # -*- encoding: utf-8
 # yapf: disable
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# yapf: disable
+# type: ignore
+
+>>>>>>> upstream/master
 
 
 checkname = 'mssql_blocked_sessions'
@@ -35,4 +47,8 @@ checks = {'': [('ID 1',
                  (0, '\nSession 1 blocked by 2 (Type: Foo, Wait: 2.7 d)', []),
                  (0, '\nSession 3 blocked by 4 (Type: Foo, Wait: 2.7 d)', []),
                  (0, '\nSession 5 blocked by 6 (Type: Bar, Wait: 2.7 d)', []),
+<<<<<<< HEAD
                  (0, '\nSession 7 blocked by 8 (Type: Bar, Wait: 2.7 d)', [])])]}
+=======
+                 (0, '\nSession 7 blocked by 8 (Type: Bar, Wait: 2.7 d)', [])])]}
+>>>>>>> upstream/master

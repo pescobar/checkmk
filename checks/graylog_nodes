@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,6 +24,13 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 # <<<graylog_nodes>>>
 # {"a56db164-78a6-4dc8-bec9-418b9edf9067": {"inputstates": {"message_input":
@@ -56,7 +64,11 @@ def parse_graylog_nodes(info):
     for line in info:
         node_details = json.loads(line[0])
 
+<<<<<<< HEAD
         for node, detail in node_details.iteritems():
+=======
+        for node, detail in node_details.items():
+>>>>>>> upstream/master
             try:
                 parsed.setdefault(node, []).append(detail)
             except KeyError:
@@ -86,7 +98,11 @@ factory_settings["graylog_nodes_default_levels"] = {
 
 
 def inventory_graylog_nodes(parsed):
+<<<<<<< HEAD
     for node in parsed.keys():
+=======
+    for node in parsed:
+>>>>>>> upstream/master
         yield node, {}
 
 
@@ -98,7 +114,14 @@ def check_graylog_nodes(item, params, parsed):
         yield 2, "Missing in agent output (graylog service running?)"
         return
 
+<<<<<<< HEAD
     for _item_name, details in parsed.iteritems():
+=======
+    for node_name, details in parsed.items():
+        if item != node_name:
+            continue
+
+>>>>>>> upstream/master
         for node_info in details:
             for key, infotext, levels in [
                 ("lb_status", "Load balancer state", "lb_"),
@@ -139,6 +162,7 @@ def check_graylog_nodes(item, params, parsed):
                     state_of_input = 0
                     if value_input_state != "RUNNING":
                         state_of_input = params["input_state"]
+<<<<<<< HEAD
                     long_output_str += "Status: %s%s" % (value_input_state,
                                                          state_markers[state_of_input])
 
@@ -151,6 +175,34 @@ def check_graylog_nodes(item, params, parsed):
             yield state_of_input, input_info
 
             yield 0, "\n%s" % "\n".join(long_output)
+=======
+                    long_output_str += "Status: %s" % value_input_state
+
+                long_output.append((state_of_input, long_output_str))
+
+        input_nr_levels = params.get('input_count_upper', (None, None))
+        input_nr_levels_lower = params.get('input_count_lower', (None, None))
+        yield check_levels(len(value_inputstates),
+                           "num_input",
+                           input_nr_levels + input_nr_levels_lower,
+                           human_readable_func=int,
+                           infoname="Inputs")
+
+        max_state = 0
+        if long_output:
+
+            long_output_info = ""
+            max_state = max([state for state, _infotext in long_output])
+            if max_state:
+                long_output_info += "One or more inputs not in state running, "
+
+            long_output_info += "see long output for more details"
+
+            yield max_state, long_output_info
+
+            for state, line in sorted(long_output):
+                yield state, "\n%s" % line
+>>>>>>> upstream/master
 
 
 check_info["graylog_nodes"] = {

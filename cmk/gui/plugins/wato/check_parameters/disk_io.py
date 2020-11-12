@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,6 +24,13 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 from cmk.gui.i18n import _
 from cmk.gui.valuespec import (
@@ -134,5 +142,9 @@ rulespec_registry.register(
         item_spec=_item_spec_disk_io,
         match_type="dict",
         parameter_valuespec=_parameter_valuespec_disk_io,
+<<<<<<< HEAD
         title=lambda: _("Levels on disk IO (old style checks)"),
+=======
+        title=lambda: _("Disk IO levels (old style checks)"),
+>>>>>>> upstream/master
     ))

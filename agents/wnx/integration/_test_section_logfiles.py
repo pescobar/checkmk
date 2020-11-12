@@ -1,13 +1,27 @@
+<<<<<<< HEAD
 #!/usr/bin/env python
 # -*- coding: utf-8; py-indent-offset: 4 -*-
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+>>>>>>> upstream/master
 import io
 import os
 import platform
 import re
 import sys
+<<<<<<< HEAD
 import six
 
 import pytest
+=======
+
+import pytest  # type: ignore
+>>>>>>> upstream/master
 from local import (actual_output, make_yaml_config, src_exec_dir, local_test, run_subprocess,
                    wait_agent, write_config)
 
@@ -184,7 +198,11 @@ def manage_logfiles(request):
     if platform.system() == 'Windows':
         for log in [Globals.testlog1, Globals.testlog2]:
             with io.open(log, 'w', encoding=request.param) as logfile:
+<<<<<<< HEAD
                 for entry in [six.text_type(Globals.testentry1), six.text_type(Globals.testentry2)]:
+=======
+                for entry in [str(Globals.testentry1), str(Globals.testentry2)]:
+>>>>>>> upstream/master
                     logfile.write('%s\r\n' % entry)
     yield
     if platform.system() == 'Windows':

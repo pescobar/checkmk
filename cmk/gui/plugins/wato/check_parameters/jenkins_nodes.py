@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,11 +24,22 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 from cmk.gui.i18n import _
 from cmk.gui.valuespec import (
     Age,
     Dictionary,
+<<<<<<< HEAD
+=======
+    DropdownChoice,
+>>>>>>> upstream/master
     Integer,
     MonitoringState,
     TextAscii,
@@ -44,6 +56,22 @@ from cmk.gui.plugins.wato import (
 def _parameter_valuespec_jenkins_nodes():
     return Dictionary(elements=[
         ("jenkins_offline", MonitoringState(title=_("Node state: Offline"), default_value=2)),
+<<<<<<< HEAD
+=======
+        ("jenkins_mode",
+         DropdownChoice(
+             title=_("Expected mode state."),
+             help=_("Choose between Normal (Utilize this node as much "
+                    "as possible) and Exclusive (Only build jobs with label "
+                    "restrictions matching this node). The state will "
+                    "change to warning state, if the mode differs."),
+             choices=[
+                 ("NORMAL", _("Normal")),
+                 ("EXCLUSIVE", _("Exclusive")),
+             ],
+             default_value="NORMAL",
+         )),
+>>>>>>> upstream/master
         ('jenkins_numexecutors',
          Tuple(
              title=_("Lower level for number of executors of this node"),
@@ -52,6 +80,25 @@ def _parameter_valuespec_jenkins_nodes():
                  Integer(title=_("Critical below")),
              ],
          )),
+<<<<<<< HEAD
+=======
+        ('jenkins_busyexecutors',
+         Tuple(
+             title=_("Upper level for number of busy executors of this node"),
+             elements=[
+                 Integer(title=_("Warning at")),
+                 Integer(title=_("Critical at")),
+             ],
+         )),
+        ('jenkins_idleexecutors',
+         Tuple(
+             title=_("Upper level for number of idle executors of this node"),
+             elements=[
+                 Integer(title=_("Warning at")),
+                 Integer(title=_("Critical at")),
+             ],
+         )),
+>>>>>>> upstream/master
         ('avg_response_time',
          Tuple(
              title=_("Average round-trip response time to this node"),

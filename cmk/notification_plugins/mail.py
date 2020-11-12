@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # -*- coding: utf-8 -*-
 # +------------------------------------------------------------------+
 # |             ____ _               _        __  __ _  __           |
@@ -22,6 +23,13 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 # Argument 1: Full system path to the pnp4nagios index.php for fetching the graphs. Usually auto configured in OMD.
 # Argument 2: HTTP-URL-Prefix to open Multisite. When provided, several links are added to the mail.
@@ -31,6 +39,7 @@
 # attached graphs and such neat stuff. Sweet!
 
 import base64
+<<<<<<< HEAD
 import os
 import socket
 import sys
@@ -38,13 +47,29 @@ import subprocess
 import urllib
 import urllib2
 import json
+=======
+>>>>>>> upstream/master
 from email.mime.application import MIMEApplication
 from email.mime.image import MIMEImage
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+<<<<<<< HEAD
 
 from cmk.notification_plugins import utils
 import cmk.utils.site as site
+=======
+import json
+import os
+import socket
+import sys
+from typing import List
+from urllib.parse import quote
+from urllib.request import urlopen
+
+from cmk.notification_plugins import utils
+import cmk.utils.site as site
+from cmk.utils.exceptions import MKException
+>>>>>>> upstream/master
 
 
 def tmpl_head_html(html_section):
@@ -336,7 +361,11 @@ BODY_ELEMENTS = [
         "host",
         True,
         "normal",
+<<<<<<< HEAD
         "Plugin Output",
+=======
+        "Summary",
+>>>>>>> upstream/master
         "$HOSTOUTPUT$",
         "$HOSTOUTPUT_HTML$",
     ),
@@ -383,7 +412,11 @@ BODY_ELEMENTS = [
         "service",
         True,
         "normal",
+<<<<<<< HEAD
         "Plugin Output",
+=======
+        "Summary",
+>>>>>>> upstream/master
         "$SERVICEOUTPUT$",
         "$SERVICEOUTPUT_HTML$",
     ),
@@ -392,7 +425,11 @@ BODY_ELEMENTS = [
         "service",
         False,
         "normal",
+<<<<<<< HEAD
         "Additional Output",
+=======
+        "Details",
+>>>>>>> upstream/master
         "$LONGSERVICEOUTPUT$",
         "$LONGSERVICEOUTPUT_HTML$",
     ),
@@ -481,10 +518,18 @@ opt_debug = '-d' in sys.argv
 bulk_mode = '--bulk' in sys.argv
 
 
+<<<<<<< HEAD
 class GraphException(Exception):
     pass
 
 
+=======
+class GraphException(MKException):
+    pass
+
+
+# TODO: Just use a single EmailContent parameter.
+>>>>>>> upstream/master
 def multipart_mail(target, subject, from_address, reply_to, content_txt, content_html, attach=None):
     if attach is None:
         attach = []
@@ -505,11 +550,17 @@ def multipart_mail(target, subject, from_address, reply_to, content_txt, content
 
     # Add all attachments
     for what, name, contents, how in attach:
+<<<<<<< HEAD
         if what == 'img':
             part = MIMEImage(contents, name=name)
         else:
             part = MIMEApplication(contents, name=name)
 
+=======
+        part = (
+            MIMEImage(contents, name=name) if what == 'img'  #
+            else MIMEApplication(contents, name=name))
+>>>>>>> upstream/master
         part.add_header('Content-ID', '<%s>' % name)
         # how must be inline or attachment
         part.add_header('Content-Disposition', how, filename=name)
@@ -519,7 +570,11 @@ def multipart_mail(target, subject, from_address, reply_to, content_txt, content
 
 
 def send_mail_smtp(message, target, from_address, context):
+<<<<<<< HEAD
     import smtplib  # for the error messages
+=======
+    import smtplib  # pylint: disable=import-outside-toplevel
+>>>>>>> upstream/master
     host_index = 1
 
     retry_possible = False
@@ -529,8 +584,12 @@ def send_mail_smtp(message, target, from_address, context):
         host_var = 'PARAMETER_SMTP_SMARTHOSTS_%d' % host_index
         if host_var not in context:
             break
+<<<<<<< HEAD
         else:
             host_index += 1
+=======
+        host_index += 1
+>>>>>>> upstream/master
 
         smarthost = context[host_var]
         try:
@@ -543,7 +602,11 @@ def send_mail_smtp(message, target, from_address, context):
         except smtplib.SMTPRecipientsRefused as e:
             # the exception contains a dict of failed recipients to the respective error. since we
             # only have one recipient there has to be exactly one element
+<<<<<<< HEAD
             errorcode, message = e.recipients.values()[0]
+=======
+            errorcode, message = list(e.recipients.values())[0]
+>>>>>>> upstream/master
 
             # default is to retry, these errorcodes are known to
             if errorcode not in [
@@ -557,7 +620,11 @@ def send_mail_smtp(message, target, from_address, context):
             retry_possible = True  # server is acting up, this may be fixed quickly
             sys.stderr.write("protocol error from \"%s\": %s\n" % (smarthost, str(e)))
         except smtplib.SMTPSenderRefused as e:
+<<<<<<< HEAD
             sys.stderr.write("server didn't accept from-address \"%s\" refused: %s\n" %\
+=======
+            sys.stderr.write("server didn't accept from-address \"%s\" refused: %s\n" %
+>>>>>>> upstream/master
                              (from_address, str(e)))
         except smtplib.SMTPAuthenticationError as e:
             sys.stderr.write("authentication failed on \"%s\": %s\n" % (smarthost, str(e)))
@@ -570,11 +637,16 @@ def send_mail_smtp(message, target, from_address, context):
 
     if success:
         return 0
+<<<<<<< HEAD
     elif retry_possible:
+=======
+    if retry_possible:
+>>>>>>> upstream/master
         return 1
     return 2
 
 
+<<<<<<< HEAD
 def default_from_address():
     return os.environ.get("OMD_SITE", "checkmk") + "@" + socket.getfqdn()
 
@@ -582,6 +654,11 @@ def default_from_address():
 def send_mail_smtp_impl(message, target, smarthost, from_address, context):
     import smtplib
     import types
+=======
+def send_mail_smtp_impl(message, target, smarthost, from_address, context):
+    import smtplib  # pylint: disable=import-outside-toplevel
+    import types  # pylint: disable=import-outside-toplevel
+>>>>>>> upstream/master
 
     def getreply_wrapper(self):
         self.last_code, self.last_repl = smtplib.SMTP.getreply(self)
@@ -591,6 +668,7 @@ def send_mail_smtp_impl(message, target, smarthost, from_address, context):
 
     encryption = context.get('PARAMETER_SMTP_ENCRYPTION', "NONE")
 
+<<<<<<< HEAD
     if encryption == "ssl_tls":
         conn = smtplib.SMTP_SSL(smarthost, port)  # , from_address)
     else:
@@ -601,6 +679,18 @@ def send_mail_smtp_impl(message, target, smarthost, from_address, context):
     conn.last_code = 0
     conn.last_repl = ""
     conn.getreply = types.MethodType(getreply_wrapper, conn)
+=======
+    conn = (
+        smtplib.SMTP_SSL(smarthost, port) if encryption == "ssl_tls"  #
+        else smtplib.SMTP(smarthost, port))
+
+    # TODO: Can we make the hack a bit less evil?
+    # evil hack: the smtplib doesn't allow access to the reply code/message
+    # in case of success. But we want it!
+    conn.last_code = 0  # type: ignore[attr-defined]
+    conn.last_repl = ""  # type: ignore[attr-defined]
+    conn.getreply = types.MethodType(getreply_wrapper, conn)  # type: ignore[assignment]
+>>>>>>> upstream/master
 
     if encryption == "starttls":
         conn.starttls()
@@ -615,17 +705,27 @@ def send_mail_smtp_impl(message, target, smarthost, from_address, context):
     # the first parameter here is actually used in the return_path header
     try:
         conn.sendmail(from_address, target.split(','), message.as_string())
+<<<<<<< HEAD
         sys.stdout.write("success %d - %s\n" % (conn.last_code, conn.last_repl))
+=======
+        sys.stdout.write("success %d - %s\n" %
+                         (conn.last_code, conn.last_repl))  # type: ignore[attr-defined]
+>>>>>>> upstream/master
     finally:
         conn.quit()
 
 
+<<<<<<< HEAD
+=======
+# TODO: Use EmailContent parameter.
+>>>>>>> upstream/master
 def send_mail(message, target, from_address, context):
     if "PARAMETER_SMTP_PORT" in context:
         return send_mail_smtp(message, target, from_address, context)
     return utils.send_mail_sendmail(message, target, from_address)
 
 
+<<<<<<< HEAD
 def fetch_pnp_data(context, params):
     path = "%s/share/pnp4nagios/htdocs/index.php" % context['OMD_ROOT'].encode('utf-8')
     php_save_path = "-d session.save_path=%s/tmp/php/session" % context['OMD_ROOT'].encode('utf-8')
@@ -697,18 +797,29 @@ def render_pnp_graphs(context):
     return graph_list
 
 
+=======
+>>>>>>> upstream/master
 def render_cmk_graphs(context):
     if context["WHAT"] == "HOST":
         svc_desc = "_HOST_"
     else:
         svc_desc = context["SERVICEDESC"]
 
+<<<<<<< HEAD
     url = "http://localhost:%d/%s/check_mk/ajax_graph_images.py?host=%s&service=%s" % \
                     (site.get_apache_port(), os.environ["OMD_SITE"],
                      urllib.quote(context["HOSTNAME"]), urllib.quote(svc_desc))
 
     try:
         json_data = urllib2.urlopen(url).read()
+=======
+    url = ("http://localhost:%d/%s/check_mk/ajax_graph_images.py?host=%s&service=%s" %
+           (site.get_apache_port(), os.environ["OMD_SITE"], quote(
+               context["HOSTNAME"]), quote(svc_desc)))
+
+    try:
+        json_data = urlopen(url).read()
+>>>>>>> upstream/master
     except Exception as e:
         if opt_debug:
             raise
@@ -724,6 +835,7 @@ def render_cmk_graphs(context):
                          (e, url, json_data))
         return []
 
+<<<<<<< HEAD
     return map(base64.b64decode, base64_strings)
 
 
@@ -736,6 +848,13 @@ def render_performance_graphs(context):
         graphs = render_cmk_graphs(context)
     else:
         graphs = render_pnp_graphs(context)
+=======
+    return [base64.b64decode(s) for s in base64_strings]
+
+
+def render_performance_graphs(context):
+    graphs = render_cmk_graphs(context)
+>>>>>>> upstream/master
 
     attachments, graph_code = [], ''
     for source, graph_png in enumerate(graphs):
@@ -784,8 +903,13 @@ def construct_content(context):
     content_html = utils.substitute_context(template_html, context)
 
     attachments = []
+<<<<<<< HEAD
     if "graph" in elements and not "ALERTHANDLEROUTPUT" in context:
         # Add PNP or Check_MK graph
+=======
+    if "graph" in elements and "ALERTHANDLEROUTPUT" not in context:
+        # Add Checkmk graphs
+>>>>>>> upstream/master
         try:
             attachments, graph_code = render_performance_graphs(context)
             content_html += graph_code
@@ -871,8 +995,13 @@ def event_templates(notification_type):
 
 def body_templates(what, is_alert_handler, elements, body_elements):
     even = "even"
+<<<<<<< HEAD
     tmpl_txt = []
     tmpl_html = []
+=======
+    tmpl_txt: List[str] = []
+    tmpl_html: List[str] = []
+>>>>>>> upstream/master
     for name, whence, forced, nottype, title, txt, html in body_elements:
         if nottype == "alerthandler" and not is_alert_handler:
             continue
@@ -880,7 +1009,11 @@ def body_templates(what, is_alert_handler, elements, body_elements):
         if nottype not in ("alerthandler", "all") and is_alert_handler:
             continue
 
+<<<<<<< HEAD
         if (whence == "both" or whence == what) and (forced or (name in elements)):
+=======
+        if (whence in ('both', what)) and (forced or (name in elements)):
+>>>>>>> upstream/master
             tmpl_txt += "%-20s %s\n" % (title + ":", txt)
             tmpl_html += '<tr class="%s0"><td class=left>%s</td><td>%s</td></tr>' % (even, title,
                                                                                      html)
@@ -889,11 +1022,33 @@ def body_templates(what, is_alert_handler, elements, body_elements):
     return ''.join(tmpl_txt), ''.join(tmpl_html)
 
 
+<<<<<<< HEAD
 class BulkEmailContent(object):
     def __init__(self, context_function):
         self.attachments = []
         self.content_txt = ""
         self.content_html = ""
+=======
+# TODO: NamedTuple?
+class EmailContent:
+    def __init__(self, context, mailto, subject, from_address, reply_to, content_txt, content_html,
+                 attachments):
+        self.context = context
+        self.mailto = mailto
+        self.subject = subject
+        self.from_address = from_address
+        self.reply_to = reply_to
+        self.content_txt = content_txt
+        self.content_html = content_html
+        self.attachments = attachments
+
+
+class BulkEmailContent(EmailContent):
+    def __init__(self, context_function):
+        attachments = []
+        content_txt = ""
+        content_html = ""
+>>>>>>> upstream/master
         parameters, contexts = context_function()
         hosts = set([])
         for context in contexts:
@@ -902,6 +1057,7 @@ class BulkEmailContent(object):
             extend_context(context)
 
             txt, html, att = construct_content(context)
+<<<<<<< HEAD
             self.content_txt += txt
             self.content_html += html
             self.attachments += att
@@ -922,11 +1078,42 @@ class BulkEmailContent(object):
 
 
 class SingleEmailContent(object):
+=======
+            content_txt += txt
+            content_html += html
+            attachments += att
+            hosts.add(context["HOSTNAME"])
+
+        context = contexts[-1]
+        # TODO: cleanup duplicate code with SingleEmailContent
+        # TODO: the context is only needed because of SMPT settings used in send_mail
+        super(BulkEmailContent, self).__init__(
+            context=context,
+            # Assume the same in each context
+            mailto=context['CONTACTEMAIL'],
+            # Use the single context subject in case there is only one context in the bulk
+            subject=(utils.get_bulk_notification_subject(contexts, hosts)
+                     if len(contexts) > 1 else context['SUBJECT']),
+            from_address=utils.format_address(
+                context.get("PARAMETER_FROM_DISPLAY_NAME", u""),
+                # TODO: Correct context parameter???
+                context.get("PARAMETER_FROM", utils.default_from_address())),
+            reply_to=utils.format_address(context.get("PARAMETER_REPLY_TO_DISPLAY_NAME", u""),
+                                          context.get("PARAMETER_REPLY_TO", u"")),
+            content_txt=content_txt,
+            content_html=content_html,
+            attachments=attachments,
+        )
+
+
+class SingleEmailContent(EmailContent):
+>>>>>>> upstream/master
     def __init__(self, context_function):
         # gather all options from env
         context = context_function()
         utils.html_escape_context(context)
         extend_context(context)
+<<<<<<< HEAD
 
         content_txt, content_html, attachments = construct_content(context)
 
@@ -948,6 +1135,30 @@ def main():
         content = BulkEmailContent(utils.read_bulk_contexts)
     else:
         content = SingleEmailContent(utils.collect_context)
+=======
+        content_txt, content_html, attachments = construct_content(context)
+
+        # TODO: cleanup duplicate code with BulkEmailContent
+        # TODO: the context is only needed because of SMPT settings used in send_mail
+        super(SingleEmailContent, self).__init__(
+            context=context,
+            mailto=context['CONTACTEMAIL'],
+            subject=context['SUBJECT'],
+            from_address=utils.format_address(
+                context.get("PARAMETER_FROM_DISPLAY_NAME", u""),
+                context.get("PARAMETER_FROM_ADDRESS", utils.default_from_address())),
+            reply_to=utils.format_address(context.get("PARAMETER_REPLY_TO_DISPLAY_NAME", u""),
+                                          context.get("PARAMETER_REPLY_TO_ADDRESS", u"")),
+            content_txt=content_txt,
+            content_html=content_html,
+            attachments=attachments,
+        )
+
+
+def main():
+    content = (BulkEmailContent(utils.read_bulk_contexts)
+               if bulk_mode else SingleEmailContent(utils.collect_context))
+>>>>>>> upstream/master
 
     if not content.mailto:  # e.g. empty field in user database
         sys.stderr.write("Cannot send HTML email: empty destination email address\n")

@@ -1,28 +1,9 @@
-#!/usr/bin/python
-# -*- encoding: utf-8; py-indent-offset: 4 -*-
-# +------------------------------------------------------------------+
-# |             ____ _               _        __  __ _  __           |
-# |            / ___| |__   ___  ___| | __   |  \/  | |/ /           |
-# |           | |   | '_ \ / _ \/ __| |/ /   | |\/| | ' /            |
-# |           | |___| | | |  __/ (__|   <    | |  | | . \            |
-# |            \____|_| |_|\___|\___|_|\_\___|_|  |_|_|\_\           |
-# |                                                                  |
-# | Copyright Mathias Kettner 2014             mk@mathias-kettner.de |
-# +------------------------------------------------------------------+
-#
-# This file is part of Check_MK.
-# The official homepage is at http://mathias-kettner.de/check_mk.
-#
-# check_mk is free software;  you can redistribute it and/or modify it
-# under the  terms of the  GNU General Public License  as published by
-# the Free Software Foundation in version 2.  check_mk is  distributed
-# in the hope that it will be useful, but WITHOUT ANY WARRANTY;  with-
-# out even the implied warranty of  MERCHANTABILITY  or  FITNESS FOR A
-# PARTICULAR PURPOSE. See the  GNU General Public License for more de-
-# tails. You should have  received  a copy of the  GNU  General Public
-# License along with GNU Make; see the file  COPYING.  If  not,  write
-# to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
-# Boston, MA 02110-1301 USA.
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
 #
 # session_id, wait_duration_ms, wait_type, blocking_session_id
 # <<<mssql_blocked_sessions>>>
@@ -39,6 +20,7 @@
 # Blocked _Sessions
 # INST_ID1|119|232292187|LCK_M_U|75
 # INST_ID2|76|221526672|LCK_M_U|115
+<<<<<<< HEAD
 
 # <<<mssql_blocked_sessions:sept(124)>>>
 # INST_ID1|No blocking sessions
@@ -50,6 +32,19 @@ factory_settings['mssql_blocked_sessions_default_levels'] = {
 NO_BLOCKING_SESSIONS_MSG = 'No blocking sessions'
 
 
+=======
+
+# <<<mssql_blocked_sessions:sept(124)>>>
+# INST_ID1|No blocking sessions
+
+factory_settings['mssql_blocked_sessions_default_levels'] = {
+    'state': 2,
+}
+
+NO_BLOCKING_SESSIONS_MSG = 'No blocking sessions'
+
+
+>>>>>>> upstream/master
 def parse_mssql_blocked_sessions(info):
     db_instance = collections.namedtuple(
         "DBInstance", ["session_id", "wait_type", "blocking_session_id", "wait_duration"])
@@ -58,6 +53,7 @@ def parse_mssql_blocked_sessions(info):
         if line[-1].startswith("ERROR:"):
             continue
 
+<<<<<<< HEAD
         if len(line) == 2 and line[1] == NO_BLOCKING_SESSIONS_MSG:
             parsed.setdefault(line[0], NO_BLOCKING_SESSIONS_MSG)
             continue
@@ -83,6 +79,30 @@ def parse_mssql_blocked_sessions(info):
                 blocking_session_id,
                 float(wait_duration_ms) / 1000,
             ))
+=======
+        if len(line) == 1 and line[0] == NO_BLOCKING_SESSIONS_MSG:
+            parsed.setdefault("", [])
+        elif len(line) == 2 and line[1] == NO_BLOCKING_SESSIONS_MSG:
+            parsed.setdefault(line[0], [])
+        elif len(line) == 4:
+            session_id, wait_duration_ms, wait_type, blocking_session_id = line
+            parsed.setdefault("", []).append(
+                db_instance(
+                    session_id,
+                    wait_type,
+                    blocking_session_id,
+                    float(wait_duration_ms) / 1000,
+                ))
+        elif len(line) == 5:
+            inst, session_id, wait_duration_ms, wait_type, blocking_session_id = line
+            parsed.setdefault(inst, []).append(
+                db_instance(
+                    session_id,
+                    wait_type,
+                    blocking_session_id,
+                    float(wait_duration_ms) / 1000,
+                ))
+>>>>>>> upstream/master
 
     return parsed
 
@@ -96,8 +116,12 @@ def check_mssql_blocked_sessions(item, params, parsed):
         # Assume general connection problem to the database, which is reported
         # by the "X Instance" service and skip this check.
         raise MKCounterWrapped("Failed to retrieve data from database")
+<<<<<<< HEAD
 
     if data == NO_BLOCKING_SESSIONS_MSG:
+=======
+    if not data:
+>>>>>>> upstream/master
         yield 0, NO_BLOCKING_SESSIONS_MSG
         return
 
@@ -127,7 +151,11 @@ def check_mssql_blocked_sessions(item, params, parsed):
 
     if summary:
         yield params['state'], "Summary: %s" % (", ".join(
+<<<<<<< HEAD
             ["%s blocked by %s ID(s)" % (k, v) for k, v in sorted(summary.iteritems())]))
+=======
+            ["%s blocked by %s ID(s)" % (k, v) for k, v in sorted(summary.items())]))
+>>>>>>> upstream/master
 
         max_state = max([state for state, _infotext in details])
         if max_state:
@@ -135,9 +163,14 @@ def check_mssql_blocked_sessions(item, params, parsed):
                 get_age_human_readable(warn), get_age_human_readable(crit))
         for state, infotext in details:
             yield state, "\n%s" % infotext
+<<<<<<< HEAD
 
     else:
         yield 0, "No blocked sessions"
+=======
+    else:
+        yield 0, NO_BLOCKING_SESSIONS_MSG
+>>>>>>> upstream/master
 
     if ignored_waittypes:
         yield 0, "\nIgnored wait types: %s" % ", ".join(ignored_waittypes)

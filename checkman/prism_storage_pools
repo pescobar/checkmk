@@ -13,4 +13,8 @@ item:
  The name of the storage pool.
 
 inventory:
+<<<<<<< HEAD
  One item per storage pool will be discovered.
+=======
+ One service is created for each storage pool.
+>>>>>>> upstream/master

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/env python
 
 import abc
@@ -6,6 +7,18 @@ import six
 
 from cmk.special_agents.agent_aws import (
     AWSEC2InstTypes,)
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+import abc
+import random
+
+from cmk.utils.aws_constants import AWSEC2InstTypes
+>>>>>>> upstream/master
 
 #   .--entities------------------------------------------------------------.
 #   |                             _   _ _   _                              |
@@ -19,7 +32,11 @@ from cmk.special_agents.agent_aws import (
 #   ---abc------------------------------------------------------------------
 
 
+<<<<<<< HEAD
 class Entity(six.with_metaclass(abc.ABCMeta, object)):
+=======
+class Entity(metaclass=abc.ABCMeta):
+>>>>>>> upstream/master
     def __init__(self, key):
         self.key = key
 
@@ -45,7 +62,11 @@ class List(Entity):
                 elem.update({e.key: e.create(choice, amount) for e in self._elements})
                 list_.append(elem)
             return list_
+<<<<<<< HEAD
         return [{e.key: e.create(x, amount) for e in self._elements} for x in xrange(amount)]
+=======
+        return [{e.key: e.create(x, amount) for e in self._elements} for x in range(amount)]
+>>>>>>> upstream/master
 
 
 class Dict(Entity):
@@ -57,7 +78,11 @@ class Dict(Entity):
     def create(self, idx, amount):
         dict_ = {}
         if self._enumerate_keys:
+<<<<<<< HEAD
             for x in xrange(amount):
+=======
+            for x in range(amount):
+>>>>>>> upstream/master
                 this_idx = "%s-%s" % (self._enumerate_keys.key, x)
                 dict_.update({this_idx: self._enumerate_keys.create(this_idx, amount)})
         dict_.update({v.key: v.create(idx, amount) for v in self._values})
@@ -74,25 +99,42 @@ class Str(Entity):
 
 class Int(Entity):
     def create(self, idx, amount):
+<<<<<<< HEAD
         return random.choice(xrange(100))
+=======
+        return random.choice(list(range(100)))
+>>>>>>> upstream/master
 
 
 class Float(Entity):
     def create(self, idx, amount):
+<<<<<<< HEAD
         return 1.0 * random.choice(xrange(100))
+=======
+        return 1.0 * random.choice(list(range(100)))
+>>>>>>> upstream/master
 
 
 class Timestamp(Entity):
     def create(self, idx, amount):
         return "2019-%02d-%02d" % (
+<<<<<<< HEAD
             random.choice(xrange(1, 13)),
             random.choice(xrange(1, 29)),
+=======
+            random.choice(list(range(1, 13))),
+            random.choice(list(range(1, 29))),
+>>>>>>> upstream/master
         )
 
 
 class Enum(Entity):
     def create(self, idx, amount):
+<<<<<<< HEAD
         return ['%s-%s-%s' % (self.key, idx, x) for x in xrange(amount)]
+=======
+        return ['%s-%s-%s' % (self.key, idx, x) for x in range(amount)]
+>>>>>>> upstream/master
 
 
 class Choice(Entity):
@@ -109,6 +151,14 @@ class BoolChoice(Choice):
         super(BoolChoice, self).__init__(key, [True, False])
 
 
+<<<<<<< HEAD
+=======
+class Bytes(Str):
+    def create(self, idx, amount):
+        return bytes(super(Bytes, self).create(idx, amount), 'utf-8')
+
+
+>>>>>>> upstream/master
 #.
 #   .--creators------------------------------------------------------------.
 #   |                                    _                                 |
@@ -122,7 +172,11 @@ class BoolChoice(Choice):
 #   .--abc------------------------------------------------------------------
 
 
+<<<<<<< HEAD
 class InstanceBuilder(six.with_metaclass(abc.ABCMeta, object)):
+=======
+class InstanceBuilder(metaclass=abc.ABCMeta):
+>>>>>>> upstream/master
     def __init__(self, idx, amount):
         self._idx = idx
         self._amount = amount
@@ -138,7 +192,11 @@ class InstanceBuilder(six.with_metaclass(abc.ABCMeta, object)):
 
     @classmethod
     def create_instances(cls, amount):
+<<<<<<< HEAD
         return [cls(idx, amount).create_instance() for idx in xrange(amount)]
+=======
+        return [cls(idx, amount).create_instance() for idx in range(amount)]
+>>>>>>> upstream/master
 
 
 #.
@@ -504,6 +562,14 @@ class RDSDescribeDBInstancesIB(InstanceBuilder):
         ]
 
 
+<<<<<<< HEAD
+=======
+class RDSListTagsForResourceIB(InstanceBuilder):
+    def _fill_instance(self):
+        return [Str('Key'), Str('Value')]
+
+
+>>>>>>> upstream/master
 #.
 #   .--ELB------------------------------------------------------------------
 
@@ -1811,6 +1877,271 @@ class EC2DescribeTagsIB(InstanceBuilder):
 
 
 #.
+<<<<<<< HEAD
+=======
+#   .--DynamoDB-------------------------------------------------------------
+
+
+class DynamoDBDescribeLimitsIB(InstanceBuilder):
+    def _fill_instance(self):
+        return [
+            Int('AccountMaxReadCapacityUnits'),
+            Int('AccountMaxWriteCapacityUnits'),
+            Int('TableMaxReadCapacityUnits'),
+            Int('TableMaxWriteCapacityUnits'),
+        ]
+
+
+class DynamoDBDescribeTableIB(InstanceBuilder):
+    def _fill_instance(self):
+        return [
+            List('AttributeDefinitions',
+                 [Str('AttributeName'),
+                  Choice('AttributeType', ['S', 'N', 'B'])]),
+            Str('TableName'),
+            List('KeySchema',
+                 [Str('AttributeName'), Choice('KeyType', ['HASH', 'RANGE'])]),
+            Choice('TableStatus', [
+                'CREATING', 'UPDATING', 'DELETING', 'ACTIVE', 'INACCESSIBLE_ENCRYPTION_CREDENTIALS',
+                'ARCHIVING', 'ARCHIVED'
+            ]),
+            Timestamp('CreationDateTime'),
+            Dict(
+                'ProvisionedThroughput',
+                [
+                    Timestamp('LastIncreaseDateTime'),
+                    Timestamp('LastDecreaseDateTime'),
+                    Int('NumberOfDecreasesToday'),
+                    # to also obtain on-demand tables with 0 provisioned throughput
+                    Choice('ReadCapacityUnits', [0, 100]),
+                    Choice('WriteCapacityUnits', [0, 100]),
+                ]),
+            Int('TableSizeBytes'),
+            Int('ItemCount'),
+            Str('TableArn'),
+            Str('TableId'),
+            Dict('BillingModeSummary', [
+                Choice('BillingMode', ['PROVISIONED', 'PAY_PER_REQUEST']),
+                Timestamp('LastUpdateToPayPerRequestDateTime'),
+            ]),
+            List('LocalSecondaryIndexes', [
+                Str('IndexName'),
+                List('KeySchema', [
+                    Str('AttributeName'),
+                    Choice('KeyType', ['HASH', 'RANGE']),
+                ]),
+                Dict('Projection', [
+                    Choice('ProjectionType', ['ALL', 'KEYS_ONLY', 'INCLUDE']),
+                    Enum('NonKeyAttributes'),
+                ]),
+                Int('IndexSizeBytes'),
+                Int('ItemCount'),
+                Str('IndexArn'),
+            ]),
+            List('GlobalSecondaryIndexes', [
+                Str('IndexName'),
+                List('KeySchema', [
+                    Str('AttributeName'),
+                    Choice('KeyType', ['HASH', 'RANGE']),
+                ]),
+                Dict('Projection', [
+                    Choice('ProjectionType', ['ALL', 'KEYS_ONLY', 'INCLUDE']),
+                    Enum('NonKeyAttributes'),
+                ]),
+                Choice('IndexStatus', ['CREATING', 'UPDATING', 'DELETING', 'ACTIVE']),
+                BoolChoice('Backfilling'),
+                Dict('ProvisionedThroughput', [
+                    Timestamp('LastIncreaseDateTime'),
+                    Timestamp('LastDecreaseDateTime'),
+                    Int('NumberOfDecreasesToday'),
+                    Int('ReadCapacityUnits'),
+                    Int('WriteCapacityUnits')
+                ]),
+                Int('IndexSizeBytes'),
+                Int('ItemCount'),
+                Str('IndexArn'),
+            ]),
+            Dict('StreamSpecification', [
+                BoolChoice('StreamEnabled'),
+                Choice('StreamViewType',
+                       ['NEW_IMAGE', 'OLD_IMAGE', 'NEW_AND_OLD_IMAGES', 'KEYS_ONLY'])
+            ]),
+            Str('LatestStreamLabel'),
+            Str('LatestStreamArn'),
+            Str('GlobalTableVersion'),
+            List('Replicas', [
+                Str('RegionName'),
+                Choice('ReplicaStatus',
+                       ['CREATING', 'CREATION_FAILED', 'UPDATING', 'DELETING', 'ACTIVE']),
+                Str('ReplicaStatusDescription'),
+                Str('ReplicaStatusPercentProgress'),
+                Str('KMSMasterKeyId'),
+                Dict('ProvisionedThroughputOverride', [Int('ReadCapacityUnits')]),
+                List('GlobalSecondaryIndexes', [
+                    Str('IndexName'),
+                    Dict('ProvisionedThroughputOverride', [Int('ReadCapacityUnits')]),
+                ])
+            ]),
+            Dict('RestoreSummary', [
+                Str('SourceBackupArn'),
+                Str('SourceTableArn'),
+                Timestamp('RestoreDateTime'),
+                BoolChoice('RestoreInProgress'),
+            ]),
+            Dict('SSEDescription', [
+                Choice('Status', ['ENABLING', 'ENABLED', 'DISABLING', 'DISABLED', 'UPDATING']),
+                Choice('SSEType', ['AES256', 'KMS']),
+                Str('KMSMasterKeyArn'),
+                Timestamp('InaccessibleEncryptionDateTime'),
+            ]),
+            Dict('ArchivalSummary', [
+                Timestamp('ArchivalDateTime'),
+                Str('ArchivalReason'),
+                Str('ArchivalBackupArn'),
+            ]),
+        ]
+
+
+class DynamoDBListTagsOfResourceIB(InstanceBuilder):
+    def _fill_instance(self):
+        return [
+            Str('Key'),
+            Str('Value'),
+        ]
+
+
+#.
+#   .--WAFV2----------------------------------------------------------------
+
+
+class WAFV2ListOperationIB(InstanceBuilder):
+    def _fill_instance(self):
+        return [Str('Name'), Str('Id'), Str('Description'), Str('LockToken'), Str('ARN')]
+
+
+class WAFV2GetWebACLIB(InstanceBuilder):
+    def _field_to_match(self):
+        return Dict('FieldToMatch', [
+            Dict('SingleHeader', [Str('Name')]),
+            Dict('SingleQueryArgument', [Str('Name')]),
+            Dict('AllQueryArguments', []),
+            Dict('UriPath', []),
+            Dict('QueryString', []),
+            Dict('Body', []),
+            Dict('Method', [])
+        ])
+
+    def _text_transformations(self):
+        return List('TextTransformations', [
+            Int('Priority'),
+            Choice('Type', [
+                'NONE', 'COMPRESS_WHITE_SPACE', 'HTML_ENTITY_DECODE', 'LOWERCASE', 'CMD_LINE',
+                'URL_DECODE'
+            ])
+        ])
+
+    def _visibility_config(self):
+        return Dict('VisibilityConfig', [
+            BoolChoice('SampledRequestsEnabled'),
+            BoolChoice('CloudWatchMetricsEnabled'),
+            Str('MetricName')
+        ])
+
+    def _process_firewall_manager_rule_groups(self, key):
+        return List(key, [
+            Str('Name'),
+            Int('Priority'),
+            Dict('FirewallManagerStatement', [
+                Dict('ManagedRuleGroupStatement',
+                     [Str('VendorName'),
+                      Str('Name'),
+                      List('ExcludedRules', [Str('Name')])]),
+                Dict('RuleGroupReferenceStatement',
+                     [Str('Name'), List('ExcludedRules', [Str('Name')])])
+            ]),
+            Dict('OverrideAction', [Dict('Count', []), Dict('None', [])]),
+            self._visibility_config()
+        ])
+
+    def _fill_instance(self):
+        return [
+            Str('Name'),
+            Str('Id'),
+            Str('ARN'),
+            Dict('DefaultAction', [Dict('Block', []), Dict('Allow', [])]),
+            Str('Description'),
+            List('Rules', [
+                Str('Name'),
+                Int('Priority'),
+                Dict(
+                    'Statement',
+                    [
+                        Dict('ByteMatchStatement', [
+                            Bytes('SearchString'),
+                            self._field_to_match(),
+                            self._text_transformations(),
+                            Choice('PositionalConstraint', [
+                                'EXACTLY', 'STARTS_WITH', 'ENDS_WITH', 'CONTAINS', 'CONTAINS_WORD'
+                            ])
+                        ]),
+                        Dict('SqliMatchStatement',
+                             [self._field_to_match(),
+                              self._text_transformations()]),
+                        Dict('XssMatchStatement',
+                             [self._field_to_match(),
+                              self._text_transformations()]),
+                        Dict('SizeConstraintStatement', [
+                            self._field_to_match(),
+                            Choice('ComparisonOperator', ['EQ', 'NE', 'LE', 'LT', 'GE', 'GT']),
+                            Int('Size'),
+                            self._text_transformations()
+                        ]),
+                        Dict('GeoMatchStatement', [Enum('CountryCodes')]),
+                        Dict('RuleGroupReferenceStatement',
+                             [Str('ARN'), List('ExcludedRules', [Str('Name')])]),
+                        Dict('IPSetReferenceStatement', [Str('ARN')]),
+                        Dict('RegexPatternSetReferenceStatement',
+                             [Str('ARN'),
+                              self._field_to_match(),
+                              self._text_transformations()]),
+                        Dict(
+                            'RateBasedStatement',
+                            [Int('Limit'),
+                             Str('AggregateKeyType'),
+                             Dict('ScopeDownStatement', [])]),
+                        Dict('AndStatement', [List('Statements', [])]),
+                        Dict('OrStatement', [List('Statements', [])]),
+                        Dict('NotStatement', [Dict('ScopeDownStatement', [])]),
+                        Dict('Statement', [
+                            Dict('ManagedRuleGroupStatement', [
+                                Str('VendorName'),
+                                Str('Name'),
+                                List('ExcludedRules', [Str('Name')])
+                            ])
+                        ]),
+                        Dict('Action', [Dict('Block', []),
+                                        Dict('Allow', []),
+                                        Dict('Count', [])]),
+                        Dict('OverrideAction',
+                             [Dict('Count', []), Dict('None', [])]),
+                        self._visibility_config(),
+                    ],
+                )
+            ]),
+            self._visibility_config(),
+            Int('Capacity'),
+            self._process_firewall_manager_rule_groups('PreProcessFirewallManagerRuleGroups'),
+            self._process_firewall_manager_rule_groups('PostProcessFirewallManagerRuleGroups'),
+            BoolChoice('ManagedByFirewallManager')
+        ]
+
+
+class WAFV2ListTagsForResourceIB(InstanceBuilder):
+    def _fill_instance(self):
+        return [Str('ResourceARN'), List('TagList', [Str('Key'), Str('Value')])]
+
+
+>>>>>>> upstream/master
 #.
 #   .--fake clients--------------------------------------------------------.
 #   |           __       _               _ _            _                  |
@@ -1822,7 +2153,11 @@ class EC2DescribeTagsIB(InstanceBuilder):
 #   '----------------------------------------------------------------------'
 
 
+<<<<<<< HEAD
 class FakeCloudwatchClient(object):
+=======
+class FakeCloudwatchClient:
+>>>>>>> upstream/master
     def describe_alarms(self, AlarmNames=None):
         alarms = CloudwatchDescribeAlarmsIB.create_instances(amount=2)
         if AlarmNames:
@@ -1853,4 +2188,24 @@ class FakeCloudwatchClient(object):
         }
 
 
+<<<<<<< HEAD
+=======
+class FakeServiceQuotasClient:
+    def list_service_quotas(self, ServiceCode):
+        q_val = Float('Value')
+        return {
+            'Quotas': [{
+                "QuotaName": name,
+                'Value': q_val.create(None, None)
+            } for name in [
+                'Running On-Demand F instances',
+                'Running On-Demand G instances',
+                'Running On-Demand P instances',
+                'Running On-Demand Standard (A, C, D, H, I, M, R, T, Z) instances',
+                'Running On-Demand X instances',
+            ]]
+        }
+
+
+>>>>>>> upstream/master
 #.

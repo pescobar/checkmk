@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: VNX NAS DBs: Quotas
+=======
+title: EMC VNX NAS DBs: Quotas
+>>>>>>> upstream/master
 agents: vnx_quotas
 catalog: hw/storagehw/emc
 license: GPL
@@ -9,7 +13,14 @@ description:
  which can be specified in numerous ways.
 
 item:
+<<<<<<< HEAD
  The Quota name.
 
 inventory:
  One service is created per quota.
+=======
+ The name of the quota
+
+inventory:
+ One service is created for each quota.
+>>>>>>> upstream/master

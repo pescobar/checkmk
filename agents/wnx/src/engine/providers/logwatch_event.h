@@ -1,3 +1,9 @@
+<<<<<<< HEAD
+=======
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+// conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 // provides basic api to start and stop service
 
@@ -9,7 +15,13 @@
 #include <string>
 #include <string_view>
 
+<<<<<<< HEAD
 #include "common/cfg_info.h"
+=======
+#include "cfg_engine.h"
+#include "common/cfg_info.h"
+#include "eventlog/eventlogbase.h"
+>>>>>>> upstream/master
 #include "providers/internal.h"
 #include "section_header.h"
 
@@ -19,6 +31,16 @@ namespace provider {
 const std::string kLogWatchEventStateFileName = "eventstate";
 const std::string kLogWatchEventStateFileExt = ".txt";
 
+<<<<<<< HEAD
+=======
+struct LogWatchLimits {
+    int64_t max_size;
+    int64_t max_line_length;
+    int64_t max_entries;
+    int64_t timeout;
+};
+
+>>>>>>> upstream/master
 // simple data structure to keep states internally
 // name, value and new or not
 struct State {
@@ -95,10 +117,16 @@ private:
     bool loaded_;
 };
 
+<<<<<<< HEAD
+=======
+enum class EvlType { classic, vista };
+
+>>>>>>> upstream/master
 using LogWatchEntryVector = std::vector<LogWatchEntry>;
 
 class LogWatchEvent : public Asynchronous {
 public:
+<<<<<<< HEAD
     LogWatchEvent()
         : Asynchronous(cma::section::kLogWatchEventName)
         , vista_api_(false)
@@ -109,6 +137,12 @@ public:
 
     LogWatchEvent(const std::string& Name, char Separator)
         : Asynchronous(Name, Separator), vista_api_(true), send_all_(true) {}
+=======
+    LogWatchEvent() : Asynchronous(cma::section::kLogWatchEventName) {}
+
+    LogWatchEvent(const std::string& name, char separator)
+        : Asynchronous(name, separator) {}
+>>>>>>> upstream/master
 
     virtual void loadConfig();
 
@@ -122,12 +156,18 @@ public:
     std::vector<std::filesystem::path> makeStateFilesTable() const;
 
     bool sendAll() const { return send_all_; }
+<<<<<<< HEAD
+=======
+    LogWatchLimits lwl;
+    LogWatchLimits getLogWatchLimits() const noexcept;
+>>>>>>> upstream/master
 
 protected:
     std::string makeBody() override;
 
 private:
     LogWatchEntryVector entries_;
+<<<<<<< HEAD
     size_t default_entry_;
     bool send_all_;
     bool vista_api_;
@@ -135,6 +175,22 @@ private:
     friend class LogWatchEventTest;
     FRIEND_TEST(LogWatchEventTest, Base);
     FRIEND_TEST(LogWatchEventTest, TestDefaultEntry);
+=======
+    size_t default_entry_ = 0;
+    bool send_all_ = false;
+    EvlType evl_type_ = EvlType::classic;
+
+    // limits block
+    int64_t max_size_ = cma::cfg::logwatch::kMaxSize;
+    int64_t max_line_length_ = cma::cfg::logwatch::kMaxLineLength;
+    int64_t max_entries_ = cma::cfg::logwatch::kMaxEntries;
+    int64_t timeout_ = cma::cfg::logwatch::kTimeout;
+#if defined(GTEST_INCLUDE_GTEST_GTEST_H_)
+    friend class LogWatchEventTest;
+    FRIEND_TEST(LogWatchEventTest, ConfigLoad);
+    FRIEND_TEST(LogWatchEventTest, TestDefaultEntry);
+    FRIEND_TEST(LogWatchEventTest, CheckMakeBody);
+>>>>>>> upstream/master
 #endif
 };
 
@@ -153,6 +209,14 @@ int UpdateEventLogStates(StateVector& states, std::vector<std::string> logs,
 
 LogWatchEntry GenerateDefaultValue();
 
+<<<<<<< HEAD
+=======
+std::optional<uint64_t> GetLastPos(EvlType type, std::string_view name);
+bool LoadFromConfig(State& state, const LogWatchEntryVector& entries) noexcept;
+
+std::pair<uint64_t, std::string> DumpEventLog(cma::evl::EventLogBase& log,
+                                              State state, LogWatchLimits lwl);
+>>>>>>> upstream/master
 // Fix Values in states according to the config
 void UpdateStatesByConfig(StateVector& States,
                           const LogWatchEntryVector& Entries,
@@ -168,10 +232,24 @@ void AddConfigEntry(StateVector& States, const LogWatchEntry&,
                     bool ResetToNull);
 
 // returns output from log and set value validity
+<<<<<<< HEAD
 std::string ReadDataFromLog(bool VistaApi, State& St, bool& LogExists);
 
 // used to check presence of some logs in registry
 bool IsEventLogInRegistry(const std::string Name);
+=======
+// nothing when log is absent
+// empty string when no more to read
+std::optional<std::string> ReadDataFromLog(EvlType type, State& state,
+                                           LogWatchLimits lwl);
+
+std::string GenerateOutputFromStates(
+    EvlType type, StateVector& states,
+    LogWatchLimits lwl);  // by value(32 bytes is ok)
+
+// used to check presence of some logs in registry
+bool IsEventLogInRegistry(std::string_view name);
+>>>>>>> upstream/master
 
 cma::cfg::EventLevels LabelToEventLevel(std::string_view LevelValue);
 

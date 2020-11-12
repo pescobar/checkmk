@@ -1,9 +1,18 @@
+<<<<<<< HEAD
 title: IBM Websphere MQ Instances
+=======
+title: IBM Websphere MQ: Instances (deprecated)
+>>>>>>> upstream/master
 agents: aix, linux
 catalog: app/websphere_mq
 license: GPL
 distribution: check_mk
 description:
+<<<<<<< HEAD
+=======
+ The <tt>websphere_mq</tt> plugin is deprecated. Please use the <tt>ibm_mq</tt> plugin.
+
+>>>>>>> upstream/master
  This check monitors the Websphere MQ instances.
  In order to work it is necesarry to install the <tt>websphere_mq</tt> plugin
  to the server.  You might need to edit this plugin to fit your needs.
@@ -14,5 +23,9 @@ item:
  The name of the instance.
 
 inventory:
+<<<<<<< HEAD
  One service will be created for each instance.
+=======
+ One service is created for each instance.
+>>>>>>> upstream/master
 

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,10 +24,21 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 from cmk.gui.i18n import _
 from cmk.gui.valuespec import (
     Dictionary,
+<<<<<<< HEAD
+=======
+    DropdownChoice,
+>>>>>>> upstream/master
     Float,
     Integer,
     MonitoringState,
@@ -46,6 +58,7 @@ def _item_spec_azure_agent_info():
 
 
 def _parameter_valuespec_azure_agent_info():
+<<<<<<< HEAD
     return Dictionary(elements=[
         ("warning_levels",
          Tuple(
@@ -77,6 +90,53 @@ def _parameter_valuespec_azure_agent_info():
              default_value=1,
          )),
     ],)
+=======
+    return Dictionary(
+        elements=[
+            ("resource_pinning",
+             DropdownChoice(
+                 title=_("Resource pinning: Ensure monitored resources are unchanged"),
+                 help=_(
+                     "If this option is selected, the resources being monitored are stored during"
+                     " discovery. The service will go to a warning state, if they change."),
+                 choices=[
+                     (True, _("Warn if resources appear or vanish")),
+                     (False, _("Silently ignore new or missing resources")),
+                 ],
+             )),
+            ("warning_levels",
+             Tuple(
+                 title=_("Upper levels for encountered warnings"),
+                 elements=[
+                     Integer(title=_("Warning at"), default_value=1),
+                     Integer(title=_("Critical at"), default_value=10),
+                 ],
+             )),
+            ("exception_levels",
+             Tuple(
+                 title=_("Upper levels for encountered exceptions"),
+                 elements=[
+                     Integer(title=_("Warning at"), default_value=1),
+                     Integer(title=_("Critical at"), default_value=1),
+                 ],
+             )),
+            ("remaining_reads_levels_lower",
+             Tuple(
+                 title=_("Lower levels for remaining API reads"),
+                 elements=[
+                     Integer(title=_("Warning below"), default_value=6000),
+                     Integer(title=_("Critical below"), default_value=3000),
+                 ],
+             )),
+            ("remaining_reads_unknown_state",
+             MonitoringState(
+                 title=_("State if remaining API reads are unknown"),
+                 default_value=1,
+             )),
+        ],
+        ignored_keys=["discovered_resources"],
+    )
+>>>>>>> upstream/master
 
 
 rulespec_registry.register(
@@ -153,7 +213,11 @@ def _parameter_valuespec_azure_storageaccounts():
          )),
         ('egress_levels',
          Tuple(
+<<<<<<< HEAD
              title=_("Levels on ingress data in bytes"),
+=======
+             title=_("Levels on egress data in bytes"),
+>>>>>>> upstream/master
              elements=[
                  Float(title=_("Warning at"), unit="B"),
                  Float(title=_("Critical at"), unit="B"),

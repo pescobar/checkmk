@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -24,6 +25,19 @@
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
 
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# NOTE: Careful when replacing the *-import below with a more specific import. This can cause
+# problems because it might remove variables from the check-context which are necessary for
+# resolving legacy discovery results such as [("SUMMARY", "diskstat_default_levels")]. Furthermore,
+# it might also remove variables needed for accessing discovery rulesets.
+from cmk.base.check_legacy_includes.aws import *  # pylint: disable=wildcard-import,unused-wildcard-import
+>>>>>>> upstream/master
 factory_settings['aws_ebs_limits_default_levels'] = {
     'block_store_snapshots': (None, 80.0, 90.0),
     'block_store_space_standard': (None, 80.0, 90.0),
@@ -36,8 +50,15 @@ factory_settings['aws_ebs_limits_default_levels'] = {
 
 
 def parse_aws_ebs_limits(info):
+<<<<<<< HEAD
     parsed = []
     for resource_key, resource_title, limit, amount, region in parse_aws(info):
+=======
+    limits_by_region: AWSLimitsByRegion = {}
+    for line in parse_aws(info):
+        resource_key, resource_title, limit, amount, region = line
+
+>>>>>>> upstream/master
         if resource_key in [
                 "block_store_space_standard",
                 "block_store_space_io1",
@@ -53,20 +74,35 @@ def parse_aws_ebs_limits(info):
             human_readable_func = lambda x: "%s/s" % x
         else:
             human_readable_func = int
+<<<<<<< HEAD
         parsed.append((resource_key, resource_title, limit, amount, region, human_readable_func))
     return parsed
 
 
+=======
+        limits_by_region.setdefault(region, []).append(
+            [resource_key, resource_title, limit, amount, human_readable_func])
+    return limits_by_region
+
+
+@get_parsed_item_data
+>>>>>>> upstream/master
 def check_aws_ebs_limits(item, params, parsed):
     return check_aws_limits("ebs", params, parsed)
 
 
 check_info['aws_ebs_limits'] = {
     'parse_function': parse_aws_ebs_limits,
+<<<<<<< HEAD
     'inventory_function': discover_single,
     'check_function': check_aws_ebs_limits,
     'service_description': 'AWS/EBS Limits',
     'includes': ['aws.include'],
+=======
+    'inventory_function': discover(),
+    'check_function': check_aws_ebs_limits,
+    'service_description': 'AWS/EBS Limits %s',
+>>>>>>> upstream/master
     'group': 'aws_ebs_limits',
     'default_levels_variable': 'aws_ebs_limits_default_levels',
     'has_perfdata': True,

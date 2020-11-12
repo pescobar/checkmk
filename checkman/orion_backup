@@ -10,8 +10,13 @@ description:
  The check goes WARN if the status is 'inactive' or 'occured',
  CRIT if 'fail' is reported, otherwise OK.
 
+<<<<<<< HEAD
 item:
  The item is called 'Battery'.
 
 inventory:
  One service for each item is generated.
+=======
+inventory:
+ One service is created.
+>>>>>>> upstream/master

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,11 +24,22 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 import cmk.gui.config as config
 import cmk.gui.inventory as inventory
 from cmk.gui.i18n import _
 from cmk.gui.plugins.views.icons import Icon, icon_and_action_registry
+<<<<<<< HEAD
+=======
+from cmk.gui.plugins.views import url_to_view
+>>>>>>> upstream/master
 
 
 @icon_and_action_registry.register
@@ -40,8 +52,11 @@ class InventoryIcon(Icon):
         return ["name"]
 
     def render(self, what, row, tags, custom_vars):
+<<<<<<< HEAD
         # TODO: Clean this up somehow
         from cmk.gui.plugins.views import url_to_view
+=======
+>>>>>>> upstream/master
         if (what == "host" or row.get("service_check_command","").startswith("check_mk_active-cmk_inv!")) \
             and inventory.has_inventory(row["host_name"]):
 

@@ -1,48 +1,46 @@
-// +------------------------------------------------------------------+
-// |             ____ _               _        __  __ _  __           |
-// |            / ___| |__   ___  ___| | __   |  \/  | |/ /           |
-// |           | |   | '_ \ / _ \/ __| |/ /   | |\/| | ' /            |
-// |           | |___| | | |  __/ (__|   <    | |  | | . \            |
-// |            \____|_| |_|\___|\___|_|\_\___|_|  |_|_|\_\           |
-// |                                                                  |
-// | Copyright Mathias Kettner 2014             mk@mathias-kettner.de |
-// +------------------------------------------------------------------+
-//
-// This file is part of Check_MK.
-// The official homepage is at http://mathias-kettner.de/check_mk.
-//
-// check_mk is free software;  you can redistribute it and/or modify it
-// under the  terms of the  GNU General Public License  as published by
-// the Free Software Foundation in version 2.  check_mk is  distributed
-// in the hope that it will be useful, but WITHOUT ANY WARRANTY;  with-
-// out even the implied warranty of  MERCHANTABILITY  or  FITNESS FOR A
-// PARTICULAR PURPOSE. See the  GNU General Public License for more de-
-// tails. You should have  received  a copy of the  GNU  General Public
-// License along with GNU Make; see the file  COPYING.  If  not,  write
-// to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
-// Boston, MA 02110-1301 USA.
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the
+// terms and conditions defined in the file COPYING, which is part of this
+// source code package.
 
 #include "Query.h"
+<<<<<<< HEAD
 #include <algorithm>
 #include <cctype>
 #include <chrono>
+=======
+
+#include <algorithm>
+#include <cassert>
+#include <cctype>
+>>>>>>> upstream/master
 #include <cmath>
 #include <cstdlib>
 #include <ratio>
 #include <sstream>
 #include <stdexcept>
 #include <utility>
+<<<<<<< HEAD
 #include "Aggregator.h"
 #include "AndingFilter.h"
 #include "ChronoUtils.h"
 #include "Column.h"
 #include "Filter.h"
+=======
+
+#include "AndingFilter.h"
+#include "ChronoUtils.h"
+#include "Column.h"
+>>>>>>> upstream/master
 #include "Logger.h"
 #include "MonitoringCore.h"
 #include "NullColumn.h"
 #include "OringFilter.h"
 #include "OutputBuffer.h"
+<<<<<<< HEAD
 #include "StatsColumn.h"
+=======
+>>>>>>> upstream/master
 #include "StringUtils.h"
 #include "Table.h"
 #include "Triggers.h"
@@ -53,10 +51,19 @@
 #ifndef CMC
 #include "nagios.h"  // for contact
 #endif
+<<<<<<< HEAD
 
 namespace {
 std::string nextStringArgument(char **line) {
     if (auto value = next_field(line)) {
+=======
+
+using namespace std::chrono_literals;
+
+namespace {
+std::string nextStringArgument(char **line) {
+    if (auto *value = next_field(line)) {
+>>>>>>> upstream/master
         return value;
     }
     throw std::runtime_error("missing argument");
@@ -102,7 +109,11 @@ Query::Query(const std::list<std::string> &lines, Table &table,
     , _logger(logger) {
     FilterStack filters;
     FilterStack wait_conditions;
+<<<<<<< HEAD
     for (auto &line : lines) {
+=======
+    for (const auto &line : lines) {
+>>>>>>> upstream/master
         auto stripped_line = mk::rstrip(line);
         if (stripped_line.empty()) {
             break;
@@ -381,7 +392,11 @@ private:
     double sum_{0};
 };
 
+<<<<<<< HEAD
 std::map<std::string, AggregationFactory> stats_ops{
+=======
+const std::map<std::string, AggregationFactory> stats_ops{
+>>>>>>> upstream/master
     {"sum", []() { return std::make_unique<SumAggregation>(); }},
     {"min", []() { return std::make_unique<MinAggregation>(); }},
     {"max", []() { return std::make_unique<MaxAggregation>(); }},
@@ -460,7 +475,11 @@ void Query::parseColumnsLine(char *line) {
                 << "replacing non-existing column '" << column_name
                 << "' with null column, reason: " << e.what();
             column = std::make_shared<NullColumn>(
+<<<<<<< HEAD
                 column_name, "non-existing column", -1, -1, -1, 0);
+=======
+                column_name, "non-existing column", ColumnOffsets{});
+>>>>>>> upstream/master
         }
         _columns.push_back(column);
         _all_columns.insert(column);
@@ -481,11 +500,20 @@ void Query::parseSeparatorsLine(char *line) {
 }
 
 namespace {
+<<<<<<< HEAD
 std::map<std::string, OutputFormat> formats{{"CSV", OutputFormat::csv},
                                             {"csv", OutputFormat::broken_csv},
                                             {"json", OutputFormat::json},
                                             {"python", OutputFormat::python},
                                             {"python3", OutputFormat::python3}};
+=======
+const std::map<std::string, OutputFormat> formats{
+    {"CSV", OutputFormat::csv},
+    {"csv", OutputFormat::broken_csv},
+    {"json", OutputFormat::json},
+    {"python", OutputFormat::python},
+    {"python3", OutputFormat::python3}};
+>>>>>>> upstream/master
 }  // namespace
 
 void Query::parseOutputFormatLine(char *line) {
@@ -554,7 +582,11 @@ void Query::parseWaitTimeoutLine(char *line) {
 }
 
 void Query::parseWaitTriggerLine(char *line) {
+<<<<<<< HEAD
     _wait_trigger = _table.core()->triggers().find(nextStringArgument(&line));
+=======
+    _wait_trigger = Triggers::find(nextStringArgument(&line));
+>>>>>>> upstream/master
 }
 
 void Query::parseWaitObjectLine(char *line) {
@@ -586,7 +618,11 @@ void Query::parseLocaltimeLine(char *line) {
             "timezone difference greater than or equal to 24 hours");
     }
 
+<<<<<<< HEAD
     if (offset != std::chrono::seconds(0)) {
+=======
+    if (offset != 0s) {
+>>>>>>> upstream/master
         using hour = std::chrono::duration<double, std::ratio<3600>>;
         Debug(_logger) << "timezone offset is "
                        << std::chrono::duration_cast<hour>(offset).count()
@@ -605,6 +641,11 @@ bool Query::process() {
                        _separators, _data_encoding);
     doWait();
     QueryRenderer q(*renderer, EmitBeginEnd::on);
+<<<<<<< HEAD
+=======
+    // TODO(sp) The construct below is horrible, refactor this!
+    // cppcheck-suppress danglingLifetime
+>>>>>>> upstream/master
     _renderer_query = &q;
     start(q);
     _table.answerQuery(this);
@@ -654,10 +695,17 @@ bool Query::processDataset(Row row) {
     }
 
     if (static_cast<size_t>(_output.os().tellp()) > _max_response_size) {
+<<<<<<< HEAD
         Informational(_logger) << "Maximum response size of "
                                << _max_response_size << " bytes exceeded!";
         // currently we only log an error into the log file and do
         // not abort the query. We handle it like Limit:
+=======
+        _output.setError(OutputBuffer::ResponseCode::limit_exceeded,
+                         "Maximum response size of " +
+                             std::to_string(_max_response_size) +
+                             " bytes exceeded!");
+>>>>>>> upstream/master
         return false;
     }
 
@@ -697,6 +745,7 @@ bool Query::processDataset(Row row) {
                 aggr->consume(row, _auth_user, timezoneOffset());
             }
         } else {
+            assert(_renderer_query);  // Missing call to `process()`.
             RowRenderer r(*_renderer_query);
             for (const auto &column : _columns) {
                 column->output(row, r, _auth_user, _timezone_offset);

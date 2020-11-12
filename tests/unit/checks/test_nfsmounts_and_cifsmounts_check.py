@@ -1,4 +1,16 @@
+<<<<<<< HEAD
 import pytest  # type: ignore
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+from collections import namedtuple
+from testlib import Check  # type: ignore[import]
+import pytest  #type: ignore[import]
+>>>>>>> upstream/master
 from checktestlib import (
     BasicCheckResult,
     CheckResult,
@@ -14,23 +26,51 @@ from checktestlib import (
 
 pytestmark = pytest.mark.checks
 
+<<<<<<< HEAD
+=======
+Size = namedtuple('Size', 'info,total,used,text')
+
+size1 = Size(
+    [u'491520', u'460182', u'460182', u'65536'],
+    491520 * 65536,
+    491520 * 65536 - 460182 * 65536,
+    "6.38% used (1.91 of 30.00 GB)",
+)
+
+size2 = Size(
+    [u'201326592', u'170803720', u'170803720', u'32768'],
+    None,  # not in use
+    None,  # not in use
+    "15.16% used (931.48 GB of 6.00 TB)",
+)
+
+>>>>>>> upstream/master
 
 @pytest.mark.parametrize(
     "info,discovery_expected,check_expected",
     [
         (  # no info
+<<<<<<< HEAD
             [], [], (['', None, BasicCheckResult(3, ' not mounted', None)],)),
         (  # single mountpoint with data
             [[u'/ABCshare', u'ok', u'491520', u'460182', u'460182', u'65536']], [
                 ('/ABCshare', {})
             ], [('/ABCshare', {}, BasicCheckResult(0, "6.4% used (1.91 GB of 30.00 GB)", None)),
                 ('/ZZZshare', {}, BasicCheckResult(3, "/ZZZshare not mounted", None))]),
+=======
+            [], [], ()),
+        (  # single mountpoint with data
+            [[u'/ABCshare', u'ok'] + size1.info], [('/ABCshare', {})], [
+                ('/ABCshare', {}, BasicCheckResult(0, size1.text, None)),
+            ]),
+>>>>>>> upstream/master
         (  # two mountpoints with empty data
             [[u'/AB', u'ok', u'-', u'-', u'-', u'-'], [u'/ABC', u'ok', u'-', u'-', u'-', u'-']], [
                 ('/AB', {}), ('/ABC', {})
             ], [('/AB', {}, BasicCheckResult(0, "Mount seems OK", None)),
                 ('/ABC', {}, BasicCheckResult(0, "Mount seems OK", None))]),
         (  # Mountpoint with spaces and permission denied
+<<<<<<< HEAD
             [[u'/var/dba', u'export', u'Permission', u'denied'],
              [u'/var/dbaexport', u'ok', u'201326592', u'170803720', u'170803720', u'32768']], [
                  ('/var/dbaexport', {}), ('/var/dba export', {})
@@ -46,6 +86,24 @@ pytestmark = pytest.mark.checks
                                            PerfValue('fs_size', 491520 * 65536),
                                            PerfValue('fs_used', 491520 * 65536 - 460182 * 65536)
                                        ]))]),
+=======
+            [[u'/var/dba', u'export', u'Permission',
+              u'denied'], [u'/var/dbaexport', u'ok'] + size2.info], [
+                  ('/var/dbaexport', {}), ('/var/dba export', {})
+              ], [('/var/dba export', {}, BasicCheckResult(2, 'Permission denied', None)),
+                  ('/var/dbaexport', {}, BasicCheckResult(0, size2.text, None))]),
+        (  # with perfdata
+            [[u'/PERFshare', u'ok'] + size1.info], [('/PERFshare', {})], [
+                ('/PERFshare', {
+                    'has_perfdata': True
+                },
+                 BasicCheckResult(0, size1.text, [
+                     PerfValue('fs_used', size1.used, 0.8 * size1.total, 0.9 * size1.total, 0,
+                               size1.total),
+                     PerfValue('fs_size', size1.total),
+                 ]))
+            ]),
+>>>>>>> upstream/master
         (  # state == 'hanging'
             [[u'/test', u'hanging', u'hanging', u'0', u'0', u'0', u'0']
             ], [('/test hanging', {})], [('/test hanging', {
@@ -53,7 +111,11 @@ pytestmark = pytest.mark.checks
             }, BasicCheckResult(2, "Server not responding", None))]),
         (  # unknown state
             [[u'/test', u'unknown', u'unknown', u'1', u'1', u'1', u'1']], [('/test unknown', {})], [
+<<<<<<< HEAD
                 ('/test unknown', {}, BasicCheckResult(2, "Unknown state", None))
+=======
+                ('/test unknown', {}, BasicCheckResult(2, "Unknown state: unknown", None))
+>>>>>>> upstream/master
             ]),
         (  # zero block size
             [[u'/test', u'perfdata', u'ok', u'0', u'460182', u'460182', u'0']],
@@ -67,9 +129,16 @@ pytestmark = pytest.mark.checks
                 #BasicCheckResult(0, "server is responding", [PerfValue('fs_size', 0), PerfValue('fs_used', 0)]))]
                 BasicCheckResult(2, "Stale fs handle", None))]),
     ])
+<<<<<<< HEAD
 def test_nfsmounts(check_manager, info, discovery_expected, check_expected):
     check_nfs = check_manager.get_check("nfsmounts")
     check_cifs = check_manager.get_check("cifsmounts")
+=======
+@pytest.mark.usefixtures("config_load_all_checks")
+def test_nfsmounts(info, discovery_expected, check_expected):
+    check_nfs = Check("nfsmounts")
+    check_cifs = Check("cifsmounts")
+>>>>>>> upstream/master
 
     # assure that the code of both checks is identical
     assert (check_nfs.info['parse_function'].__code__.co_code ==

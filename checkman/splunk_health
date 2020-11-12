@@ -10,5 +10,9 @@ description:
  Details for each component can be found in the long output of the check.
 
 inventory:
+<<<<<<< HEAD
  One service will be created
+=======
+ One service is created.
+>>>>>>> upstream/master
 

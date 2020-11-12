@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/env python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -25,6 +26,16 @@
 # Boston, MA 02110-1301 USA.
 
 import urlparse
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+from typing import Any, Dict, List
+import urllib.parse
+>>>>>>> upstream/master
 
 import cmk.utils.store as store
 
@@ -45,7 +56,11 @@ from cmk.gui.valuespec import (
     OptionalDropdownChoice,
 )
 
+<<<<<<< HEAD
 from . import (
+=======
+from cmk.gui.plugins.sidebar import (
+>>>>>>> upstream/master
     SidebarSnapin,
     snapin_registry,
     iconlink,
@@ -61,6 +76,13 @@ class BookmarkList(pagetypes.Overridable):
         return "bookmark_list"
 
     @classmethod
+<<<<<<< HEAD
+=======
+    def type_icon(cls):
+        return "bookmark_list"
+
+    @classmethod
+>>>>>>> upstream/master
     def phrase(cls, phrase):
         return {
             "title": _("Bookmark list"),
@@ -121,7 +143,11 @@ class BookmarkList(pagetypes.Overridable):
                                         allow_empty=False,
                                         validate=cls.validate_url,
                                     )),
+<<<<<<< HEAD
                                     (IconSelector(title=_("Icon"),)),
+=======
+                                    (IconSelector(title=_("Icon"), with_emblem=False)),
+>>>>>>> upstream/master
                                     (cls._vs_topic()),
                                 ],
                                 orientation="horizontal",
@@ -157,7 +183,10 @@ class BookmarkList(pagetypes.Overridable):
                 ),
             ],
             title=_("Topic") + "<sup>*</sup>",
+<<<<<<< HEAD
             style="dropdown",
+=======
+>>>>>>> upstream/master
             orientation="horizontal",
         )
 
@@ -175,7 +204,11 @@ class BookmarkList(pagetypes.Overridable):
 
     @classmethod
     def validate_url(cls, value, varprefix):
+<<<<<<< HEAD
         parsed = urlparse.urlparse(value)
+=======
+        parsed = urllib.parse.urlparse(value)
+>>>>>>> upstream/master
 
         # Absolute URLs are allowed, but limit it to http/https
         if parsed.scheme != "" and parsed.scheme not in ["http", "https"]:
@@ -218,8 +251,15 @@ class BookmarkList(pagetypes.Overridable):
 
     @classmethod
     def _do_load_legacy_bookmarks(cls):
+<<<<<<< HEAD
         path = config.user.confdir + "/bookmarks.mk"
         return store.load_data_from_file(path, [])
+=======
+        if config.user.confdir is None:
+            raise Exception("user confdir is None")
+        path = config.user.confdir + "/bookmarks.mk"
+        return store.load_object_from_file(path, default=[])
+>>>>>>> upstream/master
 
     @classmethod
     def new_bookmark(cls, title, url):
@@ -234,7 +274,11 @@ class BookmarkList(pagetypes.Overridable):
         return self._["default_topic"]
 
     def bookmarks_by_topic(self):
+<<<<<<< HEAD
         topics = {}
+=======
+        topics: Dict[str, List[Dict[str, Any]]] = {}
+>>>>>>> upstream/master
         for bookmark in self._["bookmarks"]:
             topic = topics.setdefault(bookmark["topic"], [])
             topic.append(bookmark)
@@ -263,6 +307,7 @@ class Bookmarks(SidebarSnapin):
                  "bookmarks to views and other content in the main frame")
 
     def show(self):
+<<<<<<< HEAD
         html.javascript("""
 function add_bookmark() {
     url = parent.frames[1].location;
@@ -271,6 +316,8 @@ function add_bookmark() {
             + "&url=" + encodeURIComponent(url), cmk.utils.update_contents, "snapin_bookmarks");
 }""")
 
+=======
+>>>>>>> upstream/master
         for topic, bookmarks in self._get_bookmarks_by_topic():
             html.begin_foldable_container("bookmarks", topic, False, topic)
 
@@ -284,12 +331,20 @@ function add_bookmark() {
             html.end_foldable_container()
 
         begin_footnote_links()
+<<<<<<< HEAD
         link(_("Add Bookmark"), "javascript:void(0)", onclick="add_bookmark()")
+=======
+        link(_("Add Bookmark"), "javascript:void(0)", onclick="cmk.sidebar.add_bookmark()")
+>>>>>>> upstream/master
         link(_("Edit"), "bookmark_lists.py")
         end_footnote_links()
 
     def _get_bookmarks_by_topic(self):
+<<<<<<< HEAD
         topics = {}
+=======
+        topics: Dict[Any, List[Any]] = {}
+>>>>>>> upstream/master
         BookmarkList.load()
         for instance in BookmarkList.instances_sorted():
             if (instance.is_mine() and instance.may_see()) or \
@@ -326,8 +381,13 @@ function add_bookmark() {
     def _try_shorten_url(self, url):
         referer = html.request.referer
         if referer:
+<<<<<<< HEAD
             ref_p = urlparse.urlsplit(referer)
             url_p = urlparse.urlsplit(url)
+=======
+            ref_p = urllib.parse.urlsplit(referer)
+            url_p = urllib.parse.urlsplit(url)
+>>>>>>> upstream/master
 
             # If http/https or user, pw, host, port differ, don't try to shorten
             # the URL to be linked. Simply use the full URI

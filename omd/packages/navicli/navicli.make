@@ -1,5 +1,6 @@
 NAVICLI := navicli
 NAVICLI_VERS := 0.7.1
+<<<<<<< HEAD
 NAVICLI_DIR := navisphere-64
 
 NAVICLI_INSTALL := $(BUILD_HELPER_DIR)/$(NAVICLI_DIR)-install
@@ -9,6 +10,15 @@ NAVICLI_INSTALL := $(BUILD_HELPER_DIR)/$(NAVICLI_DIR)-install
 navicli:
 	
 navicli-install: $(NAVICLI_INSTALL)
+=======
+NAVICLI_DIR := $(NAVICLI)-$(NAVICLI_VERS)
+
+NAVICLI_BUILD := $(BUILD_HELPER_DIR)/$(NAVICLI_DIR)-build
+NAVICLI_INSTALL := $(BUILD_HELPER_DIR)/$(NAVICLI_DIR)-install
+
+$(NAVICLI_BUILD):
+	$(TOUCH) $@
+>>>>>>> upstream/master
 
 # NOTE: The EMC Navisphere command line tools come with their own dynamic
 # libraries, which are quite old and some of them even collide with newer ones
@@ -29,7 +39,10 @@ $(NAVICLI_INSTALL):
 	$(MKDIR) $(DESTDIR)$(OMD_ROOT)/share/navicli
 	cp -pr $(PACKAGE_DIR)/$(NAVICLI)/$(NAVICLI_DIR)/seccli/CST $(DESTDIR)$(OMD_ROOT)/share/navicli
 	$(TOUCH) $@
+<<<<<<< HEAD
 
 navicli-skel:
 
 navicli-clean:
+=======
+>>>>>>> upstream/master

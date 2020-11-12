@@ -1,8 +1,26 @@
+<<<<<<< HEAD
 # yapf: disable
 
 checkname = 'cpu'
 
 info = [[u'0.88', u'0.83', u'0.87', u'2/1748', u'21050', u'8'], [u'124069']]
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+from cmk.base.plugins.agent_based.cpu import parse_cpu
+
+# yapf: disable
+# type: ignore
+
+
+checkname = 'cpu'
+
+parsed = parse_cpu([[u'0.88', u'0.83', u'0.87', u'2/1748', u'21050', u'8'], [u'124069']])
+>>>>>>> upstream/master
 
 discovery = {
     'loads': [(None, 'cpuload_default_levels')],
@@ -15,7 +33,11 @@ checks = {
         (5.0, 10.0),
         [(
             0,
+<<<<<<< HEAD
             '15 min load: 0.87 at 8 Cores (0.11 per Core)',
+=======
+            '15 min load: 0.87 at 8 cores (0.11 per core)',
+>>>>>>> upstream/master
             [
                 ('load1', 0.88, 40.0, 80.0, 0, 8),
                 ('load5', 0.83, 40.0, 80.0, 0, 8),

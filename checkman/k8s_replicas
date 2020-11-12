@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: Kubernetes replicas
+=======
+title: Kubernetes: Replicas
+>>>>>>> upstream/master
 agents: kubernetes
 catalog: containerization/kubernetes
 license: GPL

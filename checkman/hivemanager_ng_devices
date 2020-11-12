@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: Aerohive Hivemanager NG Devices
+=======
+title: Aerohive Hivemanager: NG Devices
+>>>>>>> upstream/master
 agents: special
 catalog: hw/network/aerohive
 license: GPL
@@ -11,7 +15,14 @@ description:
  name <i>Aerohive HiveManager NG</i> in WATO -> Datasource Programs.
 
 item:
+<<<<<<< HEAD
  The name of the Devices
 
 inventory:
  One check for each device will be created
+=======
+ The hostname of the device
+
+inventory:
+ One service is created for each device.
+>>>>>>> upstream/master

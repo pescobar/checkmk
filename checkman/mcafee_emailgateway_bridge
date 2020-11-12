@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: McAfee Email gateway: Bridge status and traffic
+=======
+title: McAfee Email Gateway: Bridge Status and Traffic
+>>>>>>> upstream/master
 agents: snmp
 catalog: app/mcafee
 license: GPL

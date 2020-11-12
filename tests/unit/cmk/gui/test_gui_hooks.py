@@ -1,5 +1,15 @@
+<<<<<<< HEAD
 from __future__ import division
 import pytest
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+import pytest  # type: ignore[import]
+>>>>>>> upstream/master
 
 import cmk.gui.hooks as hooks
 
@@ -14,6 +24,7 @@ def test_hook_registration():
 
     # pre 1.6 API
     hooks.register("bla", lambda: True)
+<<<<<<< HEAD
     assert hooks.get("bla")[0].is_builtin == False
 
     hooks.register_builtin("blub", lambda: True)
@@ -24,6 +35,18 @@ def test_hook_registration():
     assert hooks.registered("bla") == True
     assert hooks.registered("blub") == True
     assert hooks.registered("bli") == False
+=======
+    assert hooks.get("bla")[0].is_builtin is False
+
+    hooks.register_builtin("blub", lambda: True)
+    hooks.register_from_plugin("blub", lambda: False)
+    assert hooks.get("blub")[0].is_builtin is True
+    assert hooks.get("blub")[1].is_builtin is False
+
+    assert hooks.registered("bla") is True
+    assert hooks.registered("blub") is True
+    assert hooks.registered("bli") is False
+>>>>>>> upstream/master
 
     assert len(hooks.get("bla")) == 1
     assert len(hooks.get("blub")) == 2
@@ -56,6 +79,7 @@ def test_call_exception_handling(mocker):
 
 def test_builtin_vs_plugin_hooks():
     hooks.register_builtin("bla", lambda: True)
+<<<<<<< HEAD
     assert hooks.registered("bla") == True
 
     hooks.register_from_plugin("blub", lambda: True)
@@ -65,3 +89,14 @@ def test_builtin_vs_plugin_hooks():
 
     assert hooks.registered("bla") == True
     assert hooks.registered("blub") == False
+=======
+    assert hooks.registered("bla") is True
+
+    hooks.register_from_plugin("blub", lambda: True)
+    assert hooks.registered("blub") is True
+
+    hooks.load_plugins(force=True)
+
+    assert hooks.registered("bla") is True
+    assert hooks.registered("blub") is False
+>>>>>>> upstream/master

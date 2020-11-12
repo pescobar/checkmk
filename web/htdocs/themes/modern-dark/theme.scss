@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /*
 +------------------------------------------------------------------+
 |             ____ _               _        __  __ _  __           |
@@ -28,6 +29,17 @@ Boston, MA 02110-1301 USA.
 
 @import "~select2/dist/css/select2";
 @import "~@yaireo/tagify/dist/tagify";
+=======
+@charset "UTF-8";
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+// conditions defined in the file COPYING, which is part of this source code package.
+
+@import "~select2/dist/css/select2";
+@import "~@yaireo/tagify/dist/tagify";
+@import "~dc/web/css/dc";
+@import "~simplebar/dist/simplebar";
+>>>>>>> upstream/master
 
 @import "scss/_variables.scss";
 @import "../facelift/scss/_main.scss";
@@ -44,11 +56,20 @@ Boston, MA 02110-1301 USA.
 @import "../facelift/scss/_sidebar.scss";
 @import "../facelift/scss/_snapins.scss";
 @import "../facelift/scss/_node_visualization.scss";
+<<<<<<< HEAD
+=======
+@import "../facelift/scss/_cmk_figures.scss";
+@import "../facelift/scss/_mega_menu.scss";
+@import "../facelift/scss/_page_menu.scss";
+@import "../facelift/scss/_more.scss";
+@import "../facelift/scss/_graphs.scss";
+>>>>>>> upstream/master
 
 // CEE specific files. Would love to add some kind of conditional import here,
 // but that is simply not possible at the moment using SCSS. Hack around this
 // using symlinks in the git during development and replace the links with empty
 // files during the build procedure of other editions.
+<<<<<<< HEAD
 @import "../facelift/scss/cee/_graphs.scss";
 @import "../facelift/scss/cee/_reporting.scss";
 @if $ENTERPRISE = "yes" {
@@ -56,6 +77,21 @@ Boston, MA 02110-1301 USA.
   @include reporting;
 }
 
+=======
+// Note: In case you add something here, you will have to add some dummy files
+// to buildscripts/scripts/lib/versioning.groovy (see patch_themes())
+@import "../facelift/scss/cee/_graphs_cee.scss";
+@import "../facelift/scss/cee/_reporting.scss";
+@import "../facelift/scss/cee/_ntop.scss";
+@if $ENTERPRISE = "yes" {
+  @include graphs_cee;
+  @include reporting;
+  @include ntop;
+}
+
+// Note: In case you add something here, you will have to add some dummy files
+// to buildscripts/scripts/lib/versioning.groovy (see patch_themes())
+>>>>>>> upstream/master
 @import "../facelift/scss/cme/_managed.scss";
 @if $MANAGED = "yes" {
   @include managed;

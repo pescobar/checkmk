@@ -8,6 +8,10 @@
 #include <string>
 #include <string_view>
 
+<<<<<<< HEAD
+=======
+#include "common/yaml.h"
+>>>>>>> upstream/master
 #include "cvt.h"
 #include "glob_match.h"
 #include "install_api.h"
@@ -16,7 +20,10 @@
 #include "tools/_misc.h"
 #include "tools/_raii.h"
 #include "tools/_xlog.h"
+<<<<<<< HEAD
 #include "yaml-cpp/yaml.h"
+=======
+>>>>>>> upstream/master
 
 namespace cma::cfg::upgrade {
 

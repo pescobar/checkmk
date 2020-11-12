@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: Kubernetes roles
+=======
+title: Kubernetes: Roles
+>>>>>>> upstream/master
 agents: kubernetes
 catalog: containerization/kubernetes
 license: GPL

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // +------------------------------------------------------------------+
 // |             ____ _               _        __  __ _  __           |
 // |            / ___| |__   ___  ___| | __   |  \/  | |/ /           |
@@ -23,6 +24,13 @@
 // Boston, MA 02110-1301 USA.
 
 import { get_url } from "ajax";
+=======
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+// conditions defined in the file COPYING, which is part of this source code package.
+
+import {get_url} from "ajax";
+>>>>>>> upstream/master
 
 var iCurrent = null;
 var oCurrent = null;
@@ -32,6 +40,7 @@ var g_ajax_obj = null;
 // Register an input field to be a search field and add eventhandlers
 export function register_search_field(field) {
     var oField = document.getElementById(field);
+<<<<<<< HEAD
     if(oField) {
         oField.onkeydown = function(e) { if (!e) e = window.event; return mkSearchKeyDown(e, oField); };
         oField.onkeyup   = function(e) { if (!e) e = window.event; return mkSearchKeyUp(e, oField); };
@@ -39,6 +48,26 @@ export function register_search_field(field) {
 
         // On doubleclick toggle the list
         oField.ondblclick  = function() { toggle_popup(oField); };
+=======
+    if (oField) {
+        oField.onkeydown = function (e) {
+            if (!e) e = window.event;
+            return mkSearchKeyDown(e, oField);
+        };
+        oField.onkeyup = function (e) {
+            if (!e) e = window.event;
+            return mkSearchKeyUp(e, oField);
+        };
+        oField.onclick = function () {
+            close_popup();
+            return true;
+        };
+
+        // On doubleclick toggle the list
+        oField.ondblclick = function () {
+            toggle_popup(oField);
+        };
+>>>>>>> upstream/master
     }
 }
 
@@ -62,8 +91,12 @@ function mkSearchKeyUp(e, oField) {
                 e.returnValue = false;
                 e.cancelBubble = true;
                 close_popup();
+<<<<<<< HEAD
             }
             else {
+=======
+            } else {
+>>>>>>> upstream/master
                 mkSearch(oField);
             }
             break;
@@ -73,15 +106,24 @@ function mkSearchKeyUp(e, oField) {
 // On key press down event handler
 export function on_search_click() {
     var oField = document.getElementById("mk_side_search_field");
+<<<<<<< HEAD
     var ev = { "which" : 0, "keyCode" : 13 };
+=======
+    var ev = {which: 0, keyCode: 13};
+>>>>>>> upstream/master
     return mkSearchKeyDown(ev, oField);
 }
 
 function search_dropdown_value() {
+<<<<<<< HEAD
     if (oCurrent)
         return oCurrent.id.replace("result_", "");
     else
         return null;
+=======
+    if (oCurrent) return oCurrent.id.replace("result_", "");
+    else return null;
+>>>>>>> upstream/master
 }
 
 function mkSearchKeyDown(e, oField) {
@@ -98,7 +140,12 @@ function mkSearchKeyDown(e, oField) {
                 if (oField.value == "")
                     return; /* search field empty, rather not show all services! */
                 // When nothing selected, navigate with the current contents of the field
+<<<<<<< HEAD
                 top.frames["main"].location.href = "search_open.py?q=" + encodeURIComponent(oField.value);
+=======
+                top.frames["main"].location.href =
+                    "search_open.py?q=" + encodeURIComponent(oField.value);
+>>>>>>> upstream/master
                 mkTermSearch();
                 close_popup();
             }
@@ -116,7 +163,11 @@ function mkSearchKeyDown(e, oField) {
 
         // Tab
         case 9:
+<<<<<<< HEAD
             if(mkSearchResultShown()) {
+=======
+            if (mkSearchResultShown()) {
+>>>>>>> upstream/master
                 close_popup();
             }
             return;
@@ -124,7 +175,11 @@ function mkSearchKeyDown(e, oField) {
         // Up/Down arrow (Must not be handled in onkeyup since this does not fire repeated events)
         case 38:
         case 40:
+<<<<<<< HEAD
             if(!mkSearchResultShown()) {
+=======
+            if (!mkSearchResultShown()) {
+>>>>>>> upstream/master
                 mkSearch(oField);
             }
 
@@ -143,13 +198,18 @@ function mkSearchNavigate() {
 
 // Move one step of given size in the result list
 function mkSearchMoveElement(step) {
+<<<<<<< HEAD
     if(iCurrent == null) {
+=======
+    if (iCurrent == null) {
+>>>>>>> upstream/master
         iCurrent = -1;
     }
 
     iCurrent += step;
 
     var oResults = document.getElementById("mk_search_results");
+<<<<<<< HEAD
     if (!oResults)
         return;
 
@@ -158,13 +218,26 @@ function mkSearchMoveElement(step) {
 
     if(iCurrent > oResults.children.length-1)
         iCurrent = 0;
+=======
+    if (!oResults) return;
+
+    if (iCurrent < 0) iCurrent = oResults.children.length - 1;
+
+    if (iCurrent > oResults.children.length - 1) iCurrent = 0;
+>>>>>>> upstream/master
 
     oResults = oResults.childNodes;
 
     var a = 0;
+<<<<<<< HEAD
     for(var i = 0; i < oResults.length; i++) {
         if(oResults[i].tagName == "A") {
             if(a == iCurrent) {
+=======
+    for (var i = 0; i < oResults.length; i++) {
+        if (oResults[i].tagName == "A") {
+            if (a == iCurrent) {
+>>>>>>> upstream/master
                 oCurrent = oResults[i];
                 oResults[i].setAttribute("class", "active");
             } else {
@@ -182,7 +255,11 @@ function mkSearchResultShown() {
 
 // Toggle the result list
 function toggle_popup(oField) {
+<<<<<<< HEAD
     if(mkSearchResultShown()) {
+=======
+    if (mkSearchResultShown()) {
+>>>>>>> upstream/master
         close_popup();
     } else {
         mkSearch(oField);
@@ -192,7 +269,11 @@ function toggle_popup(oField) {
 // Close the result list
 export function close_popup() {
     var oContainer = document.getElementById("mk_search_results");
+<<<<<<< HEAD
     if(oContainer) {
+=======
+    if (oContainer) {
+>>>>>>> upstream/master
         oContainer.parentNode.removeChild(oContainer);
     }
 
@@ -203,7 +284,11 @@ export function close_popup() {
 function handle_search_response(oField, code) {
     if (code != "") {
         var oContainer = document.getElementById("mk_search_results");
+<<<<<<< HEAD
         if(!oContainer) {
+=======
+        if (!oContainer) {
+>>>>>>> upstream/master
             oContainer = document.createElement("div");
             oContainer.setAttribute("id", "mk_search_results");
             oField.parentNode.appendChild(oContainer);
@@ -225,6 +310,7 @@ function mkTermSearch() {
 
 // Build a new result list and show it up
 function mkSearch(oField) {
+<<<<<<< HEAD
     if(oField == null)
         return;
 
@@ -235,4 +321,18 @@ function mkSearch(oField) {
 
     mkTermSearch();
     g_ajax_obj = get_url("ajax_search.py?q=" + encodeURIComponent(val), handle_search_response, oField);
+=======
+    if (oField == null) return;
+
+    var val = oField.value;
+    if (mkSearchResultShown() && val == oldValue) return; // nothing changed, no new search
+    oldValue = val;
+
+    mkTermSearch();
+    g_ajax_obj = get_url(
+        "ajax_search.py?q=" + encodeURIComponent(val),
+        handle_search_response,
+        oField
+    );
+>>>>>>> upstream/master
 }

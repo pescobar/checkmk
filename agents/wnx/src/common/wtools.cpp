@@ -14,19 +14,146 @@
 #include "psapi.h"
 #pragma comment(lib, "wbemuuid.lib")  /// Microsoft Specific
 #pragma comment(lib, "psapi.lib")     /// Microsoft Specific
+<<<<<<< HEAD
+=======
+#pragma comment(lib, "Sensapi.lib")   /// Microsoft Specific
+>>>>>>> upstream/master
 #endif
 
 #include <cstdint>
 #include <numeric>
+<<<<<<< HEAD
+=======
+#include <random>
+>>>>>>> upstream/master
 #include <string>
 
 #include "cap.h"
 #include "cfg.h"
+<<<<<<< HEAD
+=======
+#include "common/wtools_runas.h"
+#include "common/wtools_user_control.h"
+>>>>>>> upstream/master
 #include "logger.h"
 #include "tools/_raii.h"
 #include "upgrade.h"
 
 namespace wtools {
+<<<<<<< HEAD
+=======
+bool ChangeAccessRights(
+    const wchar_t* object_name,   // name of object
+    SE_OBJECT_TYPE object_type,   // type of object
+    const wchar_t* trustee_name,  // trustee for new ACE
+    TRUSTEE_FORM trustee_form,    // format of trustee structure
+    DWORD access_rights,          // access mask for new ACE
+    ACCESS_MODE access_mode,      // type of ACE
+    DWORD inheritance             // inheritance flags for new ACE ???
+) {
+    PACL old_dacl = nullptr;
+    PSECURITY_DESCRIPTOR sd = nullptr;
+
+    if (nullptr == object_name) return false;
+
+    // Get a pointer to the existing DACL.
+    auto result = ::GetNamedSecurityInfo(object_name, object_type,
+                                         DACL_SECURITY_INFORMATION, nullptr,
+                                         nullptr, &old_dacl, nullptr, &sd);
+    if (ERROR_SUCCESS != result) {
+        XLOG::l("GetNamedSecurityInfo Error {}", result);
+        return false;
+    }
+    ON_OUT_OF_SCOPE(if (sd != nullptr) LocalFree((HLOCAL)sd));
+
+    // Initialize an EXPLICIT_ACCESS structure for the new ACE.
+
+    EXPLICIT_ACCESS ea;
+    ZeroMemory(&ea, sizeof(EXPLICIT_ACCESS));
+    ea.grfAccessPermissions = access_rights;
+    ea.grfAccessMode = access_mode;
+    ea.grfInheritance = inheritance;
+    ea.Trustee.TrusteeForm = trustee_form;
+    ea.Trustee.ptstrName = const_cast<wchar_t*>(trustee_name);
+
+    // Create a new ACL that merges the new ACE
+    // into the existing DACL.
+    PACL new_dacl = nullptr;
+    result = ::SetEntriesInAcl(1, &ea, old_dacl, &new_dacl);
+    if (ERROR_SUCCESS != result) {
+        XLOG::l("SetEntriesInAcl Error {}", result);
+        return false;
+    }
+
+    ON_OUT_OF_SCOPE(if (new_dacl != nullptr) LocalFree((HLOCAL)new_dacl));
+    // Attach the new ACL as the object's DACL.
+
+    result = ::SetNamedSecurityInfo(const_cast<wchar_t*>(object_name),
+                                    object_type, DACL_SECURITY_INFORMATION,
+                                    nullptr, nullptr, new_dacl, nullptr);
+    if (ERROR_SUCCESS != result) {
+        XLOG::l("SetNamedSecurityInfo Error {}", result);
+        return false;
+    }
+
+    return true;
+}
+
+std::pair<uint32_t, uint32_t> GetProcessExitCode(uint32_t pid) {
+    auto h = ::OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION,  // not on XP
+                           FALSE, pid);
+    if (nullptr == h) return {0, GetLastError()};
+
+    ON_OUT_OF_SCOPE(::CloseHandle(h));
+    DWORD exit_code = 0;
+    auto success = ::GetExitCodeProcess(h, &exit_code);
+    if (FALSE == success) return {-1, GetLastError()};
+
+    return {exit_code, 0};
+}
+
+std::wstring GetProcessPath(uint32_t pid) noexcept {
+    auto h =
+        ::OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, pid);
+    if (h == nullptr) return {};
+    ON_OUT_OF_SCOPE(::CloseHandle(h));
+
+    wchar_t buffer[MAX_PATH];
+    if (::GetModuleFileNameEx(h, 0, buffer, MAX_PATH)) return buffer;
+
+    return {};
+}
+
+// returns count of killed processes
+int KillProcessesByDir(const std::filesystem::path& dir) noexcept {
+    namespace fs = std::filesystem;
+    constexpr size_t kMinimumPathLen = 16;  // safety
+
+    if (dir.empty()) return -1;
+
+    if (dir.u8string().size() < kMinimumPathLen) return -1;
+
+    int killed_count = 0;
+
+    ScanProcessList([dir, &killed_count,
+                     kMinimumPathLen](const PROCESSENTRY32W& entry) -> bool {
+        auto pid = entry.th32ProcessID;
+        auto exe = wtools::GetProcessPath(pid);
+        if (exe.length() < kMinimumPathLen) return true;  // skip short path
+
+        fs::path p{exe};
+
+        auto shift = p.lexically_relative(dir).u8string();
+        if (!shift.empty() && shift[0] != '.') {
+            KillProcess(pid);
+            killed_count++;
+        }
+        return true;  // continue, we want to scan all process in the system
+    });
+
+    return killed_count;
+}
+>>>>>>> upstream/master
 
 void AppRunner::prepareResources(std::wstring_view command_line,
                                  bool create_pipe) noexcept {
@@ -79,11 +206,52 @@ uint32_t AppRunner::goExecAsJob(std::wstring_view CommandLine) noexcept {
     return 0;
 }
 
+<<<<<<< HEAD
+=======
+uint32_t AppRunner::goExecAsJobAndUser(std::wstring_view user,
+                                       std::wstring_view password,
+                                       std::wstring_view CommandLine) noexcept {
+    try {
+        if (process_id_) {
+            XLOG::l.bp("Attempt to reuse AppRunner");
+            return 0;
+        }
+
+        prepareResources(CommandLine, true);
+
+        auto [pid, jh, ph] =
+            runas::RunAsJob(user, password, CommandLine.data(), true,
+                            stdio_.getWrite(), stderr_.getWrite());
+        // store data to reuse
+        process_id_ = pid;
+        job_handle_ = jh;
+        process_handle_ = ph;
+
+        // check and return on success
+        if (process_id_) return process_id_;
+
+        // failure s here
+        XLOG::l(XLOG_FLINE + " Failed RunStd: [{}]*", GetLastError());
+
+        cleanResources();
+
+        return 0;
+    } catch (const std::exception& e) {
+        XLOG::l.crit(XLOG_FLINE + " unexpected exception: '{}'", e.what());
+    }
+    return 0;
+}
+
+>>>>>>> upstream/master
 // returns process id
 uint32_t AppRunner::goExecAsUpdater(std::wstring_view CommandLine) noexcept {
     try {
         if (process_id_) {
+<<<<<<< HEAD
             XLOG::l.bp("Attempt to reuse AppRunner");
+=======
+            XLOG::l.bp("Attempt to reuse AppRunner/updater");
+>>>>>>> upstream/master
             return 0;
         }
         prepareResources(CommandLine, true);
@@ -96,7 +264,11 @@ uint32_t AppRunner::goExecAsUpdater(std::wstring_view CommandLine) noexcept {
         if (process_id_) return process_id_;
 
         // failure s here
+<<<<<<< HEAD
         XLOG::l(XLOG_FLINE + " Failed RunStd: [{}]*", GetLastError());
+=======
+        XLOG::l(XLOG_FLINE + " Failed updater RunStd: [{}]*", GetLastError());
+>>>>>>> upstream/master
 
         cleanResources();
         return 0;
@@ -169,8 +341,13 @@ ServiceController::StopType ServiceController::registerAndRun(
         if (!ret) {
             auto error = GetLastError();
 
+<<<<<<< HEAD
             // this normal situation when we are starting service from command
             // line without parameters
+=======
+            // this normal situation when we are starting service from
+            // command line without parameters
+>>>>>>> upstream/master
             if (error == ERROR_FAILED_SERVICE_CONTROLLER_CONNECT)
                 return StopType::no_connect;
 
@@ -808,7 +985,11 @@ inline auto NextInstance(const PERF_INSTANCE_DEFINITION* Instance) {
 // DataSequence is primitive wrapper over data buffer
 // DataSequence takes ownership over buffer
 DataSequence ReadPerformanceDataFromRegistry(
+<<<<<<< HEAD
     const std::wstring& CounterName) noexcept {
+=======
+    const std::wstring& counter_name) noexcept {
+>>>>>>> upstream/master
     DWORD buf_size = 40000;
     BYTE* buffer = nullptr;
 
@@ -818,11 +999,18 @@ DataSequence ReadPerformanceDataFromRegistry(
         try {
             buffer = new BYTE[buf_size];
         } catch (...) {
+<<<<<<< HEAD
             return cma::tools::DataBlock<BYTE>();  // ups
+=======
+            XLOG::l(XLOG_FUNC + " Out of memory allocating [{}] bytes",
+                    buf_size);
+            return {};
+>>>>>>> upstream/master
         }
 
         DWORD type = 0;
         auto ret =
+<<<<<<< HEAD
             ::RegQueryValueExW(HKEY_PERFORMANCE_DATA, CounterName.c_str(),
                                nullptr, &type, buffer, &buf_size);
         RegCloseKey(HKEY_PERFORMANCE_DATA);  // MSDN requirement
@@ -844,12 +1032,38 @@ const PERF_OBJECT_TYPE* FindPerfObject(const DataSequence& Db,
                                        DWORD counter_index) noexcept {
     auto data = Db.data_;
     auto max_offset = Db.len_;
+=======
+            ::RegQueryValueExW(HKEY_PERFORMANCE_DATA, counter_name.c_str(),
+                               nullptr, &type, buffer, &buf_size);
+        ::RegCloseKey(HKEY_PERFORMANCE_DATA);  // MSDN requirement
+
+        if (ret == ERROR_SUCCESS) break;  // normal exit
+
+        if (ret != ERROR_MORE_DATA) {
+            XLOG::l("Can't read counter '{}' error [{}]",
+                    wtools::ConvertToUTF8(counter_name), ret);
+            return {};
+        }
+
+        buf_size *= 2;    // this is not optimal, may be reworked
+        delete[] buffer;  // realloc part one
+    }
+
+    return DataSequence(static_cast<int>(buf_size), buffer);
+}
+
+const PERF_OBJECT_TYPE* FindPerfObject(const DataSequence& data_buffer,
+                                       DWORD counter_index) noexcept {
+    auto data = data_buffer.data_;
+    auto max_offset = data_buffer.len_;
+>>>>>>> upstream/master
     if (!data || !max_offset) return nullptr;
 
     auto data_block = reinterpret_cast<PERF_DATA_BLOCK*>(data);
     auto object = FindFirstObject(data_block);
 
     for (DWORD i = 0; i < data_block->NumObjectTypes; ++i) {
+<<<<<<< HEAD
         // iterate to the object we requested since apparently there can be more
         // than that in the buffer returned
         if (object->ObjectNameTitleIndex == counter_index) {
@@ -858,6 +1072,16 @@ const PERF_OBJECT_TYPE* FindPerfObject(const DataSequence& Db,
             object = FindNextObject(object);
         }
     }
+=======
+        // iterate to the object we requested since apparently there can be
+        // more than that in the buffer returned
+        if (object->ObjectNameTitleIndex == counter_index) {
+            return object;
+        }
+        object = FindNextObject(object);
+    }
+
+>>>>>>> upstream/master
     return nullptr;
 }
 
@@ -877,6 +1101,10 @@ std::vector<const PERF_INSTANCE_DEFINITION*> GenerateInstances(
     } catch (const std::exception& e) {
         XLOG::l(XLOG_FLINE + " exception: '{}'", e.what());
     }
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/master
     return result;
 }
 
@@ -936,6 +1164,7 @@ std::vector<const PERF_COUNTER_DEFINITION*> GenerateCounters(
 
 // used only in skype
 // build map of the <id:name>
+<<<<<<< HEAD
 std::vector<std::wstring> GenerateCounterNames(const PERF_OBJECT_TYPE* Object,
                                                const NameMap& Map) {
     std::vector<std::wstring> result;
@@ -947,10 +1176,29 @@ std::vector<std::wstring> GenerateCounterNames(const PERF_OBJECT_TYPE* Object,
         } else {
             // not found in map
             result.push_back(std::to_wstring(counter->CounterNameTitleIndex));
+=======
+std::vector<std::wstring> GenerateCounterNames(const PERF_OBJECT_TYPE* object,
+                                               const NameMap& name_map) {
+    std::vector<std::wstring> result;
+
+    auto counter = FirstCounter(object);
+    for (DWORD i = 0UL; i < object->NumCounters; ++i) {
+        auto index = counter->CounterNameTitleIndex;
+        auto iter = name_map.find(index);
+        if (iter != name_map.end()) {
+            result.emplace_back(iter->second);
+        } else {
+            // use index as a name
+            result.emplace_back(std::to_wstring(index));
+>>>>>>> upstream/master
         }
 
         counter = NextCounter(counter);
     }
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/master
     return result;
 }
 
@@ -975,9 +1223,15 @@ static uint64_t GetCounterValueFromBlock(
             return 0;
         case PERF_SIZE_VARIABLE_LEN:
         default: {
+<<<<<<< HEAD
             // handle other data generically. This is wrong in some situation.
             // Once upon a time in future we might implement a conversion as
             // described in
+=======
+            // handle other data generically. This is wrong in some
+            // situation. Once upon a time in future we might implement a
+            // conversion as described in
+>>>>>>> upstream/master
             // http://msdn.microsoft.com/en-us/library/aa373178%28v=vs.85%29.aspx
             int size = Counter.CounterSize;
             if (size == 4) return static_cast<uint64_t>(dwords[0]);
@@ -1376,7 +1630,11 @@ bool WmiWrapper::open() noexcept {  // Obtain the initial locator to Windows
 
     auto hres =
         CoCreateInstance(CLSID_WbemLocator, nullptr, CLSCTX_INPROC_SERVER,
+<<<<<<< HEAD
                          IID_IWbemLocator, reinterpret_cast<LPVOID*>(&locator));
+=======
+                         IID_IWbemLocator, reinterpret_cast<void**>(&locator));
+>>>>>>> upstream/master
 
     if (FAILED(hres)) {
         XLOG::l.crit("Can't Create Instance WMI {:#X}",
@@ -1465,7 +1723,11 @@ bool WmiWrapper::impersonate() noexcept {
 
     if (SUCCEEDED(hres)) return true;
 
+<<<<<<< HEAD
     XLOG::l.e("Failed blanker/impersonation locator wmI {X}", hres);
+=======
+    XLOG::l.e("Failed blanker/impersonation locator wmI {:X}", hres);
+>>>>>>> upstream/master
     return false;  // Program has failed.
 }
 
@@ -1621,9 +1883,15 @@ HMODULE LoadWindowsLibrary(const std::wstring& DllPath) {
         dllpath_expanded.resize(required - 1);
     }
 
+<<<<<<< HEAD
     // load the library as a datafile without loading referenced dlls. This is
     // quicker but most of all it prevents problems if dependent dlls can't be
     // loaded.
+=======
+    // load the library as a datafile without loading referenced dlls. This
+    // is quicker but most of all it prevents problems if dependent dlls
+    // can't be loaded.
+>>>>>>> upstream/master
     return LoadLibraryExW(
         dllpath_expanded.c_str(), nullptr,
         DONT_RESOLVE_DLL_REFERENCES | LOAD_LIBRARY_AS_DATAFILE);
@@ -1666,6 +1934,7 @@ std::vector<std::string> EnumerateAllRegistryKeys(const char* RegPath) {
 
 // gtest [+]
 // returns data from the root machine registry
+<<<<<<< HEAD
 uint32_t GetRegistryValue(const std::wstring& Key, const std::wstring& Value,
                           uint32_t Default) noexcept {
     HKEY hkey = nullptr;
@@ -1677,11 +1946,25 @@ uint32_t GetRegistryValue(const std::wstring& Key, const std::wstring& Value,
         DWORD count = sizeof(buffer);
         ret = RegQueryValueExW(hkey, Value.c_str(), nullptr, &type,
                                reinterpret_cast<LPBYTE>(&buffer), &count);
+=======
+uint32_t GetRegistryValue(std::wstring_view path, std::wstring_view value_name,
+                          uint32_t dflt) noexcept {
+    HKEY hkey = nullptr;
+    auto ret = ::RegOpenKeyW(HKEY_LOCAL_MACHINE, path.data(), &hkey);
+    if (ERROR_SUCCESS == ret && nullptr != hkey) {
+        ON_OUT_OF_SCOPE(::RegCloseKey(hkey));
+        DWORD type = REG_DWORD;
+        uint32_t buffer = dflt;
+        DWORD count = sizeof(buffer);
+        ret = ::RegQueryValueExW(hkey, value_name.data(), nullptr, &type,
+                                 reinterpret_cast<LPBYTE>(&buffer), &count);
+>>>>>>> upstream/master
         if (ret == ERROR_SUCCESS && 0 != count && type == REG_DWORD) {
             return buffer;
         }
     }
     // failure here
+<<<<<<< HEAD
     XLOG::t.t(XLOG_FLINE + "Absent {}\\{} query [{}]",
               ConvertToUTF8(Key.c_str()), ConvertToUTF8(Value.c_str()), ret);
     return Default;
@@ -1708,11 +1991,85 @@ bool SetRegistryValue(const std::wstring& Key, const std::wstring& Value,
                       uint32_t Data) noexcept {
     auto ret = RegSetKeyValue(HKEY_LOCAL_MACHINE, Key.c_str(), Value.c_str(),
                               REG_DWORD, &Data, 4);
+=======
+    XLOG::t.t(XLOG_FLINE + "Absent {}\\{} query [{}]", ConvertToUTF8(path),
+              ConvertToUTF8(value_name), ret);
+    return dflt;
+}
+
+bool DeleteRegistryValue(std::wstring_view path,
+                         std::wstring_view value_name) noexcept {
+    HKEY hkey = nullptr;
+    auto ret = ::RegOpenKeyW(HKEY_LOCAL_MACHINE, path.data(), &hkey);
+    if (ERROR_SUCCESS == ret && nullptr != hkey) {
+        ON_OUT_OF_SCOPE(::RegCloseKey(hkey));
+        ret = ::RegDeleteValue(hkey, value_name.data());
+        if (ret == ERROR_SUCCESS) return true;
+        if (ret == ERROR_FILE_NOT_FOUND) {
+            XLOG::t.t(XLOG_FLINE + "No need to delete {}\\{}",
+                      ConvertToUTF8(path), ConvertToUTF8(value_name));
+            return true;
+        }
+
+        XLOG::l(XLOG_FLINE + "Failed to delete {}\\{} error [{}]",
+                ConvertToUTF8(path), ConvertToUTF8(value_name), ret);
+        return false;
+    }
+    //  here
+    XLOG::t.t(XLOG_FLINE + "No need to delete {}\\{}", ConvertToUTF8(path),
+              ConvertToUTF8(value_name));
+    return true;
+}
+
+namespace {
+
+HKEY CreateRegistryKey(std::wstring_view path) {
+    HKEY key = nullptr;
+    auto ret = ::RegCreateKeyEx(HKEY_LOCAL_MACHINE, path.data(), 0L, nullptr,
+                                REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL,
+                                &key, NULL);
+    if (ERROR_SUCCESS != ret) return nullptr;
+    return key;
+}
+// returns true on success
+bool SetRegistryValue(std::wstring_view path, std::wstring_view value_name,
+                      std::wstring_view value, DWORD type) {
+    auto key = CreateRegistryKey(path);
+    if (key == nullptr) return false;
+
+    // Set full application path with a keyname to registry
+    auto ret =
+        ::RegSetValueEx(key, value_name.data(), 0, type,
+                        reinterpret_cast<const BYTE*>(value.data()),
+                        static_cast<uint32_t>(value.size() * sizeof(wchar_t)));
+    ::RegCloseKey(key);
+    return ERROR_SUCCESS == ret;
+}
+}  // namespace
+
+bool SetRegistryValue(std::wstring_view path, std::wstring_view value_name,
+                      std::wstring_view value) {
+    return SetRegistryValue(path, value_name, value, REG_SZ);
+}
+
+bool SetRegistryValueExpand(std::wstring_view path,
+                            std::wstring_view value_name,
+                            std::wstring_view value) {
+    return SetRegistryValue(path, value_name, value, REG_EXPAND_SZ);
+}
+
+// returns true on success
+bool SetRegistryValue(std::wstring_view path, std::wstring_view value_name,
+                      uint32_t value) noexcept {
+    auto ret = ::RegSetKeyValue(HKEY_LOCAL_MACHINE, path.data(),
+                                value_name.data(), REG_DWORD, &value, 4);
+>>>>>>> upstream/master
     if (ret != 0) XLOG::d("Bad with reg set value {}", ret);
 
     return ret == ERROR_SUCCESS;
 }
 
+<<<<<<< HEAD
 std::wstring GetRegistryValue(const std::wstring& Key,
                               const std::wstring& Value,
                               const std::wstring& Default) noexcept {
@@ -1774,6 +2131,66 @@ std::wstring GetRegistryValue(const std::wstring& Key,
     XLOG::t.t(XLOG_FLINE + "Cannot open Key {} query return code {}",
               ConvertToUTF8(Key.c_str()), result);
     return Default;
+=======
+std::wstring GetRegistryValue(std::wstring_view path,
+                              std::wstring_view value_name,
+                              std::wstring_view dflt) noexcept {
+    HKEY hkey = nullptr;
+    auto result = ::RegOpenKeyW(HKEY_LOCAL_MACHINE, path.data(), &hkey);
+    if (ERROR_SUCCESS != result || nullptr == hkey) {
+        // failure here
+        XLOG::t.t(XLOG_FLINE + "Cannot open Key '{}' query return code [{}]",
+                  ConvertToUTF8(path), result);
+        return dflt.data();
+    }
+
+    ON_OUT_OF_SCOPE(::RegCloseKey(hkey));
+    DWORD type = REG_SZ;
+    wchar_t buffer[512];
+    DWORD count = sizeof(buffer);
+    auto ret = ::RegQueryValueExW(hkey, value_name.data(), nullptr, &type,
+                                  reinterpret_cast<LPBYTE>(buffer), &count);
+
+    // check for errors
+    auto type_ok = type == REG_SZ || type == REG_EXPAND_SZ;
+    if (count == 0 || !type_ok) {
+        // failure here
+        XLOG::t.t(XLOG_FLINE + "Can't open '{}\\{}' query returns [{}]",
+                  ConvertToUTF8(path), ConvertToUTF8(value_name), ret);
+        return dflt.data();
+    }
+
+    if (ret == ERROR_SUCCESS)
+        return type == REG_SZ ? buffer : ExpandStringWithEnvironment(buffer);
+
+    if (ret == ERROR_MORE_DATA) {
+        // realloc required
+        DWORD type = REG_SZ;
+        auto buffer_big = new wchar_t[count / sizeof(wchar_t) + 2];
+        ON_OUT_OF_SCOPE(delete[] buffer_big);
+        DWORD count = sizeof(count);
+        ret = ::RegQueryValueExW(hkey, value_name.data(), nullptr, &type,
+                                 reinterpret_cast<LPBYTE>(buffer_big), &count);
+
+        // check for errors
+        type_ok = type == REG_SZ || type == REG_EXPAND_SZ;
+        if (count == 0 || !type_ok) {
+            // failure here
+            XLOG::t.t(XLOG_FLINE + "Absent {}\\{} query return [{}]",
+                      ConvertToUTF8(path), ConvertToUTF8(value_name), ret);
+            return dflt.data();
+        }
+
+        if (ret == ERROR_SUCCESS)
+            return type == REG_SZ ? buffer_big
+                                  : ExpandStringWithEnvironment(buffer_big);
+    }
+
+    // failure here
+    XLOG::t.t(XLOG_FLINE + "Bad key {}\\{} query return [{}]",
+              ConvertToUTF8(path), ConvertToUTF8(value_name), ret);
+    return dflt.data();
+>>>>>>> upstream/master
 }
 
 // process terminators
@@ -1861,7 +2278,11 @@ static std::string MakeWmiTailForData(StatusColumn status_column,
 // Total,1500
 // AFter
 // Name,Freq,WMIStatus
+<<<<<<< HEAD
 // Total,1500,OK
+=======
+// Total, 500, OK
+>>>>>>> upstream/master
 // Empty or quite short strings are replaced with WMIStatus\nTimeout\n
 std::string WmiPostProcess(const std::string& in, StatusColumn status_column,
                            char separator) {
@@ -2055,6 +2476,472 @@ uint32_t GetParentPid(uint32_t pid)  // By Napalm @ NetCore2K
     return 0;
 }
 
+<<<<<<< HEAD
+=======
+#define READ_PERMISSIONS (FILE_READ_DATA | FILE_READ_ATTRIBUTES)
+#define WRITE_PERMISSIONS \
+    (FILE_WRITE_DATA | FILE_APPEND_DATA | FILE_WRITE_ATTRIBUTES | FILE_WRITE_EA)
+#define EXECUTE_PERMISSIONS (FILE_READ_DATA | FILE_EXECUTE)
+
+// Constructor
+ACLInfo::ACLInfo(_bstr_t bstrPath) {
+    ace_list_ = nullptr;
+    path_ = bstrPath;
+}
+
+// Destructor
+ACLInfo::~ACLInfo(void) {
+    // Free ace_list structure
+    clearAceList();
+}
+
+// Free the nodes of ace_list
+void ACLInfo::clearAceList() {
+    AceList* pList = ace_list_;
+    AceList* pNext;
+    while (nullptr != pList) {
+        pNext = pList->next;
+        free(pList);
+        pList = pNext;
+    }
+
+    ace_list_ = nullptr;
+}
+
+HRESULT ACLInfo::query() {
+    BOOL success = TRUE;
+    BYTE* security_descriptor_buffer = nullptr;
+    DWORD size_needed = 0;
+
+    // clear any previously queried information
+    clearAceList();
+
+    // Find out size of needed buffer for security descriptor with DACL
+    // DACL = Discretionary Access Control List
+    success = GetFileSecurityW((BSTR)path_, DACL_SECURITY_INFORMATION, nullptr,
+                               0, &size_needed);
+
+    if (0 == size_needed) {
+        return E_FAIL;
+    }
+    security_descriptor_buffer = new BYTE[size_needed];
+
+    // Retrieve security descriptor with DACL information
+    success =
+        GetFileSecurityW((BSTR)path_, DACL_SECURITY_INFORMATION,
+                         security_descriptor_buffer, size_needed, &size_needed);
+
+    // Check if we successfully retrieved security descriptor with DACL
+    // information
+    if (!success) {
+        DWORD error = GetLastError();
+        XLOG::l("Failed to get file security information {}", error);
+        return E_FAIL;
+    }
+
+    // Getting DACL from Security Descriptor
+    PACL acl = nullptr;
+    BOOL bDaclPresent = FALSE;
+    BOOL bDaclDefaulted = FALSE;
+    success = GetSecurityDescriptorDacl(
+        (SECURITY_DESCRIPTOR*)security_descriptor_buffer, &bDaclPresent, &acl,
+        &bDaclDefaulted);
+
+    // Check if we successfully retrieved DACL
+    if (!success) {
+        auto error = GetLastError();
+        XLOG::l("Failed to retrieve DACL from security descriptor {}", error);
+        return E_FAIL;
+    }
+
+    // Check if DACL present in security descriptor
+    if (!bDaclPresent) {
+        XLOG::l("DACL was not found.");
+        return E_FAIL;
+    }
+
+    // DACL for specified file was retrieved successfully
+    // Now, we should fill in the linked list of ACEs
+    // Iterate through ACEs (Access Control Entries) of DACL
+    for (USHORT i = 0; i < acl->AceCount; i++) {
+        void* ace = nullptr;
+        success = GetAce(acl, i, &ace);
+        if (!success) {
+            DWORD error = GetLastError();
+            XLOG::l("Failed to get ace {}, {}", i, error);
+            continue;
+        }
+        HRESULT hr = addAceToList((ACE_HEADER*)ace);
+        if (FAILED(hr)) {
+            XLOG::l("Failed to add ace {} to list", i);
+            continue;
+        }
+    }
+    return S_OK;
+}
+
+HRESULT ACLInfo::addAceToList(ACE_HEADER* Ace) {
+    AceList* new_ace = (AceList*)malloc(sizeof(AceList));  // SK: from example
+    if (nullptr == new_ace) {
+        return E_OUTOFMEMORY;
+    }
+
+    // Check Ace type and update new list entry accordingly
+    switch (Ace->AceType) {
+        case ACCESS_ALLOWED_ACE_TYPE: {
+            new_ace->allowed = TRUE;
+            break;
+        }
+        case ACCESS_DENIED_ACE_TYPE: {
+            new_ace->allowed = FALSE;
+            break;
+        }
+    }
+    // Update the remaining fields
+    // We add new entry to the head of list
+    new_ace->ace = Ace;
+    new_ace->next = ace_list_;
+
+    ace_list_ = new_ace;
+
+    return S_OK;
+}
+
+static std::string MakeReadableString(bool allowed, const std::string& domain,
+                                      const std::string& name,
+                                      ACCESS_MASK mask_permissions) {
+    std::string os;
+    // Output Account info (in NT4 style: domain\user)
+    if (allowed) {
+        os += "Allowed to: ";
+    } else {
+        os += "Denied from: ";
+    }
+
+    if (!domain.empty()) {
+        os += domain;
+        os += "\\";
+    }
+    if (!name.empty()) {
+        os += name;
+    }
+
+    // Output permissions (Read/Write/Execute)
+    os += " [";
+
+    // For Allowed aces
+    if (allowed) {
+        // Read Permissions
+        if ((mask_permissions & READ_PERMISSIONS) == READ_PERMISSIONS) {
+            os += "R";
+        } else {
+            os += " ";
+        }
+        // Write permissions
+        if ((mask_permissions & WRITE_PERMISSIONS) == WRITE_PERMISSIONS) {
+            os += "W";
+        } else {
+            os += " ";
+        }
+        // Execute Permissions
+        if ((mask_permissions & EXECUTE_PERMISSIONS) == EXECUTE_PERMISSIONS) {
+            os += "X";
+        } else {
+            os += " ";
+        }
+    } else
+    // Denied Ace permissions
+    {
+        // Read Permissions
+        if ((mask_permissions & READ_PERMISSIONS) != 0) {
+            os += "R";
+        } else {
+            os += " ";
+        }
+        // Write permissions
+        if ((mask_permissions & WRITE_PERMISSIONS) != 0) {
+            os += "W";
+        } else {
+            os += " ";
+        }
+        // Execute Permissions
+        if ((mask_permissions & EXECUTE_PERMISSIONS) != 0) {
+            os += "X";
+        } else {
+            os += " ";
+        }
+    }
+    os += "]";
+    return os;
+}
+
+// code below has not very high quality
+// copy pasted from MSDN
+std::string ACLInfo::output() {
+    if (nullptr == ace_list_) return "No ACL Info\n";
+
+    ACE_HEADER* ace = nullptr;
+    SID* ace_sid = nullptr;
+    ACCESS_MASK mask_permissions = 0;
+    auto list = ace_list_;
+    // Iterate through ACEs list and
+    // out put information
+    std::string os;
+    while (nullptr != list) {
+        {
+            ace = list->ace;
+            if (list->allowed) {
+                auto allowed = reinterpret_cast<ACCESS_ALLOWED_ACE*>(ace);
+                ace_sid = (SID*)(&(allowed->SidStart));
+                mask_permissions = allowed->Mask;
+            } else {
+                auto denied = reinterpret_cast<ACCESS_DENIED_ACE*>(ace);
+                ace_sid = (SID*)(&(denied->SidStart));
+                mask_permissions = denied->Mask;
+            }
+        }
+
+        SID_NAME_USE sid_name_use;
+        char name_buffer[MAX_PATH];
+        char domain_buffer[MAX_PATH];
+        DWORD name_len = sizeof(name_buffer);
+        DWORD domain_name_len = sizeof(domain_buffer);
+
+        // Get account name for SID
+        auto ret =
+            LookupAccountSidA(nullptr, ace_sid, name_buffer, &name_len,
+                              domain_buffer, &domain_name_len, &sid_name_use);
+        if (!ret) {
+            XLOG::l("Failed to get account for SID");
+            continue;
+        }
+
+        os += MakeReadableString(list->allowed, domain_buffer, name_buffer,
+                                 mask_permissions);
+        os += "\n";
+
+        list = list->next;
+    }
+    return os;
+}
+
+std::string ReadWholeFile(const std::filesystem::path& fname) noexcept {
+    try {
+        std::ifstream f(fname.u8string(), std::ios::binary);
+
+        if (!f.good()) {
+            return {};
+        }
+
+        f.seekg(0, std::ios::end);
+        auto fsize = static_cast<uint32_t>(f.tellg());
+
+        // read contents
+        f.seekg(0, std::ios::beg);
+        std::string v;
+        v.resize(fsize);
+        f.read(reinterpret_cast<char*>(v.data()), fsize);
+        return v;
+    } catch (const std::exception& e) {
+        // catching possible exceptions in the
+        // ifstream or memory allocations
+        XLOG::l(XLOG_FUNC + "Exception '{}' generated in read file", e.what());
+        return {};
+    }
+    return {};
+}
+
+bool PatchFileLineEnding(const std::filesystem::path& fname) noexcept {
+    auto result = ReadWholeFile(fname);
+    if (result.empty()) return false;
+
+    try {
+        std::ofstream tst(fname.u8string());  // text file
+        tst.write(result.c_str(), result.size());
+        return true;
+    } catch (const std::exception& e) {
+        XLOG::l("Error during patching file line ending {}", e.what());
+        return false;
+    }
+}
+
+std::wstring GenerateRandomString(size_t max_length) noexcept {
+    std::wstring possible_characters(
+        L"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_#@$^&()[]{};:");
+
+    std::random_device rd;
+    std::mt19937 generator(rd());
+
+    std::uniform_int_distribution<> dist(
+        0, static_cast<int>(possible_characters.size()) - 1);
+    std::wstring ret;
+    for (size_t i = 0; i < max_length; i++) {
+        int random_index = dist(generator);  // get index between 0 and
+                                             // possible_characters.size()-1
+        ret += possible_characters[random_index];
+    }
+
+    return ret;
+}
+
+static std::wstring CmaUserPrefix() noexcept {
+    if (cma::IsService()) return L"cmk_in_";
+    if (cma::IsTest()) return L"cmk_TST_";
+    return {};
+}
+
+std::wstring GenerateCmaUserNameInGroup(std::wstring_view group) noexcept {
+    if (group.empty()) return {};
+
+    if (cma::IsService() || cma::IsTest()) {
+        auto prefix = CmaUserPrefix();
+        if (prefix.empty()) return {};
+
+        return prefix + group.data();
+    }
+
+    return {};
+}
+
+InternalUser CreateCmaUserInGroup(const std::wstring& group) noexcept {
+    uc::LdapControl primary_dc;
+
+    auto g = wtools::ConvertToUTF8(group);
+
+    // Set up the LOCALGROUP_INFO_1 structure.
+    uc::Status add_group_status = uc::Status::exists;
+
+    if (false) {
+        wchar_t group_comment[] = L"Check MK Group created group";
+        add_group_status = primary_dc.localGroupAdd(group, group_comment);
+    }
+
+    if (add_group_status == uc::Status::error) return {};
+
+    auto name = GenerateCmaUserNameInGroup(group);
+    if (name.empty()) return {};
+
+    auto n = wtools::ConvertToUTF8(name);
+
+    auto pwd = GenerateRandomString(12);
+
+    primary_dc.userDel(name);
+    auto add_user_status = primary_dc.userAdd(name, pwd);
+    if (add_user_status != uc::Status::success) {
+        XLOG::l("Can't add user '{}'", n);
+        if (add_group_status == uc::Status::success)
+            primary_dc.localGroupDel(group);
+        return {};
+    }
+
+    // Now add the user to the local group.
+    auto add_user_to_group_status =
+        primary_dc.localGroupAddMembers(group, name);
+    if (add_user_to_group_status != uc::Status::error) return {name, pwd};
+
+    // Fail situation processing
+    XLOG::l("Can't add user '{}' to group '{}'", n, g);
+    if (add_user_status == uc::Status::success) primary_dc.userDel(name);
+
+    if (add_group_status == uc::Status::success)
+        primary_dc.localGroupDel(group);
+
+    return {};
+}
+
+bool RemoveCmaUser(const std::wstring& user_name) noexcept {
+    uc::LdapControl primary_dc;
+    return primary_dc.userDel(user_name) != uc::Status::error;
+}
+
+bool ProtectPathFromUserWrite(const std::filesystem::path& path) {
+    // CONTEXT: to prevent malicious file creation or modification  in folder
+    // "programdata/checkmk" we must remove inherited write rights for
+    // Users in checkmk root data folder.
+
+    constexpr std::wstring_view command_templates[] = {
+        L"icacls \"{}\" /inheritance:d /c",           // disable inheritance
+        L"icacls \"{}\" /remove:g *S-1-5-32-545 /c",  // remove all user rights
+        L"icacls \"{}\" /grant:r *S-1-5-32-545:(OI)(CI)(RX) /c"};  // read/exec
+
+    for (auto const t : command_templates) {
+        auto cmd = fmt::format(t.data(), path.wstring());
+        if (!cma::tools::RunCommandAndWait(cmd)) {
+            // logging is almost useless: at this phase logfile is absent
+            XLOG::l.e("Failed command '{}'", wtools::ConvertToUTF8(cmd));
+            return false;
+        }
+    }
+    XLOG::l.i("User Write Protected '{}'", path.u8string());
+
+    return true;
+}
+
+bool ProtectFileFromUserWrite(const std::filesystem::path& path) {
+    // CONTEXT: to prevent malicious file creation or modification  in folder
+    // "programdata/checkmk" we must remove inherited write rights for
+    // Users in checkmk root data folder.
+
+    constexpr std::wstring_view command_templates[] = {
+        L"icacls \"{}\" /inheritance:d /c",           // disable inheritance
+        L"icacls \"{}\" /remove:g *S-1-5-32-545 /c",  // remove all user rights
+        L"icacls \"{}\" /grant:r *S-1-5-32-545:(RX) /c"};  // read/exec
+
+    for (auto const t : command_templates) {
+        auto cmd = fmt::format(t.data(), path.wstring());
+        if (!cma::tools::RunCommandAndWait(cmd)) {
+            // logging is almost useless: at this phase logfile is absent
+            XLOG::l.e("Failed command '{}'", wtools::ConvertToUTF8(cmd));
+            return false;
+        }
+    }
+    XLOG::l.i("User Write Protected '{}'", path.u8string());
+
+    return true;
+}
+
+bool ProtectPathFromUserAccess(const std::filesystem::path& entry) {
+    // CONTEXT: some files must be protected from the user fully
+
+    constexpr std::wstring_view command_templates[] = {
+        L"icacls \"{}\" /inheritance:d /c",          // disable inheritance
+        L"icacls \"{}\" /remove:g *S-1-5-32-545 /c"  // remove all user rights
+    };
+
+    for (auto const t : command_templates) {
+        auto cmd = fmt::format(t.data(), entry.wstring());
+        if (!cma::tools::RunCommandAndWait(cmd)) {
+            // logging is almost useless: at this phase logfile is absent
+            XLOG::l.e("Failed command '{}'", wtools::ConvertToUTF8(cmd));
+            return false;
+        }
+    }
+    XLOG::l.i("User Access Protected '{}'", entry.u8string());
+
+    return true;
+}
+
+std::wstring ExpandStringWithEnvironment(std::wstring_view str) {
+    if (str.empty()) return std::wstring{str};
+
+    auto log_error_and_return_default = [](std::wstring_view str) {
+        XLOG::l("Can't expand the string #1 '{}' [{}]", ConvertToUTF8(str),
+                GetLastError());
+        return std::wstring{str};
+    };
+
+    std::wstring result;
+    auto ret = ::ExpandEnvironmentStringsW(str.data(), result.data(), 0);
+    if (ret == 0) return log_error_and_return_default(str);
+
+    result.resize(ret - 1);
+    ret = ::ExpandEnvironmentStringsW(str.data(), result.data(), ret);
+    if (ret == 0) return log_error_and_return_default(str);
+
+    return result;
+}
+
+>>>>>>> upstream/master
 }  // namespace wtools
 
 // verified code from the legacy client

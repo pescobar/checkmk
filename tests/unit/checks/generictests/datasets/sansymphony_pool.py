@@ -1,5 +1,17 @@
+<<<<<<< HEAD
 # -*- encoding: utf-8
 # yapf: disable
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# yapf: disable
+# type: ignore
+
+>>>>>>> upstream/master
 
 
 checkname = 'sansymphony_pool'
@@ -18,4 +30,8 @@ checks = {'': [('Disk_pool_1',
                   []),
                  (0,
                   'Pool allocation: 57%',
+<<<<<<< HEAD
                   [('pool_allocation', 57, 80, 90, None, None)])])]}
+=======
+                  [('pool_allocation', 57, 80, 90, None, None)])])]}
+>>>>>>> upstream/master

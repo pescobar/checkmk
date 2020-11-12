@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: Fortinet FortiSandbox Queues
+=======
+title: Fortinet FortiSandbox: Queues
+>>>>>>> upstream/master
 agents: snmp
 catalog: hw/network/fortinet
 license: GPL
@@ -9,6 +13,14 @@ description:
  check is always {OK}, but individual levels for {WARN} and {CRIT}
  can be configured.
 
+<<<<<<< HEAD
 inventory:
  One check per queue will be created.
+=======
+item:
+ Type of queue (i.e. {{Executable}}, {{PDF}}, ...)
+
+inventory:
+ One service is created for each queue.
+>>>>>>> upstream/master
 

@@ -10,7 +10,12 @@ description:
  critical or non-recoverable errors the status {CRIT}.
 
 inventory:
+<<<<<<< HEAD
  One service per host will be created.
 
 item:
  No item.
+=======
+ One service is created for each host.
+
+>>>>>>> upstream/master

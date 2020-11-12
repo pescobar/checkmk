@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: SAP HANA: Full database backup
+=======
+title: SAP HANA: Full Database Backup
+>>>>>>> upstream/master
 agents: linux
 catalog: app/sap_hana
 license: GPL
@@ -13,8 +17,11 @@ description:
  Note: This check is deprecated and replaced by newer checks.
  See werk 7100 for detailed information.
 
+<<<<<<< HEAD
 item:
  The instance name.
 
+=======
+>>>>>>> upstream/master
 inventory:
  One service is created.

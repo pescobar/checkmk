@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -32,6 +33,18 @@ from cmk.gui.valuespec import (
     MonitoringState,
     TextAscii,
     Tuple,
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+from cmk.gui.i18n import _
+from cmk.gui.valuespec import (
+    Dictionary,
+    TextAscii,
+>>>>>>> upstream/master
 )
 
 from cmk.gui.plugins.wato import (
@@ -40,6 +53,17 @@ from cmk.gui.plugins.wato import (
     RulespecGroupCheckParametersApplications,
 )
 
+<<<<<<< HEAD
+=======
+from cmk.gui.plugins.wato.check_parameters.db_jobs import (
+    run_duration,
+    ignore_db_status,
+    status_disabled_jobs,
+    status_missing_jobs,
+    missinglog,
+)
+
+>>>>>>> upstream/master
 
 def _item_spec_oracle_jobs():
     return TextAscii(
@@ -55,6 +79,7 @@ def _parameter_valuespec_oracle_jobs():
         help=_("A scheduler job is an object in an ORACLE database which could be "
                "compared to a cron job on Unix. "),
         elements=[
+<<<<<<< HEAD
             ("run_duration",
              Tuple(
                  title=_("Maximum run duration for last execution"),
@@ -92,6 +117,13 @@ def _parameter_valuespec_oracle_jobs():
                         "that the job has no last running state as this is obtained from the log. "
                         "The last run state is ignored when no log information is found."),
              )),
+=======
+            ("run_duration", run_duration),
+            ("disabled", ignore_db_status),
+            ("status_disabled_jobs", status_disabled_jobs),
+            ("status_missing_jobs", status_missing_jobs),
+            ("missinglog", missinglog),
+>>>>>>> upstream/master
         ],
     )
 

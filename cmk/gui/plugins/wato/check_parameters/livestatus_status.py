@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,6 +24,13 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 from cmk.gui.i18n import _
 from cmk.gui.valuespec import (
@@ -120,6 +128,22 @@ def _parameter_valuespec_livestatus_status():
                            default_value=60,
                        ),
                    ])),
+<<<<<<< HEAD
+=======
+            ("average_latency_fetcher",
+             Tuple(title=_("Levels Latency Fetcher"),
+                   help=_("Set Levels for the Fetcher Latency Time"),
+                   elements=[
+                       Age(
+                           title=_("Warning at or above"),
+                           default_value=30,
+                       ),
+                       Age(
+                           title=_("Critical at or above"),
+                           default_value=60,
+                       ),
+                   ])),
+>>>>>>> upstream/master
             ("helper_usage_generic",
              Tuple(title=_("Levels Helper usage Check"),
                    help=_("Set Levels for the Check helper Usage"),
@@ -146,6 +170,35 @@ def _parameter_valuespec_livestatus_status():
                            default_value="90",
                        ),
                    ])),
+<<<<<<< HEAD
+=======
+            ("helper_usage_fetcher",
+             Tuple(title=_("Levels Helper usage fetcher"),
+                   help=_("Set Levels for the fetcher helper Usage"),
+                   elements=[
+                       Percentage(
+                           title=_("Warning at or above"),
+                           default_value="40",
+                       ),
+                       Percentage(
+                           title=_("Critical at or above"),
+                           default_value="80",
+                       ),
+                   ])),
+            ("helper_usage_checker",
+             Tuple(title=_("Levels Helper usage checker"),
+                   help=_("Set Levels for the checker helper Usage"),
+                   elements=[
+                       Percentage(
+                           title=_("Warning at or above"),
+                           default_value="40",
+                       ),
+                       Percentage(
+                           title=_("Critical at or above"),
+                           default_value="80",
+                       ),
+                   ])),
+>>>>>>> upstream/master
             ("livestatus_usage",
              Tuple(title=_("Levels Livestatus Usage"),
                    help=_("Set Levels for the Checkmk Livestatus Usage"),
@@ -211,5 +264,9 @@ rulespec_registry.register(
         item_spec=lambda: TextAscii(title=_("Name of the monitoring site"),),
         match_type="dict",
         parameter_valuespec=_parameter_valuespec_livestatus_status,
+<<<<<<< HEAD
         title=lambda: _("Performance and settings of a Check_MK site"),
+=======
+        title=lambda: _("Checkmk site performance and settings"),
+>>>>>>> upstream/master
     ))

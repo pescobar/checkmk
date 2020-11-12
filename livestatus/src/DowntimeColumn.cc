@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // +------------------------------------------------------------------+
 // |             ____ _               _        __  __ _  __           |
 // |            / ___| |__   ___  ___| | __   |  \/  | |/ /           |
@@ -24,6 +25,15 @@
 
 #include "DowntimeColumn.h"
 #include <cstdint>
+=======
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the
+// terms and conditions defined in the file COPYING, which is part of this
+// source code package.
+
+#include "DowntimeColumn.h"
+
+>>>>>>> upstream/master
 #include "MonitoringCore.h"
 #include "Renderer.h"
 #include "Row.h"
@@ -80,7 +90,11 @@ std::vector<std::string> DowntimeColumn::getValue(
 }
 
 std::vector<DowntimeData> DowntimeColumn::downtimes_for_row(Row row) const {
+<<<<<<< HEAD
     if (auto data = columnData<void>(row)) {
+=======
+    if (const auto *data = columnData<void>(row)) {
+>>>>>>> upstream/master
         return _is_service
                    ? _mc->downtimes_for_service(
                          reinterpret_cast<const MonitoringCore::Service *>(

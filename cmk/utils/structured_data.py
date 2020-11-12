@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/env python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,16 +24,33 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 """
 This module handles tree structures for HW/SW inventory system and
 structured monitoring data of Check_MK.
 """
 
+<<<<<<< HEAD
 import gzip
 import re
 # Just for tests
 import pprint
 import six
+=======
+import io
+import gzip
+import re
+import pprint
+from typing import AnyStr, Dict, List, Optional
+
+from six import ensure_str
+>>>>>>> upstream/master
 
 import cmk.utils.store as store
 from cmk.utils.exceptions import MKGeneralException
@@ -72,7 +90,11 @@ from cmk.utils.exceptions import MKGeneralException
 #   '----------------------------------------------------------------------'
 
 
+<<<<<<< HEAD
 class StructuredDataTree(object):
+=======
+class StructuredDataTree:
+>>>>>>> upstream/master
     """Interface for structured data tree"""
     def __init__(self):
         super(StructuredDataTree, self).__init__()
@@ -92,6 +114,7 @@ class StructuredDataTree(object):
         parent = self._create_hierarchy(path[:-1])
         return parent.add_child(path[-1], child, tuple(path)).get_child_data()
 
+<<<<<<< HEAD
     def _validate_tree_path(self, tree_path):
         if not tree_path:
             raise MKGeneralException("Empty tree path or zero.")
@@ -102,6 +125,18 @@ class StructuredDataTree(object):
         if not (tree_path.endswith(":") or tree_path.endswith(".")):
             raise MKGeneralException("No valid tree path.")
         if bool(re.compile('[^a-zA-Z0-9_.:-]').search(tree_path)):
+=======
+    def _validate_tree_path(self, tree_path: AnyStr) -> None:
+        if not tree_path:
+            raise MKGeneralException("Empty tree path or zero.")
+        # TODO: Check if bytes/ensure_str is necessary.
+        if not isinstance(tree_path, (bytes, str)):
+            raise MKGeneralException("Wrong tree path format. Must be of type string.")
+        tp = ensure_str(tree_path)
+        if not tp.endswith((":", ".")):
+            raise MKGeneralException("No valid tree path.")
+        if bool(re.compile('[^a-zA-Z0-9_.:-]').search(tp)):
+>>>>>>> upstream/master
             raise MKGeneralException("Specified tree path contains unexpected characters.")
 
     def _parse_tree_path(self, tree_path):
@@ -127,6 +162,7 @@ class StructuredDataTree(object):
     def save_to(self, path, filename, pretty=False):
         filepath = "%s/%s" % (path, filename)
         output = self.get_raw_tree()
+<<<<<<< HEAD
         store.save_data_to_file(filepath, output, pretty=pretty)
         gzip.open(filepath + ".gz", "w").write(repr(output) + "\n")
         # Inform Livestatus about the latest inventory update
@@ -134,6 +170,20 @@ class StructuredDataTree(object):
 
     def load_from(self, filepath):
         raw_tree = store.load_data_from_file(filepath)
+=======
+        store.save_object_to_file(filepath, output, pretty=pretty)
+
+        buf = io.BytesIO()
+        with gzip.GzipFile(fileobj=buf, mode="wb") as f:
+            f.write((repr(output) + "\n").encode("utf-8"))
+        store.save_bytes_to_file(filepath + ".gz", buf.getvalue())
+
+        # Inform Livestatus about the latest inventory update
+        store.save_text_to_file("%s/.last" % path, u"")
+
+    def load_from(self, filepath):
+        raw_tree = store.load_object_from_file(filepath)
+>>>>>>> upstream/master
         return self.create_tree_from_raw_tree(raw_tree)
 
     def create_tree_from_raw_tree(self, raw_tree):
@@ -142,7 +192,11 @@ class StructuredDataTree(object):
         return self
 
     def _create_hierarchy_from_data(self, raw_tree, parent, parent_path):
+<<<<<<< HEAD
         for edge, attrs in raw_tree.iteritems():
+=======
+        for edge, attrs in raw_tree.items():
+>>>>>>> upstream/master
             if not attrs:
                 continue
             if parent_path:
@@ -165,9 +219,15 @@ class StructuredDataTree(object):
                     self._create_hierarchy_from_data(sub_raw_tree, container, abs_path)
 
     def _get_child_data(self, raw_entries):
+<<<<<<< HEAD
         leaf_data = {}
         sub_raw_tree = {}
         for k, v in raw_entries.iteritems():
+=======
+        leaf_data: Dict = {}
+        sub_raw_tree: Dict = {}
+        for k, v in raw_entries.items():
+>>>>>>> upstream/master
             if isinstance(v, dict):
                 # Dict based values mean that current key
                 # is a node.
@@ -192,7 +252,11 @@ class StructuredDataTree(object):
             # Skipping invalid entries such as
             # {u'KEY': [LIST OF STRINGS], ...}
             try:
+<<<<<<< HEAD
                 for v in entry.itervalues():
+=======
+                for v in entry.values():
+>>>>>>> upstream/master
                     if isinstance(v, list):
                         return False
             except AttributeError:
@@ -259,18 +323,27 @@ class StructuredDataTree(object):
             return self
         filtered_tree = StructuredDataTree()
         for path, keys in allowed_paths:
+<<<<<<< HEAD
             sub_tree = self._root.get_filtered_branch(path, keys, Container())
+=======
+            # Make a copy of 'paths' which is mutable
+            # later 'paths' is modified via .pop(0)
+            sub_tree = self._root.get_filtered_branch(list(path), keys, Container())
+>>>>>>> upstream/master
             if sub_tree is None:
                 continue
             filtered_tree._root.merge_with(sub_tree)
         return filtered_tree
 
+<<<<<<< HEAD
     #   ---testing--------------------------------------------------------------
 
     def get_tree_repr(self):
         # Just for testing
         return self._root.get_tree_repr()
 
+=======
+>>>>>>> upstream/master
     def __repr__(self):
         return "%s(%s)" % (self.__class__.__name__, pprint.pformat(self.get_raw_tree()))
 
@@ -291,7 +364,11 @@ class StructuredDataTree(object):
 #   '----------------------------------------------------------------------'
 
 
+<<<<<<< HEAD
 class NodeAttribute(object):
+=======
+class NodeAttribute:
+>>>>>>> upstream/master
     """Interface for all node attributes"""
     def is_empty(self):
         raise NotImplementedError()
@@ -322,12 +399,15 @@ class NodeAttribute(object):
     def copy(self):
         raise NotImplementedError()
 
+<<<<<<< HEAD
     #   ---testing--------------------------------------------------------------
 
     def get_tree_repr(self):
         # Just for testing
         raise NotImplementedError()
 
+=======
+>>>>>>> upstream/master
     def __repr__(self):
         return "%s(%s)" % (self.__class__.__name__, pprint.pformat(self.get_raw_tree()))
 
@@ -360,8 +440,12 @@ class Container(NodeAttribute):
         return True
 
     def is_equal(self, foreign, edges=None):
+<<<<<<< HEAD
         for _, __, my_child, foreign_child in \
             self._get_comparable_children(foreign, edges=edges):
+=======
+        for _, __, my_child, foreign_child in self._get_comparable_children(foreign, edges=edges):
+>>>>>>> upstream/master
             if not my_child.is_equal(foreign_child):
                 return False
         return True
@@ -415,11 +499,21 @@ class Container(NodeAttribute):
         return delta_node
 
     def get_raw_tree(self):
+<<<<<<< HEAD
         tree = {}
         for edge, _, child in self.get_children():
             child_tree = child.get_raw_tree()
             if self._is_nested_numeration_tree(child):
                 tree.setdefault(edge, child_tree.values())
+=======
+        tree: Dict = {}
+        for edge, _, child in self.get_children():
+            child_tree = child.get_raw_tree()
+            if self._is_nested_numeration_tree(child):
+                # Sort by index but forget index afterwards => nested sub nodes as before
+                sorted_values = [child_tree[k] for k in sorted(child_tree.keys())]
+                tree.setdefault(edge, sorted_values)
+>>>>>>> upstream/master
             elif isinstance(child, Numeration):
                 tree.setdefault(edge, child_tree)
             else:
@@ -428,7 +522,11 @@ class Container(NodeAttribute):
 
     def _is_nested_numeration_tree(self, child):
         if isinstance(child, Container):
+<<<<<<< HEAD
             for key in child._edges.keys():
+=======
+            for key in child._edges:
+>>>>>>> upstream/master
                 if isinstance(key, int):
                     return True
         return False
@@ -455,7 +553,11 @@ class Container(NodeAttribute):
 
     def _has_nested_numeration_node(self, node_data):
         for entry in node_data:
+<<<<<<< HEAD
             for v in entry.itervalues():
+=======
+            for v in entry.values():
+>>>>>>> upstream/master
                 if isinstance(v, list):
                     return True
         return False
@@ -464,8 +566,13 @@ class Container(NodeAttribute):
         del self._edges[edge]
         parent = self.add_child(edge, Container(), abs_path)
         for nr, entry in enumerate(child_data):
+<<<<<<< HEAD
             attrs = {}
             for k, v in entry.iteritems():
+=======
+            attrs: Dict = {}
+            for k, v in entry.items():
+>>>>>>> upstream/master
                 if isinstance(v, list):
                     numeration = parent.add_child(nr, Container(), abs_path+(nr,))\
                                        .add_child(k, Numeration(), abs_path+(nr,k))
@@ -488,6 +595,7 @@ class Container(NodeAttribute):
             new_node.add_child(edge, child.copy(), abs_path)
         return new_node
 
+<<<<<<< HEAD
     #   ---testing--------------------------------------------------------------
 
     def get_tree_repr(self):
@@ -499,6 +607,8 @@ class Container(NodeAttribute):
             tree[edge].setdefault(key, child.get_tree_repr())
         return tree
 
+=======
+>>>>>>> upstream/master
     #   ---container methods----------------------------------------------------
 
     def add_child(self, edge, child, abs_path=None):
@@ -545,18 +655,30 @@ class Container(NodeAttribute):
     #   ---getting [sub] nodes/node attributes----------------------------------
 
     def get_edge_nodes(self):
+<<<<<<< HEAD
         return self._edges.iteritems()
+=======
+        return list(self._edges.items())
+>>>>>>> upstream/master
 
     def get_children(self, edges=None):
         """Returns a flatten list of tuples (edge, absolute path, child)"""
         children = set()
         if edges is None:
+<<<<<<< HEAD
             for edge, node in self._edges.iteritems():
+=======
+            for edge, node in self._edges.items():
+>>>>>>> upstream/master
                 node_abs_path = node.get_absolute_path()
                 for child in node.get_node_children():
                     children.add((edge, node_abs_path, child))
         else:
+<<<<<<< HEAD
             for edge, node in self._edges.iteritems():
+=======
+            for edge, node in self._edges.items():
+>>>>>>> upstream/master
                 if edge not in edges:
                     continue
                 node_abs_path = node.get_absolute_path()
@@ -568,7 +690,11 @@ class Container(NodeAttribute):
         """Returns a flatten list of tuples (edge, absolute path, my child, foreign child)"""
         comparable_children = set()
         if edges is None:
+<<<<<<< HEAD
             edges = set(self._edges.keys()).union(set(foreign._edges.keys()))
+=======
+            edges = set(self._edges).union(foreign._edges)
+>>>>>>> upstream/master
         for edge in edges:
             my_node = self._edges.get(edge, Node())
             foreign_node = foreign._edges.get(edge, Node())
@@ -651,8 +777,13 @@ class Leaf(NodeAttribute):
         raise NotImplementedError()
 
     def _get_filtered_entries(self, entries, keys):
+<<<<<<< HEAD
         filtered = {}
         for k, v in entries.iteritems():
+=======
+        filtered: Dict = {}
+        for k, v in entries.items():
+>>>>>>> upstream/master
             if k in keys:
                 filtered.setdefault(k, v)
         return filtered
@@ -678,7 +809,17 @@ class Numeration(Leaf):
         return self._numeration == []
 
     def is_equal(self, foreign, edges=None):
+<<<<<<< HEAD
         return self._numeration == foreign._numeration
+=======
+        for row in self._numeration:
+            if row not in foreign._numeration:
+                return False
+        for row in foreign._numeration:
+            if row not in self._numeration:
+                return False
+        return True
+>>>>>>> upstream/master
 
     def count_entries(self):
         return sum(map(len, self._numeration))
@@ -687,8 +828,13 @@ class Numeration(Leaf):
         remaining_own_rows, remaining_other_rows, identical_rows =\
             self._get_categorized_rows(other)
 
+<<<<<<< HEAD
         new_rows = []
         removed_rows = []
+=======
+        new_rows: List = []
+        removed_rows: List = []
+>>>>>>> upstream/master
         compared_rows = []
         num_new, num_changed, num_removed = 0, 0, 0
         if not remaining_other_rows and remaining_own_rows:
@@ -710,6 +856,7 @@ class Numeration(Leaf):
 
         delta_node_rows = compared_rows\
                           + [{k: _new_delta_tree_node(v)
+<<<<<<< HEAD
                              for k,v in row.iteritems()}
                              for row in new_rows]\
                           + [{k: _removed_delta_tree_node(v)
@@ -724,11 +871,30 @@ class Numeration(Leaf):
             delta_node.set_child_data(delta_node_rows)
         else:
             delta_node = None
+=======
+                             for k,v in row.items()}
+                             for row in new_rows]\
+                          + [{k: _removed_delta_tree_node(v)
+                             for k,v in row.items()}
+                             for row in removed_rows]
+        if keep_identical:
+            delta_node_rows += [
+                {k: _identical_delta_tree_node(v) for k, v in row.items()} for row in identical_rows
+            ]
+        delta_node: Optional[Numeration] = None
+        if delta_node_rows:
+            delta_node = Numeration()
+            delta_node.set_child_data(delta_node_rows)
+>>>>>>> upstream/master
         return len(new_rows) + num_new, num_changed,\
                len(removed_rows) + num_removed, delta_node
 
     def _get_categorized_rows(self, other):
+<<<<<<< HEAD
         identical_rows = []
+=======
+        identical_rows: List = []
+>>>>>>> upstream/master
         remaining_other_rows = []
         remaining_new_rows = []
         for row in other._numeration:
@@ -756,7 +922,11 @@ class Numeration(Leaf):
             num_new += len(new_entries)
             num_changed += len(changed_entries)
             num_removed += len(removed_entries)
+<<<<<<< HEAD
             row = {}
+=======
+            row: Dict = {}
+>>>>>>> upstream/master
             for entries in [new_entries, changed_entries, removed_entries]:
                 row.update(entries)
             if keep_identical or new_entries or changed_entries or removed_entries:
@@ -769,7 +939,11 @@ class Numeration(Leaf):
         delta_node = Numeration()
         data = []
         for entry in self._numeration:
+<<<<<<< HEAD
             data.append({k: encode_as(v) for k, v in entry.iteritems()})
+=======
+            data.append({k: encode_as(v) for k, v in entry.items()})
+>>>>>>> upstream/master
         delta_node.set_child_data(data)
         return delta_node
 
@@ -799,6 +973,7 @@ class Numeration(Leaf):
                 entry.update(foreign_num[key])
                 del foreign_num[key]
 
+<<<<<<< HEAD
         self._numeration += foreign_num.values()
 
     def _get_numeration_keys(self):
@@ -806,6 +981,12 @@ class Numeration(Leaf):
         for entry in self._numeration:
             keys.update(entry.keys())
         return keys
+=======
+        self._numeration += list(foreign_num.values())
+
+    def _get_numeration_keys(self):
+        return {key for row in self._numeration for key in row}
+>>>>>>> upstream/master
 
     def _prepare_key(self, entry, keys):
         return tuple(entry[key] for key in sorted(keys) if key in entry)
@@ -815,12 +996,15 @@ class Numeration(Leaf):
         new_node.set_child_data(self._numeration[:])
         return new_node
 
+<<<<<<< HEAD
     #   ---testing--------------------------------------------------------------
 
     def get_tree_repr(self):
         # Just for testing
         return '[:]'
 
+=======
+>>>>>>> upstream/master
     #   ---leaf methods---------------------------------------------------------
 
     def set_child_data(self, data):
@@ -873,6 +1057,10 @@ class Attributes(Leaf):
     def compare_with(self, other, keep_identical=False):
         new, changed, removed, identical = \
             _compare_dicts(other._attributes, self._attributes)
+<<<<<<< HEAD
+=======
+        delta_node: Optional[Attributes] = None
+>>>>>>> upstream/master
         if new or changed or removed:
             delta_node = Attributes()
             delta_node.set_child_data(new)
@@ -880,13 +1068,20 @@ class Attributes(Leaf):
             delta_node.set_child_data(removed)
             if keep_identical:
                 delta_node.set_child_data(identical)
+<<<<<<< HEAD
         else:
             delta_node = None
+=======
+>>>>>>> upstream/master
         return len(new), len(changed), len(removed), delta_node
 
     def encode_for_delta_tree(self, encode_as):
         delta_node = Attributes()
+<<<<<<< HEAD
         data = {k: encode_as(v) for k, v in self._attributes.iteritems()}
+=======
+        data = {k: encode_as(v) for k, v in self._attributes.items()}
+>>>>>>> upstream/master
         delta_node.set_child_data(data)
         return delta_node
 
@@ -901,12 +1096,15 @@ class Attributes(Leaf):
         new_node.set_child_data(self._attributes.copy())
         return new_node
 
+<<<<<<< HEAD
     #   ---testing--------------------------------------------------------------
 
     def get_tree_repr(self):
         # Just for testing
         return '{:}'
 
+=======
+>>>>>>> upstream/master
     #   ---leaf methods---------------------------------------------------------
 
     def set_child_data(self, data):
@@ -938,18 +1136,29 @@ class Attributes(Leaf):
 #   '----------------------------------------------------------------------'
 
 
+<<<<<<< HEAD
 class Node(object):
+=======
+class Node:
+>>>>>>> upstream/master
     """Node contains max. one node attribute per type."""
 
     CHILDREN_NAMES = [Container, Numeration, Attributes]
 
     def __init__(self, abs_path=None):
         super(Node, self).__init__()
+<<<<<<< HEAD
         self._children = {}
         if abs_path is None:
             self._abs_path = tuple()
         else:
             self._abs_path = abs_path
+=======
+        if abs_path is None:
+            abs_path = tuple()
+        self._children = {}
+        self._abs_path = abs_path
+>>>>>>> upstream/master
 
     def get_absolute_path(self):
         return self._abs_path
@@ -1021,7 +1230,12 @@ def _compare_dicts(old_dict, new_dict):
       identical:    {k: (value, value), ...}
     """
     removed_keys, kept_keys, new_keys = _compare_dict_keys(old_dict, new_dict)
+<<<<<<< HEAD
     identical, changed = {}, {}
+=======
+    identical: Dict = {}
+    changed: Dict = {}
+>>>>>>> upstream/master
     for k in kept_keys:
         new_value = new_dict[k]
         old_value = old_dict[k]
@@ -1040,7 +1254,11 @@ def _compare_dict_keys(old_dict, new_dict):
     - intersection of both
     - relative complement of old_dict in new_dict
     """
+<<<<<<< HEAD
     old_keys, new_keys = set(old_dict.keys()), set(new_dict.keys())
+=======
+    old_keys, new_keys = set(old_dict), set(new_dict)
+>>>>>>> upstream/master
     return old_keys - new_keys, old_keys.intersection(new_keys),\
            new_keys - old_keys
 

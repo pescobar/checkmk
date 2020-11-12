@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/env python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,6 +24,13 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 """Manage roles and permissions
 
 In order to make getting started easier - Check_MK Multisite comes with three
@@ -40,10 +48,18 @@ configuration of all roles.
 """
 
 import re
+<<<<<<< HEAD
+=======
+from typing import Optional, Type
+>>>>>>> upstream/master
 
 import cmk.utils.store as store
 
 import cmk.gui.userdb as userdb
+<<<<<<< HEAD
+=======
+import cmk.gui.plugins.userdb.utils as userdb_utils
+>>>>>>> upstream/master
 import cmk.gui.config as config
 import cmk.gui.watolib as watolib
 import cmk.gui.forms as forms
@@ -52,12 +68,27 @@ from cmk.gui.table import table_element
 from cmk.gui.i18n import _
 from cmk.gui.globals import html
 from cmk.gui.exceptions import MKUserError
+<<<<<<< HEAD
 from cmk.gui.htmllib import HTML
+=======
+from cmk.gui.htmllib import HTML, Choices
+from cmk.gui.breadcrumb import Breadcrumb
+from cmk.gui.page_menu import (
+    PageMenu,
+    PageMenuDropdown,
+    PageMenuTopic,
+    PageMenuEntry,
+    PageMenuSearch,
+    make_simple_link,
+    make_simple_form_page_menu,
+)
+>>>>>>> upstream/master
 from cmk.gui.permissions import (
     permission_section_registry,
     permission_registry,
 )
 
+<<<<<<< HEAD
 from cmk.gui.plugins.wato.utils.html_elements import (
     search_form,)
 
@@ -74,6 +105,23 @@ from cmk.gui.plugins.wato import (
 class RoleManagement(object):
     def __init__(self):
         self._roles = userdb.load_roles()
+=======
+from cmk.gui.plugins.wato import (
+    WatoMode,
+    ActionResult,
+    mode_registry,
+    make_action_link,
+    make_confirm_link,
+    get_search_expression,
+    redirect,
+    mode_url,
+)
+
+
+class RoleManagement:
+    def __init__(self):
+        self._roles = userdb_utils.load_roles()
+>>>>>>> upstream/master
         super(RoleManagement, self).__init__()
 
     def _save_roles(self):
@@ -97,7 +145,11 @@ class RoleManagement(object):
     def _rename_user_role(self, uid, new_id):
         users = userdb.load_users(lock=True)
         for user in users.values():
+<<<<<<< HEAD
             if id in user["roles"]:
+=======
+            if uid in user["roles"]:
+>>>>>>> upstream/master
                 user["roles"].remove(uid)
                 if new_id:
                     user["roles"].append(new_id)
@@ -115,6 +167,7 @@ class ModeRoles(RoleManagement, WatoMode):
         return ["users"]
 
     def title(self):
+<<<<<<< HEAD
         return _("Roles & Permissions")
 
     def buttons(self):
@@ -125,6 +178,41 @@ class ModeRoles(RoleManagement, WatoMode):
     def action(self):
         if html.request.var("_delete"):
             delid = html.request.var("_delete")
+=======
+        return _("Roles & permissions")
+
+    def page_menu(self, breadcrumb: Breadcrumb) -> PageMenu:
+        menu = PageMenu(
+            dropdowns=[
+                PageMenuDropdown(
+                    name="roles",
+                    title=_("Roles"),
+                    topics=[
+                        PageMenuTopic(
+                            title=_("Overview"),
+                            entries=[
+                                PageMenuEntry(
+                                    title=_("Permission matrix"),
+                                    icon_name="matrix",
+                                    item=make_simple_link(
+                                        watolib.folder_preserving_link([("mode", "role_matrix")])),
+                                ),
+                            ],
+                        ),
+                    ],
+                ),
+            ],
+            breadcrumb=breadcrumb,
+        )
+        return menu
+
+    def action(self) -> ActionResult:
+        if not html.check_transaction():
+            return redirect(self.mode_url())
+
+        if html.request.var("_delete"):
+            delid = html.request.get_ascii_input_mandatory("_delete")
+>>>>>>> upstream/master
 
             if delid not in self._roles:
                 raise MKUserError(None, _("This role does not exist."))
@@ -132,6 +220,7 @@ class ModeRoles(RoleManagement, WatoMode):
             if html.transaction_valid() and self._roles[delid].get('builtin'):
                 raise MKUserError(None, _("You cannot delete the builtin roles!"))
 
+<<<<<<< HEAD
             c = wato_confirm(
                 _("Confirm deletion of role %s") % delid,
                 _("Do you really want to delete the role %s?") % delid)
@@ -175,6 +264,52 @@ class ModeRoles(RoleManagement, WatoMode):
                 watolib.add_change("edit-roles",
                                    _("Created new role '%s'") % newid,
                                    sites=config.get_login_sites())
+=======
+            users = userdb.load_users()
+            for user in users.values():
+                if delid in user["roles"]:
+                    raise MKUserError(
+                        None, _("You cannot delete roles, that are still in use (%s)!" % delid))
+
+            self._rename_user_role(delid, None)  # Remove from existing users
+            del self._roles[delid]
+            self._save_roles()
+            watolib.add_change("edit-roles",
+                               _("Deleted role '%s'") % delid,
+                               sites=config.get_login_sites())
+
+        elif html.request.var("_clone"):
+            cloneid = html.request.get_ascii_input_mandatory("_clone")
+
+            try:
+                cloned_role = self._roles[cloneid]
+            except KeyError:
+                raise MKUserError(None, _("This role does not exist."))
+
+            newid = cloneid
+            while newid in self._roles:
+                newid += "x"
+
+            new_role = {}
+            new_role.update(cloned_role)
+
+            new_alias = new_role["alias"]
+            while not watolib.is_alias_used("roles", newid, new_alias)[0]:
+                new_alias += _(" (copy)")
+            new_role["alias"] = new_alias
+
+            if cloned_role.get("builtin"):
+                new_role["builtin"] = False
+                new_role["basedon"] = cloneid
+
+            self._roles[newid] = new_role
+            self._save_roles()
+            watolib.add_change("edit-roles",
+                               _("Created new role '%s'") % newid,
+                               sites=config.get_login_sites())
+
+        return redirect(self.mode_url())
+>>>>>>> upstream/master
 
     def page(self):
         with table_element("roles") as table:
@@ -187,7 +322,14 @@ class ModeRoles(RoleManagement, WatoMode):
                 table.cell(_("Actions"), css="buttons")
                 edit_url = watolib.folder_preserving_link([("mode", "edit_role"), ("edit", rid)])
                 clone_url = make_action_link([("mode", "roles"), ("_clone", rid)])
+<<<<<<< HEAD
                 delete_url = make_action_link([("mode", "roles"), ("_delete", rid)])
+=======
+                delete_url = make_confirm_link(
+                    url=make_action_link([("mode", "roles"), ("_delete", rid)]),
+                    message=_("Do you really want to delete the role %s?") % rid,
+                )
+>>>>>>> upstream/master
                 html.icon_button(edit_url, _("Properties"), "edit")
                 html.icon_button(clone_url, _("Clone"), "clone")
                 if not role.get("builtin"):
@@ -235,6 +377,13 @@ class ModeEditRole(RoleManagement, WatoMode):
     def permissions(cls):
         return ["users"]
 
+<<<<<<< HEAD
+=======
+    @classmethod
+    def parent_mode(cls) -> Optional[Type[WatoMode]]:
+        return ModeRoles
+
+>>>>>>> upstream/master
     def __init__(self):
         super(ModeEditRole, self).__init__()
 
@@ -243,7 +392,11 @@ class ModeEditRole(RoleManagement, WatoMode):
         config.load_dynamic_permissions()
 
     def _from_vars(self):
+<<<<<<< HEAD
         self._role_id = html.request.var("edit")
+=======
+        self._role_id = html.request.get_ascii_input_mandatory("edit")
+>>>>>>> upstream/master
 
         try:
             self._role = self._roles[self._role_id]
@@ -251,6 +404,7 @@ class ModeEditRole(RoleManagement, WatoMode):
             raise MKUserError("edit", _("This role does not exist."))
 
     def title(self):
+<<<<<<< HEAD
         return _("Edit user role %s") % self._role_id
 
     def buttons(self):
@@ -262,14 +416,36 @@ class ModeEditRole(RoleManagement, WatoMode):
             return
 
         alias = html.get_unicode_input("alias")
+=======
+        return _("Edit role %s") % self._role_id
+
+    def page_menu(self, breadcrumb: Breadcrumb) -> PageMenu:
+        menu = make_simple_form_page_menu(
+            breadcrumb,
+            form_name="role",
+            button_name="save",
+        )
+        menu.inpage_search = PageMenuSearch(placeholder=_("Filter permissions"))
+        return menu
+
+    def action(self) -> ActionResult:
+        if html.form_submitted("search"):
+            return None
+
+        alias = html.request.get_unicode_input("alias")
+>>>>>>> upstream/master
 
         unique, info = watolib.is_alias_used("roles", self._role_id, alias)
         if not unique:
             raise MKUserError("alias", info)
 
+<<<<<<< HEAD
         new_id = html.request.var("id")
         if len(new_id) == 0:
             raise MKUserError("id", _("Please specify an ID for the new role."))
+=======
+        new_id = html.request.get_ascii_input_mandatory("id")
+>>>>>>> upstream/master
         if not re.match("^[-a-z0-9A-Z_]*$", new_id):
             raise MKUserError(
                 "id", _("Invalid role ID. Only the characters a-z, A-Z, 0-9, _ and - are allowed."))
@@ -281,7 +457,11 @@ class ModeEditRole(RoleManagement, WatoMode):
 
         # based on
         if not self._role.get("builtin"):
+<<<<<<< HEAD
             basedon = html.request.var("basedon")
+=======
+            basedon = html.request.get_ascii_input_mandatory("basedon")
+>>>>>>> upstream/master
             if basedon not in config.builtin_role_ids:
                 raise MKUserError("basedon",
                                   _("Invalid valid for based on. Must be id of builtin rule."))
@@ -291,7 +471,11 @@ class ModeEditRole(RoleManagement, WatoMode):
         permissions = self._role["permissions"]
         for var_name, value in html.request.itervars(prefix="perm_"):
             try:
+<<<<<<< HEAD
                 perm = permission_registry[var_name[5:]]()
+=======
+                perm = permission_registry[var_name[5:]]
+>>>>>>> upstream/master
             except KeyError:
                 continue
 
@@ -314,11 +498,18 @@ class ModeEditRole(RoleManagement, WatoMode):
         watolib.add_change("edit-roles",
                            _("Modified user role '%s'") % new_id,
                            sites=config.get_login_sites())
+<<<<<<< HEAD
         return "roles"
 
     def page(self):
         search = get_search_expression()
         search_form(_("Search for permissions: "), "edit_role")
+=======
+        return redirect(mode_url("roles"))
+
+    def page(self):
+        search = get_search_expression()
+>>>>>>> upstream/master
 
         html.begin_form("role", method="POST")
 
@@ -346,8 +537,18 @@ class ModeEditRole(RoleManagement, WatoMode):
                   "update or installation of an addons new permissions appear, the user role will get or "
                   "not get those new permissions based on the default settings of the builtin role it's "
                   "based on."))
+<<<<<<< HEAD
             choices = [(i, r["alias"]) for i, r in self._roles.items() if r.get("builtin")]
             html.dropdown("basedon", choices, deflt=self._role.get("basedon", "user"), ordered=True)
+=======
+            role_choices: Choices = [
+                (i, r["alias"]) for i, r in self._roles.items() if r.get("builtin")
+            ]
+            html.dropdown("basedon",
+                          role_choices,
+                          deflt=self._role.get("basedon", "user"),
+                          ordered=True)
+>>>>>>> upstream/master
 
         forms.end()
 
@@ -383,15 +584,26 @@ class ModeEditRole(RoleManagement, WatoMode):
                 pvalue = self._role["permissions"].get(perm.name)
                 def_value = base_role_id in perm.defaults
 
+<<<<<<< HEAD
                 choices = [("yes", _("yes")), ("no", _("no")),
                            ("default", _("default (%s)") % (def_value and _("yes") or _("no")))]
+=======
+                choices: Choices = [
+                    ("yes", _("yes")),
+                    ("no", _("no")),
+                    ("default", _("default (%s)") % (def_value and _("yes") or _("no"))),
+                ]
+>>>>>>> upstream/master
                 deflt = {True: "yes", False: "no"}.get(pvalue, "default")
 
                 html.dropdown("perm_" + perm.name, choices, deflt=deflt, style="width: 130px;")
                 html.help(perm.description)
 
         forms.end()
+<<<<<<< HEAD
         html.button("save", _("Save"))
+=======
+>>>>>>> upstream/master
         html.hidden_fields()
         html.end_form()
 
@@ -406,6 +618,7 @@ class ModeRoleMatrix(WatoMode):
     def permissions(cls):
         return ["users"]
 
+<<<<<<< HEAD
     def title(self):
         return _("Role & Permission Matrix")
 
@@ -415,6 +628,17 @@ class ModeRoleMatrix(WatoMode):
 
     def page(self):
         role_list = sorted(userdb.load_roles().items(), key=lambda a: (a[1]["alias"], a[0]))
+=======
+    @classmethod
+    def parent_mode(cls) -> Optional[Type[WatoMode]]:
+        return ModeRoles
+
+    def title(self):
+        return _("Permission matrix")
+
+    def page(self):
+        role_list = sorted(userdb_utils.load_roles().items(), key=lambda a: (a[1]["alias"], a[0]))
+>>>>>>> upstream/master
 
         for section in permission_section_registry.get_sorted_sections():
             html.begin_foldable_container("perm_matrix",
@@ -434,7 +658,11 @@ class ModeRoleMatrix(WatoMode):
                         pvalue = role["permissions"].get(perm.name)
                         if pvalue is None:
                             if base_on_id in perm.defaults:
+<<<<<<< HEAD
                                 icon_name = "perm_yes_default"
+=======
+                                icon_name: Optional[str] = "perm_yes_default"
+>>>>>>> upstream/master
                             else:
                                 icon_name = None
                         else:
@@ -442,7 +670,11 @@ class ModeRoleMatrix(WatoMode):
 
                         table.cell(role_id, css="center")
                         if icon_name:
+<<<<<<< HEAD
                             html.icon(None, icon_name)
+=======
+                            html.icon(icon_name)
+>>>>>>> upstream/master
 
             html.end_foldable_container()
 

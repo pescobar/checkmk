@@ -5,7 +5,11 @@ license: GPL
 distribution: check_mk
 description:
  With this check you can monitor the number of failures across all indices of a
+<<<<<<< HEAD
  graylog instance. It outputs the total number of failures and the number of
+=======
+ Graylog instance. It outputs the total number of failures and the number of
+>>>>>>> upstream/master
  failures in a given timeframe (default: last 30m). Also the number of affected
  indices of the last failures are shown. The long output shows detailed
  information of the last 30 failures.
@@ -13,4 +17,8 @@ description:
  Needs the datasource "Check state of Graylog" to be configured.
 
 inventory:
+<<<<<<< HEAD
  One service {"Graylog Index Failures"} will be created
+=======
+ One service is created.
+>>>>>>> upstream/master

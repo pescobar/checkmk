@@ -1,4 +1,5 @@
 Title: ucd_cpu_util: Levels for utilization
+<<<<<<< HEAD
 Level: 1
 Component: checks
 Compatible: compat
@@ -8,3 +9,17 @@ Date: 1547039744
 Class: feature
 
 Levels and averaging can now be configured for the utilization.
+=======
+Class: feature
+Compatible: incomp
+Component: checks
+Date: 1547039744
+Edition: cre
+Knowledge: undoc
+Level: 1
+State: unknown
+Version: 2.0.0i1
+
+Levels and averaging can now be configured for the utilization.
+The affected services have to be rediscovered.
+>>>>>>> upstream/master

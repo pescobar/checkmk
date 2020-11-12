@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,6 +24,13 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 from cmk.gui.i18n import _
 from cmk.gui.valuespec import (
@@ -39,6 +47,7 @@ from cmk.gui.plugins.wato import (
 
 
 def _parameter_valuespec_bonding():
+<<<<<<< HEAD
     return Dictionary(elements=[
         ("expect_active",
          DropdownChoice(
@@ -56,6 +65,28 @@ def _parameter_valuespec_bonding():
              default_value=1,
          )),
     ],)
+=======
+    return Dictionary(
+        elements=[
+            ("expect_active",
+             DropdownChoice(
+                 title=_("Warn on unexpected active interface"),
+                 choices=[
+                     ("ignore", _("ignore which one is active")),
+                     ("primary", _("require primary interface to be active")),
+                     ("lowest", _("require interface that sorts lowest alphabetically")),
+                 ],
+                 default_value="ignore",
+             )),
+            ("ieee_302_3ad_agg_id_missmatch_state",
+             MonitoringState(
+                 title=_("State for missmatching Aggregator IDs for LACP"),
+                 default_value=1,
+             )),
+        ],
+        ignored_keys=["primary"],
+    )
+>>>>>>> upstream/master
 
 
 rulespec_registry.register(
@@ -65,5 +96,9 @@ rulespec_registry.register(
         item_spec=lambda: TextAscii(title=_("Name of the bonding interface")),
         match_type="dict",
         parameter_valuespec=_parameter_valuespec_bonding,
+<<<<<<< HEAD
         title=lambda: _("Status of Linux bonding interfaces"),
+=======
+        title=lambda: _("Linux bonding interface status"),
+>>>>>>> upstream/master
     ))

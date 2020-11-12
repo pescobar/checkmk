@@ -1,5 +1,16 @@
+<<<<<<< HEAD
 import logging
 import pytest
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+import logging
+import pytest  # type: ignore[import]
+>>>>>>> upstream/master
 
 from cmk.ec.main import Perfcounters
 
@@ -104,7 +115,11 @@ def test_perfcounters_correct_status_values():
     for _x in range(2):
         c.count("rule_tries")
 
+<<<<<<< HEAD
     for column_name, column_value in zip([n for n, d in c.status_columns()], c.get_status()):
+=======
+    for column_name, column_value in zip([n for n, _d in c.status_columns()], c.get_status()):
+>>>>>>> upstream/master
         if column_name.startswith("status_average_") and column_name.endswith("_time"):
             counter_name = column_name.split("_")[-2]
             assert column_value == c._times.get(counter_name, 0.0)

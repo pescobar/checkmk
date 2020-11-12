@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,6 +24,13 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 # <<<memcached>>>
 # [localhost:11211]
@@ -218,9 +226,15 @@ memcached_traits = [("System Information", {
 
 memcached_factory_settings = {}
 for group, values in memcached_traits:
+<<<<<<< HEAD
     for key, traits in values.iteritems():
         bounds = [
             trait for trait_key, trait in traits.iteritems()
+=======
+    for key, traits in values.items():
+        bounds = [
+            trait for trait_key, trait in traits.items()
+>>>>>>> upstream/master
             if trait_key in ['fixed', 'upper_bounds', 'lower_bounds']
         ]
         if bounds and bounds[0] is not None:
@@ -281,7 +295,7 @@ def check_memcached(item, params, parsed):
         for group, checks in memcached_traits:
             fails = False
             count = 0
-            for key, traits in checks.iteritems():
+            for key, traits in checks.items():
                 if key not in readings:
                     # stat missing in output
                     continue

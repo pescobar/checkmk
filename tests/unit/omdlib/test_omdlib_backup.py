@@ -1,9 +1,24 @@
+<<<<<<< HEAD
 # encoding: utf-8
 # pylint: disable=redefined-outer-name
 
 import tarfile
 import pytest  # type: ignore
 from pathlib2 import Path
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# pylint: disable=redefined-outer-name
+
+import tarfile
+from pathlib import Path
+
+import pytest  # type: ignore[import]
+>>>>>>> upstream/master
 import omdlib
 import omdlib.main
 import omdlib.backup
@@ -61,18 +76,33 @@ def test_backup_site_to_tarfile_broken_link(site, tmp_path):
 def test_backup_site_to_tarfile_vanishing_files(site, tmp_path, monkeypatch):
     test_dir = Path(site.dir) / "xyz"
     test_file = test_dir / "test_file"
+<<<<<<< HEAD
     test_dir.mkdir(parents=True, exist_ok=True)  # pylint: disable=no-member
     test_file.touch()  # pylint: disable=no-member
+=======
+    test_dir.mkdir(parents=True, exist_ok=True)
+    test_file.touch()
+>>>>>>> upstream/master
 
     orig_add = omdlib.backup.BackupTarFile.add
 
     def add(self, name, arcname=None, recursive=True, exclude=None, filter=None):  # pylint: disable=redefined-builtin
+<<<<<<< HEAD
+=======
+        if exclude is not None:
+            raise DeprecationWarning("TarFile.add's exclude parameter should not be used")
+>>>>>>> upstream/master
         # The add() was called for test_dir which then calls os.listdir() and
         # add() for all found entries. Remove the test_file here to simulate
         # a vanished file during this step.
         if arcname == "unit/xyz/test_file":
+<<<<<<< HEAD
             test_file.unlink()  # pylint: disable=no-member
         orig_add(self, name, arcname, recursive, exclude, filter)
+=======
+            test_file.unlink()
+        orig_add(self, name, arcname, recursive, filter=filter)
+>>>>>>> upstream/master
 
     monkeypatch.setattr(omdlib.backup.BackupTarFile, "add", add)
 

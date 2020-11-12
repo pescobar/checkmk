@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/env python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,6 +24,13 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 from cmk.utils.plugin_loader import load_plugins
 
@@ -36,6 +44,7 @@ from cmk.utils.plugin_loader import load_plugins
 #   |                         |___/                                        |
 #   '----------------------------------------------------------------------'
 
+<<<<<<< HEAD
 from cmk.gui.plugins.sidebar.utils import (
     SidebarSnapin,
     CustomizableSidebarSnapin,
@@ -54,6 +63,13 @@ from cmk.gui.plugins.sidebar.utils import (
     begin_footnote_links,
     end_footnote_links,
     write_snapin_exception,
+=======
+from cmk.gui.plugins.sidebar.utils import (  # noqa: F401 # pylint: disable=unused-import
+    SidebarSnapin, PageHandlers, CustomizableSidebarSnapin, snapin_registry, snapin_width,
+    snapin_site_choice, make_topic_menu, render_link, heading, link, simplelink, bulletlink,
+    iconlink, nagioscgilink, footnotelinks, begin_footnote_links, end_footnote_links,
+    write_snapin_exception, show_topic_menu,
+>>>>>>> upstream/master
 )
 
 #.

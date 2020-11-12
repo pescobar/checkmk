@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,6 +24,13 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 from cmk.gui.i18n import _
 from cmk.gui.valuespec import (
@@ -42,6 +50,10 @@ from cmk.gui.plugins.wato import (
 def _item_spec_mysql_connections():
     return TextAscii(
         title=_("Instance"),
+<<<<<<< HEAD
+=======
+        default_value="mysql",
+>>>>>>> upstream/master
         help=_("Only needed if you have multiple MySQL Instances on one server"),
     )
 
@@ -54,13 +66,30 @@ def _parameter_valuespec_mysql_connections():
              help=_("Compares the maximum number of connections that have been "
                     "in use simultaneously since the server started with the maximum simultaneous "
                     "connections allowed by the configuration of the server. This threshold "
+<<<<<<< HEAD
                     "makes the check raise warning/critical states if the percentage is equal to "
+=======
+                    "raises warning/critical states if the percentage is equal to "
+>>>>>>> upstream/master
                     "or above the configured levels."),
              elements=[
                  Percentage(title=_("Warning at")),
                  Percentage(title=_("Critical at")),
              ],
          )),
+<<<<<<< HEAD
+=======
+        ("perc_conn_threads",
+         Tuple(title=("Currently open connections"),
+               help=_("Compares the number of currently open connections to the server "
+                      "with the maximum simultaneous connections allowed by the configuration "
+                      "of the server. This threshold raises warning/critical states if the "
+                      "percentage is equal to or above the configured levels."),
+               elements=[
+                   Percentage(title=_("Warning at")),
+                   Percentage(title=_("Critical at")),
+               ]))
+>>>>>>> upstream/master
     ],)
 
 

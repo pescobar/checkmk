@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,6 +24,13 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 import cmk.gui.config as config
 import cmk.gui.sites as sites
@@ -43,7 +51,15 @@ class Performance(SidebarSnapin):
 
     @classmethod
     def title(cls):
+<<<<<<< HEAD
         return _("Server Performance")
+=======
+        return _("Server performance")
+
+    @classmethod
+    def has_show_more_items(cls):
+        return True
+>>>>>>> upstream/master
 
     @classmethod
     def description(cls):
@@ -56,8 +72,13 @@ class Performance(SidebarSnapin):
     def show(self):
         only_sites = snapin_site_choice("performance", config.site_choices())
 
+<<<<<<< HEAD
         def write_line(left, right):
             html.open_tr()
+=======
+        def write_line(left, right, show_more):
+            html.open_tr(class_="show_more_mode" if show_more else "basic")
+>>>>>>> upstream/master
             html.td(left, class_="left")
             html.td(html.render_strong(right), class_="right")
             html.close_tr()
@@ -72,6 +93,7 @@ class Performance(SidebarSnapin):
         finally:
             sites.live().set_only_sites(None)
 
+<<<<<<< HEAD
         for what, col, format_str in \
             [("Service checks",         0, "%.2f/s"),
              ("Host checks",            1, "%.2f/s"),
@@ -81,6 +103,17 @@ class Performance(SidebarSnapin):
              ("New log messages",       5, "%.2f/s"),
              ("Cached log messages",    6, "%d")]:
             write_line(what + ":", format_str % sum(row[col] for row in data))
+=======
+        for what, show_more, col, format_str in \
+            [("Service checks",         False, 0, "%.2f/s"),
+             ("Host checks",            False, 1, "%.2f/s"),
+             ("External commands",      True, 2, "%.2f/s"),
+             ("Livestatus-conn.",       True, 3, "%.2f/s"),
+             ("Process creations",      True, 4, "%.2f/s"),
+             ("New log messages",       True, 5, "%.2f/s"),
+             ("Cached log messages",    True, 6, "%d")]:
+            write_line(what + ":", format_str % sum(row[col] for row in data), show_more=show_more)
+>>>>>>> upstream/master
 
         if only_sites is None and len(config.allsites()) == 1:
             try:
@@ -90,7 +123,11 @@ class Performance(SidebarSnapin):
                 sites.live().set_only_sites(None)
             size = sum([row[0] for row in data])
             maxx = sum([row[1] for row in data])
+<<<<<<< HEAD
             write_line(_('Com. buf. max/total'), "%d / %d" % (maxx, size))
+=======
+            write_line(_('Com. buf. max/total'), "%d / %d" % (maxx, size), show_more=True)
+>>>>>>> upstream/master
 
         html.close_table()
 

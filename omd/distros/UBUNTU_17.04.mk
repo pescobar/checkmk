@@ -1,12 +1,20 @@
 DISTRO_CODE     = zesty
 #
+<<<<<<< HEAD
 # Check_MK build specific packages below
+=======
+# Checkmk build specific packages below
+>>>>>>> upstream/master
 #
 OS_PACKAGES     =
 OS_PACKAGES    += libcap2-bin # needed for setting special file permissions
 OS_PACKAGES    += cron # needed for sites cron jobs
 OS_PACKAGES    += time # needed for mk-job
+<<<<<<< HEAD
 OS_PACKAGES    += traceroute # needed for Check_MK parent scan
+=======
+OS_PACKAGES    += traceroute # needed for Checkmk parent scan
+>>>>>>> upstream/master
 OS_PACKAGES    += curl
 OS_PACKAGES    += dialog
 OS_PACKAGES    += dnsutils
@@ -27,7 +35,10 @@ OS_PACKAGES    += php-gd
 OS_PACKAGES    += php-sqlite3
 OS_PACKAGES    += php-json
 OS_PACKAGES    += php-pear
+<<<<<<< HEAD
 OS_PACKAGES    += pyro
+=======
+>>>>>>> upstream/master
 OS_PACKAGES    += rsync
 OS_PACKAGES    += smbclient
 OS_PACKAGES    += rpcbind # otherwise missing path in util.pm
@@ -35,7 +46,11 @@ OS_PACKAGES    += unzip
 OS_PACKAGES    += xinetd
 OS_PACKAGES    += freeradius-utils
 #
+<<<<<<< HEAD
 # Check_MK build specific packages below
+=======
+# Checkmk build specific packages below
+>>>>>>> upstream/master
 #
 OS_PACKAGES    += libpcap0.8 # needed for cmc
 OS_PACKAGES    += rpm # needed by msitools/Agent Bakery

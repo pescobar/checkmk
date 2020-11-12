@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: Microsoft Azure Virtual Network Gateways
+=======
+title: Microsoft Azure Virtual Network Gateways: Connections
+>>>>>>> upstream/master
 agents: azure
 catalog: cloud/azure
 license: GPL
@@ -14,5 +18,9 @@ item:
  The name of the resource.
 
 inventory:
+<<<<<<< HEAD
  One service is created per virtual network gateway.
+=======
+ One service is created for each virtual network gateway.
+>>>>>>> upstream/master
 

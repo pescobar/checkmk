@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,14 +24,36 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 import os
 import re
 import pprint
+<<<<<<< HEAD
 from typing import Text, Dict, Union, NamedTuple, List, Optional  # pylint: disable=unused-import
 
 import cmk.utils.store as store
 import cmk.utils.rulesets.ruleset_matcher as ruleset_matcher
+=======
+from typing import Tuple, Optional, Dict, List, Any
+
+from cmk.utils.type_defs import (
+    Labels,
+    Tags,
+    HostNameConditions,
+    ServiceNameConditions,
+    RuleSpec,
+)
+import cmk.utils.store as store
+import cmk.utils.rulesets.ruleset_matcher as ruleset_matcher
+from cmk.utils.regex import escape_regex_chars
+>>>>>>> upstream/master
 
 import cmk.gui.config as config
 from cmk.gui.log import logger
@@ -54,13 +77,22 @@ from cmk.gui.watolib.utils import (
     NEGATE,
 )
 
+<<<<<<< HEAD
 import cmk_base.export
+=======
+# Tolerate this for 1.6. Should be cleaned up in future versions,
+# e.g. by trying to move the common code to a common place
+import cmk.base.export  # pylint: disable=cmk-module-layer-violation
+# Make the GUI config module reset the base config to always get the latest state of the config
+config.register_post_config_load_hook(cmk.base.export.reset_config)
+>>>>>>> upstream/master
 
 # This macro is needed to make the to_config() methods be able to use native
 # pprint/repr for the ruleset data structures. Have a look at
 # to_config_with_folder_macro() for further information.
 _FOLDER_PATH_MACRO = "%#%FOLDER_PATH%#%"
 
+<<<<<<< HEAD
 # Make the GUI config module reset the base config to always get the latest state of the config
 config.register_post_config_load_hook(cmk_base.export.reset_config)
 
@@ -78,6 +110,23 @@ class RuleConditions(object):
         self.host_tags = host_tags or {}
         self.host_labels = host_labels or {}
         self.host_name = host_name
+=======
+
+class RuleConditions:
+    def __init__(
+        self,
+        host_folder: str,
+        host_tags: Optional[Tags] = None,
+        host_labels: Optional[Labels] = None,
+        host_name: HostNameConditions = None,
+        service_description: ServiceNameConditions = None,
+        service_labels: Optional[Labels] = None,
+    ):
+        self.host_folder = host_folder
+        self.host_tags = host_tags or {}
+        self.host_labels = host_labels or {}
+        self.host_name = self._fixup_unicode_hosts(host_name)
+>>>>>>> upstream/master
         self.service_description = service_description
         self.service_labels = service_labels or {}
 
@@ -85,11 +134,34 @@ class RuleConditions(object):
         self.host_folder = conditions.get("host_folder", self.host_folder)
         self.host_tags = conditions.get("host_tags", {})
         self.host_labels = conditions.get("host_labels", {})
+<<<<<<< HEAD
         self.host_name = conditions.get("host_name")
+=======
+        self.host_name = self._fixup_unicode_hosts(conditions.get("host_name"))
+>>>>>>> upstream/master
         self.service_description = conditions.get("service_description")
         self.service_labels = conditions.get("service_labels", {})
         return self
 
+<<<<<<< HEAD
+=======
+    # Werk #10863: In 1.6 some hosts / rulesets were saved as unicode
+    # strings.  After reading the config into the GUI ensure we really
+    # process the host names as str. TODO: Can be removed with Python 3.
+    def _fixup_unicode_hosts(self, host_conditions: HostNameConditions) -> HostNameConditions:
+        if not host_conditions:
+            return host_conditions
+
+        if isinstance(host_conditions, list):
+            return [str(h) if isinstance(h, str) else h for h in host_conditions]
+
+        if isinstance(host_conditions, dict) and "$nor" in host_conditions:
+            assert len(host_conditions) == 1
+            return {"$nor": [str(h) if isinstance(h, str) else h for h in host_conditions["$nor"]]}
+
+        raise NotImplementedError()
+
+>>>>>>> upstream/master
     def to_config_with_folder_macro(self):
         """Create serializable data structure for the conditions
 
@@ -121,7 +193,11 @@ class RuleConditions(object):
         return self._to_config()
 
     def _to_config(self):
+<<<<<<< HEAD
         cfg = {}
+=======
+        cfg: RuleSpec = {}
+>>>>>>> upstream/master
 
         if self.host_tags:
             cfg["host_tags"] = self.host_tags
@@ -152,9 +228,15 @@ class RuleConditions(object):
     @property
     def tag_list(self):
         tag_list = []
+<<<<<<< HEAD
         for tag_spec in self.host_tags.itervalues():
             is_not = isinstance(tag_spec, dict) and "$ne" in tag_spec
             if is_not:
+=======
+        for tag_spec in self.host_tags.values():
+            is_not = isinstance(tag_spec, dict) and "$ne" in tag_spec
+            if isinstance(tag_spec, dict) and is_not:
+>>>>>>> upstream/master
                 tag_id = tag_spec["$ne"]
             else:
                 tag_id = tag_spec
@@ -194,7 +276,11 @@ class RuleConditions(object):
         return pattern_list, negate
 
 
+<<<<<<< HEAD
 class RulesetCollection(object):
+=======
+class RulesetCollection:
+>>>>>>> upstream/master
     """Abstract class for holding a collection of rulesets. The most basic
     specific class is the FolderRulesets class which cares about all rulesets
     configured in a folder."""
@@ -242,7 +328,11 @@ class RulesetCollection(object):
         varnames = [only_varname] if only_varname else rulespec_registry.keys()
         for varname in varnames:
             if ':' in varname:
+<<<<<<< HEAD
                 config_varname, subkey = varname.split(":", 1)
+=======
+                config_varname, subkey = varname.split(":", 1)  # type: Tuple[str, Optional[str]]
+>>>>>>> upstream/master
                 rulegroup_config = rulesets_config.get(config_varname, {})
                 if subkey not in rulegroup_config:
                     continue  # Nothing configured: nothing left to do
@@ -280,13 +370,23 @@ class RulesetCollection(object):
 
         rules_file_path = folder.rules_file_path()
         # Remove rules files if it has no content. This prevents needless reads
+<<<<<<< HEAD
         if not has_content and os.path.exists(rules_file_path):
             os.unlink(rules_file_path)  # Do not keep empty rules.mk files
+=======
+        if not has_content:
+            if os.path.exists(rules_file_path):
+                os.unlink(rules_file_path)  # Do not keep empty rules.mk files
+>>>>>>> upstream/master
             return
 
         # Adding this instead of the full path makes it easy to move config
         # files around. The real FOLDER_PATH will be added dynamically while
+<<<<<<< HEAD
         # loading the file in cmk_base.config
+=======
+        # loading the file in cmk.base.config
+>>>>>>> upstream/master
         content = content.replace("'%s'" % _FOLDER_PATH_MACRO, "'/%s/' % FOLDER_PATH")
 
         store.save_mk_file(rules_file_path, content, add_header=not config.wato_use_git)
@@ -300,6 +400,12 @@ class RulesetCollection(object):
     def set(self, name, ruleset):
         self._rulesets[name] = ruleset
 
+<<<<<<< HEAD
+=======
+    def delete(self, name):
+        del self._rulesets[name]
+
+>>>>>>> upstream/master
     def get_rulesets(self):
         return self._rulesets
 
@@ -308,8 +414,13 @@ class RulesetCollection(object):
 
     # Groups the rulesets in 3 layers (main group, sub group, rulesets)
     def get_grouped(self):
+<<<<<<< HEAD
         grouped_dict = {}
         for ruleset in self._rulesets.itervalues():
+=======
+        grouped_dict: Dict[str, Dict[str, List[Ruleset]]] = {}
+        for ruleset in self._rulesets.values():
+>>>>>>> upstream/master
             main_group = grouped_dict.setdefault(ruleset.rulespec.main_group_name, {})
             group_rulesets = main_group.setdefault(ruleset.rulespec.group_name, [])
             group_rulesets.append(ruleset)
@@ -328,7 +439,11 @@ class RulesetCollection(object):
 
 class AllRulesets(RulesetCollection):
     def _load_rulesets_recursively(self, folder, only_varname=None):
+<<<<<<< HEAD
         for subfolder in folder.all_subfolders().values():
+=======
+        for subfolder in folder.subfolders():
+>>>>>>> upstream/master
             self._load_rulesets_recursively(subfolder, only_varname)
 
         self._load_folder_rulesets(folder, only_varname)
@@ -346,7 +461,11 @@ class AllRulesets(RulesetCollection):
         self._save_rulesets_recursively(Folder.root_folder())
 
     def _save_rulesets_recursively(self, folder):
+<<<<<<< HEAD
         for subfolder in folder.all_subfolders().values():
+=======
+        for subfolder in folder.subfolders():
+>>>>>>> upstream/master
             self._save_rulesets_recursively(subfolder)
 
         self._save_folder(folder)
@@ -390,7 +509,11 @@ class StaticChecksRulesets(FilteredRulesetCollection):
         self._remove_non_static_checks_rulesets()
 
     def _remove_non_static_checks_rulesets(self):
+<<<<<<< HEAD
         for name, ruleset in self._rulesets.items():
+=======
+        for name, ruleset in list(self._rulesets.items()):
+>>>>>>> upstream/master
             if ruleset.rulespec.main_group_name != "static":
                 del self._rulesets[name]
 
@@ -401,7 +524,11 @@ class NonStaticChecksRulesets(FilteredRulesetCollection):
         self._remove_static_checks_rulesets()
 
     def _remove_static_checks_rulesets(self):
+<<<<<<< HEAD
         for name, ruleset in self._rulesets.items():
+=======
+        for name, ruleset in list(self._rulesets.items()):
+>>>>>>> upstream/master
             if ruleset.rulespec.main_group_name == "static":
                 del self._rulesets[name]
 
@@ -427,10 +554,18 @@ class SearchedRulesets(FilteredRulesetCollection):
 # TODO: Cleanup the rule indexing by position in the rules list. The "rule_nr" is used
 # as index accross several HTTP requests where other users may have done something with
 # the ruleset. In worst cases the user modifies a rule which should not be modified.
+<<<<<<< HEAD
 class Ruleset(object):
     def __init__(self, name, tag_to_group_map):
         super(Ruleset, self).__init__()
         self.name = name
+=======
+class Ruleset:
+    def __init__(self, name, tag_to_group_map):
+        super(Ruleset, self).__init__()
+        self.name = name
+        self.tag_to_group_map = tag_to_group_map
+>>>>>>> upstream/master
         self.rulespec = rulespec_registry[name]
         # Holds list of the rules. Using the folder paths as keys.
         self._rules = {}
@@ -442,6 +577,19 @@ class Ruleset(object):
         self.tuple_transformer = ruleset_matcher.RulesetToDictTransformer(
             tag_to_group_map=tag_to_group_map)
 
+<<<<<<< HEAD
+=======
+    def clone(self):
+        cloned = Ruleset(self.name, self.tag_to_group_map)
+        cloned.rulespec = self.rulespec
+        for folder, _rule_index, rule in self.get_rules():
+            cloned.append_rule(folder, rule)
+        return cloned
+
+    def set_name(self, name):
+        self.name = name
+
+>>>>>>> upstream/master
     def is_empty(self):
         return self.num_rules() == 0
 
@@ -520,6 +668,7 @@ class Ruleset(object):
             if self.is_optional():
                 content += "\nif %s is None:\n    %s = []\n" % (varname, varname)
 
+<<<<<<< HEAD
         # When using pprint we get a deterministic representation of the
         # data structures because it cares about sorting of the dict keys
         repr_func = pprint.pformat if config.wato_use_git else repr
@@ -527,6 +676,18 @@ class Ruleset(object):
         content += "\n%s = [\n" % varname
         for rule in self._rules[folder.path()]:
             content += "%s,\n" % repr_func(rule.to_config())
+=======
+        content += "\n%s = [\n" % varname
+        for rule in self._rules[folder.path()]:
+            # When using pprint we get a deterministic representation of the
+            # data structures because it cares about sorting of the dict keys
+            if config.wato_use_git:
+                text = pprint.pformat(rule.to_config())
+            else:
+                text = repr(rule.to_config())
+
+            content += "%s,\n" % text
+>>>>>>> upstream/master
         content += "] + %s\n\n" % varname
 
         return content
@@ -597,12 +758,21 @@ class Ruleset(object):
         # case we hack it here into the ruleset search which is used to populate the
         # group pages.
         if search_options["ruleset_group"] == "agents" and self.rulespec.name in [
+<<<<<<< HEAD
                 "agent_ports", "agent_encryption"
         ]:
             return True
 
         return self.rulespec.group_name \
             in rulespec_group_registry.get_matching_group_names(search_options["ruleset_group"])
+=======
+                "agent_ports", "agent_encryption", "agent_exclude_sections"
+        ]:
+            return True
+
+        return self.rulespec.group_name in rulespec_group_registry.get_matching_group_names(
+            search_options["ruleset_group"])
+>>>>>>> upstream/master
 
     def get_rule(self, folder, rule_index):
         return self._rules[folder.path()][rule_index]
@@ -699,14 +869,22 @@ class Ruleset(object):
 
     def _on_change(self):
         if has_agent_bakery():
+<<<<<<< HEAD
             import cmk.gui.cee.agent_bakery as agent_bakery
+=======
+            import cmk.gui.cee.agent_bakery as agent_bakery  # pylint: disable=no-name-in-module
+>>>>>>> upstream/master
             agent_bakery.ruleset_changed(self.name)
 
     # Returns the outcoming value or None and a list of matching rules. These are pairs
     # of rule_folder and rule_number
     def analyse_ruleset(self, hostname, svc_desc_or_item, svc_desc):
         resultlist = []
+<<<<<<< HEAD
         resultdict = {}
+=======
+        resultdict: Dict[str, Any] = {}
+>>>>>>> upstream/master
         effectiverules = []
         for folder, rule_index, rule in self.get_rules():
             if rule.is_disabled():
@@ -725,7 +903,34 @@ class Ruleset(object):
                 effectiverules.append((folder, rule_index, rule))
 
             elif self.match_type() == "dict":
+<<<<<<< HEAD
                 new_result = rule.value.copy()  # pylint: disable=no-member
+=======
+                # It may happen that a ruleset started with non-dict values. For example
+                # a ruleset that has only has a WARN and CRIT threshold in a two element
+                # tuple.
+                # When we then have to extend the ruleset to hold dict values and change
+                # the match type to dict, we normally do this by adding a top-level
+                # Transform() valuespec which encapsulates the Dictionary() valuespec.
+                # The logic for migrating the parameters is implemented in the forth()
+                # method of the transform.
+                # Users which already have saved rules using the previous valuespec now
+                # have tuples in their ruleset and reach this code with other data
+                # structures than dictionaries.
+                # We currently have no 100% safe way of automatically fixing this on the
+                # fly. The best we can do is print a meaningful error message to the user.
+                # Would be better to do these transforms once during site update. The
+                # cmk-update-config command would be a good place to do this.
+                if not isinstance(rule.value, dict):
+                    raise MKGeneralException(
+                        _("Failed to process rule #%d of ruleset \"%s\" in folder \"%s\". "
+                          "The value of a rule is incompatible to the current rule "
+                          "specification. You can try fix this by opening the rule "
+                          "for editing and save the rule again without modification.") %
+                        (rule_index, self.title(), folder.title()))
+
+                new_result = rule.value.copy()
+>>>>>>> upstream/master
                 new_result.update(resultdict)
                 resultdict = new_result
                 effectiverules.append((folder, rule_index, rule))
@@ -736,13 +941,21 @@ class Ruleset(object):
         if self.match_type() in ("list", "all"):
             return resultlist, effectiverules
 
+<<<<<<< HEAD
         elif self.match_type() == "dict":
+=======
+        if self.match_type() == "dict":
+>>>>>>> upstream/master
             return resultdict, effectiverules
 
         return None, []  # No match
 
 
+<<<<<<< HEAD
 class Rule(object):
+=======
+class Rule:
+>>>>>>> upstream/master
     @classmethod
     def create(cls, folder, ruleset):
         rule = Rule(folder, ruleset)
@@ -798,8 +1011,13 @@ class Rule(object):
     def to_config(self):
         # Special case: The main folder must not have a host_folder condition, because
         # these rules should also affect non WATO hosts.
+<<<<<<< HEAD
         for_config = self.conditions.to_config_with_folder_macro() \
             if not self.folder.is_root() else self.conditions.to_config_without_folder()
+=======
+        for_config = self.conditions.to_config_with_folder_macro(
+        ) if not self.folder.is_root() else self.conditions.to_config_without_folder()
+>>>>>>> upstream/master
         return self._to_config(for_config)
 
     def to_web_api(self):
@@ -878,10 +1096,17 @@ class Rule(object):
         if only_host_conditions:
             match_object = ruleset_matcher.RulesetMatchObject(hostname)
         elif self.ruleset.item_type() == "service":
+<<<<<<< HEAD
             match_object = cmk_base.export.ruleset_match_object_of_service(
                 hostname, svc_desc_or_item)
         elif self.ruleset.item_type() == "item":
             match_object = cmk_base.export.ruleset_match_object_for_checkgroup_parameters(
+=======
+            match_object = cmk.base.export.ruleset_match_object_of_service(
+                hostname, svc_desc_or_item)
+        elif self.ruleset.item_type() == "item":
+            match_object = cmk.base.export.ruleset_match_object_for_checkgroup_parameters(
+>>>>>>> upstream/master
                 hostname, svc_desc_or_item, svc_desc)
         elif not self.ruleset.item_type():
             match_object = ruleset_matcher.RulesetMatchObject(hostname)
@@ -897,22 +1122,48 @@ class Rule(object):
             yield reason
 
     def _get_mismatch_reasons_of_match_object(self, match_object, match_service_conditions):
+<<<<<<< HEAD
         matcher = cmk_base.export.get_ruleset_matcher()
+=======
+        matcher = cmk.base.export.get_ruleset_matcher()
+>>>>>>> upstream/master
 
         rule_dict = self.to_config()
         rule_dict["condition"]["host_folder"] = self.folder.path_for_rule_matching()
 
+<<<<<<< HEAD
         if match_service_conditions:
             if list(
                     matcher.get_service_ruleset_values(
                         match_object, [rule_dict],
                         is_binary=self.ruleset.rulespec.is_binary_ruleset)):
+=======
+        # The cache uses some id(ruleset) to build indexes for caches. When we are using
+        # dynamically allocated ruleset list objects, that are quickly invalidated, it
+        # may happen that the address space is reused for other objects, resulting in
+        # duplicate id() results for different rulesets (because ID returns the memory
+        # address the object is located at).
+        # Since we do not work with regular rulesets here, we need to clear the cache
+        # (that is not useful in this situation)
+        matcher.ruleset_optimizer.clear_host_ruleset_cache()
+
+        ruleset = [rule_dict]
+
+        if match_service_conditions:
+            if list(
+                    matcher.get_service_ruleset_values(
+                        match_object, ruleset, is_binary=self.ruleset.rulespec.is_binary_ruleset)):
+>>>>>>> upstream/master
                 return
         else:
             if list(
                     matcher.get_host_ruleset_values(
+<<<<<<< HEAD
                         match_object, [rule_dict],
                         is_binary=self.ruleset.rulespec.is_binary_ruleset)):
+=======
+                        match_object, ruleset, is_binary=self.ruleset.rulespec.is_binary_ruleset)):
+>>>>>>> upstream/master
                 return
 
         yield _("The rule does not match")
@@ -953,19 +1204,33 @@ class Rule(object):
                                                                    value_text):
             return False
 
+<<<<<<< HEAD
         if self.conditions.host_list \
             and not _match_one_of_search_expression(search_options, "rule_host_list", self.conditions.host_list[0]):
             return False
 
         if self.conditions.item_list \
            and not _match_one_of_search_expression(search_options, "rule_item_list", self.conditions.item_list[0]):
+=======
+        if self.conditions.host_list and not _match_one_of_search_expression(
+                search_options, "rule_host_list", self.conditions.host_list[0]):
+            return False
+
+        if self.conditions.item_list and not _match_one_of_search_expression(
+                search_options, "rule_item_list", self.conditions.item_list[0]):
+>>>>>>> upstream/master
             return False
 
         to_search = [
             self.comment(),
             self.description(),
+<<<<<<< HEAD
         ] + (self.conditions.host_list[0] if self.conditions.host_list else []) \
           + (self.conditions.item_list[0] if self.conditions.item_list else [])
+=======
+        ] + (self.conditions.host_list[0] if self.conditions.host_list else
+             []) + (self.conditions.item_list[0] if self.conditions.item_list else [])
+>>>>>>> upstream/master
 
         if value_text is not None:
             to_search.append(value_text)
@@ -1003,8 +1268,12 @@ class Rule(object):
     def comment(self):
         return self.rule_options.get("comment", "")
 
+<<<<<<< HEAD
     def predefined_condition_id(self):
         # type: () -> Optional[str]
+=======
+    def predefined_condition_id(self) -> Optional[str]:
+>>>>>>> upstream/master
         """When a rule refers to a predefined condition return the ID
 
         The predefined conditions are a pure WATO feature. These are resolved when writing
@@ -1014,6 +1283,7 @@ class Rule(object):
         #TODO: Once we switched the rule format to be dict base, we can move this key to the conditions dict
         return self.rule_options.get("predefined_condition_id")
 
+<<<<<<< HEAD
     def update_conditions(self, conditions):
         # type: (RuleConditions) -> None
         self.conditions = conditions
@@ -1027,6 +1297,24 @@ class Rule(object):
                and self.conditions.host_tags == {} \
                and self.conditions.has_only_explicit_service_conditions() \
                and self.folder.is_transitive_parent_of(host.folder())
+=======
+    def update_conditions(self, conditions: RuleConditions) -> None:
+        self.conditions = conditions
+
+    def get_rule_conditions(self) -> RuleConditions:
+        return self.conditions
+
+    def is_discovery_rule_of(self, host):
+        return self.conditions.host_name == [
+            host.name()
+        ] and self.conditions.host_tags == {} and self.conditions.has_only_explicit_service_conditions(
+        ) and self.folder.is_transitive_parent_of(host.folder())
+
+    def is_discovery_rule(self):
+        return (self.conditions.host_name and len(self.conditions.host_name) == 1 and
+                self.conditions.host_tags == {} and
+                self.conditions.has_only_explicit_service_conditions())
+>>>>>>> upstream/master
 
     def replace_explicit_host_condition(self, old_name, new_name):
         """Does an in-place(!) replacement of explicit (non regex) hostnames in rules"""
@@ -1057,3 +1345,17 @@ def _match_one_of_search_expression(search_options, attr_name, search_in_list):
         if _match_search_expression(search_options, attr_name, search_in):
             return True
     return False
+<<<<<<< HEAD
+=======
+
+
+def service_description_to_condition(service_description: str) -> Dict[str, str]:
+    r"""Packs a service description to be used as explicit match condition
+
+    >>> service_description_to_condition("abc")
+    {'$regex': 'abc$'}
+    >>> service_description_to_condition("a / b / c \ d \ e")
+    {'$regex': 'a / b / c \\\\ d \\\\ e$'}
+    """
+    return {"$regex": "%s$" % escape_regex_chars(service_description)}
+>>>>>>> upstream/master

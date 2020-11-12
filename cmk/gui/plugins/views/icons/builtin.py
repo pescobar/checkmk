@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,6 +24,13 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 # An icon painter is a python function which gets four parameters and
 # returns one string of rendered HTML code or None.
@@ -58,6 +66,7 @@
 #})
 
 import json
+<<<<<<< HEAD
 
 import cmk.gui.bi as bi
 import cmk.gui.config as config
@@ -65,16 +74,34 @@ import cmk.gui.metrics as metrics
 import cmk.utils
 import cmk.utils.render
 from cmk.gui.globals import g, html
+=======
+import re
+
+import cmk.gui.bi as bi
+import cmk.gui.config as config
+import cmk.utils
+import cmk.utils.render
+from cmk.gui.globals import g, html, request
+>>>>>>> upstream/master
 from cmk.gui.i18n import _
 from cmk.gui.plugins.views import (
     display_options,
     is_stale,
     paint_age,
+<<<<<<< HEAD
     pnp_url,
+=======
+>>>>>>> upstream/master
     render_cache_info,
     url_to_view,
 )
 from cmk.gui.plugins.views.icons import Icon, icon_and_action_registry
+<<<<<<< HEAD
+=======
+from cmk.gui.plugins.views.graphs import cmk_graph_url
+from cmk.gui.utils.popups import MethodAjax
+from cmk.gui.utils.urls import makeuri, makeuri_contextless
+>>>>>>> upstream/master
 
 #   .--Action Menu---------------------------------------------------------.
 #   |          _        _   _               __  __                         |
@@ -115,6 +142,7 @@ class ActionMenuIcon(Icon):
             url_vars.append(('display_options', html.request.var('display_options')))
         if html.request.has_var('_display_options'):
             url_vars.append(('_display_options', html.request.var('_display_options')))
+<<<<<<< HEAD
         url_vars.append(('_back_url', html.makeuri([])))
 
         return html.render_popup_trigger(html.render_icon('menu',
@@ -123,6 +151,15 @@ class ActionMenuIcon(Icon):
                                          'action_menu',
                                          'action_menu',
                                          url_vars=url_vars)
+=======
+        url_vars.append(('_back_url', makeuri(request, [])))
+
+        return html.render_popup_trigger(
+            html.render_icon('menu', _('Open the action menu'), cssclass="iconbutton"),
+            'action_menu',
+            MethodAjax(endpoint='action_menu', url_vars=url_vars),
+        )
+>>>>>>> upstream/master
 
 
 #.
@@ -215,11 +252,20 @@ class RescheduleIcon(Icon):
                 if row[what + '_check_command'].startswith('check_mk-'):
                     servicedesc = 'Check_MK'
                     icon = 'reload_cmk'
+<<<<<<< HEAD
                     txt = _('Reschedule \'Check_MK\' service')
 
             url = 'onclick:cmk.views.reschedule_check(this, \'%s\', \'%s\', \'%s\', \'%s\');' % \
                 (row["site"], row["host_name"], html.urlencode(servicedesc), html.urlencode(wait_svc))
             return icon, txt, url
+=======
+                    txt = _('Reschedule \'Checkmk\' service')
+
+            url = 'onclick:cmk.views.reschedule_check(this, %s, %s, %s, %s);' % \
+                (json.dumps(row["site"]), json.dumps(row["host_name"]), json.dumps(servicedesc), json.dumps(wait_svc))
+            # _self is needed to prevent wrong linking when views are parts of dashlets
+            return icon, txt, (url, "_self")
+>>>>>>> upstream/master
 
 
 #.
@@ -267,7 +313,11 @@ class RuleEditorIcon(Icon):
             else:
                 title = _("Parameters for this host")
 
+<<<<<<< HEAD
             return 'rulesets', title, html.makeuri_contextless(urlvars, "wato.py")
+=======
+            return 'rulesets', title, makeuri_contextless(request, urlvars, "wato.py")
+>>>>>>> upstream/master
 
 
 #.
@@ -310,8 +360,16 @@ class ManpageIcon(Icon):
             else:
                 return
             urlvars = [("mode", "check_manpage"), ("check_type", check_type)]
+<<<<<<< HEAD
             return 'check_plugins', _("Manual page for this check type"), html.makeuri_contextless(
                 urlvars, "wato.py")
+=======
+            return (
+                'check_plugins',
+                _("Manual page for this check type"),
+                makeuri_contextless(request, urlvars, "wato.py"),
+            )
+>>>>>>> upstream/master
 
 
 #.
@@ -378,6 +436,7 @@ class PerfgraphIcon(Icon):
             return self._pnp_icon(row, what)
 
     def _pnp_icon(self, row, what):
+<<<<<<< HEAD
         url = self._pnp_graph_icon_link(row, what)
 
         if not metrics.cmk_graphs_possible(row["site"]):
@@ -392,11 +451,21 @@ class PerfgraphIcon(Icon):
                 return
 
             force_pnp_graphing = False
+=======
+        url = self._graph_icon_link(row, what)
+
+        # Don't show the icon with Checkmk graphing. The hover makes no sense and there is no
+        # mobile view for graphs, so the graphs on the bottom of the host/service view are enough
+        # for the moment.
+        if html.is_mobile():
+            return
+>>>>>>> upstream/master
 
         return html.render_a(
             content=html.render_icon('pnp', ''),
             href=url,
             onmouseout="cmk.hover.hide()",
+<<<<<<< HEAD
             onmouseover="cmk.graph_integration.show_hover_graphs(event, %s, %s, %s, %s, %s);" % (
                 json.dumps(row['site']),
                 json.dumps(row["host_name"]),
@@ -417,6 +486,18 @@ class PerfgraphIcon(Icon):
 
         import cmk.gui.cee.plugins.views.graphs  # pylint: disable=redefined-outer-name
         return cmk.gui.cee.plugins.views.graphs.cmk_graph_url(row, what)
+=======
+            onmouseover="cmk.graph_integration.show_hover_graphs(event, %s, %s, %s);" % (
+                json.dumps(row['site']),
+                json.dumps(row["host_name"]),
+                json.dumps(row.get('service_description', '_HOST_')),
+            ))
+
+    def _graph_icon_link(self, row, what):
+        if display_options.disabled(display_options.X):
+            return ""
+        return cmk_graph_url(row, what)
+>>>>>>> upstream/master
 
 
 #.
@@ -527,8 +608,16 @@ class LogwatchIcon(Icon):
             return
 
         sitename, hostname, item = row['site'], row['host_name'], row['service_description'][4:]
+<<<<<<< HEAD
         url = html.makeuri_contextless([("site", sitename), ("host", hostname), ("file", item)],
                                        filename="logwatch.py")
+=======
+        url = makeuri_contextless(
+            request,
+            [("site", sitename), ("host", hostname), ("file", item)],
+            filename="logwatch.py",
+        )
+>>>>>>> upstream/master
         return 'logwatch', _('Open Log'), url
 
 
@@ -625,7 +714,11 @@ class DowntimesIcon(Icon):
 
             return icon, title, url_to_view(row, 'downtimes_of_' + what)
 
+<<<<<<< HEAD
         elif what == "service" and row["host_scheduled_downtime_depth"] > 0:
+=======
+        if what == "service" and row["host_scheduled_downtime_depth"] > 0:
+>>>>>>> upstream/master
             title = _("The host is currently in downtime")
             title += detail_txt(row["host_downtimes_with_extra_info"])
 
@@ -660,7 +753,11 @@ class CommentsIcon(Icon):
     def render(self, what, row, tags, custom_vars):
         comments = row[what + "_comments_with_extra_info"]
         if len(comments) > 0:
+<<<<<<< HEAD
             text = ""
+=======
+            text = u""
+>>>>>>> upstream/master
             for c in sorted(comments, key=lambda x: x[4]):
                 _id, author, comment, _ty, timestamp = c
                 comment = comment.replace("\n", "<br>")
@@ -700,9 +797,15 @@ class NotificationsIcon(Icon):
         modified = "notifications_enabled" in row[what + "_modified_attributes_list"]
         if modified and enabled:
             return 'notif_enabled', _('Notifications are manually enabled for this %s') % what
+<<<<<<< HEAD
         elif modified and not enabled:
             return 'notif_man_disabled', _('Notifications are manually disabled for this %s') % what
         elif not enabled:
+=======
+        if modified and not enabled:
+            return 'notif_man_disabled', _('Notifications are manually disabled for this %s') % what
+        if not enabled:
+>>>>>>> upstream/master
             return 'notif_disabled', _('Notifications are disabled for this %s') % what
 
 
@@ -933,7 +1036,11 @@ class AggregationsIcon(Icon):
             ]
             if what == "service":
                 urivars += [("aggr_service_service", row["service_description"])]
+<<<<<<< HEAD
             url = html.makeuri_contextless(urivars, filename="view.py")
+=======
+            url = makeuri_contextless(request, urivars, filename="view.py")
+>>>>>>> upstream/master
             return 'aggr', _("BI Aggregations containing this %s") % \
                             (what == "host" and _("Host") or _("Service")), url
 
@@ -957,7 +1064,11 @@ class StarsIcon(Icon):
 
     def render(self, what, row, tags, custom_vars):
         if 'stars' not in g:
+<<<<<<< HEAD
             g.stars = set(config.user.load_file("favorites", []))
+=======
+            g.stars = config.user.stars.copy()
+>>>>>>> upstream/master
         stars = g.stars
 
         if what == "host":
@@ -1043,16 +1154,39 @@ class CrashdumpsIcon(Icon):
     def render(self, what, row, tags, custom_vars):
         if what == "service" \
             and row["service_state"] == 3 \
+<<<<<<< HEAD
             and "check failed - please submit a crash report!" in row["service_plugin_output"] :
+=======
+            and "check failed - please submit a crash report!" in row["service_plugin_output"]:
+>>>>>>> upstream/master
 
             if not config.user.may("general.see_crash_reports"):
                 return 'crash', _(
                     "This check crashed. Please inform a Check_MK user that is allowed "
                     "to view and submit crash reports to the development team.")
 
+<<<<<<< HEAD
             crashurl = html.makeuri([("site", row["site"]), ("host", row["host_name"]),
                                      ("service", row["service_description"])],
                                     filename="crashed_check.py")
+=======
+            # Extract the crash ID produced by cmk/base/crash_reporting.py from output
+            match = re.search(r"\(Crash-ID: ([^\)]+)\)$", row["service_plugin_output"])
+            if not match:
+                return 'crash', _(
+                    "This check crashed, but no crash dump is available, please report this "
+                    "to the development team.")
+
+            crash_id = match.group(1)
+            crashurl = makeuri_contextless(
+                request,
+                [
+                    ("site", row["site"]),
+                    ("crash_id", crash_id),
+                ],
+                filename="crash.py",
+            )
+>>>>>>> upstream/master
             return 'crash', _(
                 "This check crashed. Please click here for more information. You also can submit "
                 "a crash report to the development team if you like."), crashurl

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,6 +24,13 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 from cmk.gui.i18n import _
 from cmk.gui.valuespec import (
@@ -44,11 +52,27 @@ def _parameter_valuespec_mssql_backup_per_type():
     ],)
 
 
+<<<<<<< HEAD
+=======
+def _item_spec() -> TextAscii:
+    return TextAscii(
+        title=_("Instance, tablespace & backup type"),
+        help=_("The MSSQL instance name, the tablespace name and the backup type, each separated "
+               "by a space."),
+        allow_empty=False,
+    )
+
+
+>>>>>>> upstream/master
 rulespec_registry.register(
     CheckParameterRulespecWithItem(
         check_group_name="mssql_backup_per_type",
         group=RulespecGroupCheckParametersApplications,
+<<<<<<< HEAD
         item_spec=lambda: TextAscii(title=_("Backup name"), allow_empty=False),
+=======
+        item_spec=_item_spec,
+>>>>>>> upstream/master
         match_type="dict",
         parameter_valuespec=_parameter_valuespec_mssql_backup_per_type,
         title=lambda: _("MSSQL Backup"),

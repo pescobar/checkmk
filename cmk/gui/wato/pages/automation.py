@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/env python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,13 +24,31 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 """These functions implement a web service with that a master can call
 automation functions on slaves,"""
 
 import traceback
 
+<<<<<<< HEAD
 import cmk
 import cmk.utils.store as store
+=======
+from six import ensure_str
+
+import cmk.utils.version as cmk_version
+import cmk.utils.store as store
+import cmk.utils.paths
+from cmk.utils.type_defs import UserId
+
+import cmk.gui.utils
+>>>>>>> upstream/master
 import cmk.gui.config as config
 import cmk.gui.watolib as watolib
 import cmk.gui.userdb as userdb
@@ -67,11 +86,19 @@ class ModeAutomationLogin(AjaxPage):
             response = _get_login_secret(create_on_demand=True)
         else:
             response = {
+<<<<<<< HEAD
                 "version": cmk.__version__,
                 "edition_short": cmk.edition_short(),
                 "login_secret": _get_login_secret(create_on_demand=True),
             }
         html.write_html(repr(response))
+=======
+                "version": cmk_version.__version__,
+                "edition_short": cmk_version.edition_short(),
+                "login_secret": _get_login_secret(create_on_demand=True),
+            }
+        html.write(repr(response))
+>>>>>>> upstream/master
 
 
 @page_registry.register_page("noauth:automation")
@@ -92,7 +119,11 @@ class ModeAutomation(AjaxPage):
 
     def _from_vars(self):
         self._authenticate()
+<<<<<<< HEAD
         self._command = html.request.var("command")
+=======
+        self._command = html.request.get_str_input_mandatory("command")
+>>>>>>> upstream/master
 
     def _authenticate(self):
         secret = html.request.var("secret")
@@ -115,20 +146,30 @@ class ModeAutomation(AjaxPage):
         # we request the lock in all cases.
         with store.lock_checkmk_configuration():
             watolib.init_wato_datastructures(with_wato_lock=False)
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/master
             # TODO: Refactor these two calls to also use the automation_command_registry
             if self._command == "checkmk-automation":
                 self._execute_cmk_automation()
                 return
+<<<<<<< HEAD
 
             elif self._command == "push-profile":
                 self._execute_push_profile()
                 return
 
+=======
+            if self._command == "push-profile":
+                self._execute_push_profile()
+                return
+>>>>>>> upstream/master
             try:
                 automation_command = watolib.automation_command_registry[self._command]
             except KeyError:
                 raise MKGeneralException(_("Invalid automation command: %s.") % self._command)
+<<<<<<< HEAD
 
             self._execute_automation_command(automation_command)
 
@@ -138,6 +179,16 @@ class ModeAutomation(AjaxPage):
         indata = watolib.mk_eval(html.request.var("indata"))
         stdin_data = watolib.mk_eval(html.request.var("stdin_data"))
         timeout = watolib.mk_eval(html.request.var("timeout"))
+=======
+            self._execute_automation_command(automation_command)
+
+    def _execute_cmk_automation(self):
+        cmk_command = html.request.get_str_input_mandatory("automation")
+        args = watolib.mk_eval(html.request.get_str_input_mandatory("arguments"))
+        indata = watolib.mk_eval(html.request.get_str_input_mandatory("indata"))
+        stdin_data = watolib.mk_eval(html.request.get_str_input_mandatory("stdin_data"))
+        timeout = watolib.mk_eval(html.request.get_str_input_mandatory("timeout"))
+>>>>>>> upstream/master
         result = watolib.check_mk_local_automation(cmk_command, args, indata, stdin_data, timeout)
         # Don't use write_text() here (not needed, because no HTML document is rendered)
         html.write(repr(result))
@@ -145,7 +196,11 @@ class ModeAutomation(AjaxPage):
     def _execute_push_profile(self):
         try:
             # Don't use write_text() here (not needed, because no HTML document is rendered)
+<<<<<<< HEAD
             html.write(watolib.mk_repr(self._automation_push_profile()))
+=======
+            html.write(ensure_str(watolib.mk_repr(self._automation_push_profile())))
+>>>>>>> upstream/master
         except Exception as e:
             logger.exception("error pushing profile")
             if config.debug:
@@ -173,8 +228,12 @@ class ModeAutomation(AjaxPage):
             raise MKGeneralException(_('Invalid call: The profile is missing.'))
 
         users = userdb.load_users(lock=True)
+<<<<<<< HEAD
         profile = watolib.mk_eval(profile)
         users[user_id] = profile
+=======
+        users[UserId(user_id)] = watolib.mk_eval(profile)
+>>>>>>> upstream/master
         userdb.save_users(users)
 
         return True
@@ -188,14 +247,22 @@ class ModeAutomation(AjaxPage):
             logger.exception("error executing automation command")
             if config.debug:
                 raise
+<<<<<<< HEAD
             html.write_text(_("Internal automation error: %s\n%s") % \
                             (e, traceback.format_exc()))
+=======
+            html.write_text(_("Internal automation error: %s\n%s") % (e, traceback.format_exc()))
+>>>>>>> upstream/master
 
 
 def _get_login_secret(create_on_demand=False):
     path = cmk.utils.paths.var_dir + "/wato/automation_secret.mk"
 
+<<<<<<< HEAD
     secret = store.load_data_from_file(path)
+=======
+    secret = store.load_object_from_file(path)
+>>>>>>> upstream/master
     if secret is not None:
         return secret
 
@@ -203,5 +270,9 @@ def _get_login_secret(create_on_demand=False):
         return None
 
     secret = cmk.gui.utils.get_random_string(32)
+<<<<<<< HEAD
     store.save_data_to_file(path, secret)
+=======
+    store.save_object_to_file(path, secret)
+>>>>>>> upstream/master
     return secret

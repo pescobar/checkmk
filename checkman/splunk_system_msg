@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: Splunk: System messages
+=======
+title: Splunk: System Messages
+>>>>>>> upstream/master
 agents: splunk
 catalog: app/splunk
 license: GPL
@@ -11,5 +15,9 @@ description:
  Please note that you have to clear such messages within Splunk.
 
 inventory:
+<<<<<<< HEAD
  One service for will be created
+=======
+ One service is created.
+>>>>>>> upstream/master
 

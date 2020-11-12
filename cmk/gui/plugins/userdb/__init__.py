@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/env python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,6 +24,13 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 from cmk.utils.plugin_loader import load_plugins
 
@@ -36,12 +44,21 @@ from cmk.utils.plugin_loader import load_plugins
 #   |                         |___/                                        |
 #   '----------------------------------------------------------------------'
 
+<<<<<<< HEAD
 from cmk.gui.plugins.userdb.utils import (  # pylint: disable=unused-import
+=======
+from cmk.gui.plugins.userdb.utils import (  # noqa: F401 # pylint: disable=unused-import
+>>>>>>> upstream/master
     UserAttribute,  #
     user_attribute_registry,  #
     get_user_attributes,  #
     UserConnector,  #
+<<<<<<< HEAD
     user_connector_registry,
+=======
+    user_connector_registry,  #
+    CheckCredentialsResult,
+>>>>>>> upstream/master
 )
 
 #.

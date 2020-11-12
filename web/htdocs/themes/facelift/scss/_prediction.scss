@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /*
 +------------------------------------------------------------------+
 |             ____ _               _        __  __ _  __           |
@@ -30,6 +31,19 @@ table.prediction {
   border: 1px solid #000;
   border-spacing: 0;
   box-shadow: 0.5px 0.5px 2px #888;
+=======
+@charset "UTF-8";
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+// conditions defined in the file COPYING, which is part of this source code package.
+
+table.prediction {
+  margin-top: 10px;
+  background-color: rgb(238, 238, 238);
+  border: 1px solid rgb(0, 0, 0);
+  border-spacing: 0;
+  box-shadow: 0.5px 0.5px 2px rgb(136, 136, 136);
+>>>>>>> upstream/master
 
   canvas {
     margin: 0;
@@ -42,7 +56,11 @@ table.prediction {
       padding-top: 2px;
       padding-bottom: 12px;
       padding-left: 43px;
+<<<<<<< HEAD
       color: #000;
+=======
+      color: rgb(0, 0, 0);
+>>>>>>> upstream/master
 
       div {
         display: inline-block;
@@ -53,8 +71,13 @@ table.prediction {
           width: 12px;
           height: 12px;
           vertical-align: bottom;
+<<<<<<< HEAD
           border: 1px solid #000;
           box-shadow: 0.5px 0.5px 1px #888;
+=======
+          border: 1px solid rgb(0, 0, 0);
+          box-shadow: 0.5px 0.5px 1px rgb(136, 136, 136);
+>>>>>>> upstream/master
         }
 
         &.entry {

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -27,6 +28,15 @@
 import re
 import os
 import time
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+import re
+>>>>>>> upstream/master
 
 import cmk.gui.config as config
 import cmk.gui.utils as utils
@@ -38,6 +48,7 @@ from cmk.gui.exceptions import MKUserError
 
 
 @cmk.gui.pages.register("tree_openclose")
+<<<<<<< HEAD
 def ajax_tree_openclose():
     html.load_tree_states()
 
@@ -49,6 +60,14 @@ def ajax_tree_openclose():
 
     html.set_tree_state(tree, name, html.request.var("state"))
     html.save_tree_states()
+=======
+def ajax_tree_openclose() -> None:
+    tree = html.request.get_str_input_mandatory("tree")
+    name = html.request.get_unicode_input_mandatory("name")
+
+    config.user.set_tree_state(tree, name, html.request.get_str_input("state"))
+    config.user.save_tree_states()
+>>>>>>> upstream/master
     html.write('OK')  # Write out something to make debugging easier
 
 
@@ -64,6 +83,7 @@ def ajax_tree_openclose():
 #   +----------------------------------------------------------------------+
 
 
+<<<<<<< HEAD
 def init_selection():
     # Generate the initial selection_id
     selection_id()
@@ -88,12 +108,27 @@ def cleanup_old_selections():
 
 # Generates a selection id or uses the given one
 def selection_id():
+=======
+def init_selection() -> None:
+    """Generate the initial selection_id"""
+    selection_id()
+    config.user.cleanup_old_selections()
+
+
+def selection_id() -> str:
+    """Generates a selection id or uses the given one"""
+>>>>>>> upstream/master
     if not html.request.has_var('selection'):
         sel_id = utils.gen_id()
         html.request.set_var('selection', sel_id)
         return sel_id
 
+<<<<<<< HEAD
     sel_id = html.request.var('selection')
+=======
+    sel_id = html.request.get_str_input_mandatory('selection')
+
+>>>>>>> upstream/master
     # Avoid illegal file access by introducing .. or /
     if not re.match("^[-0-9a-zA-Z]+$", sel_id):
         new_id = utils.gen_id()
@@ -102,6 +137,7 @@ def selection_id():
     return sel_id
 
 
+<<<<<<< HEAD
 def get_rowselection(ident):
     vo = config.user.load_file("rowselection/%s" % selection_id(), {})
     return vo.get(ident, [])
@@ -136,3 +172,14 @@ def ajax_set_rowselection():
     rows = html.request.var('rows', '').split(',')
 
     set_rowselection(ident, rows, action)
+=======
+@cmk.gui.pages.register("ajax_set_rowselection")
+def ajax_set_rowselection() -> None:
+    ident = html.request.get_str_input_mandatory('id')
+    action = html.request.get_str_input_mandatory('action', 'set')
+    if action not in ['add', 'del', 'set', 'unset']:
+        raise MKUserError(None, _('Invalid action'))
+
+    rows = html.request.get_str_input_mandatory('rows', '').split(',')
+    config.user.set_rowselection(selection_id(), ident, rows, action)
+>>>>>>> upstream/master

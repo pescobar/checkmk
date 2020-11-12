@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+<<<<<<< HEAD
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
 # |             ____ _               _        __  __ _  __           |
@@ -23,6 +24,12 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 # This check performs HTTP requests with some advanced features like
 # a) Detecting, populating and submitting HTML forms
@@ -52,9 +59,18 @@ import getopt
 import re
 import socket
 import sys
+<<<<<<< HEAD
 import urllib.request, urllib.parse, urllib.error
 import http.cookiejar
 import html.parser
+=======
+import urllib.request
+import urllib.parse
+import urllib.error
+import http.cookiejar
+import html.parser
+from typing import Dict, cast, Tuple
+>>>>>>> upstream/master
 
 
 def usage():
@@ -329,7 +345,11 @@ def main(args=None):
     port = 80
     ssl = False
     form_name = None
+<<<<<<< HEAD
     params = {}
+=======
+    params: Dict[str, str] = {}
+>>>>>>> upstream/master
     expect_regex = None
     timeout = 10  # seconds
     num_warn = None
@@ -350,7 +370,11 @@ def main(args=None):
         elif o == '-f':
             form_name = a
         elif o == '-q':
+<<<<<<< HEAD
             params = dict([parts.split('=', 1) for parts in a.split('&')])
+=======
+            params = dict(cast(Tuple[str, str], parts.split('=', 1)) for parts in a.split('&'))
+>>>>>>> upstream/master
         elif o == '-e':
             expect_regex = a
         elif o == '-t':

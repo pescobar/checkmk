@@ -1,35 +1,21 @@
-// +------------------------------------------------------------------+
-// |             ____ _               _        __  __ _  __           |
-// |            / ___| |__   ___  ___| | __   |  \/  | |/ /           |
-// |           | |   | '_ \ / _ \/ __| |/ /   | |\/| | ' /            |
-// |           | |___| | | |  __/ (__|   <    | |  | | . \            |
-// |            \____|_| |_|\___|\___|_|\_\___|_|  |_|_|\_\           |
-// |                                                                  |
-// | Copyright Mathias Kettner 2014             mk@mathias-kettner.de |
-// +------------------------------------------------------------------+
-//
-// This file is part of Check_MK.
-// The official homepage is at http://mathias-kettner.de/check_mk.
-//
-// check_mk is free software;  you can redistribute it and/or modify it
-// under the  terms of the  GNU General Public License  as published by
-// the Free Software Foundation in version 2.  check_mk is  distributed
-// in the hope that it will be useful, but WITHOUT ANY WARRANTY;  with-
-// out even the implied warranty of  MERCHANTABILITY  or  FITNESS FOR A
-// PARTICULAR PURPOSE. See the  GNU General Public License for more de-
-// tails. You should have  received  a copy of the  GNU  General Public
-// License along with GNU Make; see the file  COPYING.  If  not,  write
-// to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
-// Boston, MA 02110-1301 USA.
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the
+// terms and conditions defined in the file COPYING, which is part of this
+// source code package.
 
 #ifndef StringUtils_h
 #define StringUtils_h
 
 #include "config.h"  // IWYU pragma: keep
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/master
 #include <bitset>
 #include <cstddef>
 #include <ostream>
 #include <string>
+#include <string_view>
 #include <utility>
 #include <vector>
 
@@ -47,11 +33,19 @@ bool starts_with(const std::string &input, const std::string &test);
 
 std::vector<std::string> split(const std::string &str, char delimiter);
 
+std::string join(const std::vector<std::string> &values,
+                 const std::string &separator);
+
 std::string lstrip(const std::string &str,
                    const std::string &chars = " \t\n\v\f\r");
 
 std::string rstrip(const std::string &str,
                    const std::string &chars = " \t\n\v\f\r");
+
+// TODO (sk): unit tests
+std::string_view rstrip(std::string_view str, std::string_view chars);
+// TODO (sk): unit tests
+std::string_view lstrip(std::string_view str, std::string_view chars);
 
 std::string strip(const std::string &str,
                   const std::string &chars = " \t\n\v\f\r");
@@ -59,6 +53,15 @@ std::string strip(const std::string &str,
 std::pair<std::string, std::string> nextField(
     const std::string &str, const std::string &chars = " \t\n\v\f\r");
 
+<<<<<<< HEAD
+=======
+std::string replace_first(const std::string &str, const std::string &from,
+                          const std::string &to);
+
+std::string replace_all(const std::string &str, const std::string &from,
+                        const std::string &to);
+
+>>>>>>> upstream/master
 std::string from_multi_line(const std::string &str);
 std::string to_multi_line(const std::string &str);
 

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -27,6 +28,19 @@
 from cmk.gui.i18n import _
 from cmk.gui.valuespec import (
     Integer,
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+from cmk.gui.i18n import _
+from cmk.gui.valuespec import (
+    Age,
+    Dictionary,
+    Transform,
+>>>>>>> upstream/master
     Tuple,
 )
 
@@ -38,6 +52,7 @@ from cmk.gui.plugins.wato import (
 
 
 def _parameter_valuespec_systemtime():
+<<<<<<< HEAD
     return Tuple(
         title=_("Time offset"),
         elements=[
@@ -45,6 +60,25 @@ def _parameter_valuespec_systemtime():
             Integer(title=_("Critical at"), unit=_("Seconds")),
         ],
     )
+=======
+    return Transform(Dictionary(
+        title="Time offset",
+        elements=[
+            (
+                "levels",
+                Tuple(
+                    title=_("Levels on time offset"),
+                    elements=[
+                        Age(title=_("Warning at"), default_value=30),
+                        Age(title=_("Critical at"), default_value=60),
+                    ],
+                ),
+            ),
+        ],
+        optional_keys=False,
+    ),
+                     forth=lambda v: {'levels': v} if isinstance(v, tuple) else v)
+>>>>>>> upstream/master
 
 
 rulespec_registry.register(

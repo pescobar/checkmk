@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -24,6 +25,19 @@
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
 
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# NOTE: Careful when replacing the *-import below with a more specific import. This can cause
+# problems because it might remove variables from the check-context which are necessary for
+# resolving legacy discovery results such as [("SUMMARY", "diskstat_default_levels")]. Furthermore,
+# it might also remove variables needed for accessing discovery rulesets.
+from cmk.base.check_legacy_includes.f5_bigip import *  # pylint: disable=wildcard-import,unused-wildcard-import
+>>>>>>> upstream/master
 # Agent / MIB output
 #SysChassisPowerSupplyEntry ::=
 #        SEQUENCE {
@@ -63,15 +77,22 @@ def check_f5_bigip_psu(item, _no_params, info):
 
     return (3, "item not found in SNMP output")
 
+
 check_info["f5_bigip_psu"] = {
-    'check_function':          check_f5_bigip_psu,
-    'inventory_function':      inventory_f5_bigip_psu,
-    'service_description':     'PSU %s',
+    'check_function': check_f5_bigip_psu,
+    'inventory_function': inventory_f5_bigip_psu,
+    'service_description': 'PSU %s',
     # Get ID and status from the SysChassisPowerSupplyTable
+<<<<<<< HEAD
     'snmp_info':               ('.1.3.6.1.4.1.3375.2.1.3.2.2.2.1', [1, 2]),
     'snmp_scan_function':
     # Check using the vendor mib Id and verify it's a loadbalancer
 
      lambda oid: '.1.3.6.1.4.1.3375.2' in oid(".1.3.6.1.2.1.1.2.0") \
                  and "big-ip" in oid(".1.3.6.1.4.1.3375.2.1.4.1.0").lower(),
+=======
+    'snmp_info': ('.1.3.6.1.4.1.3375.2.1.3.2.2.2.1', [1, 2]),
+    'snmp_scan_function':  # Check using the vendor mib Id and verify it's a loadbalancer
+        scan_f5_bigip,
+>>>>>>> upstream/master
 }

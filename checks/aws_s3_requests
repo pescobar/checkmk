@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -27,6 +28,23 @@
 
 def parse_aws_s3(info):  # pylint: disable=function-redefined
     parsed = _extract_aws_metrics_by_labels([
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# NOTE: Careful when replacing the *-import below with a more specific import. This can cause
+# problems because it might remove variables from the check-context which are necessary for
+# resolving legacy discovery results such as [("SUMMARY", "diskstat_default_levels")]. Furthermore,
+# it might also remove variables needed for accessing discovery rulesets.
+from cmk.base.check_legacy_includes.aws import *  # pylint: disable=wildcard-import,unused-wildcard-import
+
+
+def parse_aws_s3(info):  # pylint: disable=function-redefined
+    parsed = extract_aws_metrics_by_labels([
+>>>>>>> upstream/master
         "AllRequests",
         "GetRequests",
         "PutRequests",
@@ -41,8 +59,13 @@ def parse_aws_s3(info):  # pylint: disable=function-redefined
         "TotalRequestLatency",
         "BytesDownloaded",
         "BytesUploaded",
+<<<<<<< HEAD
         "SelectScannedBytes",
         "SelectReturnedBytes",
+=======
+        "SelectBytesScanned",
+        "SelectBytesReturned",
+>>>>>>> upstream/master
     ], parse_aws(info))
     return parsed
 
@@ -57,12 +80,21 @@ def parse_aws_s3(info):  # pylint: disable=function-redefined
 #   '----------------------------------------------------------------------'
 
 
+<<<<<<< HEAD
 @get_parsed_item_data
 def check_aws_s3_requests(item, params, metrics):
     now = time.time()
     all_requests_rate = get_rate('aws_s3_http_errors_all_requests.%s' % item, now,
                                  metrics['AllRequests'])
     yield 0, 'Total: %s/s' % all_requests_rate
+=======
+@aws_get_parsed_item_data
+def check_aws_s3_requests(item, params, metrics):
+    all_requests_rate = metrics.get('AllRequests')
+    if all_requests_rate is None:
+        raise MKCounterWrapped("Currently no data from AWS")
+    yield 0, 'Total: %s' % aws_get_counts_rate_human_readable(all_requests_rate)
+>>>>>>> upstream/master
 
     for key, perf_key, title in [
         ("GetRequests", "get_requests", "Get"),
@@ -73,16 +105,25 @@ def check_aws_s3_requests(item, params, metrics):
         ("SelectRequests", "select_requests", "Select"),
         ("ListRequests", "list_requests", "List"),
     ]:
+<<<<<<< HEAD
         requests = metrics.get(key)
         if requests is None:
             continue
 
         requests_rate = get_rate('aws_s3_%s.%s' % (perf_key, item), now, requests)
         yield 0, '%s: %s/s' % (title, requests_rate), [(perf_key, requests_rate)]
+=======
+        requests_rate = metrics.get(key, 0)
+
+        yield 0, '%s: %s' % (title, aws_get_counts_rate_human_readable(requests_rate)), [
+            (perf_key, requests_rate)
+        ]
+>>>>>>> upstream/master
 
         try:
             requests_perc = 100.0 * requests_rate / all_requests_rate
         except ZeroDivisionError:
+<<<<<<< HEAD
             pass
         else:
             yield check_levels(requests_perc,
@@ -90,15 +131,30 @@ def check_aws_s3_requests(item, params, metrics):
                                params.get('levels_%s_perc' % perf_key),
                                human_readable_func=get_percent_human_readable,
                                infoname="%s of total requests" % title)
+=======
+            requests_perc = 0
+
+        yield check_levels(requests_perc,
+                           '%s_perc' % perf_key,
+                           params.get('%s_perc' % perf_key),
+                           human_readable_func=get_percent_human_readable,
+                           infoname="%s of total requests" % title)
+>>>>>>> upstream/master
 
 
 check_info['aws_s3_requests'] = {
     'parse_function': parse_aws_s3,
+<<<<<<< HEAD
     'inventory_function': lambda p:\
         inventory_aws_generic(p, ['AllRequests']),
     'check_function': check_aws_s3_requests,
     'service_description': 'AWS/S3 Requests %s',
     'includes': ['aws.include'],
+=======
+    'inventory_function': lambda p: inventory_aws_generic(p, ['AllRequests']),
+    'check_function': check_aws_s3_requests,
+    'service_description': 'AWS/S3 Requests %s',
+>>>>>>> upstream/master
     'has_perfdata': True,
     'group': 'aws_s3_requests',
 }
@@ -114,6 +170,7 @@ check_info['aws_s3_requests'] = {
 #   '----------------------------------------------------------------------'
 
 
+<<<<<<< HEAD
 @get_parsed_item_data
 def check_aws_s3_http_errors(item, params, metrics):
     now = time.time()
@@ -146,6 +203,21 @@ check_info['aws_s3_requests.http_errors'] = {
     'check_function': check_aws_s3_http_errors,
     'service_description': 'AWS/S3 HTTP Errors %s',
     'includes': ['aws.include'],
+=======
+@aws_get_parsed_item_data
+def check_aws_s3_http_errors(item, params, metrics):
+    return check_aws_http_errors(params.get("levels_load_balancers", params),
+                                 metrics, ['4xx', '5xx'],
+                                 '%sErrors',
+                                 key_all_requests='AllRequests')
+
+
+check_info['aws_s3_requests.http_errors'] = {
+    'inventory_function': lambda p: inventory_aws_generic(
+        p, ['AllRequests', '4xxErrors', '5xxErrors']),
+    'check_function': check_aws_s3_http_errors,
+    'service_description': 'AWS/S3 HTTP Errors %s',
+>>>>>>> upstream/master
     'has_perfdata': True,
     'group': 'aws_s3_http_errors',
 }
@@ -161,6 +233,7 @@ check_info['aws_s3_requests.http_errors'] = {
 #   '----------------------------------------------------------------------'
 
 
+<<<<<<< HEAD
 @get_parsed_item_data
 def check_aws_s3_latency(item, params, metrics):
     yield check_levels(metrics['TotalRequestLatency'] / 1000.0,
@@ -180,6 +253,41 @@ check_info['aws_s3_requests.latency'] = {
     'check_function': check_aws_s3_latency,
     'service_description': 'AWS/S3 Latency %s',
     'includes': ['aws.include'],
+=======
+@aws_get_parsed_item_data
+def check_aws_s3_latency(item, params, metrics):
+    metric_infos = []
+    for key, title, perf_key in [
+        ("TotalRequestLatency", "Total request latency", "aws_request_latency"),
+        ("FirstByteLatency", "First byte latency", None),
+    ]:
+        metric_val = metrics.get(key)
+        if metric_val:
+            metric_val *= 1e-3
+
+        if perf_key is None:
+            levels = None
+        else:
+            levels = params.get("levels_seconds")
+            if levels is not None:
+                levels = tuple([level * 1e-3 for level in levels])
+
+        metric_infos.append({
+            'metric_val': metric_val,
+            'metric_name': perf_key,
+            'levels': levels,
+            'info_name': title,
+            'human_readable_func': get_age_human_readable
+        })
+
+    return check_aws_metrics(metric_infos)
+
+
+check_info['aws_s3_requests.latency'] = {
+    'inventory_function': lambda p: inventory_aws_generic(p, ['TotalRequestLatency']),
+    'check_function': check_aws_s3_latency,
+    'service_description': 'AWS/S3 Latency %s',
+>>>>>>> upstream/master
     'has_perfdata': True,
     'group': 'aws_s3_latency',
 }
@@ -195,6 +303,7 @@ check_info['aws_s3_requests.latency'] = {
 #   '----------------------------------------------------------------------'
 
 
+<<<<<<< HEAD
 @get_parsed_item_data
 def check_aws_s3_traffic_stats(item, params, metrics):
     for key, title, perf_key in [
@@ -211,6 +320,25 @@ check_info['aws_s3_requests.traffic_stats'] = {
     'check_function': check_aws_s3_traffic_stats,
     'service_description': 'AWS/S3 Traffic Stats %s',
     'includes': ['aws.include'],
+=======
+@aws_get_parsed_item_data
+def check_aws_s3_traffic_stats(item, params, metrics):
+    return check_aws_metrics([{
+        'metric_val': metrics.get(key),
+        'metric_name': perf_key,
+        'info_name': title,
+        'human_readable_func': aws_get_bytes_rate_human_readable
+    } for key, title, perf_key in [
+        ("BytesDownloaded", "Downloads", "aws_s3_downloads"),
+        ("BytesUploaded", "Uploads", "aws_s3_uploads"),
+    ]])
+
+
+check_info['aws_s3_requests.traffic_stats'] = {
+    'inventory_function': lambda p: inventory_aws_generic(p, ['BytesDownloaded', 'BytesUploaded']),
+    'check_function': check_aws_s3_traffic_stats,
+    'service_description': 'AWS/S3 Traffic Stats %s',
+>>>>>>> upstream/master
     'has_perfdata': True,
 }
 
@@ -225,6 +353,7 @@ check_info['aws_s3_requests.traffic_stats'] = {
 #   '----------------------------------------------------------------------'
 
 
+<<<<<<< HEAD
 @get_parsed_item_data
 def check_aws_s3_select_object(item, params, metrics):
     # In the agent we use "Sum" which means: bytes per period (300s)
@@ -243,5 +372,25 @@ check_info['aws_s3_requests.select_object'] = {
     'check_function': check_aws_s3_select_object,
     'service_description': 'AWS/S3 SELECT Object %s',
     'includes': ['aws.include'],
+=======
+@aws_get_parsed_item_data
+def check_aws_s3_select_object(item, params, metrics):
+    return check_aws_metrics([{
+        'metric_val': metrics.get(key),
+        'metric_name': perf_key,
+        'info_name': title,
+        'human_readable_func': aws_get_bytes_rate_human_readable
+    } for key, title, perf_key in [
+        ("SelectBytesScanned", "Scanned", "aws_s3_select_object_scanned"),
+        ("SelectBytesReturned", "Returned", "aws_s3_select_object_returned"),
+    ]])
+
+
+check_info['aws_s3_requests.select_object'] = {
+    'inventory_function': lambda p: inventory_aws_generic(
+        p, ['SelectBytesScanned', 'SelectBytesReturned']),
+    'check_function': check_aws_s3_select_object,
+    'service_description': 'AWS/S3 SELECT Object %s',
+>>>>>>> upstream/master
     'has_perfdata': True,
 }

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/env python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,6 +24,13 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 import json
 
@@ -30,7 +38,11 @@ from cmk.gui.i18n import _
 from cmk.gui.globals import html
 import cmk.gui.sites as sites
 
+<<<<<<< HEAD
 from . import SidebarSnapin, snapin_registry
+=======
+from cmk.gui.plugins.sidebar import SidebarSnapin, snapin_registry
+>>>>>>> upstream/master
 
 
 @snapin_registry.register
@@ -53,6 +65,7 @@ class Speedometer(SidebarSnapin):
     def show(self):
         html.open_div(class_="speedometer")
         html.img(html.theme_url("images/speedometer.png"), id_="speedometerbg")
+<<<<<<< HEAD
         html.canvas('', width=228, height=136, id_="speedometer")
         html.close_div()
 
@@ -163,6 +176,12 @@ function move_needle(from_perc, to_perc)
 
 speedometer_show_speed(0, 0, 0);
 """)
+=======
+        html.canvas('', width="228", height="136", id_="speedometer")
+        html.close_div()
+
+        html.javascript("cmk.sidebar.speedometer_show_speed(0, 0, 0);")
+>>>>>>> upstream/master
 
     @classmethod
     def allowed_roles(cls):
@@ -179,9 +198,16 @@ speedometer_show_speed(0, 0, 0);
             # Try to get values from last call in order to compute
             # driftig speedometer-needle and to reuse the scheduled
             # check reate.
+<<<<<<< HEAD
             last_perc = float(html.request.var("last_perc"))
             scheduled_rate = float(html.request.var("scheduled_rate"))
             last_program_start = int(html.request.var("program_start"))
+=======
+            # TODO: Do we need a get_float_input_mandatory?
+            last_perc = float(html.request.get_str_input_mandatory("last_perc"))
+            scheduled_rate = float(html.request.get_str_input_mandatory("scheduled_rate"))
+            last_program_start = html.request.get_integer_input_mandatory("program_start")
+>>>>>>> upstream/master
 
             # Get the current rates and the program start time. If there
             # are more than one site, we simply add the start times.
@@ -196,7 +222,11 @@ speedometer_show_speed(0, 0, 0);
             # That way we save CPU resources since the computation of the
             # scheduled checks rate needs to loop over all hosts and services.
             if last_program_start != program_start:
+<<<<<<< HEAD
                 # These days, we configure the correct check interval for Check_MK checks.
+=======
+                # These days, we configure the correct check interval for Checkmk checks.
+>>>>>>> upstream/master
                 # We do this correctly for active and for passive ones. So we can simply
                 # use the check_interval of all services. Hosts checks are ignored.
                 #
@@ -218,6 +248,7 @@ speedometer_show_speed(0, 0, 0);
             last_perc = 0.0
             title = _("No performance data: %s") % e
 
+<<<<<<< HEAD
         data = {
             "scheduled_rate": scheduled_rate,
             "program_start": program_start,
@@ -227,3 +258,13 @@ speedometer_show_speed(0, 0, 0);
         }
 
         html.write(json.dumps(data))
+=======
+        html.write(
+            json.dumps({
+                "scheduled_rate": scheduled_rate,
+                "program_start": program_start,
+                "percentage": percentage,
+                "last_perc": last_perc,
+                "title": title,
+            }))
+>>>>>>> upstream/master

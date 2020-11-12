@@ -14,5 +14,9 @@ perfdata:
  One graph for the Temperature.
 
 inventory:
+<<<<<<< HEAD
  All available temperature sensors are automatically discovered.
+=======
+ One service is created for ech available temperature sensor.
+>>>>>>> upstream/master
 

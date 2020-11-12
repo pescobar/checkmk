@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/env python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -29,6 +30,18 @@ from typing import List, Tuple as TypingTuple  # pylint: disable=unused-import
 from cmk.gui.i18n import _
 from cmk.gui.exceptions import MKUserError
 from cmk.gui.valuespec import ValueSpec  # pylint: disable=unused-import
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+"""Module to hold shared code for check parameter module internals"""
+
+from typing import List, Tuple as _Tuple
+from cmk.gui.i18n import _
+from cmk.gui.exceptions import MKUserError
+>>>>>>> upstream/master
 from cmk.gui.valuespec import (
     Alternative,
     CascadingDropdown,
@@ -42,8 +55,15 @@ from cmk.gui.valuespec import (
     ListOf,
     Optional,
     Percentage,
+<<<<<<< HEAD
     Transform,
     Tuple,
+=======
+    TextAscii,
+    Transform,
+    Tuple,
+    ValueSpec,
+>>>>>>> upstream/master
 )
 from cmk.gui.plugins.wato import PredictiveLevels
 
@@ -73,7 +93,11 @@ def get_free_used_dynamic_valuespec(what, name, default_value=(80.0, 90.0)):
         title = _("free space")
         course = _("below")
 
+<<<<<<< HEAD
     vs_subgroup = [
+=======
+    vs_subgroup: List[ValueSpec] = [
+>>>>>>> upstream/master
         Tuple(title=_("Percentage %s") % title,
               elements=[
                   Percentage(title=_("Warning if %s") % course, unit="%", minvalue=0.0),
@@ -92,7 +116,10 @@ def get_free_used_dynamic_valuespec(what, name, default_value=(80.0, 90.0)):
 
     return Alternative(
         title=_("Levels for %s %s") % (name, title),
+<<<<<<< HEAD
         style="dropdown",
+=======
+>>>>>>> upstream/master
         show_alternative_title=True,
         default_value=default_value,
         elements=vs_subgroup + [
@@ -152,7 +179,11 @@ fs_levels_elements = [
 ]
 
 # Note: This hack is only required on very old filesystem checks (prior August 2013)
+<<<<<<< HEAD
 fs_levels_elements_hack = [
+=======
+fs_levels_elements_hack: List[_Tuple[str, ValueSpec]] = [
+>>>>>>> upstream/master
     # Beware: this is a nasty hack that helps us to detect new-style parameters.
     # Something hat has todo with float/int conversion and has not been documented
     # by the one who implemented this.
@@ -161,9 +192,15 @@ fs_levels_elements_hack = [
         totext="",
         title="",
     )),
+<<<<<<< HEAD
 ]  # type: List[TypingTuple[str, ValueSpec]]
 
 fs_reserved_elements = [
+=======
+]
+
+fs_reserved_elements: List[_Tuple[str, ValueSpec]] = [
+>>>>>>> upstream/master
     ("show_reserved",
      DropdownChoice(
          title=_("Show space reserved for the <tt>root</tt> user"),
@@ -189,7 +226,11 @@ fs_reserved_elements = [
              (False, _("Include reserved space")),
              (True, _("Exclude reserved space")),
          ])),
+<<<<<<< HEAD
 ]  # type: List[TypingTuple[str, ValueSpec]]
+=======
+]
+>>>>>>> upstream/master
 
 fs_inodes_elements = [
     ("inodes_levels",
@@ -316,12 +357,20 @@ size_trend_elements = [
               label=_("Enable generation of performance data from trends"))),
 ]
 
+<<<<<<< HEAD
 filesystem_elements = fs_levels_elements \
+=======
+filesystem_elements: List[_Tuple[str, ValueSpec]] = fs_levels_elements \
+>>>>>>> upstream/master
                     + fs_levels_elements_hack \
                     + fs_reserved_elements \
                     + fs_inodes_elements \
                     + fs_magic_elements \
+<<<<<<< HEAD
                     + size_trend_elements # type: List[TypingTuple[str, ValueSpec]]
+=======
+                    + size_trend_elements
+>>>>>>> upstream/master
 
 
 def vs_filesystem(extra_elements=None):
@@ -331,7 +380,11 @@ def vs_filesystem(extra_elements=None):
         help=_("This ruleset allows to set parameters for space and inodes usage"),
         elements=filesystem_elements + extra_elements,
         hidden_keys=["flex_levels"],
+<<<<<<< HEAD
         ignored_keys=["patterns"],
+=======
+        ignored_keys=["patterns", "include_volume_name"],
+>>>>>>> upstream/master
     )
 
 
@@ -361,3 +414,22 @@ def vs_interface_traffic():
                                  ("upper", _("Upper"), vs_abs_perc()),
                                  ("lower", _("Lower"), vs_abs_perc()),
                              ])
+<<<<<<< HEAD
+=======
+
+
+def mssql_item_spec_instance_tablespace() -> TextAscii:
+    return TextAscii(
+        title=_("Instance & tablespace name"),
+        help=_("The MSSQL instance name and the tablespace name separated by a space."),
+        allow_empty=False,
+    )
+
+
+def mssql_item_spec_instance_database_file() -> TextAscii:
+    return TextAscii(
+        title=_("Instance, database & file name"),
+        help=_("A combination of the instance, database and (logical) file name."),
+        allow_empty=False,
+    )
+>>>>>>> upstream/master

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -30,6 +31,19 @@ from . import (
     builtin_dashboards,
     GROW,
     MAX,
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+from cmk.gui.i18n import _
+
+from cmk.gui.plugins.dashboard import (
+    builtin_dashboards,
+    GROW,
+>>>>>>> upstream/master
 )
 
 builtin_dashboards["main"] = {
@@ -38,7 +52,13 @@ builtin_dashboards["main"] = {
     "mtime": 0,
     "show_title": True,
     "title": _("Main Overview"),
+<<<<<<< HEAD
     "topic": _("Overview"),
+=======
+    "topic": "overview",
+    "sort_index": 10,
+    "icon": "dashboard",
+>>>>>>> upstream/master
     "description": _("This dashboard gives you a general overview on the state of your "
                      "monitored devices."),
     "dashlets": [
@@ -117,7 +137,11 @@ builtin_dashboards["main"] = {
             "title": _("Service Problems (unhandled)"),
             "title_url": "view.py?view_name=svcproblems&is_service_acknowledged=0",
             "position": (1, 19),
+<<<<<<< HEAD
             "size": (GROW, MAX),
+=======
+            "size": (GROW, GROW),
+>>>>>>> upstream/master
             "show_title": True,
             'browser_reload': 30,
             'column_headers': 'pergroup',
@@ -184,7 +208,10 @@ builtin_dashboards["main"] = {
             },
             'hidden': True,
             'layout': 'table',
+<<<<<<< HEAD
             'linktitle': 'Events',
+=======
+>>>>>>> upstream/master
             'mustsearch': False,
             'name': 'dashlet_4',
             'num_columns': 1,
@@ -198,6 +225,7 @@ builtin_dashboards["main"] = {
     ]
 }
 
+<<<<<<< HEAD
 builtin_dashboards["topology"] = {
     "single_infos": [],
     "context": {},
@@ -221,13 +249,22 @@ builtin_dashboards["topology"] = {
     }],
 }
 
+=======
+>>>>>>> upstream/master
 builtin_dashboards["simple_problems"] = {
     "single_infos": [],
     "context": {},
     "mtime": 0,
     "show_title": True,
+<<<<<<< HEAD
     "title": _("Host & Services Problems"),
     "topic": _("Overview"),
+=======
+    "title": _("Host & service problems"),
+    "topic": "problems",
+    "icon": "host_svc_problems",
+    "sort_index": 10,
+>>>>>>> upstream/master
     "description": _("A compact dashboard which lists your unhandled host and service problems."),
     "dashlets": [
         {
@@ -280,7 +317,11 @@ builtin_dashboards["simple_problems"] = {
             "title_url": "view.py?view_name=svcproblems&is_service_acknowledged=0",
             "show_title": True,
             "position": (1, 19),
+<<<<<<< HEAD
             "size": (GROW, MAX),
+=======
+            "size": (GROW, GROW),
+>>>>>>> upstream/master
             'browser_reload': 30,
             'column_headers': 'pergroup',
             'datasource': 'services',
@@ -328,3 +369,299 @@ builtin_dashboards["simple_problems"] = {
         },
     ]
 }
+<<<<<<< HEAD
+=======
+
+builtin_dashboards["cmk_overview"] = {
+    "topic": "analyze",
+    "sort_index": 70,
+    'name': 'cmk_overview',
+    'hidebutton': False,
+    'title': u'Checkmk overview',
+    'description': u'Displays an overview of all Checkmk servers and instances\n',
+    'add_context_to_title': False,
+    'link_from': {},
+    'context': {},
+    'hidden': False,
+    "mtime": 0,
+    'show_title': True,
+    'dashlets': [{
+        'background': True,
+        'type': 'linked_view',
+        'name': 'cmk_servers',
+        'add_context_to_title': True,
+        'link_from': {},
+        'context': {},
+        'position': (1, 1),
+        'show_title': True,
+        'single_infos': [],
+        'size': (0, 0)
+    }, {
+        'name': 'cmk_sites',
+        'title': u'Site overview',
+        'show_title': True,
+        'background': True,
+        'add_context_to_title': True,
+        'link_from': {},
+        'context': {},
+        'position': (1, 47),
+        'type': 'linked_view',
+        'single_infos': [],
+        'size': (0, 0)
+    }],
+    'single_infos': [],
+    'icon': 'checkmk'
+}
+
+builtin_dashboards['cmk_host'] = {
+    'add_context_to_title': True,
+    'description': u'Display information relevant for the Checkmk performance\n',
+    'link_from': {
+        'single_infos': ['host'],
+        'host_labels': {
+            'cmk/check_mk_server': 'yes'
+        }
+    },
+    'title': u'Checkmk server',
+    'hidebutton': False,
+    'dashlets': [{
+        'show_title': True,
+        'link_from': {},
+        'background': True,
+        'add_context_to_title': True,
+        'context': {},
+        'position': (-1, 29),
+        'size': (0, 0),
+        'type': 'linked_view',
+        'single_infos': [],
+        'name': 'cmk_sites_of_host'
+    }, {
+        'context': {
+            'service': u'CPU load'
+        },
+        'link_from': {},
+        'type': 'single_metric',
+        'time_range': 'current',
+        'metric': u'load5',
+        'add_context_to_title': True,
+        'render_options': {
+            'show_site': 'false',
+            'font_size': 'dynamic',
+            'show_state_color': 'background',
+            'show_metric': 'tooltip',
+            'show_unit': 'true',
+            'link_to_svc_detail': 'true',
+            'show_host': 'false',
+            'show_service': ('above', 12.0)
+        },
+        'background': True,
+        'position': (1, 1),
+        'show_title': False,
+        'single_infos': ['service', 'host'],
+        'size': (26, 14)
+    }, {
+        'add_context_to_title': True,
+        'context': {
+            'service': u'Disk IO SUMMARY'
+        },
+        'background': True,
+        'link_from': {},
+        'timerange': '1',
+        'graph_render_options': {
+            'font_size': 8.0,
+            'show_graph_time': True,
+            'show_time_axis': True,
+            'foreground_color': 'default',
+            'title_format': 'plain',
+            'canvas_color': 'default',
+            'show_legend': False,
+            'show_title': True,
+            'show_margin': True,
+            'vertical_axis_width': 'fixed',
+            'show_controls': False,
+            'show_pin': True,
+            'background_color': 'default',
+            'show_vertical_axis': True
+        },
+        'source': 8,
+        'show_title': False,
+        'position': (-36, 15),
+        'type': 'pnpgraph',
+        'single_infos': ['service', 'host'],
+        'size': (0, 14)
+    }, {
+        'add_context_to_title': True,
+        'context': {
+            'service': u'Kernel Performance'
+        },
+        'background': True,
+        'link_from': {},
+        'timerange': '1',
+        'graph_render_options': {
+            'font_size': 8.0,
+            'show_graph_time': True,
+            'show_time_axis': True,
+            'foreground_color': 'default',
+            'title_format': 'plain',
+            'canvas_color': 'default',
+            'show_legend': False,
+            'show_title': True,
+            'show_margin': True,
+            'vertical_axis_width': 'fixed',
+            'show_controls': False,
+            'show_pin': True,
+            'background_color': 'default',
+            'show_vertical_axis': True
+        },
+        'source': 2,
+        'show_title': False,
+        'position': (27, 15),
+        'type': 'pnpgraph',
+        'single_infos': ['service', 'host'],
+        'size': (0, 14)
+    }, {
+        'add_context_to_title': True,
+        'context': {
+            'service': u'Memory'
+        },
+        'link_from': {},
+        'type': 'pnpgraph',
+        'timerange': '1',
+        'graph_render_options': {
+            'font_size': 8.0,
+            'show_graph_time': True,
+            'show_time_axis': True,
+            'foreground_color': 'default',
+            'title_format': 'plain',
+            'vertical_axis_width': 'fixed',
+            'show_legend': False,
+            'show_title': True,
+            'show_margin': True,
+            'canvas_color': 'default',
+            'show_controls': False,
+            'show_pin': True,
+            'background_color': 'default',
+            'show_vertical_axis': True
+        },
+        'source': 1,
+        'background': True,
+        'position': (27, 1),
+        'show_title': False,
+        'single_infos': ['service', 'host'],
+        'size': (0, 14)
+    }, {
+        'add_context_to_title': True,
+        'context': {
+            'host': u'heute',
+            'service': u'Disk IO SUMMARY'
+        },
+        'background': True,
+        'link_from': {},
+        'timerange': '1',
+        'graph_render_options': {
+            'font_size': 8.0,
+            'show_graph_time': True,
+            'show_time_axis': True,
+            'foreground_color': 'default',
+            'title_format': 'plain',
+            'vertical_axis_width': 'fixed',
+            'show_legend': False,
+            'show_title': True,
+            'show_margin': True,
+            'canvas_color': 'default',
+            'show_controls': False,
+            'show_pin': True,
+            'background_color': 'default',
+            'show_vertical_axis': True
+        },
+        'source': 2,
+        'show_title': False,
+        'position': (-36, 1),
+        'type': 'pnpgraph',
+        'single_infos': ['service', 'host'],
+        'size': (0, 14)
+    }, {
+        'context': {
+            'service': u'Filesystem /'
+        },
+        'link_from': {},
+        'type': 'single_metric',
+        'time_range': 'current',
+        'metric': u'fs_used',
+        'add_context_to_title': True,
+        'render_options': {
+            'show_site': 'false',
+            'font_size': 'dynamic',
+            'show_state_color': 'background',
+            'show_metric': 'tooltip',
+            'show_service': ('above', 12.0),
+            'link_to_svc_detail': 'true',
+            'show_host': 'false',
+            'show_unit': 'true'
+        },
+        'background': True,
+        'position': (1, 15),
+        'show_title': False,
+        'single_infos': ['host', 'service'],
+        'size': (26, 14)
+    }, {
+        'force_checkboxes': False,
+        'background': True,
+        'play_sounds': False,
+        'num_columns': 1,
+        'size': (35, 28),
+        'group_painters': [],
+        'layout': 'table',
+        'title': u'Network',
+        'painters': [
+            ('service_state', None, None),
+            ('service_description', None, None),
+            ('perfometer', None, None),
+        ],
+        'column_headers': 'off',
+        'type': 'view',
+        'columns': {
+            'columns': [
+                ('service_state', None, None),
+                ('service_description', None, None),
+                ('perfometer', None, None),
+            ]
+        },
+        'link_from': {},
+        'visibility': {},
+        'add_context_to_title': True,
+        'user_sortable': False,
+        'show_title': True,
+        'grouping': {
+            'grouping': []
+        },
+        'sorting': {
+            'sorters': [('svcdescr', False)]
+        },
+        'name': 'dashlet_7',
+        'mobile': False,
+        'browser_reload': 0,
+        'sorters': [('svcdescr', False)],
+        'datasource': 'services',
+        'context': {
+            'serviceregex': {
+                'service_regex': 'Interface',
+                'neg_service_regex': ''
+            }
+        },
+        'position': (-1, 1),
+        'single_infos': ['host'],
+        'mustsearch': False
+    }],
+    'name': 'cmk_host',
+    'topic': 'applications',
+    'context': {},
+    'mtime': 0,
+    'owner': '',
+    'hidden': True,
+    'show_title': True,
+    'public': False,
+    'single_infos': ['host'],
+    'icon': 'checkmk'
+}
+>>>>>>> upstream/master

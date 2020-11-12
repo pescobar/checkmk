@@ -15,7 +15,19 @@ kind: ClusterRole
 metadata:
   name: check-mk
 rules:
+<<<<<<< HEAD
 - apiGroups: [""]
+=======
+- apiGroups:
+  - ""
+  - storage.k8s.io
+  - rbac.authorization.k8s.io
+  - apps
+  - extensions
+  - batch
+  - autoscaling
+  - networking.k8s.io/v1beta1
+>>>>>>> upstream/master
   resources:
   - componentstatuses
   - nodes
@@ -31,6 +43,7 @@ rules:
   - persistentvolumes
   - namespaces
   - endpoints
+<<<<<<< HEAD
   verbs: ["get", "list"]
 - apiGroups: ["storage.k8s.io"]
   resources:
@@ -43,10 +56,16 @@ rules:
   verbs: ["get", "list"]
 - apiGroups: ["extensions"]
   resources:
+=======
+  - storageclasses
+  - clusterroles
+  - roles
+>>>>>>> upstream/master
   - daemonsets
   - deployments
   - replicasets
   - ingresses
+<<<<<<< HEAD
   verbs: ["get", "list"]
 - apiGroups: ["apps"]
   resources:
@@ -61,6 +80,13 @@ rules:
   resources:
   - horizontalpodautoscalers
   verbs: ["list", "watch"]
+=======
+  - statefulsets
+  - cronjobs
+  - jobs
+  - horizontalpodautoscalers
+  verbs: ["get", "list"]
+>>>>>>> upstream/master
 - apiGroups:
   - custom.metrics.k8s.io
   resources: ["*"]

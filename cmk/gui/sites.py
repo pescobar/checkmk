@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -32,6 +33,33 @@ from cmk.utils.paths import livestatus_unix_socket
 import cmk.gui.config as config
 from cmk.gui.config import SiteId, SiteConfiguration, SiteConfigurations, LoggedInUser  # pylint: disable=unused-import
 from cmk.gui.globals import g, html
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+from contextlib import contextmanager
+from typing import Any, cast, Dict, Iterator, List, NewType, Optional, Tuple, Union
+
+from livestatus import (
+    MultiSiteConnection,
+    MKLivestatusQueryError,
+    SiteId,
+    SiteConfiguration,
+    SiteConfigurations,
+)
+
+from cmk.utils.version import is_managed_edition
+
+from cmk.utils.paths import livestatus_unix_socket
+from cmk.utils.type_defs import UserId
+
+import cmk.gui.config as config
+from cmk.gui.globals import g, request
+from cmk.gui.config import LoggedInUser
+>>>>>>> upstream/master
 
 #   .--API-----------------------------------------------------------------.
 #   |                             _    ____ ___                            |
@@ -45,8 +73,13 @@ from cmk.gui.globals import g, html
 #   '----------------------------------------------------------------------'
 
 
+<<<<<<< HEAD
 def live(user=None, force_authuser=None):
     # type: (Optional[LoggedInUser], Optional[str]) -> MultiSiteConnection
+=======
+def live(user: Optional[LoggedInUser] = None,
+         force_authuser: Optional[UserId] = None) -> MultiSiteConnection:
+>>>>>>> upstream/master
     """Get Livestatus connection object matching the current site configuration
        and user settings. On the first call the actual connection is being made."""
     _ensure_connected(user, force_authuser)
@@ -57,30 +90,50 @@ SiteStatus = NewType('SiteStatus', Dict[str, Any])
 SiteStates = NewType('SiteStates', Dict[SiteId, SiteStatus])
 
 
+<<<<<<< HEAD
 def states(user=None, force_authuser=None):
     # type: (Optional[LoggedInUser], Optional[str]) -> SiteStates
+=======
+def states(user: Optional[LoggedInUser] = None,
+           force_authuser: Optional[UserId] = None) -> SiteStates:
+>>>>>>> upstream/master
     """Returns dictionary of all known site states."""
     _ensure_connected(user, force_authuser)
     return g.site_status
 
 
+<<<<<<< HEAD
 def disconnect():
     # type: () -> None
+=======
+def disconnect() -> None:
+>>>>>>> upstream/master
     """Actively closes all Livestatus connections."""
     g.pop('live', None)
     g.pop('site_status', None)
 
 
 # TODO: This should live somewhere else, it's just a random helper...
+<<<<<<< HEAD
 def all_groups(what):
     # type: (str) -> List[Tuple[str, str]]
+=======
+def all_groups(what: str) -> List[Tuple[str, str]]:
+>>>>>>> upstream/master
     """Returns a list of host/service/contact groups (pairs of name/alias)
 
     Groups are collected via livestatus from all sites. In case no alias is defined
     the name is used as second element. The list is sorted by lower case alias in the first place."""
+<<<<<<< HEAD
     groups = live().query("GET %sgroups\nCache: reload\nColumns: name alias\n" % what)
     # The dict() removes duplicate group names. Aliases don't need be deduplicated.
     return sorted([(name, alias or name) for name, alias in dict(groups).iteritems()],
+=======
+    query = "GET %sgroups\nCache: reload\nColumns: name alias\n" % what
+    groups = cast(List[Tuple[str, str]], live().query(query))
+    # The dict() removes duplicate group names. Aliases don't need be deduplicated.
+    return sorted([(name, alias or name) for name, alias in dict(groups).items()],
+>>>>>>> upstream/master
                   key=lambda e: e[1].lower())
 
 
@@ -108,6 +161,7 @@ def all_groups(what):
 
 
 # Build up a connection to livestatus to either a single site or multiple sites.
+<<<<<<< HEAD
 def _ensure_connected(user, force_authuser):
     # type: (Optional[LoggedInUser], Optional[str]) -> None
     if 'live' in g:
@@ -116,18 +170,39 @@ def _ensure_connected(user, force_authuser):
         user = config.user
     if force_authuser is None:
         force_authuser = html.request.var("force_authuser")
+=======
+def _ensure_connected(user: Optional[LoggedInUser], force_authuser: Optional[UserId]) -> None:
+    if 'live' in g:
+        return
+
+    if user is None:
+        user = config.user
+
+    if force_authuser is None:
+        request_force_authuser = request.get_unicode_input("force_authuser")
+        force_authuser = UserId(request_force_authuser) if request_force_authuser else None
+
+>>>>>>> upstream/master
     g.site_status = {}
     _connect_multiple_sites(user)
     _set_livestatus_auth(user, force_authuser)
 
 
+<<<<<<< HEAD
 def _connect_multiple_sites(user):
     # type: (LoggedInUser) -> None
+=======
+def _connect_multiple_sites(user: LoggedInUser) -> None:
+>>>>>>> upstream/master
     enabled_sites, disabled_sites = _get_enabled_and_disabled_sites(user)
     _set_initial_site_states(enabled_sites, disabled_sites)
 
     if is_managed_edition():
+<<<<<<< HEAD
         import cmk.gui.cme.managed as managed
+=======
+        import cmk.gui.cme.managed as managed  # pylint: disable=no-name-in-module
+>>>>>>> upstream/master
         g.live = managed.CMEMultiSiteConnection(enabled_sites, disabled_sites)
     else:
         g.live = MultiSiteConnection(enabled_sites, disabled_sites)
@@ -169,12 +244,21 @@ def _connect_multiple_sites(user):
     update_site_states_from_dead_sites()
 
 
+<<<<<<< HEAD
 def _get_enabled_and_disabled_sites(user):
     # type: (LoggedInUser) -> Tuple[SiteConfigurations, SiteConfigurations]
     enabled_sites = SiteConfigurations({})
     disabled_sites = SiteConfigurations({})
 
     for site_id, site in user.authorized_sites().iteritems():
+=======
+def _get_enabled_and_disabled_sites(
+        user: LoggedInUser) -> Tuple[SiteConfigurations, SiteConfigurations]:
+    enabled_sites: SiteConfigurations = {}
+    disabled_sites: SiteConfigurations = {}
+
+    for site_id, site in user.authorized_sites().items():
+>>>>>>> upstream/master
         site = _site_config_for_livestatus(site_id, site)
 
         if user.is_site_disabled(site_id):
@@ -185,8 +269,12 @@ def _get_enabled_and_disabled_sites(user):
     return enabled_sites, disabled_sites
 
 
+<<<<<<< HEAD
 def _site_config_for_livestatus(site_id, site):
     # type: (SiteId, SiteConfiguration) -> SiteConfiguration
+=======
+def _site_config_for_livestatus(site_id: SiteId, site: SiteConfiguration) -> SiteConfiguration:
+>>>>>>> upstream/master
     """Prepares a site config specification for the livestatus module
 
     In case the GUI connects to the local livestatus proxy there are several
@@ -194,6 +282,7 @@ def _site_config_for_livestatus(site_id, site):
     a) Tell livestatus not to strip away the cache header
     b) Connect in plain text to the sites local proxy unix socket
     """
+<<<<<<< HEAD
     site = SiteConfiguration(site.copy())
 
     if site["proxy"] is not None:
@@ -210,6 +299,23 @@ def _site_config_for_livestatus(site_id, site):
 
 def encode_socket_for_livestatus(site_id, site):
     # type: (SiteId, SiteConfiguration) -> str
+=======
+    copied_site: SiteConfiguration = site.copy()
+
+    if copied_site["proxy"] is not None:
+        copied_site["cache"] = site["proxy"].get("cache", True)
+
+    else:
+        if copied_site["socket"][0] in ["tcp", "tcp6"]:
+            copied_site["tls"] = site["socket"][1]["tls"]
+
+    copied_site["socket"] = encode_socket_for_livestatus(site_id, site)
+
+    return copied_site
+
+
+def encode_socket_for_livestatus(site_id: SiteId, site: SiteConfiguration) -> str:
+>>>>>>> upstream/master
     socket_spec = site["socket"]
     family_spec, address_spec = socket_spec
 
@@ -228,11 +334,18 @@ def encode_socket_for_livestatus(site_id, site):
     raise NotImplementedError()
 
 
+<<<<<<< HEAD
 def update_site_states_from_dead_sites():
     # type: () -> None
     # Get exceptions in case of dead sites
     for site_id, deadinfo in live().dead_sites().items():
         status_host_state = deadinfo.get("status_host_state")
+=======
+def update_site_states_from_dead_sites() -> None:
+    # Get exceptions in case of dead sites
+    for site_id, deadinfo in live().dead_sites().items():
+        status_host_state = cast(Optional[int], deadinfo.get("status_host_state"))
+>>>>>>> upstream/master
         g.site_status[site_id].update({
             "exception": deadinfo["exception"],
             "status_host_state": status_host_state,
@@ -240,8 +353,12 @@ def update_site_states_from_dead_sites():
         })
 
 
+<<<<<<< HEAD
 def _status_host_state_name(shs):
     # type: (Optional[int]) -> str
+=======
+def _status_host_state_name(shs: Optional[int]) -> str:
+>>>>>>> upstream/master
     return _STATUS_NAMES.get(shs, "unknown")
 
 
@@ -264,8 +381,12 @@ def _set_initial_site_states(enabled_sites, disabled_sites):
 
 # If Multisite is retricted to data the user is a contact for, we need to set an
 # AuthUser: header for livestatus.
+<<<<<<< HEAD
 def _set_livestatus_auth(user, force_authuser):
     # type: (LoggedInUser, str) -> None
+=======
+def _set_livestatus_auth(user: LoggedInUser, force_authuser: Optional[UserId]) -> None:
+>>>>>>> upstream/master
     user_id = _livestatus_auth_user(user, force_authuser)
     if user_id is not None:
         g.live.set_auth_user('read', user_id)
@@ -285,6 +406,7 @@ def _set_livestatus_auth(user, force_authuser):
 
 # Returns either None when no auth user shal be set or the name of the user
 # to be used as livestatus auth user
+<<<<<<< HEAD
 def _livestatus_auth_user(user, force_authuser):
     # type: (LoggedInUser, str) -> Optional[str]
     if not user.may("general.see_all"):
@@ -292,9 +414,58 @@ def _livestatus_auth_user(user, force_authuser):
     if force_authuser == "1":
         return user.id
     if force_authuser == "0":
+=======
+def _livestatus_auth_user(user: LoggedInUser, force_authuser: Optional[UserId]) -> Optional[UserId]:
+    if not user.may("general.see_all"):
+        return user.id
+    if force_authuser == UserId("1"):
+        return user.id
+    if force_authuser == UserId("0"):
+>>>>>>> upstream/master
         return None
     if force_authuser:
         return force_authuser  # set a different user
     if user.get_attribute("force_authuser"):
         return user.id
     return None
+<<<<<<< HEAD
+=======
+
+
+@contextmanager
+def only_sites(sites: Union[None, List[SiteId], SiteId]) -> Iterator[None]:
+    """Livestatus query over sites"""
+    if not sites:
+        sites = None
+    elif not isinstance(sites, list):
+        sites = [sites]
+
+    live().set_only_sites(sites)
+
+    try:
+        yield
+    finally:
+        live().set_only_sites(None)
+
+
+@contextmanager
+def prepend_site() -> Iterator[None]:
+    live().set_prepend_site(True)
+    try:
+        yield
+    finally:
+        live().set_prepend_site(False)
+
+
+@contextmanager
+def set_limit(limit: Optional[int]) -> Iterator[None]:
+    if limit is not None:
+        live().set_limit(limit + 1)  # + 1: We need to know, if limit is exceeded
+    else:
+        live().set_limit(None)
+
+    try:
+        yield
+    finally:
+        live().set_limit()  # removes limit
+>>>>>>> upstream/master

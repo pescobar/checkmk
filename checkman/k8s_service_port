@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: Kubernetes service ports
+=======
+title: Kubernetes: Service Ports
+>>>>>>> upstream/master
 agents: kubernetes
 catalog: containerization/kubernetes
 license: GPL
@@ -8,7 +12,14 @@ description:
  Levels for expected values can be set via WATO.
 
 inventory:
+<<<<<<< HEAD
  One service per port is created.
 
 item:
  The name of the port if given otherwise the port number.
+=======
+ One service is created for each port.
+
+item:
+ The name of the port if given otherwise the port number.
+>>>>>>> upstream/master

@@ -5,7 +5,11 @@ Class: fix
 Compatible: compat
 Edition: cre
 State: unknown
+<<<<<<< HEAD
 Version: 1.7.0i1
+=======
+Version: 2.0.0i1
+>>>>>>> upstream/master
 Date: 1568786068
 
 The "Background jobs overview" of WATO is now only listing the job types

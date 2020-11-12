@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/env python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,6 +24,13 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 from cmk.gui.i18n import _
 from cmk.gui.globals import html
@@ -46,7 +54,11 @@ class OverviewDashlet(Dashlet):
 
     @classmethod
     def description(cls):
+<<<<<<< HEAD
         return _("Displays an introduction and Check_MK logo.")
+=======
+        return _("Displays an introduction and Checkmk logo.")
+>>>>>>> upstream/master
 
     @classmethod
     def sort_index(cls):
@@ -67,8 +79,14 @@ class OverviewDashlet(Dashlet):
 
         html.open_td()
         html.h2("CheckMK")
+<<<<<<< HEAD
         html.write_html('Welcome to CheckMK. If you want to learn more about CheckMK, please visit '
                         'our <a href="https://checkmk.com/" target="_blank">user manual</a>.')
+=======
+        html.write_text(
+            _('Welcome to Checkmk. If you want to learn more about Checkmk, please visit '
+              'our <a href="https://checkmk.com/" target="_blank">user manual</a>.'))
+>>>>>>> upstream/master
         html.close_td()
 
         html.close_tr()

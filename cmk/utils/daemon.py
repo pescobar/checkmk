@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -44,6 +45,27 @@ from cmk.utils.exceptions import MKGeneralException
 
 
 def daemonize(user=0, group=0):
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+from contextlib import contextmanager
+import ctypes
+import ctypes.util
+import os
+from pathlib import Path
+import sys
+from typing import Generator
+
+import cmk.utils.store as store
+from cmk.utils.exceptions import MKGeneralException
+
+
+def daemonize() -> None:
+>>>>>>> upstream/master
     # do the UNIX double-fork magic, see Stevens' "Advanced
     # Programming in the UNIX Environment" for details (ISBN 0201563177)
     try:
@@ -62,12 +84,15 @@ def daemonize(user=0, group=0):
     # Create new process group with the process as leader
     os.setsid()
 
+<<<<<<< HEAD
     # Set user/group depending on params
     if group:
         os.setregid(getgrnam(group)[2], getgrnam(group)[2])
     if user:
         os.setreuid(getpwnam(user)[2], getpwnam(user)[2])
 
+=======
+>>>>>>> upstream/master
     # do second fork
     try:
         pid = os.fork()
@@ -89,7 +114,11 @@ def daemonize(user=0, group=0):
     os.close(so)
 
 
+<<<<<<< HEAD
 def closefrom(lowfd):
+=======
+def closefrom(lowfd: int) -> None:
+>>>>>>> upstream/master
     """Closes all file descriptors starting with "lowfd", ignoring errors
 
     Deletes all open file descriptors greater than or equal to lowfd from the
@@ -107,13 +136,21 @@ def closefrom(lowfd):
     os.closerange(lowfd, highfd)
 
 
+<<<<<<< HEAD
 def lock_with_pid_file(path):
     # type: (Path) -> None
+=======
+def lock_with_pid_file(path: Path) -> None:
+>>>>>>> upstream/master
     """
     Use this after daemonizing or in foreground mode to ensure there is only
     one process running.
     """
+<<<<<<< HEAD
     if not cmk.utils.store.try_aquire_lock(str(path)):
+=======
+    if not store.try_aquire_lock(str(path)):
+>>>>>>> upstream/master
         raise MKGeneralException("Failed to aquire PID file lock: "
                                  "Another process is already running")
 
@@ -123,6 +160,7 @@ def lock_with_pid_file(path):
         f.write(u"%d\n" % os.getpid())
 
 
+<<<<<<< HEAD
 def _cleanup_locked_pid_file(path):
     # type: (Path) -> None
     """Cleanup the lock + file acquired by the function above"""
@@ -130,6 +168,14 @@ def _cleanup_locked_pid_file(path):
         return
 
     cmk.utils.store.release_lock(str(path))
+=======
+def _cleanup_locked_pid_file(path: Path) -> None:
+    """Cleanup the lock + file acquired by the function above"""
+    if not store.have_lock(str(path)):
+        return
+
+    store.release_lock(str(path))
+>>>>>>> upstream/master
 
     try:
         path.unlink()
@@ -138,8 +184,12 @@ def _cleanup_locked_pid_file(path):
 
 
 @contextmanager
+<<<<<<< HEAD
 def pid_file_lock(path):
     # type: (Path) -> Generator[None, None, None]
+=======
+def pid_file_lock(path: Path) -> Generator[None, None, None]:
+>>>>>>> upstream/master
     """Context manager for PID file based locking"""
     lock_with_pid_file(path)
     try:
@@ -148,7 +198,11 @@ def pid_file_lock(path):
         _cleanup_locked_pid_file(path)
 
 
+<<<<<<< HEAD
 def set_cmdline(cmdline):
+=======
+def set_cmdline(cmdline: bytes) -> None:
+>>>>>>> upstream/master
     """
     Change the process name and process command line on of the running process
     This works at least with Python 2.x on Linux
@@ -156,19 +210,37 @@ def set_cmdline(cmdline):
     argv = ctypes.POINTER(ctypes.c_char_p)()
     argc = ctypes.c_int()
     ctypes.pythonapi.Py_GetArgcArgv(ctypes.byref(argc), ctypes.byref(argv))
+<<<<<<< HEAD
     cmdlen = sum([len(argv[i]) for i in range(argc.value)]) + argc.value
     # TODO: This can probably be simplified...
     _new_cmdline = ctypes.c_char_p(cmdline.ljust(cmdlen, '\0'))
+=======
+    # mypy: The type is not detected correctly
+    cmdlen = sum([len(argv[i]) for i in range(argc.value)]) + argc.value  # type: ignore[arg-type]
+    # TODO: This can probably be simplified...
+    _new_cmdline = ctypes.c_char_p(cmdline.ljust(cmdlen, b'\0'))  # noqa: F841
+>>>>>>> upstream/master
 
     set_procname(cmdline)
 
 
+<<<<<<< HEAD
 def set_procname(cmdline):
+=======
+def set_procname(cmdline: bytes) -> None:
+>>>>>>> upstream/master
     """
     Change the process name of the running process
     This works at least with Python 2.x on Linux
     """
+<<<<<<< HEAD
     libc = ctypes.cdll.LoadLibrary(ctypes.util.find_library('c'))
+=======
+    lib = ctypes.util.find_library('c')
+    if not lib:
+        return
+    libc = ctypes.cdll.LoadLibrary(lib)
+>>>>>>> upstream/master
 
     #argv = ctypes.POINTER(ctypes.c_char_p)()
 

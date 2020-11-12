@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/env python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,11 +24,24 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 """Mode for displaying and modifying the rule based host and service
 parameters. This is a host/service overview page over all things that can be
 modified via rules."""
 
+<<<<<<< HEAD
 import cmk
+=======
+from typing import List, Tuple as _Tuple, Optional, Type, Iterator
+
+from six import ensure_str
+>>>>>>> upstream/master
 
 import cmk.gui.config as config
 import cmk.gui.watolib as watolib
@@ -36,16 +50,35 @@ import cmk.gui.view_utils
 from cmk.gui.i18n import _
 from cmk.gui.globals import html
 from cmk.gui.exceptions import MKUserError
+<<<<<<< HEAD
+=======
+from cmk.gui.valuespec import Tuple
+from cmk.gui.watolib.rulesets import Ruleset, Rule
+from cmk.gui.watolib.hosts_and_folders import CREFolder
+>>>>>>> upstream/master
 from cmk.gui.watolib.rulespecs import (
     rulespec_group_registry,
     rulespec_registry,
 )
+<<<<<<< HEAD
+=======
+from cmk.gui.breadcrumb import Breadcrumb
+from cmk.gui.page_menu import (
+    PageMenu,
+    PageMenuDropdown,
+    PageMenuTopic,
+    PageMenuEntry,
+)
+from cmk.gui.wato.pages.hosts import ModeEditHost, page_menu_host_entries
+from cmk.gui.plugins.wato.utils.context_buttons import make_service_status_link
+>>>>>>> upstream/master
 
 from cmk.gui.plugins.wato import (
     WatoMode,
     mode_registry,
 )
 
+<<<<<<< HEAD
 from cmk.gui.plugins.wato.utils.context_buttons import (
     host_status_button,
     service_status_button,
@@ -56,6 +89,13 @@ from cmk.gui.plugins.wato.utils.context_buttons import (
 class ModeObjectParameters(WatoMode):
     _PARAMETERS_UNKNOWN = []
     _PARAMETERS_OMIT = []
+=======
+
+@mode_registry.register
+class ModeObjectParameters(WatoMode):
+    _PARAMETERS_UNKNOWN: List = []
+    _PARAMETERS_OMIT: List = []
+>>>>>>> upstream/master
 
     @classmethod
     def name(cls):
@@ -65,15 +105,28 @@ class ModeObjectParameters(WatoMode):
     def permissions(cls):
         return ["hosts", "rulesets"]
 
+<<<<<<< HEAD
     def _from_vars(self):
         self._hostname = html.get_ascii_input("host")  # may be empty in new/clone mode
+=======
+    @classmethod
+    def parent_mode(cls) -> Optional[Type[WatoMode]]:
+        return ModeEditHost
+
+    def _from_vars(self):
+        self._hostname = html.request.get_ascii_input_mandatory("host")
+>>>>>>> upstream/master
         self._host = watolib.Folder.current().host(self._hostname)
         if self._host is None:
             raise MKUserError("host", _('The given host does not exist.'))
         self._host.need_permission("read")
 
         # TODO: Validate?
+<<<<<<< HEAD
         self._service = html.get_unicode_input("service")
+=======
+        self._service = html.request.get_unicode_input("service")
+>>>>>>> upstream/master
 
     def title(self):
         title = _("Parameters of") + " " + self._hostname
@@ -81,6 +134,7 @@ class ModeObjectParameters(WatoMode):
             title += " / " + self._service
         return title
 
+<<<<<<< HEAD
     def buttons(self):
         if self._service:
             prefix = _("Host-")
@@ -105,6 +159,38 @@ class ModeObjectParameters(WatoMode):
                 prefix + _("Diagnostic"),
                 watolib.folder_preserving_link([("mode", "diag_host"), ("host", self._hostname)]),
                 "diagnose")
+=======
+    def page_menu(self, breadcrumb: Breadcrumb) -> PageMenu:
+        return PageMenu(
+            dropdowns=[
+                PageMenuDropdown(
+                    name="hosts",
+                    title=_("Hosts"),
+                    topics=[
+                        PageMenuTopic(
+                            title=_("For this host"),
+                            entries=list(page_menu_host_entries(self.name(), self._host)),
+                        ),
+                    ],
+                ),
+                PageMenuDropdown(
+                    name="services",
+                    title=_("Services"),
+                    topics=[
+                        PageMenuTopic(
+                            title=_("For this service"),
+                            entries=list(self._page_menu_service_entries()),
+                        ),
+                    ],
+                ),
+            ],
+            breadcrumb=breadcrumb,
+        )
+
+    def _page_menu_service_entries(self) -> Iterator[PageMenuEntry]:
+        if self._service:
+            yield make_service_status_link(self._host.name(), self._service)
+>>>>>>> upstream/master
 
     def page(self):
         all_rulesets = watolib.AllRulesets()
@@ -120,7 +206,11 @@ class ModeObjectParameters(WatoMode):
         for groupname in sorted(rulespec_group_registry.get_host_rulespec_group_names()):
             maingroup = groupname.split("/")[0]
             for rulespec in sorted(rulespec_registry.get_by_group(groupname),
+<<<<<<< HEAD
                                    key=lambda x: x.title):
+=======
+                                   key=lambda x: x.title or ""):
+>>>>>>> upstream/master
                 if (rulespec.item_type == 'service') == (not self._service):
                     continue  # This rule is not for hosts/services
 
@@ -151,6 +241,11 @@ class ModeObjectParameters(WatoMode):
         self._show_labels(host_info["labels"], "host", host_info["label_sources"])
 
     def _show_service_info(self, all_rulesets):
+<<<<<<< HEAD
+=======
+        assert self._service is not None
+
+>>>>>>> upstream/master
         serviceinfo = watolib.check_mk_automation(self._host.site_id(), "analyse-service",
                                                   [self._hostname, self._service])
         if not serviceinfo:
@@ -197,6 +292,7 @@ class ModeObjectParameters(WatoMode):
                     try:
                         rulespec = rulespec_registry["static_checks:" + checkgroup]
                     except KeyError:
+<<<<<<< HEAD
                         rulespec = None
 
                     if rulespec:
@@ -211,6 +307,20 @@ class ModeObjectParameters(WatoMode):
                     else:
                         self._render_rule_reason(_("Parameters"), None, "", "", True,
                                                  _("This check is not configurable via WATO"))
+=======
+                        self._render_rule_reason(_("Parameters"), None, "", "", True,
+                                                 _("This check is not configurable via WATO"))
+                        return
+
+                    url = watolib.folder_preserving_link([('mode', 'edit_ruleset'),
+                                                          ('varname',
+                                                           "static_checks:" + checkgroup),
+                                                          ('host', self._hostname)])
+                    assert isinstance(rulespec.valuespec, Tuple)
+                    self._render_rule_reason(
+                        _("Parameters"), url, _("Determined by discovery"), None, False,
+                        rulespec.valuespec._elements[2].value_to_text(serviceinfo["parameters"]))
+>>>>>>> upstream/master
 
                 else:
                     rulespec = rulespec_registry[grouprule]
@@ -230,6 +340,10 @@ class ModeObjectParameters(WatoMode):
                 itemspec = rulespec.item_spec
                 if itemspec:
                     item_text = itemspec.value_to_text(serviceinfo["item"])
+<<<<<<< HEAD
+=======
+                    assert rulespec.item_spec is not None
+>>>>>>> upstream/master
                     title = rulespec.item_spec.title()
                 else:
                     item_text = serviceinfo["item"]
@@ -240,6 +354,10 @@ class ModeObjectParameters(WatoMode):
                                               svc_desc_or_item=serviceinfo["item"],
                                               svc_desc=self._service,
                                               known_settings=self._PARAMETERS_OMIT)
+<<<<<<< HEAD
+=======
+                assert isinstance(rulespec.valuespec, Tuple)
+>>>>>>> upstream/master
                 html.write(rulespec.valuespec._elements[2].value_to_text(serviceinfo["parameters"]))
                 html.close_td()
                 html.close_tr()
@@ -255,9 +373,21 @@ class ModeObjectParameters(WatoMode):
                                           known_settings=serviceinfo["parameters"])
 
         elif origin == "classic":
+<<<<<<< HEAD
             rule_nr = serviceinfo["rule_nr"]
             rules = all_rulesets.get("custom_checks").get_rules()
             rule_folder, rule_index, _rule = rules[rule_nr]
+=======
+            ruleset = all_rulesets.get("custom_checks")
+            origin_rule_result = self._get_custom_check_origin_rule(ruleset, self._hostname,
+                                                                    self._service)
+            if origin_rule_result is None:
+                raise MKUserError(
+                    None,
+                    _("Failed to determine origin rule of %s / %s") %
+                    (self._hostname, self._service))
+            rule_folder, rule_index, _rule = origin_rule_result
+>>>>>>> upstream/master
 
             url = watolib.folder_preserving_link([('mode', 'edit_ruleset'),
                                                   ('varname', "custom_checks"),
@@ -288,6 +418,27 @@ class ModeObjectParameters(WatoMode):
         self._show_labels(serviceinfo.get("labels", {}), "service",
                           serviceinfo.get("label_sources", {}))
 
+<<<<<<< HEAD
+=======
+    def _get_custom_check_origin_rule(self, ruleset: Ruleset, hostname: str,
+                                      svc_desc: str) -> Optional[_Tuple[CREFolder, int, Rule]]:
+        # We could use the outcome of _setting instead of the outcome of
+        # the automation call in the future
+        _setting, rules = ruleset.analyse_ruleset(self._hostname,
+                                                  svc_desc_or_item=None,
+                                                  svc_desc=None)
+
+        for rule_folder, rule_index, rule in rules:
+            if rule.is_disabled():
+                continue
+            if rule.value["service_description"] != self._service:
+                continue
+
+            return rule_folder, rule_index, rule
+
+        return None
+
+>>>>>>> upstream/master
     def _show_labels(self, labels, object_type, label_sources):
         forms.section(_("Effective labels"))
         html.open_table(class_="setting")
@@ -342,8 +493,13 @@ class ModeObjectParameters(WatoMode):
                 ('rule_folder', rule.folder.path()),
                 ('rulenr', rule.index()),
                 ('host', self._hostname),
+<<<<<<< HEAD
                 ('item', watolib.mk_repr(svc_desc_or_item) if svc_desc_or_item else ''),
                 ('service', watolib.mk_repr(svc_desc) if svc_desc else ''),
+=======
+                ('item', ensure_str(watolib.mk_repr(svc_desc_or_item)) if svc_desc_or_item else ''),
+                ('service', ensure_str(watolib.mk_repr(svc_desc)) if svc_desc else ''),
+>>>>>>> upstream/master
             ])
 
         varname = rulespec.name
@@ -353,8 +509,13 @@ class ModeObjectParameters(WatoMode):
             ('mode', 'edit_ruleset'),
             ('varname', varname),
             ('host', self._hostname),
+<<<<<<< HEAD
             ('item', watolib.mk_repr(svc_desc_or_item)),
             ('service', watolib.mk_repr(svc_desc)),
+=======
+            ('item', ensure_str(watolib.mk_repr(svc_desc_or_item))),
+            ('service', ensure_str(watolib.mk_repr(svc_desc))),
+>>>>>>> upstream/master
         ])
 
         forms.section(html.render_a(rulespec.title, url))
@@ -398,7 +559,11 @@ class ModeObjectParameters(WatoMode):
         # patterns are configured in logwatch_rules. We do not have access to the actual
         # patterns here but just to the useless "None". In order not to complicate things
         # we simply display nothing here.
+<<<<<<< HEAD
         elif varname == "logwatch_rules":
+=======
+        if varname == "logwatch_rules":
+>>>>>>> upstream/master
             pass
 
         elif known_settings is not self._PARAMETERS_UNKNOWN:
@@ -441,14 +606,22 @@ class ModeObjectParameters(WatoMode):
             # We have a setting
             elif valuespec:
                 if ruleset.match_type() == "all":
+<<<<<<< HEAD
                     html.write(", ".join([valuespec.value_to_text(e) for e in setting]))
+=======
+                    html.write(", ".join(valuespec.value_to_text(s) for s in setting))
+>>>>>>> upstream/master
                 else:
                     html.write(valuespec.value_to_text(setting))
 
             # Binary rule, no valuespec, outcome is True or False
             else:
                 icon_name = "rule_%s%s" % ("yes" if setting else "no", "_off" if not rules else '')
+<<<<<<< HEAD
                 html.icon(title=_("yes") if setting else _("no"), icon=icon_name)
+=======
+                html.icon(icon_name, title=_("yes") if setting else _("no"))
+>>>>>>> upstream/master
         html.close_td()
         html.close_tr()
         html.close_table()

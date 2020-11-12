@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // +------------------------------------------------------------------+
 // |             ____ _               _        __  __ _  __           |
 // |            / ___| |__   ___  ___| | __   |  \/  | |/ /           |
@@ -27,6 +28,19 @@
 #include <iterator>
 #include <ostream>
 #include "Filter.h"
+=======
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the
+// terms and conditions defined in the file COPYING, which is part of this
+// source code package.
+
+#include "ServiceGroupMembersColumn.h"
+
+#include <algorithm>
+#include <iterator>
+#include <ostream>
+
+>>>>>>> upstream/master
 #include "ListFilter.h"
 #include "Logger.h"
 #include "Renderer.h"
@@ -34,6 +48,10 @@
 
 #ifdef CMC
 #include <unordered_set>
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/master
 #include "Host.h"
 #include "LogEntry.h"
 #include "Service.h"
@@ -99,8 +117,13 @@ ServiceGroupMembersColumn::getMembers(Row row, const contact *auth_user) const {
     std::vector<Member> members;
 #ifdef CMC
     (void)_mc;  // HACK
+<<<<<<< HEAD
     if (auto p = columnData<Host::services_t>(row)) {
         for (auto &svc : *p) {
+=======
+    if (const auto *p = columnData<Host::services_t>(row)) {
+        for (const auto &svc : *p) {
+>>>>>>> upstream/master
             if (auth_user == nullptr || svc->hasContact(auth_user)) {
                 members.emplace_back(
                     svc->host()->name(), svc->name(),
@@ -110,7 +133,11 @@ ServiceGroupMembersColumn::getMembers(Row row, const contact *auth_user) const {
         }
     }
 #else
+<<<<<<< HEAD
     if (auto p = columnData<servicesmember *>(row)) {
+=======
+    if (const auto *p = columnData<servicesmember *>(row)) {
+>>>>>>> upstream/master
         for (servicesmember *mem = *p; mem != nullptr; mem = mem->next) {
             service *svc = mem->service_ptr;
             if (auth_user == nullptr ||

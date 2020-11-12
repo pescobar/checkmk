@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/env python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,15 +24,31 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 from collections import namedtuple
 import argparse
 import sys
 import requests
+<<<<<<< HEAD
+=======
+import urllib3  # type: ignore[import]
+import cmk.utils.password_store
+
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+cmk.utils.password_store.replace_passwords()
+>>>>>>> upstream/master
 
 Section = namedtuple('Section', ['name', 'uri', 'handler'])
 
 
+<<<<<<< HEAD
 def main():
     # Sections to query
     # https://docs.splunk.com/Documentation/Splunk/7.2.6/RESTREF/RESTlicense#licenser.2Fpools
@@ -48,12 +65,58 @@ def main():
     ]
 
     args = parse_arguments()
+=======
+def main(argv=None):
+    if argv is None:
+        argv = sys.argv[1:]
+    # Sections to query
+    # https://docs.splunk.com/Documentation/Splunk/7.2.6/RESTREF/RESTlicense#licenser.2Fpools
+    sections = [
+        Section(
+            name="license_state",
+            uri="/services/licenser/licenses",
+            handler=handle_license_state,
+        ),
+        Section(
+            name="license_usage",
+            uri="/services/licenser/usage",
+            handler=handle_license_usage,
+        ),
+        Section(
+            name="system_msg",
+            uri="/services/messages",
+            handler=handle_system_msg,
+        ),
+        Section(
+            name="jobs",
+            uri="/services/search/jobs",
+            handler=handle_jobs,
+        ),
+        Section(
+            name="health",
+            uri="/services/server/health/splunkd/details",
+            handler=handle_health,
+        ),
+        Section(
+            name="alerts",
+            uri="/services/alerts/fired_alerts",
+            handler=handle_alerts,
+        ),
+    ]
+
+    args = parse_arguments(argv)
+>>>>>>> upstream/master
 
     sys.stdout.write("<<<check_mk>>>\n")
 
     try:
         handle_request(args, sections)
+<<<<<<< HEAD
     except Exception:
+=======
+    except Exception as e:
+        sys.stderr.write("Unhandled exception: %s\n" % e)
+>>>>>>> upstream/master
         if args.debug:
             return 1
 
@@ -62,6 +125,7 @@ def handle_request(args, sections):
     url_base = "%s://%s:%d" % (args.proto, args.hostname, args.port)
 
     for section in sections:
+<<<<<<< HEAD
         try:
             url = url_base + section.uri
             response = requests.get(url,
@@ -82,6 +146,35 @@ def handle_request(args, sections):
 def parse_arguments(argv=None):
     if argv is None:
         argv = sys.argv[1:]
+=======
+        if section.name in args.modules:
+            try:
+                url = url_base + section.uri
+
+                response = requests.get(
+                    url,
+                    auth=(args.user, args.password),
+                    data={"output_mode": "json"},
+                )
+
+                response.raise_for_status()
+
+            except requests.exceptions.RequestException as e:
+                sys.stderr.write("Error: %s\n" % e)
+                if args.debug:
+                    raise
+                return 1
+
+            value = response.json().get('entry')
+            if value is None:
+                continue
+
+            sys.stdout.write("<<<splunk_%s>>>\n" % section.name)
+            section.handler(value)
+
+
+def parse_arguments(argv):
+>>>>>>> upstream/master
 
     parser = argparse.ArgumentParser(description=__doc__,
                                      formatter_class=argparse.RawTextHelpFormatter)
@@ -108,12 +201,19 @@ def parse_arguments(argv=None):
     parser.add_argument("--debug",
                         action="store_true",
                         help="Debug mode: let Python exceptions come through")
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/master
     parser.add_argument("hostname",
                         metavar="HOSTNAME",
                         help="Name of the splunk instance to query.")
 
+<<<<<<< HEAD
     return parser.parse_args()
+=======
+    return parser.parse_args(argv)
+>>>>>>> upstream/master
 
 
 def handle_license_state(value):
@@ -156,8 +256,13 @@ def handle_jobs(value):
         sys.stdout.write("%s %s %s %s %s\n" % (
             entries["published"],  # creation time
             entries["author"],  # author of the search
+<<<<<<< HEAD
             entries.get("content", "Unknown").get("request", "Unkown").get(
                 "ui_dispatch_app"),  # Application of the search, may be empty for internal searches
+=======
+            # Application of the search, may be empty for internal searches
+            entries.get("content", {}).get("request", {}).get("ui_dispatch_app", "Unknown"),
+>>>>>>> upstream/master
             entries["content"]["dispatchState"],  # state of the search
             entries["content"]["isZombie"],  # zombie state (false/true)
         ))
@@ -166,11 +271,19 @@ def handle_jobs(value):
 def handle_health(value):
     sys.stdout.write("Overall_state %s\n" % value[0].get("content", {}).get("health"))
 
+<<<<<<< HEAD
     for func, state in value[0]["content"]["features"].iteritems():
         func_name = "%s%s" % (func[0].upper(), func[1:].lower())
         sys.stdout.write("%s %s\n" % (func_name.replace(" ", "_"), state.get("health", {})))
 
         for feature, status in state["features"].iteritems():
+=======
+    for func, state in value[0]["content"]["features"].items():
+        func_name = "%s%s" % (func[0].upper(), func[1:].lower())
+        sys.stdout.write("%s %s\n" % (func_name.replace(" ", "_"), state.get("health", {})))
+
+        for feature, status in state["features"].items():
+>>>>>>> upstream/master
             feature_name = "%s%s" % (feature[0].upper(), feature[1:].lower())
             sys.stdout.write(
                 "%s %s %s\n" %

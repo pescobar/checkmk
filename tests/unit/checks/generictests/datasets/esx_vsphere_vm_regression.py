@@ -1,11 +1,29 @@
+<<<<<<< HEAD
 # -*- encoding: utf-8
 # yapf: disable
 from cmk_base.discovered_labels import HostLabel
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# yapf: disable
+# type: ignore
+
+from cmk.base.plugins.agent_based.esx_vsphere_vm import parse_esx_vsphere_vm
+>>>>>>> upstream/master
 
 checkname = 'esx_vsphere_vm'
 
 
+<<<<<<< HEAD
 info = [[u'config.datastoreUrl',
+=======
+parsed = parse_esx_vsphere_vm([
+    [u'config.datastoreUrl',
+>>>>>>> upstream/master
          u'maintenanceMode',
          u'normal|url',
          u'ds:///vmfs/volumes/vsan:5239d5cbf4c95b8c-5977b0e019a35313/|uncommitted',
@@ -66,7 +84,13 @@ info = [[u'config.datastoreUrl',
         [u'summary.quickStats.staticCpuEntitlement', u'5167'],
         [u'summary.quickStats.staticMemoryEntitlement', u'16532'],
         [u'summary.quickStats.swappedMemory', u'0'],
+<<<<<<< HEAD
         [u'summary.quickStats.uptimeSeconds', u'262571']]
+=======
+        [u'summary.quickStats.uptimeSeconds', u'262571'],
+    ],
+)
+>>>>>>> upstream/master
 
 
 discovery = {'cpu': [(None, None)],
@@ -76,10 +100,17 @@ discovery = {'cpu': [(None, None)],
              'mem_usage': [(None, {})],
              'mounted_devices': [(None, None)],
              'name': [(None, None)],
+<<<<<<< HEAD
              'running_on': [(None, None),
                             HostLabel(u'cmk/vsphere_object', u'vm')
                            ],
              'snapshots': [(None, {})]}
+=======
+             'running_on': [(None, None)],
+             'snapshots': [(None, {})],
+             'snapshots_summary': [(None, {})],
+             }
+>>>>>>> upstream/master
 
 
 checks = {'cpu': [(None,
@@ -92,11 +123,16 @@ checks = {'cpu': [(None,
                           [(0, u'Stored on vsanDatastore (28.82 TB/66.1% free)', [])])],
           'guest_tools': [(None,
                            {},
+<<<<<<< HEAD
                            [(1,
+=======
+                           [(0,
+>>>>>>> upstream/master
                              'VMware Tools are installed, but are not managed by VMWare',
                              [])])],
           'heartbeat': [(None, {}, [(0, u'Heartbeat status is green', [])])],
           'mem_usage': [(None,
+<<<<<<< HEAD
                          {},
                          [(0,
                            'Host: 15.97 GB, Guest: 4.32 GB, Ballooned: 0.00 B, Private: 15.89 GB, Shared: 102.00 MB',
@@ -109,3 +145,17 @@ checks = {'cpu': [(None,
           'name': [(None, {}, [(0, u'scwagprc01.widag.local', [])])],
           'running_on': [(None, {}, [(0, u'Running on zh1wagesx02.widag.local', [])])],
           'snapshots': [(None, {}, [(0, 'No snapshots found', [])])]}
+=======
+                         {'host': (10000000000, 20000000000)},
+                         [
+                             (1, 'Host: 15.97 GB (warn/crit at 9.31 GB/18.63 GB)', [('host', 17148411904.0, 10000000000, 20000000000, None, None)]),
+                             (0, 'Guest: 4.32 GB', [('guest', 4637851648.0, None, None, None, None)]),
+                             (0, 'Ballooned: 0.00 B', [('ballooned', 0.0, None, None, None, None)]),
+                             (0, 'Private: 15.89 GB', [('private', 17066622976.0, None, None, None, None)]),
+                             (0, 'Shared: 102.00 MB', [('shared', 106954752.0, None, None, None, None)]),
+                            ])],
+          'mounted_devices': [(None, {}, [(0, 'HA functionality guaranteed', [])])],
+          'name': [(None, {}, [(0, u'scwagprc01.widag.local', [])])],
+          'running_on': [(None, {}, [(0, u'Running on zh1wagesx02.widag.local', [])])],
+          'snapshots': [(None, {}, [(0, 'Count: 0', [])])]}
+>>>>>>> upstream/master

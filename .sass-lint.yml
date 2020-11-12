@@ -35,10 +35,13 @@ rules:
     - 2
     -
       style: lowercase
+<<<<<<< HEAD
   indentation:
     - 2
     -
       size: 2
+=======
+>>>>>>> upstream/master
   leading-zero:
     - 0
     -

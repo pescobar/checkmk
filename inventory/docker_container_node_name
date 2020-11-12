@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,15 +24,32 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+import cmk.base.plugins.agent_based.utils.docker as docker
+from cmk.base.check_legacy_includes.legacy_docker import *  # pylint: disable=wildcard-import,unused-wildcard-import
+>>>>>>> upstream/master
 
 
 def parse_docker_container_node_name(info):
     # pylint: disable=undefined-variable
+<<<<<<< HEAD
     version = docker_get_version(info)
     if version is None:
         return {"NodeName": parse_legacy_docker_container_node_name(info)}
 
     return docker_json_get_obj(info[1]) or {}
+=======
+    version = docker.get_version(info)
+    if version is None:
+        return {"NodeName": parse_legacy_docker_container_node_name(info)}
+
+    return docker.json_get_obj(info[1]) or {}
+>>>>>>> upstream/master
 
 
 def inv_docker_container_node_name(info, inventory_tree):
@@ -43,6 +61,9 @@ def inv_docker_container_node_name(info, inventory_tree):
 
 
 inv_info['docker_container_node_name'] = {  # pylint: disable=undefined-variable
+<<<<<<< HEAD
     'includes': ['docker.include', 'legacy_docker.include'],
+=======
+>>>>>>> upstream/master
     'inv_function': inv_docker_container_node_name,
 }

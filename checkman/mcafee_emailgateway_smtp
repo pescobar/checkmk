@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: McAfee Email gateway: SMTP statistics
+=======
+title: McAfee Email Gateway: SMTP Statistics
+>>>>>>> upstream/master
 agents: snmp
 catalog: app/mcafee
 license: GPL

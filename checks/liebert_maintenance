@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -24,6 +25,19 @@
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
 
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# NOTE: Careful when replacing the *-import below with a more specific import. This can cause
+# problems because it might remove variables from the check-context which are necessary for
+# resolving legacy discovery results such as [("SUMMARY", "diskstat_default_levels")]. Furthermore,
+# it might also remove variables needed for accessing discovery rulesets.
+from cmk.base.check_legacy_includes.liebert import *  # pylint: disable=wildcard-import,unused-wildcard-import
+>>>>>>> upstream/master
 # example output
 # .1.3.6.1.4.1.476.1.42.3.9.20.1.10.1.2.1.4868 Calculated Next Maintenance Month
 # .1.3.6.1.4.1.476.1.42.3.9.20.1.20.1.2.1.4868 5
@@ -41,7 +55,11 @@ def inventory_liebert_maintenance(parsed):
 
 def check_liebert_maintenance(_no_item, params, parsed):
     month, year = None, None
+<<<<<<< HEAD
     for key, value in parsed.iteritems():
+=======
+    for key, value in parsed.items():
+>>>>>>> upstream/master
         if "month" in key.lower():
             month = value
         elif "year" in key.lower():
@@ -60,7 +78,11 @@ def check_liebert_maintenance(_no_item, params, parsed):
 
 
 check_info['liebert_maintenance'] = {
+<<<<<<< HEAD
     'parse_function': lambda info: parse_liebert_without_unit(info, int),
+=======
+    'parse_function': lambda info: parse_liebert_without_unit_wrapper(info, int),
+>>>>>>> upstream/master
     'inventory_function': inventory_liebert_maintenance,
     'check_function': check_liebert_maintenance,
     'service_description': 'Maintenance',
@@ -73,6 +95,9 @@ check_info['liebert_maintenance'] = {
             '20.1.2.1.4869',  #LIEBERT-GP-FLExible-MIB: lgpFlexibleEntryValue
         ]),
     'snmp_scan_function': scan_liebert,
+<<<<<<< HEAD
     'includes': ['liebert.include'],
+=======
+>>>>>>> upstream/master
     'default_levels_variable': 'liebert_maintenance_default_levels',
 }

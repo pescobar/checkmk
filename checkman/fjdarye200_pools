@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: Fujitsu ETERNUS DX200 storage systems: Thin provisioning pool
+=======
+title: Fujitsu ETERNUS DX200 Storage Systems: Thin Provisioning Pool
+>>>>>>> upstream/master
 agents: snmp
 catalog: hw/storagehw/fujitsu
 license: GPLv2
@@ -13,4 +17,8 @@ item:
  The index of the thin provisioning pool.
 
 inventory:
+<<<<<<< HEAD
  One item per pool will be discovered.
+=======
+ One service is created for each pool.
+>>>>>>> upstream/master

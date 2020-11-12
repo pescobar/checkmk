@@ -1,7 +1,18 @@
+<<<<<<< HEAD
 title: SSH connection to execute commands on a remote host
+=======
+title: SSH Connection to Execute Commands on a Remote Host
+>>>>>>> upstream/master
 agents: active
 catalog: agentless
 license: GPL
 distribution: check_mk
+<<<<<<< HEAD
+=======
+
+item:
+ If available the executed command, otherwise the service description
+
+>>>>>>> upstream/master
 description:
  This is an active check which uses SSH to execute commands on a remote host.

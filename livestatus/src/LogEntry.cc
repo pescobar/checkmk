@@ -1,32 +1,25 @@
-// +------------------------------------------------------------------+
-// |             ____ _               _        __  __ _  __           |
-// |            / ___| |__   ___  ___| | __   |  \/  | |/ /           |
-// |           | |   | '_ \ / _ \/ __| |/ /   | |\/| | ' /            |
-// |           | |___| | | |  __/ (__|   <    | |  | | . \            |
-// |            \____|_| |_|\___|\___|_|\_\___|_|  |_|_|\_\           |
-// |                                                                  |
-// | Copyright Mathias Kettner 2014             mk@mathias-kettner.de |
-// +------------------------------------------------------------------+
-//
-// This file is part of Check_MK.
-// The official homepage is at http://mathias-kettner.de/check_mk.
-//
-// check_mk is free software;  you can redistribute it and/or modify it
-// under the  terms of the  GNU General Public License  as published by
-// the Free Software Foundation in version 2.  check_mk is  distributed
-// in the hope that it will be useful, but WITHOUT ANY WARRANTY;  with-
-// out even the implied warranty of  MERCHANTABILITY  or  FITNESS FOR A
-// PARTICULAR PURPOSE. See the  GNU General Public License for more de-
-// tails. You should have  received  a copy of the  GNU  General Public
-// License along with GNU Make; see the file  COPYING.  If  not,  write
-// to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
-// Boston, MA 02110-1301 USA.
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the
+// terms and conditions defined in the file COPYING, which is part of this
+// source code package.
 
 #include "LogEntry.h"
+<<<<<<< HEAD
 #include <cstdlib>
 #include <stdexcept>
 #include <unordered_map>
 #include <utility>
+=======
+
+#include <algorithm>  // IWYU pragma: keep
+#include <cstdlib>
+#include <cstring>
+#include <functional>  // IWYU pragma: keep
+#include <stdexcept>
+#include <unordered_map>
+#include <utility>
+
+>>>>>>> upstream/master
 #include "StringUtils.h"
 
 // 0123456789012345678901234567890
@@ -59,10 +52,16 @@ LogEntry::LogEntry(size_t lineno, std::string line)
     } catch (const std::logic_error &e) {
         _class = Class::invalid;
         _kind = LogEntryKind::none;
+<<<<<<< HEAD
+=======
+        _time = 0;
+        _type = "";
+>>>>>>> upstream/master
         return;  // ignore invalid lines silently
     }
 
     classifyLogMessage();
+<<<<<<< HEAD
     applyWorkarounds();
 }
 
@@ -106,11 +105,79 @@ bool LogEntry::assign(Param par, const std::string &field) {
             break;
         case Param::Ignore:
             break;
-    }
+=======
+}
 
-    return true;
+void LogEntry::assign(Param par, const std::string &field) {
+    switch (par) {
+        case Param::HostName:
+            _host_name = field;
+            return;
+        case Param::ServiceDescription:
+            _service_description = field;
+            return;
+        case Param::CommandName:
+            _command_name = field;
+            return;
+        case Param::CommandNameWithWorkaround:
+            _command_name = field;
+            // The NotifyHelper class has a long, tragic history: Through a long
+            // series of commits, it suffered from spelling mistakes like
+            // "HOST_NOTIFICATION" or "HOST NOTIFICATION" (without a colon),
+            // parameter lists not matching the corresponding format strings,
+            // and last but not least wrong ordering of fields. The net result
+            // of this tragedy is that due to legacy reasons, we have to support
+            // parsing an incorrect ordering of "state type" and "command name"
+            // fields. :-P
+            if (_state_type.empty()) {
+                return;  // extremely broken line
+            }
+            if (_state_type == "check-mk-notify") {
+                // Ooops, we encounter one of our own buggy lines...
+                std::swap(_state_type, _command_name);
+                if (_state_type.empty()) {
+                    return;  // extremely broken line, even after swapping
+                }
+            }
+            _state = _service_description.empty()
+                         ? static_cast<int>(parseHostState(_state_type))
+                         : static_cast<int>(parseServiceState(_state_type));
+            return;
+        case Param::ContactName:
+            _contact_name = field;
+            return;
+        case Param::HostState:
+            _state = static_cast<int>(parseHostState(field));
+            return;
+        case Param::ServiceState:
+        case Param::ExitCode:  // HACK: Encoded as a service state! :-P
+            _state = static_cast<int>(parseServiceState(field));
+            return;
+        case Param::State:
+            _state = atoi(field.c_str());
+            return;
+        case Param::StateType:
+            _state_type = field;
+            return;
+        case Param::Attempt:
+            _attempt = atoi(field.c_str());
+            return;
+        case Param::Comment:
+            _comment = field;
+            return;
+        case Param::PluginOutput:
+            _plugin_output = field;
+            return;
+        case Param::LongPluginOutput:
+            _long_plugin_output = mk::to_multi_line(field);
+            return;
+        case Param::Ignore:
+            return;
+>>>>>>> upstream/master
+    }
 };
 
+// NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 std::vector<LogEntry::LogDef> LogEntry::log_definitions{
     LogDef{"INITIAL HOST STATE",
            Class::state,
@@ -198,15 +265,25 @@ std::vector<LogEntry::LogDef> LogEntry::log_definitions{
            Class::hs_notification,
            LogEntryKind::none,
            {Param::ContactName, Param::HostName, Param::StateType,
+<<<<<<< HEAD
             Param::CommandName, Param::PluginOutput,  //
             Param::Ignore,                            // author
+=======
+            Param::CommandNameWithWorkaround, Param::PluginOutput,
+            Param::Ignore,  // author
+>>>>>>> upstream/master
             Param::Comment, Param::LongPluginOutput}},
     ////////////////
     LogDef{"SERVICE NOTIFICATION",
            Class::hs_notification,
            LogEntryKind::none,
            {Param::ContactName, Param::HostName, Param::ServiceDescription,
+<<<<<<< HEAD
             Param::StateType, Param::CommandName, Param::PluginOutput,  //
+=======
+            Param::StateType, Param::CommandNameWithWorkaround,
+            Param::PluginOutput,
+>>>>>>> upstream/master
             Param::Ignore,  // author
             Param::Comment, Param::LongPluginOutput}},
     ////////////////
@@ -214,26 +291,45 @@ std::vector<LogEntry::LogDef> LogEntry::log_definitions{
            Class::hs_notification,
            LogEntryKind::none,
            {Param::ContactName, Param::HostName, Param::StateType,
+<<<<<<< HEAD
             Param::CommandName, Param::PluginOutput, Param::Comment}},
+=======
+            Param::CommandNameWithWorkaround, Param::PluginOutput,
+            Param::Comment}},
+>>>>>>> upstream/master
     ////////////////
     LogDef{"SERVICE NOTIFICATION RESULT",
            Class::hs_notification,
            LogEntryKind::none,
            {Param::ContactName, Param::HostName, Param::ServiceDescription,
+<<<<<<< HEAD
             Param::StateType, Param::CommandName, Param::PluginOutput,
             Param::Comment}},
+=======
+            Param::StateType, Param::CommandNameWithWorkaround,
+            Param::PluginOutput, Param::Comment}},
+>>>>>>> upstream/master
     ////////////////
     LogDef{"HOST NOTIFICATION PROGRESS",
            Class::hs_notification,
            LogEntryKind::none,
            {Param::ContactName, Param::HostName, Param::StateType,
+<<<<<<< HEAD
             Param::CommandName, Param::PluginOutput}},
+=======
+            Param::CommandNameWithWorkaround, Param::PluginOutput}},
+>>>>>>> upstream/master
     ////////////////
     LogDef{"SERVICE NOTIFICATION PROGRESS",
            Class::hs_notification,
            LogEntryKind::none,
            {Param::ContactName, Param::HostName, Param::ServiceDescription,
+<<<<<<< HEAD
             Param::StateType, Param::CommandName, Param::PluginOutput}},
+=======
+            Param::StateType, Param::CommandNameWithWorkaround,
+            Param::PluginOutput}},
+>>>>>>> upstream/master
     ////////////////
     LogDef{"HOST ALERT HANDLER STARTED",
            Class::alert_handlers,
@@ -248,14 +344,22 @@ std::vector<LogEntry::LogDef> LogEntry::log_definitions{
     LogDef{"HOST ALERT HANDLER STOPPED",
            Class::alert_handlers,
            LogEntryKind::none,
+<<<<<<< HEAD
            {Param::HostName, Param::CommandName, Param::ServiceState,
+=======
+           {Param::HostName, Param::CommandName, Param::ExitCode,
+>>>>>>> upstream/master
             Param::PluginOutput}},
     ////////////////
     LogDef{"SERVICE ALERT HANDLER STOPPED",
            Class::alert_handlers,
            LogEntryKind::none,
            {Param::HostName, Param::ServiceDescription, Param::CommandName,
+<<<<<<< HEAD
             Param::ServiceState, Param::PluginOutput}},
+=======
+            Param::ExitCode, Param::PluginOutput}},
+>>>>>>> upstream/master
     ////////////////
     // NOTE: Only Nagios writes such lines if configured to do so.
     LogDef{"PASSIVE SERVICE CHECK",
@@ -303,6 +407,7 @@ void LogEntry::classifyLogMessage() {
     if (textStartsWith("LOG VERSION: 2.0")) {
         _class = Class::program;
         _kind = LogEntryKind::log_version;
+<<<<<<< HEAD
         return;
     }
     if (textStartsWith("logging initial states") ||
@@ -364,6 +469,42 @@ void LogEntry::applyWorkarounds() {
     _state = _service_description.empty()
                  ? static_cast<int>(parseHostState(_state_type))
                  : static_cast<int>(parseServiceState(_state_type));
+=======
+        return;
+    }
+    if (textStartsWith("logging initial states") ||
+        textStartsWith("logging intitial states")) {
+        _class = Class::program;
+        _kind = LogEntryKind::log_initial_states;
+        return;
+    }
+    if (textContains("starting...") || textContains("active mode...")) {
+        _class = Class::program;
+        _kind = LogEntryKind::core_starting;
+        return;
+    }
+    if (textContains("shutting down...") || textContains("Bailing out") ||
+        textContains("standby mode...")) {
+        _class = Class::program;
+        _kind = LogEntryKind::core_stopping;
+        return;
+    }
+    if (textContains("restarting...")) {
+        _class = Class::program;
+        _kind = LogEntryKind::none;
+        return;
+    }
+    _class = Class::info;
+    _kind = LogEntryKind::none;
+}
+
+bool LogEntry::textStartsWith(const std::string &what) const {
+    return _message.compare(timestamp_prefix_length, what.size(), what) == 0;
+}
+
+bool LogEntry::textContains(const std::string &what) const {
+    return _message.find(what, timestamp_prefix_length) != std::string::npos;
+>>>>>>> upstream/master
 }
 
 namespace {
@@ -379,7 +520,11 @@ std::string extractStateType(const std::string &str) {
     return str;
 }
 
+<<<<<<< HEAD
 std::unordered_map<std::string, ServiceState> fl_service_state_types{
+=======
+const std::unordered_map<std::string, ServiceState> fl_service_state_types{
+>>>>>>> upstream/master
     // normal states
     {"OK", ServiceState::ok},
     {"WARNING", ServiceState::warning},
@@ -388,7 +533,11 @@ std::unordered_map<std::string, ServiceState> fl_service_state_types{
     // states from "... ALERT"/"... NOTIFICATION"
     {"RECOVERY", ServiceState::ok}};
 
+<<<<<<< HEAD
 std::unordered_map<std::string, HostState> fl_host_state_types{
+=======
+const std::unordered_map<std::string, HostState> fl_host_state_types{
+>>>>>>> upstream/master
     // normal states
     {"UP", HostState::up},
     {"DOWN", HostState::down},
@@ -400,7 +549,7 @@ std::unordered_map<std::string, HostState> fl_host_state_types{
     {"OK", HostState::up},
     {"WARNING", HostState::down},
     {"CRITICAL", HostState::unreachable},
-    {"UNKNOWN", HostState::up}};
+    {"UNKNOWN", static_cast<HostState>(3)}};  // Horrible HACK
 }  // namespace
 
 // static
@@ -413,4 +562,125 @@ ServiceState LogEntry::parseServiceState(const std::string &str) {
 HostState LogEntry::parseHostState(const std::string &str) {
     auto it = fl_host_state_types.find(extractStateType(str));
     return it == fl_host_state_types.end() ? HostState::up : it->second;
+<<<<<<< HEAD
+=======
+}
+
+namespace {
+std::string parens(const std::string &fun, const std::string &arg) {
+    return fun + " (" + arg + ")";
+}
+
+// TODO(sp) Centralized these mappings and their inverses...
+std::string to_host_state(int state) {
+    switch (state) {
+        case 0:
+            return "UP";
+        case 1:
+            return "DOWN";
+        case 2:
+            return "UNREACHABLE";
+        default:
+            return "FUNNY_HOST_STATE_" + std::to_string(state);
+    }
+}
+
+std::string to_service_state(int state) {
+    switch (state) {
+        case 0:
+            return "OK";
+        case 1:
+            return "WARNING";
+        case 2:
+            return "CRITICAL";
+        case 3:
+            return "UNKNOWN";
+        default:
+            return "FUNNY_HOST_STATE_" + std::to_string(state);
+    }
+}
+
+std::string to_exit_code(int state) {
+    switch (state) {
+        case 0:
+            return "SUCCESS";
+        case 1:
+            return "TEMPORARY_FAILURE";
+        case 2:
+            return "PERMANENT_FAILURE";
+        default:
+            return "FUNNY_EXIT_CODE_" + std::to_string(state);
+    }
+}
+}  // namespace
+
+std::string LogEntry::state_info() const {
+    switch (_kind) {
+        case LogEntryKind::state_host_initial:
+        case LogEntryKind::state_host:
+        case LogEntryKind::alert_host:
+            return parens(_state_type, to_host_state(_state));
+
+        case LogEntryKind::state_service_initial:
+        case LogEntryKind::state_service:
+        case LogEntryKind::alert_service:
+            return parens(_state_type, to_service_state(_state));
+
+        case LogEntryKind::none:
+            if (strcmp(_type, "HOST NOTIFICATION RESULT") == 0 ||
+                strcmp(_type, "SERVICE NOTIFICATION RESULT") == 0 ||
+                strcmp(_type, "HOST NOTIFICATION PROGRESS") == 0 ||
+                strcmp(_type, "SERVICE NOTIFICATION PROGRESS") == 0 ||
+                strcmp(_type, "HOST ALERT HANDLER STOPPED") == 0 ||
+                strcmp(_type, "SERVICE ALERT HANDLER STOPPED") == 0) {
+                return parens("EXIT_CODE", to_exit_code(_state));
+            }
+            if (strcmp(_type, "HOST NOTIFICATION") == 0) {
+                if (_state_type == "UP" ||    //
+                    _state_type == "DOWN" ||  //
+                    _state_type == "UNREACHABLE") {
+                    return parens("NOTIFY", _state_type);
+                }
+                if (mk::starts_with(_state_type, "ALERTHANDLER (")) {
+                    return parens("EXIT_CODE", to_exit_code(_state));
+                }
+                return _state_type;
+            }
+            if (strcmp(_type, "SERVICE NOTIFICATION") == 0) {
+                if (_state_type == "OK" ||        //
+                    _state_type == "WARNING" ||   //
+                    _state_type == "CRITICAL" ||  //
+                    _state_type == "UNKNOWN") {
+                    return parens("NOTIFY", _state_type);
+                }
+                if (mk::starts_with(_state_type, "ALERTHANDLER (")) {
+                    return parens("EXIT_CODE", to_exit_code(_state));
+                }
+                return _state_type;
+            }
+            if (strcmp(_type, "PASSIVE HOST CHECK") == 0) {
+                return parens("PASSIVE", to_host_state(_state));
+            }
+            if (strcmp(_type, "PASSIVE SERVICE CHECK") == 0) {
+                return parens("PASSIVE", to_service_state(_state));
+            }
+            return "";
+
+        case LogEntryKind::downtime_alert_host:
+        case LogEntryKind::downtime_alert_service:
+        case LogEntryKind::flapping_host:
+        case LogEntryKind::flapping_service:
+        case LogEntryKind::acknowledge_alert_host:
+        case LogEntryKind::acknowledge_alert_service:
+            return _state_type;
+
+        case LogEntryKind::timeperiod_transition:
+        case LogEntryKind::core_starting:
+        case LogEntryKind::core_stopping:
+        case LogEntryKind::log_version:
+        case LogEntryKind::log_initial_states:
+            return "";
+    }
+    return "";  // unreachable, make the compiler happy
+>>>>>>> upstream/master
 }

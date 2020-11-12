@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,6 +24,13 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 from cmk.gui.i18n import _
 from cmk.gui.valuespec import (
@@ -38,12 +46,21 @@ from cmk.gui.plugins.wato import (
 )
 
 
+<<<<<<< HEAD
 def _parameter_valuespec_read_hits():
     return Tuple(
         title=_(u"Prefetch hits"),
         elements=[
             Float(title=_(u"Warning below"), default_value=95.0),
             Float(title=_(u"Critical below"), default_value=90.0),
+=======
+def _parameter_valuespec_read_hits() -> Tuple:
+    return Tuple(
+        title=_("Prefetch hits"),
+        elements=[
+            Float(title=_("Warning below"), default_value=95.0),
+            Float(title=_("Critical below"), default_value=90.0),
+>>>>>>> upstream/master
         ],
     )
 
@@ -52,7 +69,13 @@ rulespec_registry.register(
     CheckParameterRulespecWithItem(
         check_group_name="read_hits",
         group=RulespecGroupCheckParametersStorage,
+<<<<<<< HEAD
         item_spec=lambda: TextAscii(title=_(u"Port index or 'Total'")),
         parameter_valuespec=_parameter_valuespec_read_hits,
         title=lambda: _("Read prefetch hits for DDN S2A devices"),
+=======
+        item_spec=lambda: TextAscii(title=_("Port index or 'Total'")),
+        parameter_valuespec=_parameter_valuespec_read_hits,
+        title=lambda: _("DDN S2A read prefetch hits"),
+>>>>>>> upstream/master
     ))

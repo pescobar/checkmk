@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: SAP HANA License
+=======
+title: SAP HANA: License
+>>>>>>> upstream/master
 agents: linux
 catalog: app/sap_hana
 license: GPL
@@ -22,7 +26,18 @@ description:
  This check is also cluster-aware.
 
 item:
+<<<<<<< HEAD
  The instance name
 
 inventory:
  One service is created per instance.
+=======
+ The sid instance name
+
+inventory:
+ One service is created for each instance.
+
+cluster:
+  On a cluster the first dataset of a node that is encountered
+  is evaluated.
+>>>>>>> upstream/master

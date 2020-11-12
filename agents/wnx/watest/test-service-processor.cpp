@@ -61,12 +61,22 @@ TEST(ServiceProcessorTest, Generate) {
 
     AsyncAnswer::DataBlock db;
     auto ret = sp.wrapResultWithStaticSections(db);
+<<<<<<< HEAD
+=======
+    ret.push_back(0);
+>>>>>>> upstream/master
     std::string data = reinterpret_cast<const char*>(ret.data());
     ASSERT_TRUE(ret.size() > 5);
     auto t = cma::tools::SplitString(data, "\n");
     EXPECT_EQ(t[0] + "\n", cma::section::MakeHeader(cma::section::kCheckMk));
     EXPECT_EQ(t[t.size() - 2] + "\n",
+<<<<<<< HEAD
               cma::section::MakeHeader(cma::section::kSystemTime));
+=======
+              cma::section::MakeHeader(cma::section::kSystemTime))
+        << "data:\n"
+        << data;
+>>>>>>> upstream/master
 }
 
 TEST(ServiceProcessorTest, StartStopExe) {
@@ -151,7 +161,11 @@ TEST(ServiceProcessorTest, Base) {
             cma::carrier::kCarrierFileName, tmp.u8string());
         sp.tryToDirectCall(uptime_provider, a.getId(), "0");
         auto table = tst::ReadFileAsTable(tmp.u8string());
+<<<<<<< HEAD
         EXPECT_EQ(table.size(), 2);
+=======
+        ASSERT_EQ(table.size(), 2);
+>>>>>>> upstream/master
         EXPECT_EQ(table[0] + "\n", MakeHeader(cma::section::kUptimeName));
     }
 
@@ -203,6 +217,7 @@ TEST(ServiceProcessorTest, DirectCall) {
                                                             wmi::kSepChar};
         AsyncAnswer a;
         a.prepareAnswer("aaa");
+<<<<<<< HEAD
         wmi_cpuload_provider.directCall(
             "0", a.getId(),
             cma::carrier::BuildPortName(cma::carrier::kCarrierFileName,
@@ -218,6 +233,37 @@ TEST(ServiceProcessorTest, DirectCall) {
         EXPECT_EQ(table[4] + "\n",
                   cma::section::MakeSubSectionHeader(
                       cma::provider::kSubSectionComputerSystem));
+=======
+        std::vector<std::string> table;
+        for (int i = 0; i < 3; i++) {
+            wmi_cpuload_provider.directCall(
+                "0", a.getId(),
+                cma::carrier::BuildPortName(cma::carrier::kCarrierFileName,
+                                            tmp.u8string()));
+            table = tst::ReadFileAsTable(tmp.u8string());
+
+            if (table.size() < 7) {
+                using namespace std::chrono;
+                XLOG::SendStringToStdio("?", XLOG::Colors::pink);
+                cma::tools::sleep(1000ms);
+                continue;
+            }
+
+            EXPECT_EQ(table[0] + "\n",
+                      cma::section::MakeHeader(cma::provider::kWmiCpuLoad,
+                                               cma::provider::wmi::kSepChar));
+
+            EXPECT_EQ(table[1] + "\n",
+                      cma::section::MakeSubSectionHeader(
+                          cma::provider::kSubSectionSystemPerf));
+            EXPECT_EQ(table[4] + "\n",
+                      cma::section::MakeSubSectionHeader(
+                          cma::provider::kSubSectionComputerSystem));
+            return;
+        }
+        EXPECT_TRUE(false) << "CpuLoad returns not enough data, size = "
+                           << table.size();
+>>>>>>> upstream/master
     }
 }
 

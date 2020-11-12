@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,6 +24,13 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 # Computes for a scheduling entry the last/next time that this entry
 # should have run or will be run. Such a scheduling entry is specified
@@ -32,13 +40,20 @@
 import abc
 import datetime
 import time
+<<<<<<< HEAD
 import six
+=======
+>>>>>>> upstream/master
 
 from dateutil.relativedelta import relativedelta
 from dateutil.rrule import rrule, DAILY, WEEKLY, MONTHLY
 
 
+<<<<<<< HEAD
 class Schedule(six.with_metaclass(abc.ABCMeta, object)):
+=======
+class Schedule(metaclass=abc.ABCMeta):
+>>>>>>> upstream/master
     """
     Abstract base class for schedules. A default implementation
     for the last and next event at a given datetime are provided.
@@ -66,6 +81,10 @@ class DaySchedule(Schedule):
     A daily schedule.
     """
     def __init__(self, timeofday):
+<<<<<<< HEAD
+=======
+        super().__init__()
+>>>>>>> upstream/master
         self._rule = rrule(DAILY, byhour=timeofday.hour, byminute=timeofday.minute, bysecond=0)
 
     @property
@@ -82,6 +101,10 @@ class WeekSchedule(Schedule):
     A weekly schedule.
     """
     def __init__(self, weekday, timeofday):
+<<<<<<< HEAD
+=======
+        super().__init__()
+>>>>>>> upstream/master
         if not 0 <= weekday <= 6:
             raise ValueError('weekday must be between 0 and 6')
         self._rule = rrule(WEEKLY,
@@ -104,6 +127,10 @@ class StartMonthSchedule(Schedule):
     A monthly schedule initialized relatively to the first day of the month.
     """
     def __init__(self, day, timeofday):
+<<<<<<< HEAD
+=======
+        super().__init__()
+>>>>>>> upstream/master
         if not 1 <= day <= 31:
             raise ValueError('day must be between 1 and 31')
         self._rule = rrule(MONTHLY,
@@ -126,6 +153,10 @@ class EndMonthSchedule(Schedule):
     A monthly schedule initialized relatively to the last day of the month.
     """
     def __init__(self, days_from_end, timeofday):
+<<<<<<< HEAD
+=======
+        super().__init__()
+>>>>>>> upstream/master
         if not 1 <= days_from_end <= 31:
             raise ValueError('days_from_end must be between 1 and 31')
         day = -days_from_end
@@ -151,6 +182,7 @@ def _get_schedule(period, timeofday):
     t = datetime.time(*timeofday)
 
     if period == "day":
+<<<<<<< HEAD
         schedule = DaySchedule(t)
     elif period[0] == "week":
         weekday = period[1]
@@ -165,6 +197,19 @@ def _get_schedule(period, timeofday):
         raise ValueError('Unknown period')
 
     return schedule
+=======
+        return DaySchedule(t)
+    if period[0] == "week":
+        weekday = period[1]
+        return WeekSchedule(weekday, t)
+    if period[0] == "month_begin":
+        day = period[1]
+        return StartMonthSchedule(day, t)
+    if period[0] == "month_end":
+        days_from_end = period[1]
+        return EndMonthSchedule(days_from_end, t)
+    raise ValueError('Unknown period')
+>>>>>>> upstream/master
 
 
 def last_scheduled_time(period, timeofday, dt=None):

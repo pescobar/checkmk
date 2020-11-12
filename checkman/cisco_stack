@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: CISCO Stack Switches: Stack Switch States
+=======
+title: Cisco Stack Switches: Stack Switch States
+>>>>>>> upstream/master
 agents: snmp
 catalog: hw/network/cisco
 license: GPL
@@ -10,4 +14,8 @@ item:
  The stack switch number.
 
 inventory:
+<<<<<<< HEAD
  One service per switch is created.
+=======
+ One service is created for each switch.
+>>>>>>> upstream/master

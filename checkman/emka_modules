@@ -17,4 +17,8 @@ item:
  The module name.
 
 inventory:
+<<<<<<< HEAD
  One service per module is created.
+=======
+ One service is created for each activated module.
+>>>>>>> upstream/master

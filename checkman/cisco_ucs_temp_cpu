@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: Cisco UCS: CPU temperature
+=======
+title: Cisco UCS: CPU Temperature
+>>>>>>> upstream/master
 agents: snmp
 catalog: hw/network/cisco
 license: GPL
@@ -10,4 +14,8 @@ item:
  The name of the CPU
 
 inventory:
+<<<<<<< HEAD
  One service per CPU
+=======
+ One service is created for each CPU.
+>>>>>>> upstream/master

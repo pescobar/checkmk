@@ -16,6 +16,7 @@ endif
 MOD_FCGID_BUILD := $(BUILD_HELPER_DIR)/$(MOD_FCGID_DIR)-build
 MOD_FCGID_INSTALL := $(BUILD_HELPER_DIR)/$(MOD_FCGID_DIR)-install
 MOD_FCGID_PATCHING := $(BUILD_HELPER_DIR)/$(MOD_FCGID_DIR)-patching
+<<<<<<< HEAD
 MOD_FCGID_SKEL := $(BUILD_HELPER_DIR)/$(MOD_FCGID_DIR)-skel
 
 .PHONY: $(MOD_FCGID) $(MOD_FCGID)-install $(MOD_FCGID)-skel $(MOD_FCGID)-clean
@@ -29,10 +30,21 @@ $(MOD_FCGID)-skel: $(MOD_FCGID_SKEL)
 $(MOD_FCGID_BUILD): $(MOD_FCGID_PATCHING)
 	cd $(MOD_FCGID_DIR) && APXS=$(APXS) ./configure.apxs
 	CPATH="/usr/include/apache2-worker" $(MAKE) -C $(MOD_FCGID_DIR)
+=======
+
+#MOD_FCGID_INSTALL_DIR := $(INTERMEDIATE_INSTALL_BASE)/$(MOD_FCGID_DIR)
+MOD_FCGID_BUILD_DIR := $(PACKAGE_BUILD_DIR)/$(MOD_FCGID_DIR)
+#MOD_FCGID_WORK_DIR := $(PACKAGE_WORK_DIR)/$(MOD_FCGID_DIR)
+
+$(MOD_FCGID_BUILD): $(MOD_FCGID_PATCHING)
+	cd $(MOD_FCGID_BUILD_DIR) && APXS=$(APXS) ./configure.apxs
+	CPATH="/usr/include/apache2-worker" $(MAKE) -C $(MOD_FCGID_BUILD_DIR)
+>>>>>>> upstream/master
 	$(TOUCH) $@
 
 $(MOD_FCGID_INSTALL): $(MOD_FCGID_BUILD)
 	$(MKDIR) $(DESTDIR)$(OMD_ROOT)/lib/apache/modules
+<<<<<<< HEAD
 	cp $(MOD_FCGID_DIR)/modules/fcgid/.libs/mod_fcgid.so $(DESTDIR)$(OMD_ROOT)/lib/apache/modules
 	chmod 644 $(DESTDIR)$(OMD_ROOT)/lib/apache/modules/mod_fcgid.so
 	$(TOUCH) $@
@@ -43,3 +55,9 @@ $(MOD_FCGID_SKEL): $(MOD_FCGID_INSTALL)
 
 $(MOD_FCGID)-clean:
 	$(RM) -r $(MOD_FCGID_DIR) $(BUILD_HELPER_DIR)/$(MOD_FCGID)*
+=======
+	cp $(MOD_FCGID_BUILD_DIR)/modules/fcgid/.libs/mod_fcgid.so $(DESTDIR)$(OMD_ROOT)/lib/apache/modules
+	chmod 644 $(DESTDIR)$(OMD_ROOT)/lib/apache/modules/mod_fcgid.so
+	$(MKDIR) $(SKEL)/tmp/apache/fcgid_sock
+	$(TOUCH) $@
+>>>>>>> upstream/master

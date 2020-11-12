@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: Kentix MultiSensor: Dew point
+=======
+title: Kentix MultiSensor: Dew Point
+>>>>>>> upstream/master
 agents: snmp
 catalog: hw/environment/kentix
 license: GPL
@@ -9,3 +13,12 @@ description:
 
  The device allows to configure an upper and lower
  level. There are no default levels set.
+<<<<<<< HEAD
+=======
+
+item:
+ One of the two statement {{LAN}} or {{Rack}}
+
+inventory:
+ One service is created.
+>>>>>>> upstream/master

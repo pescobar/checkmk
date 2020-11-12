@@ -1,4 +1,15 @@
+<<<<<<< HEAD
 import pytest
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+import pytest  # type: ignore[import]
+from testlib import Check  # type: ignore[import]
+>>>>>>> upstream/master
 from checktestlib import BasicCheckResult
 
 pytestmark = pytest.mark.checks
@@ -27,6 +38,7 @@ RA32E_SWITCH = 'ra32e_switch'
      ('Sensor 05', None), ('Sensor 06', None), ('Sensor 07', None), ('Sensor 08', None),
      ('Sensor 09', None), ('Sensor 10', None), ('Sensor 11', None), ('Sensor 12', None),
      ('Sensor 13', None), ('Sensor 14', None), ('Sensor 15', None), ('Sensor 16', None)])])
+<<<<<<< HEAD
 def test_ra32e_switch_discovery(check_manager, info, result):
     check = check_manager.get_check(RA32E_SWITCH)
     assert list(check.run_discovery(info)) == result
@@ -34,14 +46,31 @@ def test_ra32e_switch_discovery(check_manager, info, result):
 
 def test_ra32e_switch_check_closed_no_rule(check_manager):
     check = check_manager.get_check(RA32E_SWITCH)
+=======
+@pytest.mark.usefixtures("config_load_all_checks")
+def test_ra32e_switch_discovery(info, result):
+    check = Check(RA32E_SWITCH)
+    assert list(check.run_discovery(info)) == result
+
+
+@pytest.mark.usefixtures("config_load_all_checks")
+def test_ra32e_switch_check_closed_no_rule():
+    check = Check(RA32E_SWITCH)
+>>>>>>> upstream/master
     result = BasicCheckResult(*check.run_check("Sensor 01", None, [['1']]))
 
     assert result.status == 0
     assert result.infotext.startswith("closed")
 
 
+<<<<<<< HEAD
 def test_ra32e_switch_check_open_expected_close(check_manager):
     check = check_manager.get_check(RA32E_SWITCH)
+=======
+@pytest.mark.usefixtures("config_load_all_checks")
+def test_ra32e_switch_check_open_expected_close():
+    check = Check(RA32E_SWITCH)
+>>>>>>> upstream/master
     result = BasicCheckResult(*check.run_check(
         "Sensor 03", 'closed',
         [['1', '1', '0', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1']]))
@@ -51,8 +80,14 @@ def test_ra32e_switch_check_open_expected_close(check_manager):
     assert "expected closed" in result.infotext
 
 
+<<<<<<< HEAD
 def test_ra32e_switch_check_no_input(check_manager):
     check = check_manager.get_check(RA32E_SWITCH)
+=======
+@pytest.mark.usefixtures("config_load_all_checks")
+def test_ra32e_switch_check_no_input():
+    check = Check(RA32E_SWITCH)
+>>>>>>> upstream/master
     result = BasicCheckResult(*check.run_check("Sensor 01", 'ignore', [['']]))
 
     assert result.status == 3

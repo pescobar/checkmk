@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,6 +24,13 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 import time
 
@@ -42,9 +50,17 @@ from cmk.gui.permissions import (
     PermissionSection,
     declare_permission,
 )
+<<<<<<< HEAD
 
 g_acknowledgement_time = {}
 g_modified_time = 0
+=======
+from cmk.gui.breadcrumb import make_simple_page_breadcrumb
+from cmk.gui.main_menu import mega_menu_registry
+
+g_acknowledgement_time = {}
+g_modified_time = 0.0
+>>>>>>> upstream/master
 g_columns = ["time", "contact_name", "type", "host_name", "service_description", "comment"]
 
 
@@ -77,7 +93,12 @@ def load_plugins(force):
 
 def acknowledge_failed_notifications(timestamp):
     g_acknowledgement_time[config.user.id] = timestamp
+<<<<<<< HEAD
     save_acknowledgements()
+=======
+    config.user.acknowledged_notifications = int(g_acknowledgement_time[config.user.id])
+    set_modified_time()
+>>>>>>> upstream/master
 
 
 def set_modified_time():
@@ -85,6 +106,7 @@ def set_modified_time():
     g_modified_time = time.time()
 
 
+<<<<<<< HEAD
 def save_acknowledgements():
     config.user.save_file("acknowledged_notifications", int(g_acknowledgement_time[config.user.id]))
     set_modified_time()
@@ -105,6 +127,20 @@ def load_acknowledgements():
         # date. This should considerably reduce the number of log files that have to be searched
         # when retrieving the list
         acknowledge_failed_notifications(time.time())
+=======
+def acknowledged_time():
+    if g_acknowledgement_time.get(config.user.id) is None or\
+            config.user.file_modified("acknowledged_notifications") > g_modified_time:
+        g_acknowledgement_time[config.user.id] = config.user.acknowledged_notifications
+        set_modified_time()
+        if g_acknowledgement_time[config.user.id] == 0:
+            # when this timestamp is first initialized, save the current timestamp as the acknowledge
+            # date. This should considerably reduce the number of log files that have to be searched
+            # when retrieving the list
+            acknowledge_failed_notifications(time.time())
+
+    return g_acknowledgement_time[config.user.id]
+>>>>>>> upstream/master
 
 
 def load_failed_notifications(before=None, after=None, stat_only=False, extra_headers=None):
@@ -141,6 +177,7 @@ def load_failed_notifications(before=None, after=None, stat_only=False, extra_he
             horizon = 86400
         query.append("Filter: time > %d" % (int(time.time()) - horizon))
 
+<<<<<<< HEAD
     query = "\n".join(query)
 
     if extra_headers is not None:
@@ -149,6 +186,16 @@ def load_failed_notifications(before=None, after=None, stat_only=False, extra_he
     if stat_only:
         try:
             result = sites.live().query_summed_stats(query)
+=======
+    query_txt = "\n".join(query)
+
+    if extra_headers is not None:
+        query_txt += extra_headers
+
+    if stat_only:
+        try:
+            result = sites.live().query_summed_stats(query_txt)
+>>>>>>> upstream/master
         except MKLivestatusNotFoundError:
             result = [0]  # Normalize the result when no site answered
 
@@ -159,14 +206,22 @@ def load_failed_notifications(before=None, after=None, stat_only=False, extra_he
 
         return result
 
+<<<<<<< HEAD
     else:
         return sites.live().query(query)
+=======
+    return sites.live().query(query_txt)
+>>>>>>> upstream/master
 
 
 def render_notification_table(failed_notifications):
     with table_element() as table:
+<<<<<<< HEAD
         header = dict([(name, idx) for idx, name in enumerate(g_columns)])
 
+=======
+        header = {name: idx for idx, name in enumerate(g_columns)}
+>>>>>>> upstream/master
         for row in failed_notifications:
             table.row()
             table.text_cell(_("Time"),
@@ -180,12 +235,24 @@ def render_notification_table(failed_notifications):
 
 # TODO: We should really recode this to use the view and a normal view command / action
 def render_page_confirm(acktime, prev_url, failed_notifications):
+<<<<<<< HEAD
     html.header(_("Confirm failed notifications"))
 
     if failed_notifications:
         html.open_div(class_="really")
         html.write_text(_("Do you really want to acknowledge all failed notifications up to %s?") %\
                    cmk.utils.render.date_and_time(acktime))
+=======
+    title = _("Confirm failed notifications")
+    breadcrumb = make_simple_page_breadcrumb(mega_menu_registry.menu_monitoring(), title)
+    html.header(title, breadcrumb)
+
+    if failed_notifications:
+        html.open_div(class_="really")
+        html.write_text(
+            _("Do you really want to acknowledge all failed notifications up to %s?") %
+            cmk.utils.render.date_and_time(acktime))
+>>>>>>> upstream/master
         html.begin_form("confirm", method="GET", action=prev_url)
         html.hidden_field('acktime', acktime)
         html.button('_confirm', _("Yes"))
@@ -199,6 +266,7 @@ def render_page_confirm(acktime, prev_url, failed_notifications):
 
 @cmk.gui.pages.register("clear_failed_notifications")
 def page_clear():
+<<<<<<< HEAD
     acktime = html.request.var('acktime')
     if acktime is None:
         acktime = time.time()
@@ -209,6 +277,12 @@ def page_clear():
     if html.request.var('_confirm'):
         acknowledge_failed_notifications(acktime)
         html.reload_sidebar()
+=======
+    acktime = html.request.get_float_input_mandatory('acktime', time.time())
+    prev_url = html.get_url_input('prev_url', '')
+    if html.request.var('_confirm'):
+        acknowledge_failed_notifications(acktime)
+>>>>>>> upstream/master
 
         if config.user.authorized_login_sites():
             # This local import is needed for the moment
@@ -218,3 +292,8 @@ def page_clear():
 
     failed_notifications = load_failed_notifications(before=acktime, after=acknowledged_time())
     render_page_confirm(acktime, prev_url, failed_notifications)
+<<<<<<< HEAD
+=======
+    if html.request.var('_confirm'):
+        html.reload_sidebar()
+>>>>>>> upstream/master

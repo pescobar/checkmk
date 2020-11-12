@@ -1,13 +1,34 @@
 *.a
 *.la
 *.o
+<<<<<<< HEAD
 *.so
+=======
+*.o.tmp
+*.pu
+*.so
+.clangd/
+>>>>>>> upstream/master
 .cproject
 .deps
 Makefile
 Makefile.in
+<<<<<<< HEAD
 compile_commands.json
 cppcheck-result.xml
 html/
 livecheck
+=======
+asio-asio-1-18-0/
+compile_commands.json
+cppcheck-result.xml
+googletest-07d4a6e93d/
+html/
+includes/
+libs/
+livecheck
+rrdtool-*
+test_detail.xml
+test_neb
+>>>>>>> upstream/master
 unixcat

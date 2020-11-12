@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/env python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,6 +24,13 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 from cmk.gui.i18n import _
 from cmk.gui.globals import html
@@ -56,7 +64,11 @@ class SnapinDashlet(IFrameDashlet):
 
     @classmethod
     def initial_size(cls):
+<<<<<<< HEAD
         return (27, 20)
+=======
+        return (28, 20)
+>>>>>>> upstream/master
 
     @classmethod
     def initial_refresh_interval(cls):
@@ -75,16 +87,28 @@ class SnapinDashlet(IFrameDashlet):
 
     @classmethod
     def _snapin_choices(cls):
+<<<<<<< HEAD
         import cmk.gui.sidebar as sidebar
+=======
+        import cmk.gui.sidebar as sidebar  # pylint: disable=import-outside-toplevel
+>>>>>>> upstream/master
         return sorted([(k, v.title()) for k, v in sidebar.snapin_registry.items()],
                       key=lambda x: x[1])
 
     def display_title(self):
+<<<<<<< HEAD
         import cmk.gui.sidebar as sidebar
         return sidebar.snapin_registry[self._dashlet_spec["snapin"]].title()
 
     def update(self):
         import cmk.gui.sidebar as sidebar
+=======
+        import cmk.gui.sidebar as sidebar  # pylint: disable=import-outside-toplevel
+        return sidebar.snapin_registry[self._dashlet_spec["snapin"]].title()
+
+    def update(self):
+        import cmk.gui.sidebar as sidebar  # pylint: disable=import-outside-toplevel
+>>>>>>> upstream/master
         dashlet = self._dashlet_spec
         snapin = sidebar.snapin_registry.get(self._dashlet_spec['snapin'])
         if not snapin:

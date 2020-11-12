@@ -1,6 +1,18 @@
+<<<<<<< HEAD
 // HEADER ONLY(mostly) Player Engine
 
 #pragma once
+=======
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+// conditions defined in the file COPYING, which is part of this source code package.
+
+// HEADER ONLY(mostly) Player Engine
+
+#pragma once
+#include <fmt/format.h>
+
+>>>>>>> upstream/master
 #include <filesystem>
 #include <iostream>
 #include <optional>
@@ -8,7 +20,10 @@
 
 #include "cma_core.h"
 #include "common/wtools.h"
+<<<<<<< HEAD
 #include "fmt/format.h"
+=======
+>>>>>>> upstream/master
 #include "logger.h"
 #include "tools/_misc.h"
 #include "tools/_xlog.h"
@@ -232,6 +247,7 @@ private:
     int processExecArray(const std::vector<std::wstring>& ExecArray) {
         int count = 0;
         for (auto& exec_entry : ExecArray) {
+<<<<<<< HEAD
             using namespace std::filesystem;
             path p = exec_entry;
             if (!exists(p)) continue;
@@ -239,6 +255,16 @@ private:
             if (is_directory(p)) {
                 // this is bad idea
                 for (auto& dir_entry : directory_iterator(p)) {
+=======
+            namespace fs = std::filesystem;
+            fs::path p = exec_entry;
+            std::error_code ec;
+            if (!fs::exists(p, ec)) continue;
+
+            if (fs::is_directory(p, ec)) {
+                // this is bad idea
+                for (auto& dir_entry : fs::directory_iterator(p, ec)) {
+>>>>>>> upstream/master
                     auto p_entry = dir_entry.path();
 
                     if (tryAddToExecArray(p_entry)) count++;

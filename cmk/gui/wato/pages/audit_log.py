@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/env python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,16 +24,31 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 """Handling of the audit logfiles"""
 
 import re
 import time
+<<<<<<< HEAD
+=======
+from typing import List, Iterator
+>>>>>>> upstream/master
 
 import cmk.utils.render as render
 
 import cmk.gui.config as config
 from cmk.gui.table import table_element
 import cmk.gui.watolib as watolib
+<<<<<<< HEAD
+=======
+from cmk.gui.watolib.changes import AuditLogStore
+>>>>>>> upstream/master
 from cmk.gui.display_options import display_options
 from cmk.gui.valuespec import (
     Dictionary,
@@ -41,6 +57,7 @@ from cmk.gui.valuespec import (
     Integer,
     AbsoluteDate,
 )
+<<<<<<< HEAD
 from cmk.gui.plugins.wato.utils.context_buttons import (
     changelog_button,
     home_button,
@@ -48,12 +65,38 @@ from cmk.gui.plugins.wato.utils.context_buttons import (
 from cmk.gui.globals import html
 from cmk.gui.i18n import _
 from cmk.gui.plugins.wato import WatoMode, mode_registry, wato_confirm
+=======
+from cmk.gui.exceptions import FinalizeRequest
+from cmk.gui.globals import html
+from cmk.gui.i18n import _
+from cmk.gui.plugins.wato import (
+    WatoMode,
+    ActionResult,
+    mode_registry,
+    flash,
+    redirect,
+    make_confirm_link,
+)
+from cmk.gui.breadcrumb import Breadcrumb
+from cmk.gui.page_menu import (
+    PageMenu,
+    PageMenuDropdown,
+    PageMenuTopic,
+    PageMenuEntry,
+    PageMenuPopup,
+    make_simple_link,
+    make_display_options_dropdown,
+)
+>>>>>>> upstream/master
 
 
 @mode_registry.register
 class ModeAuditLog(WatoMode):
+<<<<<<< HEAD
     log_path = watolib.changes.audit_log_path
 
+=======
+>>>>>>> upstream/master
     @classmethod
     def name(cls):
         return "auditlog"
@@ -65,10 +108,15 @@ class ModeAuditLog(WatoMode):
     def __init__(self):
         self._options = self._vs_audit_log_options().default_value()
         super(ModeAuditLog, self).__init__()
+<<<<<<< HEAD
+=======
+        self._store = AuditLogStore(AuditLogStore.make_path())
+>>>>>>> upstream/master
 
     def title(self):
         return _("Audit log")
 
+<<<<<<< HEAD
     def buttons(self):
         changelog_button()
         home_button()
@@ -83,6 +131,123 @@ class ModeAuditLog(WatoMode):
         return self.log_path.exists()
 
     def action(self):
+=======
+    def page_menu(self, breadcrumb: Breadcrumb) -> PageMenu:
+        menu = PageMenu(
+            dropdowns=[
+                PageMenuDropdown(
+                    name="log",
+                    title=_("Actions"),
+                    topics=[
+                        PageMenuTopic(
+                            title=_("Actions"),
+                            entries=list(self._page_menu_entries_actions()),
+                        ),
+                    ],
+                ),
+                PageMenuDropdown(
+                    name="export",
+                    title=_("Export"),
+                    topics=[
+                        PageMenuTopic(
+                            title=_("Export"),
+                            entries=list(self._page_menu_entries_export()),
+                        ),
+                    ],
+                ),
+                PageMenuDropdown(
+                    name="related",
+                    title=_("Related"),
+                    topics=[
+                        PageMenuTopic(
+                            title=_("Setup"),
+                            entries=list(self._page_menu_entries_setup()),
+                        ),
+                    ],
+                ),
+            ],
+            breadcrumb=breadcrumb,
+        )
+
+        self._extend_display_dropdown(menu)
+        return menu
+
+    def _page_menu_entries_setup(self) -> Iterator[PageMenuEntry]:
+        if config.user.may("wato.sites"):
+            yield PageMenuEntry(
+                title=_("View changes"),
+                icon_name="activate",
+                item=make_simple_link(watolib.folder_preserving_link([("mode", "changelog")])),
+            )
+
+    def _page_menu_entries_actions(self) -> Iterator[PageMenuEntry]:
+        if not self._log_exists():
+            return
+
+        if not config.user.may("wato.auditlog"):
+            return
+
+        if not config.user.may("wato.edit"):
+            return
+
+        if config.user.may("wato.clear_auditlog"):
+            yield PageMenuEntry(
+                title=_("Clear log"),
+                icon_name="trash",
+                item=make_simple_link(
+                    make_confirm_link(
+                        url=html.makeactionuri([("_action", "clear")]),
+                        message=_("Do you really want to clear the audit log?"),
+                    )),
+            )
+
+    def _page_menu_entries_export(self) -> Iterator[PageMenuEntry]:
+        if not self._log_exists():
+            return
+
+        if not config.user.may("wato.auditlog"):
+            return
+
+        if not config.user.may("wato.edit"):
+            return
+
+        if not config.user.may("general.csv_export"):
+            return
+
+        yield PageMenuEntry(
+            title=_("Export CSV"),
+            icon_name="download_csv",
+            item=make_simple_link(html.makeactionuri([("_action", "csv")])),
+        )
+
+    def _extend_display_dropdown(self, menu: PageMenu) -> None:
+        display_dropdown = menu.get_dropdown_by_name("display", make_display_options_dropdown())
+
+        display_dropdown.topics.insert(
+            0,
+            PageMenuTopic(
+                title=_("Filter"),
+                entries=[
+                    PageMenuEntry(
+                        title=_("Filter view"),
+                        icon_name="filters_set" if html.form_submitted("options") else "filters",
+                        item=PageMenuPopup(self._render_filter_form()),
+                        name="filters",
+                        is_shortcut=True,
+                    ),
+                ],
+            ))
+
+    def _render_filter_form(self) -> str:
+        with html.plugged():
+            self._display_audit_log_options()
+            return html.drain()
+
+    def _log_exists(self):
+        return self._store.exists()
+
+    def action(self) -> ActionResult:
+>>>>>>> upstream/master
         if html.request.var("_action") == "clear":
             config.user.need_permission("wato.auditlog")
             config.user.need_permission("wato.clear_auditlog")
@@ -98,11 +263,20 @@ class ModeAuditLog(WatoMode):
             config.user.need_permission("wato.auditlog")
             return self._export_audit_log()
 
+<<<<<<< HEAD
+=======
+        return None
+
+>>>>>>> upstream/master
     def page(self):
         audit = self._parse_audit_log()
 
         if not audit:
+<<<<<<< HEAD
             html.show_info(_("The audit log is empty."))
+=======
+            html.show_message(_("The audit log is empty."))
+>>>>>>> upstream/master
 
         elif self._options["display"] == "daily":
             self._display_daily_audit_log(audit)
@@ -113,8 +287,11 @@ class ModeAuditLog(WatoMode):
     def _display_daily_audit_log(self, log):
         log, times = self._get_next_daily_paged_log(log)
 
+<<<<<<< HEAD
         self._display_audit_log_options()
 
+=======
+>>>>>>> upstream/master
         self._display_page_controls(*times)
 
         if display_options.enabled(display_options.T):
@@ -127,8 +304,11 @@ class ModeAuditLog(WatoMode):
     def _display_multiple_days_audit_log(self, log):
         log = self._get_multiple_days_log_entries(log)
 
+<<<<<<< HEAD
         self._display_audit_log_options()
 
+=======
+>>>>>>> upstream/master
         if display_options.enabled(display_options.T):
             html.h3(
                 _("Audit log for %s and %d days ago") %
@@ -141,6 +321,7 @@ class ModeAuditLog(WatoMode):
                            limit=None,
                            sortable=False,
                            searchable=False) as table:
+<<<<<<< HEAD
             for t, linkinfo, user, _action, text in log:
                 table.row()
                 table.cell(_("Object"), self._render_logfile_linkinfo(linkinfo))
@@ -150,6 +331,17 @@ class ModeAuditLog(WatoMode):
 
                 # This must not be attrencoded: The entries are encoded when writing to the log.
                 table.cell(_("Change"), text.replace("\\n", "<br>\n"), css="fill")
+=======
+            for entry in log:
+                table.row()
+                table.cell(_("Object"), self._render_logfile_linkinfo(entry.linkinfo))
+                table.cell(_("Time"), html.render_nobr(render.date_and_time(float(entry.time))))
+                user = ('<i>%s</i>' % _('internal')) if entry.user_id == '-' else entry.user_id
+                table.cell(_("User"), html.render_text(user), css="nobreak")
+
+                # This must not be attrencoded: The entries are encoded when writing to the log.
+                table.cell(_("Change"), entry.text.replace("\\n", "<br>\n"), css="fill")
+>>>>>>> upstream/master
 
     def _get_next_daily_paged_log(self, log):
         start = self._get_start_date()
@@ -158,8 +350,13 @@ class ModeAuditLog(WatoMode):
             log_today, times = self._paged_log_from(log, start)
             if len(log) == 0 or len(log_today) > 0:
                 return log_today, times
+<<<<<<< HEAD
             else:  # No entries today, but log not empty -> go back in time
                 start -= 24 * 3600
+=======
+            # No entries today, but log not empty -> go back in time
+            start -= 24 * 3600
+>>>>>>> upstream/master
 
     def _get_start_date(self):
         if self._options["start"] == "now":
@@ -188,6 +385,7 @@ class ModeAuditLog(WatoMode):
         next_log_time = None
         first_log_index = None
         last_log_index = None
+<<<<<<< HEAD
         for index, (t, _linkinfo, _user, _action, _text) in enumerate(log):
             if t >= end_time:
                 # This log is too new
@@ -195,6 +393,13 @@ class ModeAuditLog(WatoMode):
             elif first_log_index is None \
                   and t < end_time \
                   and t >= start_time:
+=======
+        for index, entry in enumerate(log):
+            if entry.time >= end_time:
+                # This log is too new
+                continue
+            if first_log_index is None and start_time <= entry.time < end_time:
+>>>>>>> upstream/master
                 # This is a log for this day. Save the first index
                 if first_log_index is None:
                     first_log_index = index
@@ -203,7 +408,11 @@ class ModeAuditLog(WatoMode):
                     if index > 0:
                         next_log_time = int(log[index - 1][0])
 
+<<<<<<< HEAD
             elif t < start_time and last_log_index is None:
+=======
+            elif entry.time < start_time and last_log_index is None:
+>>>>>>> upstream/master
                 last_log_index = index
                 # This is the next log after this day
                 previous_log_time = int(log[index][0])
@@ -304,6 +513,7 @@ class ModeAuditLog(WatoMode):
             optional_keys=[],
         )
 
+<<<<<<< HEAD
     def _clear_audit_log_after_confirm(self):
         c = wato_confirm(_("Confirm deletion of audit log"),
                          _("Do you really want to clear the audit log?"))
@@ -330,6 +540,15 @@ class ModeAuditLog(WatoMode):
                     break
 
         self.log_path.rename(newpath)
+=======
+    def _clear_audit_log_after_confirm(self) -> ActionResult:
+        self._clear_audit_log()
+        flash(_("Cleared audit log."))
+        return redirect(self.mode_url())
+
+    def _clear_audit_log(self):
+        self._store.clear()
+>>>>>>> upstream/master
 
     def _render_logfile_linkinfo(self, linkinfo):
         if ':' in linkinfo:  # folder:host
@@ -353,7 +572,11 @@ class ModeAuditLog(WatoMode):
 
         return html.render_a(title, href=url)
 
+<<<<<<< HEAD
     def _export_audit_log(self):
+=======
+    def _export_audit_log(self) -> ActionResult:
+>>>>>>> upstream/master
         html.set_output_format("csv")
 
         if self._options["display"] == "daily":
@@ -379,6 +602,7 @@ class ModeAuditLog(WatoMode):
             if linkinfo == '-':
                 linkinfo = ''
 
+<<<<<<< HEAD
             if self._filter_entry(user, action, text):
                 continue
 
@@ -407,6 +631,15 @@ class ModeAuditLog(WatoMode):
         entries.reverse()
 
         return entries
+=======
+            html.write_text(','.join((render.date(int(t)), render.time_of_day(int(t)), linkinfo,
+                                      user, action, '"' + text + '"')) + '\n')
+        return FinalizeRequest(code=200)
+
+    def _parse_audit_log(self) -> List[AuditLogStore.Entry]:
+        return list(
+            reversed([e for e in self._store.read() if not self._filter_entry(e[2], e[3], e[4])]))
+>>>>>>> upstream/master
 
     def _filter_entry(self, user, action, text):
         if not self._options["filter_regex"]:

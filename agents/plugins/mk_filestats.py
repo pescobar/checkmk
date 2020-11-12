@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+<<<<<<< HEAD
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
 # |             ____ _               _        __  __ _  __           |
@@ -23,6 +24,12 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 r"""Check_MK Agent Plugin: mk_filestats
 
 This is a Check_MK Agent plugin. If configured, it will be called by the
@@ -94,11 +101,18 @@ described by the following four phases:
     * ``output: extremes_only''
       Only report the youngest, oldest, smallest, and biggest files. In case
       checks only require this information, we can signifficantly reduce data.
+<<<<<<< HEAD
+=======
+    * ``output: single_file''
+      Monitor a single file and send its metrics. If a input_pattern of a .cfg section
+      matches multiple files, the agent sents one subsection per file.
+>>>>>>> upstream/master
 
 You should find an example configuration file at
 '../cfg_examples/filestats.cfg' relative to this file.
 """
 
+<<<<<<< HEAD
 import errno
 import re
 import os
@@ -114,6 +128,53 @@ try:
     import ConfigParser as configparser
 except NameError:  # Python3
     import configparser
+=======
+__version__ = "2.0.0i2"
+
+import errno
+import glob
+import logging
+import operator
+import os
+import re
+import shlex
+import sys
+import time
+from stat import S_ISDIR, S_ISREG
+
+# NOTE: The tool 3to2 runs when the agent is configured for python 2.5/2.6
+#       and converts the import automatically to 'ConfigParser'.
+#       It does not run for python 2.7, which is why the try/except block
+#       is needed; python 2.7.17 supports importing 'configparser', but from
+#       2.7.18 this is not supported. The documentation explicitly states
+#       that the module 'configparser' is supported from python 3.
+#       https://docs.python.org/2/library/configparser.html
+try:
+    import configparser
+except ImportError:  # Python2
+    import ConfigParser as configparser  # type: ignore
+
+
+def ensure_str(s):
+    if sys.version_info[0] >= 3:
+        if isinstance(s, bytes):
+            return s.decode("utf-8")
+    else:
+        if isinstance(s, unicode):  # pylint: disable=undefined-variable
+            return s.encode("utf-8")
+    return s
+
+
+def ensure_text(s):
+    if sys.version_info[0] >= 3:
+        if isinstance(s, bytes):
+            return s.decode("utf-8")
+    else:
+        if isinstance(s, str):
+            return s.decode("utf-8")
+    return s
+
+>>>>>>> upstream/master
 
 DEFAULT_CFG_FILE = os.path.join(os.getenv('MK_CONFDIR', ''), "filestats.cfg")
 
@@ -131,7 +192,11 @@ def parse_arguments(argv=None):
     parsed_args = {}
 
     if "-h" in argv or "--help" in argv:
+<<<<<<< HEAD
         sys.stderr.write(__doc__)
+=======
+        sys.stderr.write(ensure_str(__doc__))
+>>>>>>> upstream/master
         sys.exit(0)
 
     if "-v" in argv or "--verbose" in argv:
@@ -160,9 +225,13 @@ class FileStat(object):
     def __init__(self, path):
         super(FileStat, self).__init__()
         LOGGER.debug("Creating FileStat(%r)", path)
+<<<<<<< HEAD
         if not isinstance(path, unicode):  # pylint: disable=bad-builtin
             path = path.decode('utf8')
         self.path = path
+=======
+        self.path = ensure_text(path)
+>>>>>>> upstream/master
         self.stat_status = 'ok'
         self.size = None
         self.age = None
@@ -279,10 +348,23 @@ class AbstractFilter(object):
         raise NotImplementedError()
 
 
+<<<<<<< HEAD
+=======
+COMPARATORS = {
+    '<': operator.lt,
+    '<=': operator.le,
+    '>': operator.gt,
+    '>=': operator.ge,
+    '==': operator.eq,
+}
+
+
+>>>>>>> upstream/master
 class AbstractNumericFilter(AbstractFilter):
     """Common code for filtering by comparing integers"""
     def __init__(self, spec_string):
         super(AbstractNumericFilter, self).__init__()
+<<<<<<< HEAD
         try:
             spec = FILTER_SPEC_PATTERN.match(spec_string).groupdict()
         except AttributeError:
@@ -302,6 +384,17 @@ class AbstractNumericFilter(AbstractFilter):
     def _matches_value(self, other_value):
         """decide whether an integer value matches"""
         return self._value.__cmp__(int(other_value)) in self._positive_cmp_results
+=======
+        match = FILTER_SPEC_PATTERN.match(spec_string)
+        if match is None:
+            raise ValueError("unable to parse filter spec: %r" % spec_string)
+        spec = match.groupdict()
+        comp = COMPARATORS.get(spec['operator'])
+        if comp is None:
+            raise ValueError("unknown operator for numeric filter: %r" % spec['operator'])
+        reference = int(spec['value'])
+        self._matches_value = lambda actual: comp(int(actual), reference)
+>>>>>>> upstream/master
 
     def matches(self, filestat):
         raise NotImplementedError()
@@ -333,9 +426,13 @@ class RegexFilter(AbstractFilter):
     def __init__(self, regex_pattern):
         super(RegexFilter, self).__init__()
         LOGGER.debug("initializing with pattern: %r", regex_pattern)
+<<<<<<< HEAD
         if not isinstance(regex_pattern, unicode):  # pylint: disable=bad-builtin
             regex_pattern = regex_pattern.decode('utf8')
         self._regex = re.compile(regex_pattern, re.UNICODE)
+=======
+        self._regex = re.compile(ensure_text(regex_pattern), re.UNICODE)
+>>>>>>> upstream/master
 
     def matches(self, filestat):
         return bool(self._regex.match(filestat.path))
@@ -441,6 +538,24 @@ def output_aggregator_extremes_only(group_name, files_iter):
     yield repr({"type": "summary", "count": count})
 
 
+<<<<<<< HEAD
+=======
+def output_aggregator_single_file(group_name, files_iter):
+
+    for lazy_file in files_iter:
+
+        count_format_specifiers = group_name.count("%s")
+
+        if count_format_specifiers == 0:
+            subsection_name = group_name
+        else:
+            subsection_name = group_name % ((lazy_file.path,) + (('%s',) *
+                                                                 (count_format_specifiers - 1)))
+        yield "[[[single_file %s]]]" % subsection_name
+        yield lazy_file.dumps()
+
+
+>>>>>>> upstream/master
 def get_output_aggregator(config):
     output_spec = config.get("output")
     try:
@@ -448,6 +563,10 @@ def get_output_aggregator(config):
             "count_only": output_aggregator_count_only,
             "extremes_only": output_aggregator_extremes_only,
             "file_stats": output_aggregator_file_stats,
+<<<<<<< HEAD
+=======
+            "single_file": output_aggregator_single_file,
+>>>>>>> upstream/master
         }[output_spec]
     except KeyError:
         raise ValueError("unknown 'output' spec: %r" % output_spec)

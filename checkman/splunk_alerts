@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: Splunk: Health
+=======
+title: Splunk: Alerts
+>>>>>>> upstream/master
 agents: splunk
 catalog: app/splunk
 license: GPL
@@ -8,5 +12,9 @@ description:
  You can set levels on the alerts count.
 
 inventory:
+<<<<<<< HEAD
  One service will be created
+=======
+ One service is created.
+>>>>>>> upstream/master
 

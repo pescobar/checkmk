@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: Dell OpenManage: PSU redundancy status
+=======
+title: Dell OpenManage: PSU Redundancy Status
+>>>>>>> upstream/master
 agents: snmp
 catalog: hw/server/dell
 license: GPL
@@ -10,7 +14,14 @@ description:
  or "unknown".
 
 item:
+<<<<<<< HEAD
  The index of a redundancy group is used as item
 
 inventory:
  One service for each redundancy group is created
+=======
+ The index of a redundancy group
+
+inventory:
+ One service is created for each redundancy group.
+>>>>>>> upstream/master

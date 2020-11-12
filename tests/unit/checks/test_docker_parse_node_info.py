@@ -1,9 +1,25 @@
+<<<<<<< HEAD
 import pytest
 import os
 
 pytestmark = pytest.mark.checks
 
 exec (open(os.path.join(os.path.dirname(__file__), '../../../checks/legacy_docker.include')).read())
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+import os
+import pytest  # type: ignore[import]
+
+from cmk.base.plugins.agent_based.utils import legacy_docker
+
+from cmk.base.check_legacy_includes.legacy_docker import *
+pytestmark = pytest.mark.checks
+>>>>>>> upstream/master
 
 
 @pytest.mark.parametrize(
@@ -107,10 +123,13 @@ exec (open(os.path.join(os.path.dirname(__file__), '../../../checks/legacy_docke
                 "Labels": [],
                 # needed for check:
                 "Name": "Tiberius",
+<<<<<<< HEAD
                 "Containers": 22,
                 "ContainersRunning": 0,
                 "ContainersStopped": 22,
                 "ContainersPaused": 0,
+=======
+>>>>>>> upstream/master
             }),
         (
             [
@@ -211,10 +230,13 @@ exec (open(os.path.join(os.path.dirname(__file__), '../../../checks/legacy_docke
                 "Labels": ["staging=true", "storage=ssd"],
                 # needed for check:
                 "Name": "ubuntu",
+<<<<<<< HEAD
                 "Containers": 14,
                 "ContainersRunning": 3,
                 "ContainersStopped": 10,
                 "ContainersPaused": 1,
+=======
+>>>>>>> upstream/master
             }),
         (
             [
@@ -284,10 +306,13 @@ exec (open(os.path.join(os.path.dirname(__file__), '../../../checks/legacy_docke
                 "Labels": [],
                 # needed for check:
                 "Name": "Klappspaten",
+<<<<<<< HEAD
                 "Containers": 2,
                 "ContainersRunning": 1,
                 "ContainersStopped": 1,
                 "ContainersPaused": 0,
+=======
+>>>>>>> upstream/master
             }),
         (
             [
@@ -361,10 +386,13 @@ exec (open(os.path.join(os.path.dirname(__file__), '../../../checks/legacy_docke
                 "Labels": [],
                 # needed for check:
                 "Name": "klappson",
+<<<<<<< HEAD
                 "Containers": 5,
                 "ContainersRunning": 1,
                 "ContainersStopped": 4,
                 "ContainersPaused": 0,
+=======
+>>>>>>> upstream/master
             }),
         (
             [
@@ -419,10 +447,13 @@ exec (open(os.path.join(os.path.dirname(__file__), '../../../checks/legacy_docke
                 "Labels": [],
                 # needed for check:
                 "Name": "Klappspaten",
+<<<<<<< HEAD
                 "Containers": 2,
                 "ContainersRunning": 1,
                 "ContainersStopped": 1,
                 "ContainersPaused": 0,
+=======
+>>>>>>> upstream/master
             }),
         ([[
             u'Got', u'permission', u'denied', u'while', u'trying', u'to', u'connect', u'to', u'the',
@@ -436,6 +467,7 @@ def test_parse_legacy_docker_node_info(indata, outdata_subset):
     def assert_contains(dic, key, value):
         assert key in dic, "missing key: %r" % key
         if isinstance(value, dict):
+<<<<<<< HEAD
             for r_key, r_value in value.iteritems():
                 assert_contains(dic[key], r_key, r_value)
         else:
@@ -443,4 +475,16 @@ def test_parse_legacy_docker_node_info(indata, outdata_subset):
 
     parsed = parse_legacy_docker_node_info(indata)
     for k, v in outdata_subset.iteritems():
+=======
+            for r_key, r_value in value.items():
+                assert_contains(dic[key], r_key, r_value)
+        else:
+            assert dic[key] == value, "expected: %r, got %r" % (
+                value,
+                parsed[key]  # type: ignore[name-defined,misc]
+            )
+
+    parsed = legacy_docker.parse_node_info(indata)
+    for k, v in outdata_subset.items():
+>>>>>>> upstream/master
         assert_contains(parsed, k, v)

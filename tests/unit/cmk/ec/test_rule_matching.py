@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import logging
 import pytest
 
@@ -7,6 +8,24 @@ from cmk.ec.main import RuleMatcher, SyslogPriority, EventServer
 
 @pytest.fixture()
 def m():
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+import logging
+from typing import Dict
+import pytest  # type: ignore[import]
+
+import cmk.utils.version as cmk_version
+from cmk.ec.main import RuleMatcher, EventServer
+
+
+@pytest.fixture(name="m")
+def fixture_m():
+>>>>>>> upstream/master
     logger = logging.getLogger("cmk.mkeventd")
     return RuleMatcher(logger, {"debug_rules": True})
 
@@ -47,7 +66,11 @@ def test_match_message(m, message, result, match_message, cancel_message, match_
 
     event = {"text": message}
 
+<<<<<<< HEAD
     matched_groups = {}
+=======
+    matched_groups: Dict = {}
+>>>>>>> upstream/master
     assert m.event_rule_matches_message(rule, event, matched_groups) == result
     assert matched_groups["match_groups_message"] == match_groups
 
@@ -97,7 +120,11 @@ def test_match_priority(m, priority, match_priority, cancel_priority, has_match,
 
     event = {"priority": priority}
 
+<<<<<<< HEAD
     matched_match_priority = {}
+=======
+    matched_match_priority: Dict = {}
+>>>>>>> upstream/master
     assert m.event_rule_determine_match_priority(rule, event, matched_match_priority) == result
     assert matched_match_priority["has_match"] == has_match
     assert matched_match_priority["has_canceling_match"] == has_canceling_match
@@ -171,7 +198,11 @@ def test_match_outcome(m, rule, match_groups, match_priority, result):
     }),
 ])
 def test_match_site(m, rule, result, monkeypatch):
+<<<<<<< HEAD
     monkeypatch.setattr(cmk, "omd_site", lambda: "ding")
+=======
+    monkeypatch.setattr(cmk_version, "omd_site", lambda: "ding")
+>>>>>>> upstream/master
     assert m.event_rule_matches_site(rule, {}) == result
 
 

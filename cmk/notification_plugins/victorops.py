@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # -*- coding: utf-8 -*-
 # +------------------------------------------------------------------+
 # |             ____ _               _        __  __ _  __           |
@@ -22,22 +23,37 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 r"""
 Send notification messages to VictorOPS
 =======================================
 
 Create a JSON message to be sent to VictorOPS REST API
 """
+<<<<<<< HEAD
 from __future__ import unicode_literals
 
 from typing import Dict  # pylint: disable=unused-import
+=======
+from typing import Dict
+>>>>>>> upstream/master
 
 from cmk.notification_plugins.utils import host_url_from_context, service_url_from_context
 
 
 def translate_states(state):
     if state in ['OK', 'UP']:
+<<<<<<< HEAD
         return 'OK'
+=======
+        return 'RECOVERY'
+>>>>>>> upstream/master
     if state in ['CRITICAL', 'DOWN']:
         return 'CRITICAL'
     if state in ['UNKNOWN', 'UNREACHABLE']:
@@ -45,9 +61,14 @@ def translate_states(state):
     return state  # This is WARNING
 
 
+<<<<<<< HEAD
 def victorops_msg(context):
     # type: (Dict) -> Dict
     """Build the message for slack"""
+=======
+def victorops_msg(context: Dict) -> Dict:
+    """Build the message for VictorOps"""
+>>>>>>> upstream/master
 
     if context.get('WHAT', None) == "SERVICE":
         state = translate_states(context["SERVICESTATE"])

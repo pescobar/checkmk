@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -27,6 +28,23 @@
 
 def parse_aws_elbv2_application(info):
     metrics = _extract_aws_metrics_by_labels([
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# NOTE: Careful when replacing the *-import below with a more specific import. This can cause
+# problems because it might remove variables from the check-context which are necessary for
+# resolving legacy discovery results such as [("SUMMARY", "diskstat_default_levels")]. Furthermore,
+# it might also remove variables needed for accessing discovery rulesets.
+from cmk.base.check_legacy_includes.aws import *  # pylint: disable=wildcard-import,unused-wildcard-import
+
+
+def parse_aws_elbv2_application(info):
+    metrics = extract_aws_metrics_by_labels([
+>>>>>>> upstream/master
         'ConsumedLCUs',
         'ActiveConnectionCount',
         'NewConnectionCount',
@@ -51,7 +69,11 @@ def parse_aws_elbv2_application(info):
     # We get exactly one entry: {INST-ID: METRICS}
     # INST-ID is the piggyback host name
     try:
+<<<<<<< HEAD
         return metrics.values()[-1]
+=======
+        return list(metrics.values())[-1]
+>>>>>>> upstream/master
     except IndexError:
         return {}
 
@@ -67,12 +89,23 @@ def parse_aws_elbv2_application(info):
 
 
 def check_aws_elbv2_application_lcu(item, params, parsed):
+<<<<<<< HEAD
     lcus = parsed['ConsumedLCUs']
     yield check_levels(lcus,
                        'aws_consumed_lcus',
                        params.get('levels'),
                        human_readable_func=int,
                        infoname="Consumed")
+=======
+    lcus = parsed.get('ConsumedLCUs')
+    if lcus is None:
+        raise MKCounterWrapped("Currently no data from AWS")
+    yield check_levels(lcus,
+                       'aws_consumed_lcus',
+                       params.get('levels'),
+                       human_readable_func=aws_get_float_human_readable,
+                       infoname="Consumption")
+>>>>>>> upstream/master
 
 
 check_info['aws_elbv2_application'] = {
@@ -80,7 +113,10 @@ check_info['aws_elbv2_application'] = {
     'inventory_function': lambda p: inventory_aws_generic_single(p, ['ConsumedLCUs']),
     'check_function': check_aws_elbv2_application_lcu,
     'service_description': 'AWS/ApplicationELB LCUs',
+<<<<<<< HEAD
     'includes': ['aws.include'],
+=======
+>>>>>>> upstream/master
     'group': 'aws_elbv2_lcu',
     'has_perfdata': True,
 }
@@ -103,6 +139,7 @@ _aws_elbv2_application_connection_types = [
 ]
 
 
+<<<<<<< HEAD
 def inventory_aws_elbv2_application_connections(parsed):
     for conn_ty in _aws_elbv2_application_connection_types:
         if conn_ty in parsed:
@@ -111,11 +148,19 @@ def inventory_aws_elbv2_application_connections(parsed):
 
 def check_aws_elbv2_application_connections(item, params, parsed):
     for conn_ty, (key, title) in zip(_aws_elbv2_application_connection_types, [
+=======
+def check_aws_elbv2_application_connections(item, params, parsed):
+
+    metric_infos = []
+
+    for cw_metric_name, (info_name, key) in zip(_aws_elbv2_application_connection_types, [
+>>>>>>> upstream/master
         ('Active', 'active'),
         ('New', 'new'),
         ('Rejected', 'rejected'),
         ('TLS errors', 'tls_errors'),
     ]):
+<<<<<<< HEAD
         conns = parsed.get(conn_ty)
         if conns is None:
             continue
@@ -124,14 +169,36 @@ def check_aws_elbv2_application_connections(item, params, parsed):
                            None,
                            human_readable_func=int,
                            infoname=title)
+=======
+        if key == 'tls_errors':
+            metric_name = 'aws_client_tls_errors'
+        else:
+            metric_name = 'aws_%s_connections' % key
+
+        metric_infos.append({
+            'metric_val': parsed.get(cw_metric_name),
+            'metric_name': metric_name,
+            'info_name': info_name,
+            'human_readable_func': aws_get_counts_rate_human_readable
+        })
+
+    return check_aws_metrics(metric_infos)
+>>>>>>> upstream/master
 
 
 check_info['aws_elbv2_application.connections'] = {
     'parse_function': parse_aws_elbv2_application,
+<<<<<<< HEAD
     'inventory_function': inventory_aws_elbv2_application_connections,
     'check_function': check_aws_elbv2_application_connections,
     'service_description': 'AWS/ApplicationELB Connections',
     'includes': ['aws.include'],
+=======
+    'inventory_function': lambda p: inventory_aws_generic_single(
+        p, _aws_elbv2_application_connection_types, requirement=any),
+    'check_function': check_aws_elbv2_application_connections,
+    'service_description': 'AWS/ApplicationELB Connections',
+>>>>>>> upstream/master
     'has_perfdata': True,
 }
 
@@ -147,6 +214,7 @@ check_info['aws_elbv2_application.connections'] = {
 
 
 def check_aws_elbv2_application_http_elb(item, params, parsed):
+<<<<<<< HEAD
     now = time.time()
     request_count = parsed.get('RequestCount')
     if request_count is not None:
@@ -196,6 +264,17 @@ check_info['aws_elbv2_application.http_elb'] = {
     'check_function': check_aws_elbv2_application_http_elb,
     'service_description': 'AWS/ApplicationELB HTTP ELB',
     'includes': ['aws.include'],
+=======
+    return check_aws_http_errors(params.get("levels_load_balancers", params), parsed,
+                                 ['3xx', '4xx', '5xx', '500', '502', '503', '504'],
+                                 'HTTPCode_ELB_%s_Count')
+
+
+check_info['aws_elbv2_application.http_elb'] = {
+    'inventory_function': lambda p: inventory_aws_generic_single(p, ['RequestCount']),
+    'check_function': check_aws_elbv2_application_http_elb,
+    'service_description': 'AWS/ApplicationELB HTTP ELB',
+>>>>>>> upstream/master
     'group': 'aws_elb_http',
     'has_perfdata': True,
 }
@@ -210,6 +289,7 @@ check_info['aws_elbv2_application.http_elb'] = {
 #   |                                                                      |
 #   '----------------------------------------------------------------------'
 
+<<<<<<< HEAD
 
 def check_aws_elbv2_application_http_redirects(item, params, parsed):
     for redirect_ty, title, key in [
@@ -231,6 +311,32 @@ check_info['aws_elbv2_application.http_redirects'] = {
     'check_function': check_aws_elbv2_application_http_redirects,
     'service_description': 'AWS/ApplicationELB HTTP Redirects',
     'includes': ['aws.include'],
+=======
+_aws_elbv2_application_http_redirects_metrics = [
+    'HTTP_Redirect_Count',
+    'HTTP_Redirect_Url_Limit_Exceeded_Count',
+    'HTTP_Fixed_Response_Count',
+]
+
+
+def check_aws_elbv2_application_http_redirects(item, params, parsed):
+    return check_aws_metrics([{
+        'metric_val': parsed.get(cw_metric_name),
+        'metric_name': 'aws_%s' % key,
+        'info_name': info_name,
+        'human_readable_func': aws_get_counts_rate_human_readable
+    } for cw_metric_name, (info_name, key) in zip(_aws_elbv2_application_http_redirects_metrics, [(
+        'Successful', 'http_redirects'), (
+            'Not completed',
+            'http_redirect_url_limit'), ('Successful fixed responses', 'http_fixed_response')])])
+
+
+check_info['aws_elbv2_application.http_redirects'] = {
+    'inventory_function': lambda p: inventory_aws_generic_single(
+        p, _aws_elbv2_application_http_redirects_metrics, requirement=any),
+    'check_function': check_aws_elbv2_application_http_redirects,
+    'service_description': 'AWS/ApplicationELB HTTP Redirects',
+>>>>>>> upstream/master
     'has_perfdata': True,
 }
 
@@ -244,6 +350,7 @@ check_info['aws_elbv2_application.http_redirects'] = {
 #   |                                                                      |
 #   '----------------------------------------------------------------------'
 
+<<<<<<< HEAD
 
 def inventory_aws_elbv2_application_statistics(parsed):
     for metric in [
@@ -295,5 +402,46 @@ check_info['aws_elbv2_application.statistics'] = {
     'check_function': check_aws_elbv2_application_statistics,
     'service_description': 'AWS/ApplicationELB Statistics',
     'includes': ['aws.include'],
+=======
+_aws_elbv2_application_statistics_metrics = [
+    'ProcessedBytes',
+    'IPv6ProcessedBytes',
+    'IPv6RequestCount',
+    'RuleEvaluations',
+]
+
+
+def check_aws_elbv2_application_statistics(item, params, parsed):
+
+    metric_infos = []
+
+    for cw_metric_name, (info_name,
+                         metric_name) in zip(_aws_elbv2_application_statistics_metrics,
+                                             [('Processed bytes', 'aws_proc_bytes'),
+                                              ('IPv6 Processed bytes', 'aws_ipv6_proc_bytes'),
+                                              ('IPv6RequestCount', 'aws_ipv6_requests'),
+                                              ('Rule evaluations', 'aws_rule_evaluations')]):
+
+        if 'bytes' in metric_name:
+            human_readable_func = aws_get_bytes_rate_human_readable
+        else:
+            human_readable_func = aws_get_counts_rate_human_readable
+
+        metric_infos.append({
+            'metric_val': parsed.get(cw_metric_name),
+            'metric_name': metric_name,
+            'info_name': info_name,
+            'human_readable_func': human_readable_func
+        })
+
+    return check_aws_metrics(metric_infos)
+
+
+check_info['aws_elbv2_application.statistics'] = {
+    'inventory_function': lambda p: inventory_aws_generic_single(
+        p, _aws_elbv2_application_statistics_metrics, requirement=any),
+    'check_function': check_aws_elbv2_application_statistics,
+    'service_description': 'AWS/ApplicationELB Statistics',
+>>>>>>> upstream/master
     'has_perfdata': True,
 }

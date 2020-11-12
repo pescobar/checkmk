@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,14 +24,30 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 """The WATO folders network scan for new hosts"""
 
 import os
 import re
+<<<<<<< HEAD
 import threading
 import socket
 import subprocess
 from typing import NamedTuple  # pylint: disable=unused-import
+=======
+import socket
+import subprocess
+import threading
+from typing import NamedTuple, List, Tuple
+
+from cmk.utils.type_defs import HostAddress, HostName
+>>>>>>> upstream/master
 
 from cmk.gui.globals import html
 from cmk.gui.i18n import _
@@ -53,8 +70,12 @@ class AutomationNetworkScan(AutomationCommand):
     def command_name(self):
         return "network-scan"
 
+<<<<<<< HEAD
     def get_request(self):
         # type: () -> NetworkScanRequest
+=======
+    def get_request(self) -> NetworkScanRequest:
+>>>>>>> upstream/master
         folder_path = html.request.var("folder")
         if folder_path is None:
             raise MKGeneralException(_("Folder path is missing"))
@@ -94,7 +115,11 @@ def _ip_addresses_to_scan(folder):
 
 
 def _ip_addresses_of_ranges(ip_ranges):
+<<<<<<< HEAD
     addresses = set([])
+=======
+    addresses = set()
+>>>>>>> upstream/master
 
     for ty, spec in ip_ranges:
         if ty == "ip_range":
@@ -115,7 +140,11 @@ _FULL_IPV4 = (2**32) - 1
 def _ip_addresses_of_range(spec):
     first_int, last_int = map(_ip_int_from_string, spec)
 
+<<<<<<< HEAD
     addresses = []
+=======
+    addresses: List[HostAddress] = []
+>>>>>>> upstream/master
 
     if first_int > last_int:
         return addresses  # skip wrong config
@@ -129,7 +158,11 @@ def _ip_addresses_of_range(spec):
     return addresses
 
 
+<<<<<<< HEAD
 def _ip_int_from_string(ip_str):
+=======
+def _ip_int_from_string(ip_str: str) -> int:
+>>>>>>> upstream/master
     packed_ip = 0
     octets = ip_str.split(".")
     for oc in octets:
@@ -137,9 +170,15 @@ def _ip_int_from_string(ip_str):
     return packed_ip
 
 
+<<<<<<< HEAD
 def _string_from_ip_int(ip_int):
     octets = []
     for _ in xrange(4):
+=======
+def _string_from_ip_int(ip_int: int) -> HostAddress:
+    octets: List[str] = []
+    for _unused in range(4):
+>>>>>>> upstream/master
         octets.insert(0, str(ip_int & 0xFF))
         ip_int >>= 8
     return ".".join(octets)
@@ -164,7 +203,11 @@ def _mask_bits_to_int(n):
 def _known_ip_addresses():
     addresses = set()
 
+<<<<<<< HEAD
     for host in Host.all().itervalues():
+=======
+    for host in Host.all().values():
+>>>>>>> upstream/master
         attributes = host.attributes()
 
         address = attributes.get("ipaddress")
@@ -207,7 +250,11 @@ def _scan_ip_addresses(folder, ip_addresses):
 
     # Initalize all workers
     threads = []
+<<<<<<< HEAD
     found_hosts = []
+=======
+    found_hosts: List[Tuple[HostName, HostAddress]] = []
+>>>>>>> upstream/master
     for _t_num in range(parallel_pings):
         t = threading.Thread(target=_ping_worker, args=[ip_addresses, found_hosts])
         t.daemon = True
@@ -221,7 +268,11 @@ def _scan_ip_addresses(folder, ip_addresses):
     return found_hosts
 
 
+<<<<<<< HEAD
 def _ping_worker(addresses, hosts):
+=======
+def _ping_worker(addresses: List[HostAddress], hosts: List[Tuple[HostName, HostAddress]]) -> None:
+>>>>>>> upstream/master
     while True:
         try:
             ipaddress = addresses.pop()
@@ -237,8 +288,16 @@ def _ping_worker(addresses, hosts):
             hosts.append((host_name, ipaddress))
 
 
+<<<<<<< HEAD
 def _ping(address):
     return subprocess.Popen(['ping', '-c2', '-w2', address],
                             stdout=open(os.devnull, "a"),
                             stderr=subprocess.STDOUT,
+=======
+def _ping(address: HostAddress) -> bool:
+    return subprocess.Popen(['ping', '-c2', '-w2', address],
+                            stdout=open(os.devnull, "a"),
+                            stderr=subprocess.STDOUT,
+                            encoding="utf-8",
+>>>>>>> upstream/master
                             close_fds=True).wait() == 0

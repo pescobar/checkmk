@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // +------------------------------------------------------------------+
 // |             ____ _               _        __  __ _  __           |
 // |            / ___| |__   ___  ___| | __   |  \/  | |/ /           |
@@ -23,6 +24,15 @@
 // Boston, MA 02110-1301 USA.
 
 #include "test_utilities.h"
+=======
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the
+// terms and conditions defined in the file COPYING, which is part of this
+// source code package.
+
+#include "test_utilities.h"
+
+>>>>>>> upstream/master
 #include <type_traits>
 #include <utility>
 
@@ -44,7 +54,15 @@ TestHost::TestHost(const Attributes &cust_vars) : cust_vars_(cust_vars) {
     display_name = cc("the display name");
     alias = cc("the alias");
     address = cc("the address");
+<<<<<<< HEAD
     host_check_command = cc("the host check command");
+=======
+#ifdef NAGIOS4
+    check_command = cc("the host check command");
+#else
+    host_check_command = cc("the host check command");
+#endif
+>>>>>>> upstream/master
     custom_variables = cust_vars_.start();
     plugin_output = cc("the plugin output");
     long_plugin_output = cc("the long plugin output");
@@ -55,7 +73,15 @@ TestService::TestService(host *h, const Attributes &cust_vars)
     : cust_vars_(cust_vars) {
     description = cc("muppet_show");
     display_name = cc("The Muppet Show");
+<<<<<<< HEAD
     service_check_command = cc("check_fozzie_bear");
+=======
+#ifdef NAGIOS4
+    check_command = cc("check_fozzie_bear");
+#else
+    service_check_command = cc("check_fozzie_bear");
+#endif
+>>>>>>> upstream/master
     custom_variables = cust_vars_.start();
     plugin_output = cc("plug");
     long_plugin_output = cc("long plug");

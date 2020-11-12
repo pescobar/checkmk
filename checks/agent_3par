@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -34,6 +35,27 @@ def agent_3par_arguments(params, hostname, ipaddress):
 
     if "values" in params:
         args += ["-v", ",".join(params["values"])]
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+
+def agent_3par_arguments(params, hostname, ipaddress):
+    args = [
+        "--user",
+        params["user"],
+        "--password",
+        passwordstore_get_cmdline("%s", params["password"]),
+    ]
+    if not params.get("verify_cert", False):
+        args.append("--no-cert-check")
+
+    if "values" in params:
+        args += ["--values", ",".join(params["values"])]
+>>>>>>> upstream/master
 
     args.append(ipaddress)
 

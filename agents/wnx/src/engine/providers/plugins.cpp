@@ -4,6 +4,11 @@
 
 #include "providers/plugins.h"
 
+<<<<<<< HEAD
+=======
+#include <fmt/format.h>
+
+>>>>>>> upstream/master
 #include <filesystem>
 #include <regex>
 #include <string>
@@ -12,9 +17,15 @@
 #include "cfg.h"
 #include "cma_core.h"
 #include "common/wtools.h"
+<<<<<<< HEAD
 #include "fmt/format.h"
 #include "glob_match.h"
 #include "logger.h"
+=======
+#include "glob_match.h"
+#include "logger.h"
+#include "service_processor.h"
+>>>>>>> upstream/master
 #include "tools/_raii.h"
 #include "tools/_xlog.h"
 
@@ -91,6 +102,70 @@ static void LogExecuteExtensions(std::string_view title,
     XLOG::d.i("{} {}", title, formatted_string);
 }
 
+<<<<<<< HEAD
+=======
+void PluginsProvider::updateCommandLine() noexcept {
+    try {
+        if (getHostSp() == nullptr && !local_)
+            XLOG::l.bp("Plugins must have correctly set owner to use modules");
+
+        UpdatePluginMapCmdLine(pm_, getHostSp());
+    } catch (const std::exception& e) {
+        XLOG::l(XLOG_FUNC + " unexpected exception '{}'", e.what());
+    }
+}
+
+void PluginsProvider::UpdatePluginMapCmdLine(PluginMap& pm,
+                                             cma::srv::ServiceProcessor* sp) {
+    using namespace std::literals;
+    for (auto& [name, entry] : pm) {
+        XLOG::t.i("checking entry");
+        entry.setCmdLine(L""sv);
+        if (entry.path().empty()) continue;  // skip empty files
+        XLOG::t.i("checking host");
+
+        if (sp == nullptr) continue;  // skip if no host(testing, etc)
+
+        auto& mc = sp->getModuleCommander();
+        auto fname = entry.path().u8string();
+        XLOG::t.i("checking our script");
+
+        if (!mc.isModuleScript(fname)) continue;  // skip non-module
+
+        XLOG::t.i("building command line");
+
+        auto cmd_line = mc.buildCommandLine(fname);
+        if (!cmd_line.empty()) {
+            XLOG::d.i("A Module changes command line of the plugin '{}'",
+                      wtools::ConvertToUTF8(cmd_line));
+            entry.setCmdLine(cmd_line);
+        }
+    }
+}
+
+std::vector<std::string> PluginsProvider::gatherAllowedExtensions() const {
+    using namespace cma::cfg;
+    auto sp = getHostSp();
+    auto global_exts = GetInternalArray(groups::kGlobal, vars::kExecute);
+
+    // check that plugin has owner(in the case of local it is not true)
+    if (nullptr == sp) return global_exts;
+
+    auto mc = sp->getModuleCommander();
+
+    auto exts = mc.getExtensions();
+    for (auto& e : exts) {
+        if (e.empty()) continue;
+
+        if (e[0] == '.') e.erase(e.begin(), e.begin() + 1);
+    }
+
+    for (auto& ge : global_exts) exts.emplace_back(ge);
+
+    return exts;
+}
+
+>>>>>>> upstream/master
 void PluginsProvider::loadConfig() {
     using namespace cma::cfg;
     XLOG::t(XLOG_FUNC + " entering '{}'", uniq_name_);
@@ -107,11 +182,21 @@ void PluginsProvider::loadConfig() {
     // linking all files, execute and extensions
     auto files = cma::GatherAllFiles(pv);
     XLOG::t("Found [{}] files to execute", files.size());
+<<<<<<< HEAD
     auto execute = GetInternalArray(groups::kGlobal, vars::kExecute);
     LogExecuteExtensions("Allowed Extensions:", execute);
     if (execute.size() == 0) XLOG::l("No allowed extensions. This is strange.");
 
     cma::FilterPathByExtension(files, execute);
+=======
+    auto exts = gatherAllowedExtensions();
+
+    LogExecuteExtensions("Allowed Extensions:", exts);
+    if (exts.size() == 0) XLOG::l("No allowed extensions. This is strange.");
+
+    cma::FilterPathByExtension(files, exts);
+
+>>>>>>> upstream/master
     XLOG::d.t("Left [{}] files to execute", files.size());
 
     auto yaml_units =
@@ -123,6 +208,12 @@ void PluginsProvider::loadConfig() {
     UpdatePluginMap(pm_, local_, files, exe_units, true);
     XLOG::d.t("Left [{}] files to execute in '{}'", pm_.size(), uniq_name_);
 
+<<<<<<< HEAD
+=======
+    // We try to find command line among modules, if nothing leave it
+    updateCommandLine();
+
+>>>>>>> upstream/master
     // calculating timeout(may change in every kick)
     updateTimeout();
 }

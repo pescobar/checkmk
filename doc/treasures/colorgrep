@@ -1,17 +1,32 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
 # This is like egrep, but hilites the exact positions
 # of *subexpressions*. This is e.g. useful for testing
 # inventory_processes...
 
+<<<<<<< HEAD
 from __future__ import print_function
 import re, sys
+=======
+import re
+import sys
+
+>>>>>>> upstream/master
 
 
 def color(x):
     if x == 0:
         return "\033[0m"
+<<<<<<< HEAD
     else:
         return "\033[1;3%dm" % x
+=======
+    return "\033[1;3%dm" % x
+>>>>>>> upstream/master
 
 
 def handle_line(r, line):
@@ -36,8 +51,16 @@ def handle_line(r, line):
         out += color(0)
         out += line[end:]
         print(out)
+<<<<<<< HEAD
 
 
 r = re.compile(sys.argv[1])
 for line in sys.stdin:
     handle_line(r, line[:-1])
+=======
+
+
+rg = re.compile(sys.argv[1])
+for line_ in sys.stdin:
+    handle_line(rg, line_[:-1])
+>>>>>>> upstream/master

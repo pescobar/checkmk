@@ -1,17 +1,41 @@
+<<<<<<< HEAD
 """Submodule providing the `run` function of generictests package"""
 from __future__ import print_function
 from ast import literal_eval
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+"""Submodule providing the `run` function of generictests package"""
+from ast import literal_eval
+from contextlib import contextmanager
+import freezegun  # type: ignore[import]
+>>>>>>> upstream/master
 
 from checktestlib import DiscoveryResult, assertDiscoveryResultsEqual, \
                          CheckResult, assertCheckResultsEqual, \
                          MockHostExtraConf, MockItemState, \
                          Immutables, assertEqual
+<<<<<<< HEAD
 from testlib import MissingCheckInfoError
 from generictests.checkhandler import checkhandler
 from contextlib import contextmanager
 import freezegun
 from cmk.gui.watolib.rulespecs import rulespec_registry
 import cmk.gui.plugins.wato.check_parameters
+=======
+from testlib import MissingCheckInfoError, Check  # type: ignore[import]
+from generictests.checkhandler import checkhandler
+
+from cmk.utils.type_defs import CheckPluginName
+
+from cmk.base.api.agent_based import value_store
+
+# TODO CMK-4180
+#from cmk.gui.watolib.rulespecs import rulespec_registry
+>>>>>>> upstream/master
 
 
 class DiscoveryParameterTypeError(AssertionError):
@@ -71,7 +95,11 @@ def get_mock_values(dataset, subcheck):
     mock_is_d = getattr(dataset, 'mock_item_state', {})
     mock_hc_d = getattr(dataset, 'mock_host_conf', {})
     mock_hc_m = getattr(dataset, 'mock_host_conf_merged', {})
+<<<<<<< HEAD
     return mock_is_d.get(subcheck, {}), mock_hc_d.get(subcheck, []), mock_hc_m.get(subcheck, {}),
+=======
+    return mock_is_d.get(subcheck, {}), mock_hc_d.get(subcheck, []), mock_hc_m.get(subcheck, {})
+>>>>>>> upstream/master
 
 
 def get_discovery_expected(subcheck, dataset):
@@ -113,6 +141,7 @@ def update_dataset_attrs_with_discovery(dataset, check, subcheck, discovery_resu
 def validate_discovered_params(check, params):
     """Validate params with respect to the rule's valuespec
     """
+<<<<<<< HEAD
     if not params:
         return
 
@@ -137,6 +166,41 @@ def validate_discovered_params(check, params):
 
 
 def run_test_on_parse(check_manager, dataset, immu):
+=======
+    # TODO CMK-4180
+    return
+    # if not params:
+    #     return
+
+    # # get the rule's valuespec
+    # rulespec_group = check.info.get("group")
+    # if rulespec_group is None:
+    #     return
+
+    # key = "checkgroup_parameters:%s" % (rulespec_group,)
+    # if key in rulespec_registry:
+    #     spec = rulespec_registry[key].valuespec
+    # else:
+    #     # Static checks still don't work. For example the test for
+    #     # domino_tasks. For the moment just skip
+    #     # key_sc = "static_checks:%s" % (rulespec_group,)
+    #     return
+
+    # # We need to handle one exception: In the ps params, the key 'cpu_rescale_max'
+    # # *may* be 'None'. However, this is deliberately not allowed by the valuespec,
+    # # to force the user to make a choice. The 'Invalid Parameter' message in this
+    # # case does make sense, as it encourages the user to open and update the
+    # # parameters. See Werk 6646
+    # if 'cpu_rescale_max' in params:
+    #     params = params.copy()
+    #     params.update(cpu_rescale_max=True)
+
+    # print("Loading %r with prams %r" % (key, params))
+    # spec.validate_value(params, "")
+
+
+def run_test_on_parse(dataset, immu):
+>>>>>>> upstream/master
     """Test parse function
 
     If dataset has .info attribute and the check has parse function defined,
@@ -152,7 +216,11 @@ def run_test_on_parse(check_manager, dataset, immu):
 
     immu.register(dataset.info, 'info')
     try:
+<<<<<<< HEAD
         main_check = check_manager.get_check(dataset.checkname)
+=======
+        main_check = Check(dataset.checkname)
+>>>>>>> upstream/master
         parse_function = main_check.info.get("parse_function")
     except MissingCheckInfoError:
         # this could be ok -
@@ -220,22 +288,37 @@ def optional_freeze_time(dataset):
         yield
 
 
+<<<<<<< HEAD
 def run(check_manager, dataset, write=False):
     """Run all possible tests on 'dataset'"""
     print("START: %r" % (dataset,))
     checklist = checkhandler.get_applicables(dataset.checkname)
+=======
+def run(check_info, dataset, write=False):
+    """Run all possible tests on 'dataset'"""
+    print("START: %r" % (dataset,))
+    checklist = checkhandler.get_applicables(dataset.checkname, check_info)
+>>>>>>> upstream/master
     assert checklist, "Found no check plugin for %r" % (dataset.checkname,)
 
     immu = Immutables()
 
     with optional_freeze_time(dataset):
 
+<<<<<<< HEAD
         parsed = run_test_on_parse(check_manager, dataset, immu)
+=======
+        parsed = run_test_on_parse(dataset, immu)
+>>>>>>> upstream/master
 
         # LOOP OVER ALL (SUB)CHECKS
         for sname in checklist:
             subcheck = (sname + '.').split('.')[1]
+<<<<<<< HEAD
             check = check_manager.get_check(sname)
+=======
+            check = Check(sname)
+>>>>>>> upstream/master
 
             info_arg = get_info_argument(dataset, subcheck, parsed)
             immu.test(' after get_info_argument ')
@@ -243,7 +326,12 @@ def run(check_manager, dataset, write=False):
 
             mock_is, mock_hec, mock_hecm = get_mock_values(dataset, subcheck)
 
+<<<<<<< HEAD
             with MockItemState(mock_is), \
+=======
+            with value_store.context(CheckPluginName("test"), "unit-test"), \
+                 MockItemState(mock_is), \
+>>>>>>> upstream/master
                  MockHostExtraConf(check, mock_hec), \
                  MockHostExtraConf(check, mock_hecm, "host_extra_conf_merged"):
 

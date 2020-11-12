@@ -1,4 +1,16 @@
+<<<<<<< HEAD
 # yapf: disable
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# yapf: disable
+# type: ignore
+
+>>>>>>> upstream/master
 
 
 checkname = 'ucs_c_rack_server_health'
@@ -23,4 +35,8 @@ checks = {'': [('Rack unit 1 Storage SAS SLOT HBA vd 0',
                 [(0, 'Status: good', [])]),
                ('Rack unit 2 Storage SAS SLOT HBA vd 0',
                 {},
+<<<<<<< HEAD
                 [(3, 'Status: unknown[anythingelse]', [])])]}
+=======
+                [(3, 'Status: unknown[anythingelse]', [])])]}
+>>>>>>> upstream/master

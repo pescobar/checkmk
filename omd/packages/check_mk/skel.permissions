@@ -1,5 +1,9 @@
 var/check_mk/web 0775
 var/check_mk/logwatch 0775
+<<<<<<< HEAD
+=======
+var/check_mk/crashes 0775
+>>>>>>> upstream/master
 var/check_mk/wato 0775
 var/check_mk/wato/snapshots 0775
 var/check_mk/wato/auth 0775

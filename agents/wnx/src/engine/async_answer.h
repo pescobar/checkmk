@@ -1,3 +1,9 @@
+<<<<<<< HEAD
+=======
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+// conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 // provides basic api to start and stop service
 
@@ -33,7 +39,11 @@ public:
     AsyncAnswer()
         : timeout_(5), awaited_segments_(0), tp_id_(GenerateAnswerId()) {}
 
+<<<<<<< HEAD
     bool isAnswerOlder(std::chrono::milliseconds Milli) const;
+=======
+    bool isAnswerOlder(std::chrono::milliseconds period) const;
+>>>>>>> upstream/master
 
     auto getId() const { return tp_id_; }
 
@@ -46,7 +56,11 @@ public:
     void dropAnswer();  // owner does it, reset all to initial state
 
     //
+<<<<<<< HEAD
     bool waitAnswer(std::chrono::milliseconds MillisecondsToWait);
+=======
+    bool waitAnswer(std::chrono::milliseconds to_wait);
+>>>>>>> upstream/master
 
     void exeKickedCount(int Count) {
         std::lock_guard lk(lock_);
@@ -61,14 +75,24 @@ public:
     // #TODO gtest
     auto getAllClear() {}
 
+<<<<<<< HEAD
     bool prepareAnswer(std::string_view Ip) noexcept;
+=======
+    bool prepareAnswer(std::string_view Ip);
+>>>>>>> upstream/master
     uint64_t num() const noexcept { return sw_.getCount(); }
 
     // Reporting Function, which called by the sections
     // #TODO gtest
+<<<<<<< HEAD
     bool addSegment(const std::string SegmentProviderName,  // name
                     const AnswerId RequiredAnswerId,        // "password"
                     const std::vector<uint8_t> data         // data for section
+=======
+    bool addSegment(const std::string& section_name,  // name
+                    const AnswerId answer_id,         // "password"
+                    const std::vector<uint8_t>& data  // data for section
+>>>>>>> upstream/master
     );
 
     // #TODO gtest

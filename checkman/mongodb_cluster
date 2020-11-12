@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: MongoDB Cluster Information
+=======
+title: MongoDB: Cluster Information
+>>>>>>> upstream/master
 agents: linux
 catalog: app/mongodb
 license: GPL
@@ -14,5 +18,13 @@ description:
 
 Note: This check will only be discovered, if the agent runs on the primary mongos router node.
 
+<<<<<<< HEAD
 inventory:
  One service is created for each database named 'MongoDB Database: <database name>'
+=======
+item:
+ Name of the cluster
+
+inventory:
+ One service is created for each database named 'MongoDB Database: <database name>'.
+>>>>>>> upstream/master

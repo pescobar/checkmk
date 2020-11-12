@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: dell OpenManage: Fans
+=======
+title: Dell OpenManage: Fans
+>>>>>>> upstream/master
 agents: snmp
 catalog: hw/server/dell
 license: GPL
@@ -14,7 +18,14 @@ description:
  Thresholds can be also defined by the common ruleset for fans.
 
 item:
+<<<<<<< HEAD
  The fan index is the item
 
 inventory:
  One service for each fan is created
+=======
+ The fan index
+
+inventory:
+ One service is created for each fan.
+>>>>>>> upstream/master

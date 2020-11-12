@@ -1,6 +1,12 @@
+<<<<<<< HEAD
 title: DDN S2A: Unit status
 agents: ddn_s2a
 catalog: storage/other
+=======
+title: DDN S2A: Unit Status
+agents: ddn_s2a
+catalog: hw/storagehw/ddn_s2a
+>>>>>>> upstream/master
 license: GPL
 distribution: check_mk
 description:
@@ -12,4 +18,8 @@ item:
  The unit index.
 
 inventory:
+<<<<<<< HEAD
  One service per peer is created.
+=======
+ One service is created for each peer.
+>>>>>>> upstream/master

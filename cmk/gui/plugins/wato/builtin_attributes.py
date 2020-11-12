@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,6 +24,13 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 import time
 
@@ -83,6 +91,12 @@ class HostAttributeAlias(ABCHostAttributeNagiosText):
     def topic(self):
         return HostAttributeTopicBasicSettings
 
+<<<<<<< HEAD
+=======
+    def is_show_more(self) -> bool:
+        return True
+
+>>>>>>> upstream/master
     @classmethod
     def sort_index(cls):
         return 10
@@ -93,6 +107,12 @@ class HostAttributeAlias(ABCHostAttributeNagiosText):
     def nagios_name(self):
         return "alias"
 
+<<<<<<< HEAD
+=======
+    def is_explicit(self):
+        return True
+
+>>>>>>> upstream/master
     def title(self):
         return _("Alias")
 
@@ -127,7 +147,11 @@ class HostAttributeIPv4Address(ABCHostAttributeValueSpec):
             help=_("In case the name of the host is not resolvable via <tt>/etc/hosts</tt> "
                    "or DNS by your monitoring server, you can specify an explicit IP "
                    "address or a resolvable DNS name of the host here.<br> <b>Notes</b>:<br> "
+<<<<<<< HEAD
                    "1. If you leave this attribute empty, hostname resolution will be done when "
+=======
+                   "1. If you do not set this attribute, hostname resolution will be done when "
+>>>>>>> upstream/master
                    "you activate the configuration. "
                    "Check_MKs builtin DNS cache is activated per default in the global "
                    "configuration to speed up the activation process. The cache is normally "
@@ -165,7 +189,11 @@ class HostAttributeIPv6Address(ABCHostAttributeValueSpec):
             help=_("In case the name of the host is not resolvable via <tt>/etc/hosts</tt> "
                    "or DNS by your monitoring server, you can specify an explicit IPv6 "
                    "address or a resolvable DNS name of the host here.<br> <b>Notes</b>:<br> "
+<<<<<<< HEAD
                    "1. If you leave this attribute empty, hostname resolution will be done when "
+=======
+                   "1. If you do not set this attribute, hostname resolution will be done when "
+>>>>>>> upstream/master
                    "you activate the configuration. "
                    "Check_MKs builtin DNS cache is activated per default in the global "
                    "configuration to speed up the activation process. The cache is normally "
@@ -188,6 +216,12 @@ class HostAttributeAdditionalIPv4Addresses(ABCHostAttributeValueSpec):
     def sort_index(cls):
         return 50
 
+<<<<<<< HEAD
+=======
+    def is_show_more(self) -> bool:
+        return True
+
+>>>>>>> upstream/master
     def name(self):
         return "additional_ipv4addresses"
 
@@ -221,6 +255,12 @@ class HostAttributeAdditionalIPv6Addresses(ABCHostAttributeValueSpec):
     def sort_index(cls):
         return 60
 
+<<<<<<< HEAD
+=======
+    def is_show_more(self) -> bool:
+        return True
+
+>>>>>>> upstream/master
     def name(self):
         return "additional_ipv6addresses"
 
@@ -268,6 +308,7 @@ class HostAttributeSNMPCommunity(ABCHostAttributeValueSpec):
 
     def valuespec(self):
         return SNMPCredentials(
+<<<<<<< HEAD
                 help =  _("Using this option you can configure the community which should be used when "
                           "contacting this host via SNMP v1/v2 or v3. It is possible to configure the SNMP community by "
                           "using the <a href=\"%s\">SNMP Communities</a> ruleset, but when you configure "
@@ -275,6 +316,16 @@ class HostAttributeSNMPCommunity(ABCHostAttributeValueSpec):
                             "wato.py?mode=edit_ruleset&varname=snmp_communities",
                 default_value = None,
             )
+=======
+            help=
+            _("Using this option you can configure the community which should be used when "
+              "contacting this host via SNMP v1/v2 or v3. It is possible to configure the SNMP community by "
+              "using the <a href=\"%s\">SNMP Communities</a> ruleset, but when you configure "
+              "a community here, this will override the community defined by the rules.") %
+            "wato.py?mode=edit_ruleset&varname=snmp_communities",
+            default_value=None,
+        )
+>>>>>>> upstream/master
 
 
 @host_attribute_registry.register
@@ -289,6 +340,12 @@ class HostAttributeParents(ABCHostAttributeValueSpec):
     def sort_index(cls):
         return 80
 
+<<<<<<< HEAD
+=======
+    def is_show_more(self) -> bool:
+        return True
+
+>>>>>>> upstream/master
     def show_in_table(self):
         return True
 
@@ -721,7 +778,10 @@ class HostAttributeManagementSNMPCommunity(ABCHostAttributeValueSpec):
 
 class IPMICredentials(Alternative):
     def __init__(self, **kwargs):
+<<<<<<< HEAD
         kwargs["style"] = "dropdown"
+=======
+>>>>>>> upstream/master
         kwargs["elements"] = [
             FixedValue(
                 None,
@@ -763,6 +823,12 @@ class HostAttributeSite(ABCHostAttributeValueSpec):
     def name(self):
         return "site"
 
+<<<<<<< HEAD
+=======
+    def is_show_more(self) -> bool:
+        return True
+
+>>>>>>> upstream/master
     def topic(self):
         return HostAttributeTopicBasicSettings
 
@@ -992,6 +1058,12 @@ class HostAttributeLabels(ABCHostAttributeValueSpec):
     def sort_index(cls):
         return 190
 
+<<<<<<< HEAD
+=======
+    def is_show_more(self) -> bool:
+        return True
+
+>>>>>>> upstream/master
     def help(self):
         return _("With the help of labels you can flexibly group your hosts in "
                  "order to refer to them later at other places in Check_MK, e.g. in rule chains. "

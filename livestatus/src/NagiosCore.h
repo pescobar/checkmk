@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // +------------------------------------------------------------------+
 // |             ____ _               _        __  __ _  __           |
 // |            / ___| |__   ___  ___| | __   |  \/  | |/ /           |
@@ -21,21 +22,43 @@
 // License along with GNU Make; see the file  COPYING.  If  not,  write
 // to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 // Boston, MA 02110-1301 USA.
+=======
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the
+// terms and conditions defined in the file COPYING, which is part of this
+// source code package.
+>>>>>>> upstream/master
 
 #ifndef NagiosCore_h
 #define NagiosCore_h
 
 #include "config.h"  // IWYU pragma: keep
+<<<<<<< HEAD
 #include <chrono>
 #include <cstddef>
 #include <string>
 #include <unordered_map>
 #include <vector>
+=======
+
+#include <chrono>
+#include <cstddef>
+#include <filesystem>
+#include <functional>  // IWYU pragma: keep
+#include <string>
+#include <unordered_map>
+#include <vector>
+
+#include "Metric.h"
+>>>>>>> upstream/master
 #include "MonitoringCore.h"
 #include "Store.h"
 #include "Triggers.h"
 #include "auth.h"
+<<<<<<< HEAD
 #include "contact_fwd.h"
+=======
+>>>>>>> upstream/master
 #include "data_encoding.h"
 #include "nagios.h"
 class InputBuffer;
@@ -47,12 +70,21 @@ struct NagiosPaths {
     std::string _pnp;
     std::string _mk_inventory;
     std::string _structured_status;
+<<<<<<< HEAD
+=======
+    std::filesystem::path _crash_reports_path;
+    std::filesystem::path _license_usage_history_path;
+>>>>>>> upstream/master
     std::string _mk_logwatch;
     std::string _logfile;
     std::string _mkeventd_socket;
     std::string _rrdcached_socket;
 
+<<<<<<< HEAD
     void dump(Logger *logger);
+=======
+    void dump(Logger *logger) const;
+>>>>>>> upstream/master
 };
 
 struct NagiosLimits {
@@ -83,6 +115,10 @@ public:
                                            const Contact *contact) override;
 
     std::chrono::system_clock::time_point last_logfile_rotation() override;
+<<<<<<< HEAD
+=======
+    std::chrono::system_clock::time_point last_config_change() override;
+>>>>>>> upstream/master
     size_t maxLinesPerLogFile() const override;
 
     Command find_command(const std::string &name) const override;
@@ -98,6 +134,7 @@ public:
 
     bool mkeventdEnabled() override;
 
+<<<<<<< HEAD
     std::string mkeventdSocketPath() override;
     std::string mkLogwatchPath() override;
     std::string mkInventoryPath() override;
@@ -106,6 +143,18 @@ public:
     std::string historyFilePath() override;
     std::string logArchivePath() override;
     std::string rrdcachedSocketPath() override;
+=======
+    std::filesystem::path mkeventdSocketPath() const override;
+    std::filesystem::path mkLogwatchPath() const override;
+    std::filesystem::path mkInventoryPath() const override;
+    std::filesystem::path structuredStatusPath() const override;
+    std::filesystem::path crashReportPath() const override;
+    std::filesystem::path licenseUsageHistoryPath() const override;
+    std::filesystem::path pnpPath() const override;
+    std::filesystem::path historyFilePath() const override;
+    std::filesystem::path logArchivePath() const override;
+    std::filesystem::path rrdcachedSocketPath() const override;
+>>>>>>> upstream/master
 
     Encoding dataEncoding() override;
     size_t maxResponseSize() override;
@@ -126,6 +175,14 @@ public:
     Attributes customAttributes(const void *holder,
                                 AttributeKind kind) const override;
 
+<<<<<<< HEAD
+=======
+    MetricLocation metricLocation(const std::string &host_name,
+                                  const std::string &service_description,
+                                  const Metric::Name &var) const override;
+    bool pnp4nagiosEnabled() const override;
+
+>>>>>>> upstream/master
     // specific for NagiosCore
     bool answerRequest(InputBuffer &input, OutputBuffer &output);
     void registerDowntime(nebstruct_downtime_data *data);

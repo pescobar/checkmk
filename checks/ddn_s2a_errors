@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,12 +24,26 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# NOTE: Careful when replacing the *-import below with a more specific import. This can cause
+# problems because it might remove variables from the check-context which are necessary for
+# resolving legacy discovery results such as [("SUMMARY", "diskstat_default_levels")]. Furthermore,
+# it might also remove variables needed for accessing discovery rulesets.
+from cmk.base.check_legacy_includes.ddn_s2a import *  # pylint: disable=wildcard-import,unused-wildcard-import
+>>>>>>> upstream/master
 
 
 def parse_ddn_s2a_errors(info):
     preparsed = parse_ddn_s2a_api_response(info)
     return {
         "port_type": preparsed[u"port_type"],
+<<<<<<< HEAD
         "link_failure_errs": map(int, preparsed[u"link_failure_errs"]),
         "lost_sync_errs": map(int, preparsed[u"lost_sync_errs"]),
         "loss_of_signal_errs": map(int, preparsed[u"loss_of_sig_errs"]),
@@ -38,6 +53,17 @@ def parse_ddn_s2a_errors(info):
         "ctio_timeouts": map(int, preparsed[u"CTIO_timeouts"]),
         "ctio_xmit_errs": map(int, preparsed[u"CTIO_xmit_errs"]),
         "ctio_other_errs": map(int, preparsed[u"CTIO_other_errs"]),
+=======
+        "link_failure_errs": list(map(int, preparsed[u"link_failure_errs"])),
+        "lost_sync_errs": list(map(int, preparsed[u"lost_sync_errs"])),
+        "loss_of_signal_errs": list(map(int, preparsed[u"loss_of_sig_errs"])),
+        "prim_seq_errs": list(map(int, preparsed[u"prim_seq_errs"])),
+        "crc_errs": list(map(int, preparsed[u"CRC_errs"])),
+        "receive_errs": list(map(int, preparsed[u"receive_errs"])),
+        "ctio_timeouts": list(map(int, preparsed[u"CTIO_timeouts"])),
+        "ctio_xmit_errs": list(map(int, preparsed[u"CTIO_xmit_errs"])),
+        "ctio_other_errs": list(map(int, preparsed[u"CTIO_other_errs"])),
+>>>>>>> upstream/master
     }
 
 
@@ -117,6 +143,9 @@ check_info['ddn_s2a_errors'] = {
     'inventory_function': inventory_ddn_s2a_errors,
     'check_function': check_ddn_s2a_errors,
     'service_description': 'DDN S2A Port Errors %s',
+<<<<<<< HEAD
     'includes': ["ddn_s2a.include"],
+=======
+>>>>>>> upstream/master
     'group': "ddn_s2a_port_errors",
 }

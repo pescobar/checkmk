@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -28,6 +29,20 @@ from cmk.gui.i18n import _
 from cmk.gui.valuespec import (
     Percentage,
     TextAscii,
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+from cmk.gui.i18n import _
+from cmk.gui.valuespec import (
+    Dictionary,
+    Percentage,
+    TextAscii,
+    Transform,
+>>>>>>> upstream/master
     Tuple,
 )
 
@@ -38,6 +53,7 @@ from cmk.gui.plugins.wato import (
 )
 
 
+<<<<<<< HEAD
 def _parameter_valuespec_smoke():
     return Tuple(
         help=_("For devices which measure smoke in percent"),
@@ -45,6 +61,32 @@ def _parameter_valuespec_smoke():
             Percentage(title=_("Warning at"), allow_int=True, default_value=1),
             Percentage(title=_("Critical at"), allow_int=True, default_value=5),
         ],
+=======
+def _transform_smoke_detection_params(params):
+    if isinstance(params, tuple):
+        return {'levels': params}
+    return params
+
+
+def _parameter_valuespec_smoke():
+    return Transform(
+        Dictionary(
+            help=_("For devices that measure smoke in percent"),
+            elements=[
+                (
+                    'levels',
+                    Tuple(
+                        title=_('Upper limits in percent'),
+                        elements=[
+                            Percentage(title=_("Warning at"), allow_int=True, default_value=1),
+                            Percentage(title=_("Critical at"), allow_int=True, default_value=5),
+                        ],
+                    ),
+                ),
+            ],
+        ),
+        forth=_transform_smoke_detection_params,
+>>>>>>> upstream/master
     )
 
 

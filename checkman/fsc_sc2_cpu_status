@@ -15,5 +15,9 @@ item:
  The CPU designation
 
 inventory:
+<<<<<<< HEAD
  One service per CPU is created.
+=======
+ One service is created for each CPU.
+>>>>>>> upstream/master
 

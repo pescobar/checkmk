@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,6 +24,13 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 import cmk.gui.mkeventd as mkeventd
 from cmk.gui.i18n import _
@@ -63,7 +71,11 @@ def _item_help_logwatch_rules():
 def _valuespec_logwatch_rules():
     return Transform(
         Dictionary(
+<<<<<<< HEAD
             title=_('Logwatch Patterns'),
+=======
+            title=_('Logfile patterns'),
+>>>>>>> upstream/master
             elements=[
                 ("reclassify_patterns",
                  ListOf(
@@ -163,6 +175,10 @@ def _valuespec_logwatch_rules():
                  )),
             ],
             optional_keys=["reclassify_states"],
+<<<<<<< HEAD
+=======
+            ignored_keys=["pre_comp_group_patterns", "group_patterns"],
+>>>>>>> upstream/master
         ),
         forth=lambda x: isinstance(x, dict) and x or {"reclassify_patterns": x},
     )
@@ -227,7 +243,10 @@ def _parameter_valuespec_logwatch_ec():
         help=_("Instead of using the regular logwatch check all lines received by logwatch can "
                "be forwarded to a Check_MK event console daemon to be processed. The target event "
                "console can be configured for each host in a separate rule."),
+<<<<<<< HEAD
         style="dropdown",
+=======
+>>>>>>> upstream/master
         elements=[
             FixedValue(
                 "",
@@ -242,7 +261,10 @@ def _parameter_valuespec_logwatch_ec():
                         Transform(
                             # TODO: Clean this up to some CascadingDropdown()
                             Alternative(
+<<<<<<< HEAD
                                 style="dropdown",
+=======
+>>>>>>> upstream/master
                                 title=_("Forwarding Method"),
                                 elements=[
                                     FixedValue(

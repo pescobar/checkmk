@@ -5,7 +5,11 @@ Class: fix
 Compatible: compat
 Edition: cre
 State: unknown
+<<<<<<< HEAD
 Version: 1.7.0i1
+=======
+Version: 2.0.0i1
+>>>>>>> upstream/master
 Date: 1568360378
 
 According to the Azure API documentation offers of type MS-AZR-0145P, MS-AZR-0146P, MS-AZR-159P,

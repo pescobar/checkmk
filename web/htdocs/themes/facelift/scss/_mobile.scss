@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /*
 +------------------------------------------------------------------+
 |             ____ _               _        __  __ _  __           |
@@ -31,6 +32,23 @@ body.mobile {
     width: 80%;
     padding: 0.5ex 1em;
     margin: 1em 0 3em 0;
+=======
+@charset "UTF-8";
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+// conditions defined in the file COPYING, which is part of this source code package.
+
+/* Styles for Check_MK mobile interface */
+body.mobile {
+  div.really,
+  div.success,
+  div.error,
+  div.message,
+  div.warning {
+    width: 80%;
+    padding: 0.5ex 1em;
+    margin: 1em 0 3em;
+>>>>>>> upstream/master
     text-align: center;
     border-style: solid;
     border-width: 2px;
@@ -38,12 +56,21 @@ body.mobile {
   }
 
   div.error {
+<<<<<<< HEAD
     color: $theme-color-text;
     background-color: #fcc;
   }
 
   div.command_group a {
     color: #000;
+=======
+    color: $font-color;
+    background-color: rgb(255, 204, 204);
+  }
+
+  div.command_group a {
+    color: rgb(0, 0, 0);
+>>>>>>> upstream/master
   }
 
   table.data {
@@ -53,7 +80,11 @@ body.mobile {
     td {
       padding: 2px 3px;
       overflow: hidden;
+<<<<<<< HEAD
       border: 1px solid #ddd;
+=======
+      border: 1px solid rgb(221, 221, 221);
+>>>>>>> upstream/master
     }
   }
 
@@ -61,19 +92,31 @@ body.mobile {
     width: 100%;
 
     tr.header {
+<<<<<<< HEAD
       color: #000;
+=======
+      color: rgb(0, 0, 0);
+>>>>>>> upstream/master
     }
 
     > tbody > tr.data > td {
       padding: 4px 6px;
       font-size: 13px;
+<<<<<<< HEAD
       border: 1px solid #aaa;
+=======
+      border: 1px solid rgb(170, 170, 170);
+>>>>>>> upstream/master
       border-radius: 5px;
     }
   }
 
   td.nonstatus {
+<<<<<<< HEAD
     background-color: #fff;
+=======
+    background-color: rgb(255, 255, 255);
+>>>>>>> upstream/master
   }
 
   /* Forms for filters and commands */
@@ -118,12 +161,20 @@ body.mobile {
       padding: 0;
       font-size: 9px;
       font-weight: normal;
+<<<<<<< HEAD
       color: #333;
+=======
+      color: rgb(51, 51, 51);
+>>>>>>> upstream/master
     }
 
     div.content {
       width: 69px;
+<<<<<<< HEAD
       background-color: #ff0;
+=======
+      background-color: rgb(255, 255, 0);
+>>>>>>> upstream/master
     }
 
     div.title {
@@ -146,15 +197,25 @@ body.mobile {
     height: 14px;
   }
 
+<<<<<<< HEAD
   .ui-header .ui-title, .ui-footer .ui-title {
     margin: .6em 46px .8em;
+=======
+  .ui-header .ui-title,
+  .ui-footer .ui-title {
+    margin: 0.6em 46px 0.8em;
+>>>>>>> upstream/master
   }
 
   .ui-li-aside.state {
     width: 4.5em;
     text-align: center;
     border-radius: 5px;
+<<<<<<< HEAD
     box-shadow: 0 0 2px #444;
+=======
+    box-shadow: 0 0 2px rgb(68, 68, 68);
+>>>>>>> upstream/master
   }
 
   td.pnpgraph img {
@@ -165,8 +226,14 @@ body.mobile {
     font-size: 25px;
   }
 
+<<<<<<< HEAD
   #loginhead, #loginfoot {
     color: #444;
+=======
+  #loginhead,
+  #loginfoot {
+    color: rgb(68, 68, 68);
+>>>>>>> upstream/master
     text-align: center;
   }
 
@@ -212,7 +279,11 @@ body.mobile {
         display: inline-block;
         width: 40px;
         overflow: hidden;
+<<<<<<< HEAD
         color: #000;
+=======
+        color: rgb(0, 0, 0);
+>>>>>>> upstream/master
 
         img {
           margin-left: 0;

@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: SAP HANA Statistics Server
+=======
+title: SAP HANA: Statistics Server
+>>>>>>> upstream/master
 agents: linux
 catalog: app/sap_hana
 license: GPL
@@ -15,7 +19,14 @@ description:
  If there are no startet threads the check goes CRIT.
 
 item:
+<<<<<<< HEAD
  The instance name
 
 inventory:
  One service is created per instance.
+=======
+ The sid instance name
+
+inventory:
+ One service is created for each instance.
+>>>>>>> upstream/master

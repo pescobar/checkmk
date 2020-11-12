@@ -1,3 +1,11 @@
+<<<<<<< HEAD
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 """Script to create regression tests
 
 This is actually a script, but we need all the test magic,
@@ -57,12 +65,25 @@ B. Update all or one selected test to match the current status quo
      * the regular "-k test-name-pattern"  option to py.test
 
 """
+<<<<<<< HEAD
 import os
 import ast
 import sys
 import time
 import yapf
 from importlib import import_module
+=======
+import ast
+from importlib import import_module
+import os
+from pathlib import Path
+import pytest
+import sys
+import time
+from typing import Any, Iterable
+
+import yapf  # type: ignore[import]
+>>>>>>> upstream/master
 
 import generictests.run
 
@@ -72,10 +93,15 @@ YAPF_STYLE = {
 }
 
 
+<<<<<<< HEAD
 class WritableDataset(object):
     def __init__(self, filename, init_dict):
         self.comments = ['-*- encoding: utf-8', 'yapf: disable']
         self.filename = filename
+=======
+class WritableDataset:
+    def __init__(self, init_dict):
+>>>>>>> upstream/master
         self.writelist = (
             'checkname',
             'freeze_time',
@@ -92,7 +118,11 @@ class WritableDataset(object):
         self.info = init_dict.get('info', None)
         freeze_time = init_dict.get('freeze_time', None)
         if freeze_time == "":
+<<<<<<< HEAD
             freeze_time = time.strftime("%Y-%m-%d %H:%M:%S")
+=======
+            freeze_time = time.strftime(u"%Y-%m-%d %H:%M:%S")
+>>>>>>> upstream/master
         self.freeze_time = freeze_time
         self.parsed = init_dict.get('parsed', None)
         self.discovery = init_dict.get('discovery', {})
@@ -110,6 +140,7 @@ class WritableDataset(object):
                 return
         self.checks[subcheck].append(new_entry)
 
+<<<<<<< HEAD
     def write(self, directory):
         content = []
         imports = set()
@@ -119,10 +150,22 @@ class WritableDataset(object):
                 continue
             content.append("%s = %r" % (k, v))
             imports |= self.get_imports(v)
+=======
+    def write(self, filename):
+        content = []
+        imports = set()
+        for attr in self.writelist:
+            value = getattr(self, attr)
+            if not value:
+                continue
+            content.append(u"%s = %r" % (attr, value))
+            imports |= self.get_imports(value)
+>>>>>>> upstream/master
 
         if not content:
             return
 
+<<<<<<< HEAD
         with open('%s/%s' % (directory, self.filename.split("/")[-1]), 'w') as f:
             for comment in self.comments:
                 f.write('# %s\n' % comment)
@@ -136,6 +179,38 @@ class WritableDataset(object):
                 style_config=YAPF_STYLE,
             )
             f.write(output)
+=======
+        content = list(sorted(imports)) + content
+
+        yapfed_content, __ = yapf.yapflib.yapf_api.FormatCode(
+            '\n\n'.join(content),
+            style_config=YAPF_STYLE,
+        )
+
+        with Path(filename).open('w') as handle:
+            # Disabling yapf: yapf parses comment blocks and disables the next
+            # lines if and only if the FIRST line of that block contains
+            #   '# yapf: disable'
+            # Does not work:
+            #   '# -*- encoding: utf-8'
+            #   '# yapf: disable'
+            # Works:
+            #   '# -*- encoding: utf-8'
+            #   ''
+            #   '# yapf: disable'
+            comments = [
+                u'#!/usr/bin/env python3\n',
+                u'# -*- encoding: utf-8 -*-\n',
+                u'# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2\n',
+                u'# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and\n',
+                u'# conditions defined in the file COPYING, which is part of this source code package.\n',
+                u'\n',
+                u'# yapf: disable\n',
+                u'# type: ignore\n',
+            ]
+            handle.writelines(comments)
+            handle.write(yapfed_content)
+>>>>>>> upstream/master
 
     def get_imports(self, value):
         try:
@@ -145,11 +220,19 @@ class WritableDataset(object):
             pass
 
         if isinstance(value, dict):
+<<<<<<< HEAD
             iterate = value.iteritems()
         elif isinstance(value, (tuple, list)):
             iterate = value
         else:
             return {"from %s import %s" % (value.__module__, value.__class__.__name__)}
+=======
+            iterate: Iterable[Any] = value.items()
+        elif isinstance(value, (tuple, list)):
+            iterate = value
+        else:
+            return {u"from %s import %s" % (value.__module__, value.__class__.__name__)}
+>>>>>>> upstream/master
 
         imports = set()
         for val in iterate:
@@ -169,8 +252,13 @@ def _get_out_filename(datasetfile, inplace):
 
     return out_name.replace('.py', '_regression.py')
 
+<<<<<<< HEAD
 
 def test_main(check_manager, datasetfile, inplace):
+=======
+@pytest.mark.usefixtures("config_load_all_checks")
+def test_main(config_check_info, datasetfile, inplace):
+>>>>>>> upstream/master
     """Script to create test datasets.
 
     This is a script. But we need the py.test environment, so it comes in the
@@ -188,6 +276,7 @@ def test_main(check_manager, datasetfile, inplace):
     input_data = import_module(os.path.splitext(modn)[0])
     sys.path.pop(0)
 
+<<<<<<< HEAD
     out_name = _get_out_filename(datasetfile, inplace)
     regression = WritableDataset(out_name, vars(input_data))
 
@@ -196,3 +285,10 @@ def test_main(check_manager, datasetfile, inplace):
     directory = os.path.join(os.path.dirname(__file__), "datasets")
     regression.write(directory)
     return
+=======
+    regression = WritableDataset(vars(input_data))
+
+    generictests.run(config_check_info, regression, write=True)
+
+    regression.write(_get_out_filename(datasetfile, inplace))
+>>>>>>> upstream/master

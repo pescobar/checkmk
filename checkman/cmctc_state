@@ -9,9 +9,14 @@ description:
  as well as the status of connected units and sensors are
  handled in the corresponding subchecks.
 
+<<<<<<< HEAD
 item:
  No item.
 
 inventory:
  One check per host will be created.
+=======
+inventory:
+ One service is created for each host.
+>>>>>>> upstream/master
 

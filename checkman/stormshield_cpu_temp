@@ -8,8 +8,15 @@ description:
  to monitor the temperature of the CPUs.
 
 item:
+<<<<<<< HEAD
  The description of the service as provided by
  the index of the device.
 
 inventory:
  Each cpu will be inventorized.
+=======
+ The index of the CPU
+
+inventory:
+ One service is created for each CPU.
+>>>>>>> upstream/master

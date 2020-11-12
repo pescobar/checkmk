@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: Docker container memory usage
+=======
+title: Docker: Container Memory Usage
+>>>>>>> upstream/master
 agents: linux
 catalog: containerization/docker
 license: GPL
@@ -12,5 +16,9 @@ description:
  thresholds on the memory usage.
 
 inventory:
+<<<<<<< HEAD
  One check per container is created if the Check_MK agent is executed
+=======
+ One service is created for each container if the Checkmk agent is executed
+>>>>>>> upstream/master
  in the context of a docker container.

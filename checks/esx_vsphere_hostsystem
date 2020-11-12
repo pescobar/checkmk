@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -24,10 +25,29 @@
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
 
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# NOTE: Careful when replacing the *-import below with a more specific import. This can cause
+# problems because it might remove variables from the check-context which are necessary for
+# resolving legacy discovery results such as [("SUMMARY", "diskstat_default_levels")]. Furthermore,
+# it might also remove variables needed for accessing discovery rulesets.
+from cmk.base.check_legacy_includes.cpu_util import *  # pylint: disable=wildcard-import,unused-wildcard-import
+# NOTE: Careful when replacing the *-import below with a more specific import. This can cause
+# problems because it might remove variables from the check-context which are necessary for
+# resolving legacy discovery results such as [("SUMMARY", "diskstat_default_levels")]. Furthermore,
+# it might also remove variables needed for accessing discovery rulesets.
+from cmk.base.check_legacy_includes.mem import *  # pylint: disable=wildcard-import,unused-wildcard-import
+>>>>>>> upstream/master
 # TODO: The extra_sections part is only transitional code to avoid
 # duplicate CPU services.
 # Previously, the duplicate services were handled in the agent_vsphere
 # directly. Starting with 1.5.0 this is problematic since multiple
+<<<<<<< HEAD
 # datasources can be defined in Check_MK natively. Therefore we shift
 # the detection of the duplicate services directly to this check.
 # When it is possible to handle duplicate services for different
@@ -110,6 +130,15 @@ check_info['esx_vsphere_hostsystem.cpu_usage'] = {
     "default_levels_variable": "esx_host_cpu_default_levels",
     "includes": ["cpu_util.include"],
 }
+=======
+# datasources can be defined in Checkmk natively. Therefore we shift
+# the detection of the duplicate services directly to this check.
+# When it is possible to handle duplicate services for different
+# datasources correctly at the cmk.base level this code can be removed.
+# NOTE: By design the extra_sections are passed to EVERY subcheck and
+# therefore have to be removed in every subcheck!
+# Change-Id: I3b6a56efcff4c75bbd05a051242e18deaa499d9e
+>>>>>>> upstream/master
 
 #.
 #   .--Mem-Cluster---------------------------------------------------------.
@@ -122,12 +151,20 @@ check_info['esx_vsphere_hostsystem.cpu_usage'] = {
 #   +----------------------------------------------------------------------+
 
 
+<<<<<<< HEAD
 def check_esx_vsphere_hostsystem_mem_cluster(item, params, info):
     info, _ = info
     data = {}
     for line in info:
         if line[0] in ["summary.quickStats.overallMemoryUsage", "hardware.memorySize", "name"]:
             data.setdefault(line[0], []).append(line[1])
+=======
+def check_esx_vsphere_hostsystem_mem_cluster(item, params, parsed):
+    data = {}
+    for key, value in parsed.items():
+        if key in ["summary.quickStats.overallMemoryUsage", "hardware.memorySize", "name"]:
+            data.setdefault(key, []).append(value)
+>>>>>>> upstream/master
     sorted_params = sorted(params, reverse=True)
 
     nodes_count = len(data['name'])
@@ -135,34 +172,27 @@ def check_esx_vsphere_hostsystem_mem_cluster(item, params, info):
         savefloat(x) * 1024 * 1024 for x in data['summary.quickStats.overallMemoryUsage'])
     total_memory_size = sum(savefloat(x) for x in data['hardware.memorySize'])
 
-    level = total_memory_usage / total_memory_size * 100
-    label = ""
-    state = 0
-    warn_perf, crit_perf = None, None
-    for count, levels in sorted_params:
+    for count, (warn, crit) in sorted_params:
         if nodes_count >= count:
-            warn, crit = levels
-            warn_perf = warn * total_memory_size / 100
-            crit_perf = crit * total_memory_size / 100
+            state, text, perf = check_memory_element(
+                "Usage",
+                total_memory_usage,
+                total_memory_size,
+                ('perc_used', (warn, crit)),
+                metric_name="mem_used",
+            )
+            perf.append(("mem_total", total_memory_size))
 
-            if level > crit:
-                state = 2
-                label = " (Levels at %d%%/%d%%)" % (warn, crit)
-            elif level > warn:
-                state = 1
-                label = " (Levels at %d%%/%d%%)" % (warn, crit)
-            break
-
-    perf = [("usage", total_memory_usage, warn_perf, crit_perf, 0, total_memory_size),
-            ("mem_total", total_memory_size)]
-    yield state, "%d%%%s used - %s/%s" % \
-            (level, label, get_bytes_human_readable(total_memory_usage),
-             get_bytes_human_readable(total_memory_size)), perf
+            return state, text, perf
 
 
 check_info['esx_vsphere_hostsystem.mem_usage_cluster'] = {
     "check_function": check_esx_vsphere_hostsystem_mem_cluster,
+<<<<<<< HEAD
     "service_description": "Memory used",
+=======
+    "service_description": "Memory",
+>>>>>>> upstream/master
     "group": "mem_cluster",
     "has_perfdata": True,
 }
@@ -178,8 +208,12 @@ check_info['esx_vsphere_hostsystem.mem_usage_cluster'] = {
 #   +----------------------------------------------------------------------+
 
 
+<<<<<<< HEAD
 def check_esx_vsphere_hostsystem_cpu_util_cluster(item, params, info):
     info, _ = info
+=======
+def check_esx_vsphere_hostsystem_cpu_util_cluster(item, params, parsed):
+>>>>>>> upstream/master
     current_node = {}
 
     def get_node_usage(node):
@@ -193,15 +227,24 @@ def check_esx_vsphere_hostsystem_cpu_util_cluster(item, params, info):
     overall_used = []
     overall_total = []
     overall_threads = []
+<<<<<<< HEAD
     for line in info:
         if line[0] in [
+=======
+    for key, value in parsed.items():
+        if key in [
+>>>>>>> upstream/master
                 "hardware.cpuInfo.numCpuPackages",
                 "hardware.cpuInfo.numCpuCores",
                 "hardware.cpuInfo.numCpuThreads",
                 "summary.quickStats.overallCpuUsage",
                 "hardware.cpuInfo.hz",
         ]:
+<<<<<<< HEAD
             current_node[line[0]] = line[1]
+=======
+            current_node[key] = value[0]
+>>>>>>> upstream/master
         if len(current_node) == 5:  # 5 keys -> node complete
             node_used, node_total, node_threads = get_node_usage(current_node)
             overall_used.append(node_used)
@@ -237,7 +280,10 @@ check_info['esx_vsphere_hostsystem.cpu_util_cluster'] = {
     "service_description": "CPU utilization",
     "group": "cpu_utilization_cluster",
     "has_perfdata": True,
+<<<<<<< HEAD
     "includes": ["cpu_util.include"],
+=======
+>>>>>>> upstream/master
 }
 #.
 #   .--Memory--------------------------------------------------------------.
@@ -252,6 +298,7 @@ check_info['esx_vsphere_hostsystem.cpu_util_cluster'] = {
 esx_host_mem_default_levels = (80.0, 90.0)
 
 
+<<<<<<< HEAD
 def inventory_esx_vsphere_hostsystem_mem(info):
     info, _ = info
     data = esx_vsphere_hostsystem_convert(info).keys()
@@ -262,10 +309,19 @@ def inventory_esx_vsphere_hostsystem_mem(info):
 def check_esx_vsphere_hostsystem_mem(item, params, info):
     info, _ = info
     data = esx_vsphere_hostsystem_convert(info)
+=======
+def inventory_esx_vsphere_hostsystem_mem(parsed):
+    if 'summary.quickStats.overallMemoryUsage' in parsed and 'hardware.memorySize' in parsed:
+        return [(None, 'esx_host_mem_default_levels')]
 
-    if "summary.quickStats.overallMemoryUsage" not in data:
+>>>>>>> upstream/master
+
+def check_esx_vsphere_hostsystem_mem(item, params, parsed):
+
+    if "summary.quickStats.overallMemoryUsage" not in parsed:
         return
 
+<<<<<<< HEAD
     memory_usage = savefloat(data['summary.quickStats.overallMemoryUsage'][0]) * 1024 * 1024
     memory_size = savefloat(data['hardware.memorySize'][0])
     level = memory_usage / memory_size * 100
@@ -287,12 +343,30 @@ def check_esx_vsphere_hostsystem_mem(item, params, info):
         ("mem_total", memory_size),
     ]
     return (state, message, perf)
+=======
+    memory_usage = savefloat(parsed['summary.quickStats.overallMemoryUsage'][0]) * 1024 * 1024
+    memory_size = savefloat(parsed['hardware.memorySize'][0])
+
+    state, text, perf = check_memory_element(
+        "Usage",
+        memory_usage,
+        memory_size,
+        ('perc_used', params),
+        metric_name="mem_used",
+    )
+    perf.append(("mem_total", memory_size))
+    return state, text, perf
+>>>>>>> upstream/master
 
 
 check_info['esx_vsphere_hostsystem.mem_usage'] = {
     "inventory_function": inventory_esx_vsphere_hostsystem_mem,
     "check_function": check_esx_vsphere_hostsystem_mem,
+<<<<<<< HEAD
     "service_description": "Memory used",
+=======
+    "service_description": "Memory",
+>>>>>>> upstream/master
     "group": "esx_host_memory",
     "has_perfdata": True
 }
@@ -308,6 +382,7 @@ check_info['esx_vsphere_hostsystem.mem_usage'] = {
 #   +----------------------------------------------------------------------+
 
 
+<<<<<<< HEAD
 def inventory_esx_vsphere_hostsystem_state(info):
     info, _ = info
     data = esx_vsphere_hostsystem_convert(info).keys()
@@ -318,11 +393,19 @@ def inventory_esx_vsphere_hostsystem_state(info):
 def check_esx_vsphere_hostsystem_state(_no_item, _no_params, info):
     info, _ = info
     data = esx_vsphere_hostsystem_convert(info)
+=======
+def inventory_esx_vsphere_hostsystem_state(parsed):
+    if 'runtime.inMaintenanceMode' in parsed:
+        return [(None, None)]
+
+
+def check_esx_vsphere_hostsystem_state(_no_item, _no_params, parsed):
+>>>>>>> upstream/master
     state = 0
-    if "overallStatus" not in data:
+    if "overallStatus" not in parsed:
         return
 
-    overallStatus = str(data['overallStatus'][0])
+    overallStatus = str(parsed['overallStatus'][0])
     if overallStatus == "yellow":
         state = 1
     elif overallStatus in ["red", "gray"]:
@@ -330,7 +413,7 @@ def check_esx_vsphere_hostsystem_state(_no_item, _no_params, info):
     yield state, "Entity state: " + overallStatus
 
     state = 0
-    powerState = str(data['runtime.powerState'][0])
+    powerState = str(parsed['runtime.powerState'][0])
     if powerState in ['poweredOff', 'unknown']:
         state = 2
     elif powerState == 'standBy':
@@ -356,6 +439,7 @@ check_info['esx_vsphere_hostsystem.state'] = {
 #   |                                                                      |
 #   '----------------------------------------------------------------------'
 
+<<<<<<< HEAD
 
 def inventory_esx_vsphere_hostsystem_maintenance(info):
     info, _ = info
@@ -368,12 +452,22 @@ def inventory_esx_vsphere_hostsystem_maintenance(info):
 def check_esx_vsphere_hostsystem_maintenance(_no_item, params, info):
     info, _ = info
     data = esx_vsphere_hostsystem_convert(info)
+=======
+
+def inventory_esx_vsphere_hostsystem_maintenance(parsed):
+    if 'runtime.inMaintenanceMode' in parsed:
+        current_state = str(parsed['runtime.inMaintenanceMode'][0]).lower()
+        return [(None, {'target_state': current_state})]
+
+
+def check_esx_vsphere_hostsystem_maintenance(_no_item, params, parsed):
+>>>>>>> upstream/master
     target_state = params['target_state']
 
-    if "runtime.inMaintenanceMode" not in data:
+    if "runtime.inMaintenanceMode" not in parsed:
         return
 
-    current_state = str(data['runtime.inMaintenanceMode'][0]).lower()
+    current_state = str(parsed['runtime.inMaintenanceMode'][0]).lower()
     state = 0
     if target_state != current_state:
         state = 2
@@ -408,6 +502,7 @@ check_info['esx_vsphere_hostsystem.maintenance'] = {
 # >= version 6.0
 # vmhba32:C0:T0:L0 active
 
+<<<<<<< HEAD
 
 def esx_vsphere_multipath_convert(info):
     data = esx_vsphere_hostsystem_convert(info)
@@ -420,9 +515,21 @@ def esx_vsphere_multipath_convert(info):
     paths = {}
     for lun_id, path, state in path_info:
         paths.setdefault(lun_id, []).append((state, path))
+=======
+>>>>>>> upstream/master
 
+def esx_vsphere_multipath_convert(data):
+
+    raw_path_info = data.get('config.storageDevice.multipathInfo')
+    if not raw_path_info:
+        return {}
+
+    paths = {}
+    for lun_id, path, state in zip(raw_path_info[::3], raw_path_info[1::3], raw_path_info[2::3]):
+        paths.setdefault(lun_id, []).append((state, path))
     return paths
 
+<<<<<<< HEAD
 
 def inventory_esx_vsphere_hostsystem_multipath(info):
     info, _ = info
@@ -431,6 +538,14 @@ def inventory_esx_vsphere_hostsystem_multipath(info):
 
 def check_esx_vsphere_hostsystem_multipath(item, params, info):
     info, _ = info
+=======
+
+def inventory_esx_vsphere_hostsystem_multipath(parsed):
+    return [(x, None) for x in esx_vsphere_multipath_convert(parsed)]
+
+
+def check_esx_vsphere_hostsystem_multipath(item, params, parsed):
+>>>>>>> upstream/master
     state_infos = {
         # alert_state, count, info
         "active": [0, 0, ""],
@@ -444,7 +559,11 @@ def check_esx_vsphere_hostsystem_multipath(item, params, info):
     message = ""
     path_names = []
 
+<<<<<<< HEAD
     for path, states in esx_vsphere_multipath_convert(info).iteritems():
+=======
+    for path, states in esx_vsphere_multipath_convert(parsed).items():
+>>>>>>> upstream/master
         if path == item:
             # Collect states
             for path_state, path_name in states:

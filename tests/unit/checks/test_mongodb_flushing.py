@@ -1,5 +1,16 @@
+<<<<<<< HEAD
 import pytest
 import sys
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+import pytest  # type: ignore[import]
+from testlib import Check  # type: ignore[import]
+>>>>>>> upstream/master
 from checktestlib import CheckResult
 
 pytestmark = pytest.mark.checks
@@ -30,6 +41,7 @@ pytestmark = pytest.mark.checks
          -1.0),
         ([], 3, 'missing data: average_ms and flushed and last_ms', [], -1, '', '', -1.0),
     ])
+<<<<<<< HEAD
 def test_check_function(check_manager, info, state_expected, info_expected, perf_expected,
                         state_expected_flush, info_expected_flush, perf_expected_flush_key,
                         perf_expected_flush_value):
@@ -37,6 +49,15 @@ def test_check_function(check_manager, info, state_expected, info_expected, perf
     Only checks for missing flushing data
     """
     check = check_manager.get_check("mongodb_flushing")
+=======
+@pytest.mark.usefixtures("config_load_all_checks")
+def test_check_function(info, state_expected, info_expected, perf_expected, state_expected_flush,
+                        info_expected_flush, perf_expected_flush_key, perf_expected_flush_value):
+    """
+    Only checks for missing flushing data
+    """
+    check = Check("mongodb_flushing")
+>>>>>>> upstream/master
     check_result = CheckResult(
         check.run_check(None, {
             "average_time": (1, 4, 60),

@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: Docker Node Info
+=======
+title: Docker: Node Info
+>>>>>>> upstream/master
 agents: linux
 catalog: containerization/docker
 license: GPL

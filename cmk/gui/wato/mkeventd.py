@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/env python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,11 +24,19 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 import abc
 import logging
 import os
 import re
+<<<<<<< HEAD
 import time
 import zipfile
 import cStringIO
@@ -46,10 +55,32 @@ from pysmi.searcher.stub import StubSearcher  # type: ignore
 from pysmi.error import PySmiError  # type: ignore
 import six
 
+=======
+import io
+import time
+import zipfile
+from typing import (Callable, Dict, List, Optional as _Optional, TypeVar, Union, Type, Iterator,
+                    overload)
+from pathlib import Path
+
+from pysmi.compiler import MibCompiler  # type: ignore[import]
+from pysmi.parser.smiv1compat import SmiV1CompatParser  # type: ignore[import]
+from pysmi.searcher.pypackage import PyPackageSearcher  # type: ignore[import]
+from pysmi.searcher.pyfile import PyFileSearcher  # type: ignore[import]
+from pysmi.writer.pyfile import PyFileWriter  # type: ignore[import]
+from pysmi.reader.localfile import FileReader  # type: ignore[import]
+from pysmi.codegen.pysnmp import PySnmpCodeGen  # type: ignore[import]
+from pysmi.reader.callback import CallbackReader  # type: ignore[import]
+from pysmi.searcher.stub import StubSearcher  # type: ignore[import]
+from pysmi.error import PySmiError  # type: ignore[import]
+
+import cmk.utils.version as cmk_version
+>>>>>>> upstream/master
 import cmk.utils.log
 import cmk.utils.paths
 import cmk.utils.store as store
 import cmk.utils.render
+<<<<<<< HEAD
 
 import cmk.ec.export as ec
 import cmk.ec.defaults
@@ -58,6 +89,17 @@ if cmk.is_managed_edition():
     import cmk.gui.cme.managed as managed
 else:
     managed = None  # type: ignore
+=======
+import cmk.utils.packaging
+
+# It's OK to import centralized config load logic
+import cmk.ec.export as ec  # pylint: disable=cmk-module-layer-violation
+
+if cmk_version.is_managed_edition():
+    import cmk.gui.cme.managed as managed  # pylint: disable=no-name-in-module
+else:
+    managed = None  # type: ignore[assignment]
+>>>>>>> upstream/master
 
 import cmk.gui.forms as forms
 import cmk.gui.config as config
@@ -66,6 +108,10 @@ import cmk.gui.mkeventd
 import cmk.gui.watolib as watolib
 import cmk.gui.hooks as hooks
 from cmk.gui.table import table_element
+<<<<<<< HEAD
+=======
+from cmk.gui.valuespec import CascadingDropdownChoice, DictionaryEntry
+>>>>>>> upstream/master
 from cmk.gui.valuespec import (
     TextUnicode,
     DropdownChoice,
@@ -92,18 +138,43 @@ from cmk.gui.valuespec import (
     Foldable,
     DualListChoice,
     LogLevelChoice,
+<<<<<<< HEAD
 )
 from cmk.gui.i18n import _
 from cmk.gui.globals import html
 from cmk.gui.htmllib import HTML
+=======
+    rule_option_elements,
+)
+from cmk.gui.i18n import _, _l
+from cmk.gui.globals import html, request
+from cmk.gui.htmllib import HTML, Choices
+>>>>>>> upstream/master
 from cmk.gui.exceptions import MKUserError, MKGeneralException
 from cmk.gui.permissions import (
     Permission,
     permission_registry,
 )
+<<<<<<< HEAD
 from cmk.gui.wato.pages.global_settings import (
     GlobalSettingsMode,
     EditGlobalSettingMode,
+=======
+from cmk.gui.breadcrumb import Breadcrumb
+from cmk.gui.page_menu import (
+    PageMenu,
+    PageMenuDropdown,
+    PageMenuTopic,
+    PageMenuEntry,
+    PageMenuSearch,
+    make_simple_link,
+    make_simple_form_page_menu,
+    make_confirmed_form_submit_link,
+)
+from cmk.gui.wato.pages.global_settings import (
+    ABCGlobalSettingsMode,
+    ABCEditGlobalSettingMode,
+>>>>>>> upstream/master
 )
 
 from cmk.gui.plugins.wato.utils import (
@@ -113,16 +184,25 @@ from cmk.gui.plugins.wato.utils import (
     ConfigVariable,
     ConfigDomainGUI,
     WatoMode,
+<<<<<<< HEAD
+=======
+    ActionResult,
+>>>>>>> upstream/master
     mode_registry,
     SNMPCredentials,
     HostnameTranslation,
     ContactGroupSelection,
     ConfigDomainEventConsole,
+<<<<<<< HEAD
     rule_option_elements,
     get_search_expression,
     add_change,
     changelog_button,
     home_button,
+=======
+    get_search_expression,
+    add_change,
+>>>>>>> upstream/master
     make_action_link,
     rulespec_group_registry,
     RulespecGroup,
@@ -130,6 +210,7 @@ from cmk.gui.plugins.wato.utils import (
     HostRulespec,
     ServiceRulespec,
     main_module_registry,
+<<<<<<< HEAD
     MainModule,
     wato_confirm,
     search_form,
@@ -145,6 +226,28 @@ from cmk.gui.plugins.wato.check_mk_configuration import (
 )
 from cmk.gui.plugins.wato.globals_notification import ConfigVariableGroupNotifications
 
+=======
+    ABCMainModule,
+    MainModuleTopicEvents,
+    site_neutral_path,
+    SampleConfigGenerator,
+    sample_config_generator_registry,
+    mode_url,
+    redirect,
+    flash,
+)
+
+from cmk.gui.plugins.wato.check_mk_configuration import (
+    RulespecGroupMonitoringConfigurationVarious,
+    RulespecGroupHostsMonitoringRulesVarious,
+    ConfigVariableGroupUserInterface,
+    ConfigVariableGroupWATO,
+)
+from cmk.gui.plugins.wato.globals_notification import ConfigVariableGroupNotifications
+
+from cmk.gui.utils.urls import makeuri_contextless, make_confirm_link
+
+>>>>>>> upstream/master
 
 def _compiled_mibs_dir():
     return cmk.utils.paths.omd_root + "/local/share/check_mk/compiled_mibs"
@@ -203,7 +306,11 @@ def substitute_help():
 
 
 def ActionList(vs, **kwargs):
+<<<<<<< HEAD
     def validate_action_list(self, value, varprefix):
+=======
+    def validate_action_list(value, varprefix):
+>>>>>>> upstream/master
         action_ids = [v["id"] for v in value]
         rule_packs = load_mkeventd_rules()
         for rule_pack in rule_packs:
@@ -220,7 +327,11 @@ def ActionList(vs, **kwargs):
 
 class RuleState(CascadingDropdown):
     def __init__(self, **kwargs):
+<<<<<<< HEAD
         choices = [
+=======
+        choices: List[CascadingDropdownChoice] = [
+>>>>>>> upstream/master
             (0, _("OK")),
             (1, _("WARN")),
             (2, _("CRIT")),
@@ -265,7 +376,11 @@ class RuleState(CascadingDropdown):
 
 
 def vs_mkeventd_rule_pack(fixed_id=None, fixed_title=None):
+<<<<<<< HEAD
     elements = []
+=======
+    elements: List[DictionaryEntry] = []
+>>>>>>> upstream/master
     if fixed_id:
         elements.append(("id",
                          FixedValue(
@@ -304,7 +419,11 @@ def vs_mkeventd_rule_pack(fixed_id=None, fixed_title=None):
                          label=_("Currently disable execution of all rules in the pack"),
                      )),)
 
+<<<<<<< HEAD
     if cmk.is_managed_edition():
+=======
+    if cmk_version.is_managed_edition():
+>>>>>>> upstream/master
         elements += managed.customer_choice_element(deflt=managed.SCOPE_GLOBAL)
 
     return Dictionary(
@@ -327,7 +446,11 @@ def vs_mkeventd_rule(customer=None):
          )),
     ] + rule_option_elements()
 
+<<<<<<< HEAD
     if cmk.is_managed_edition():
+=======
+    if cmk_version.is_managed_edition():
+>>>>>>> upstream/master
         if customer:
             # Enforced by rule pack
             elements += [
@@ -482,7 +605,10 @@ def vs_mkeventd_rule(customer=None):
              help=_("Use this option to override the "
                     "<a href=\"wato.py?mode=mkeventd_edit_configvar&site=&varname=event_limit\">"
                     "global rule event limit</a>"),
+<<<<<<< HEAD
              style="dropdown",
+=======
+>>>>>>> upstream/master
              elements=[
                  FixedValue(
                      None,
@@ -736,6 +862,10 @@ def vs_mkeventd_rule(customer=None):
          RegExpUnicode(
              title=_("Match syslog application (tag)"),
              help=_("Regular expression for matching the syslog tag (case insenstive)"),
+<<<<<<< HEAD
+=======
+             size=64,
+>>>>>>> upstream/master
              mode=RegExp.infix,
              case_sensitive=False,
          )),
@@ -746,12 +876,25 @@ def vs_mkeventd_rule(customer=None):
              orientation="horizontal",
              show_titles=False,
              elements=[
+<<<<<<< HEAD
                  DropdownChoice(label=_("from:"),
                                 choices=cmk.gui.mkeventd.syslog_priorities,
                                 default_value=4),
                  DropdownChoice(label=_(" to:"),
                                 choices=cmk.gui.mkeventd.syslog_priorities,
                                 default_value=0),
+=======
+                 DropdownChoice(
+                     label=_("from:"),
+                     choices=cmk.gui.mkeventd.syslog_priorities,
+                     default_value=4,
+                 ),
+                 DropdownChoice(
+                     label=_(" to:"),
+                     choices=cmk.gui.mkeventd.syslog_priorities,
+                     default_value=0,
+                 ),
+>>>>>>> upstream/master
              ],
          )),
         ("match_facility",
@@ -771,12 +914,25 @@ def vs_mkeventd_rule(customer=None):
              orientation="horizontal",
              show_titles=False,
              elements=[
+<<<<<<< HEAD
                  DropdownChoice(label=_("from:"),
                                 choices=cmk.gui.mkeventd.service_levels,
                                 prefix_values=True),
                  DropdownChoice(label=_(" to:"),
                                 choices=cmk.gui.mkeventd.service_levels,
                                 prefix_values=True),
+=======
+                 DropdownChoice(
+                     label=_("from:"),
+                     choices=cmk.gui.mkeventd.service_levels,
+                     prefix_values=True,
+                 ),
+                 DropdownChoice(
+                     label=_(" to:"),
+                     choices=cmk.gui.mkeventd.service_levels,
+                     prefix_values=True,
+                 ),
+>>>>>>> upstream/master
              ],
          )),
         ("match_timeperiod",
@@ -812,12 +968,25 @@ def vs_mkeventd_rule(customer=None):
              orientation="horizontal",
              show_titles=False,
              elements=[
+<<<<<<< HEAD
                  DropdownChoice(label=_("from:"),
                                 choices=cmk.gui.mkeventd.syslog_priorities,
                                 default_value=7),
                  DropdownChoice(label=_(" to:"),
                                 choices=cmk.gui.mkeventd.syslog_priorities,
                                 default_value=5),
+=======
+                 DropdownChoice(
+                     label=_("from:"),
+                     choices=cmk.gui.mkeventd.syslog_priorities,
+                     default_value=7,
+                 ),
+                 DropdownChoice(
+                     label=_(" to:"),
+                     choices=cmk.gui.mkeventd.syslog_priorities,
+                     default_value=5,
+                 ),
+>>>>>>> upstream/master
              ],
          )),
         ("cancel_application",
@@ -979,6 +1148,7 @@ def vs_mkeventd_rule(customer=None):
 def load_mkeventd_rules():
     rule_packs = ec.load_rule_packs()
 
+<<<<<<< HEAD
     # Add information about rule hits: If we are running on OMD then we know
     # the path to the state retention file of mkeventd and can read the rule
     # statistics directly from that file.
@@ -986,6 +1156,10 @@ def load_mkeventd_rules():
     for rule_id, count in sites.live().query("GET eventconsolerules\nColumns: rule_id rule_hits\n"):
         rule_stats.setdefault(rule_id, 0)
         rule_stats[rule_id] += count
+=======
+    # TODO: We should really separate the rule stats from this "config load logic"
+    rule_stats = _get_rule_stats_from_ec()
+>>>>>>> upstream/master
 
     for rule_pack in rule_packs:
         pack_hits = 0
@@ -998,6 +1172,20 @@ def load_mkeventd_rules():
     return rule_packs
 
 
+<<<<<<< HEAD
+=======
+def _get_rule_stats_from_ec() -> Dict[str, int]:
+    # Add information about rule hits: If we are running on OMD then we know
+    # the path to the state retention file of mkeventd and can read the rule
+    # statistics directly from that file.
+    rule_stats: Dict[str, int] = {}
+    for rule_id, count in sites.live().query("GET eventconsolerules\nColumns: rule_id rule_hits\n"):
+        rule_stats.setdefault(rule_id, 0)
+        rule_stats[rule_id] += count
+    return rule_stats
+
+
+>>>>>>> upstream/master
 def save_mkeventd_rules(rule_packs):
     ec.save_rule_packs(rule_packs, config.mkeventd_pprint_rules)
 
@@ -1017,7 +1205,11 @@ class SampleConfigGeneratorECSampleRulepack(SampleConfigGenerator):
         return 50
 
     def generate(self):
+<<<<<<< HEAD
         save_mkeventd_rules([cmk.ec.defaults.default_rule_pack([])])
+=======
+        save_mkeventd_rules([ec.default_rule_pack([])])
+>>>>>>> upstream/master
 
 
 #.
@@ -1034,6 +1226,7 @@ class SampleConfigGeneratorECSampleRulepack(SampleConfigGenerator):
 #   '----------------------------------------------------------------------'
 
 
+<<<<<<< HEAD
 class ABCEventConsoleMode(six.with_metaclass(abc.ABCMeta, WatoMode)):
     # NOTE: This class is obviously still abstract, but pylint fails to see
     # this, even in the presence of the meta class assignment below, see
@@ -1043,6 +1236,12 @@ class ABCEventConsoleMode(six.with_metaclass(abc.ABCMeta, WatoMode)):
     def __init__(self):
         self._rule_packs = load_mkeventd_rules()
         super(ABCEventConsoleMode, self).__init__()
+=======
+class ABCEventConsoleMode(WatoMode, metaclass=abc.ABCMeta):
+    def __init__(self):
+        self._rule_packs = load_mkeventd_rules()
+        super().__init__()
+>>>>>>> upstream/master
 
     def _verify_ec_enabled(self):
         if not config.mkeventd_enabled:
@@ -1063,6 +1262,7 @@ class ABCEventConsoleMode(six.with_metaclass(abc.ABCMeta, WatoMode)):
         self._vs_mkeventd_event().render_input("event", event)
         forms.end()
         html.hidden_fields()
+<<<<<<< HEAD
         html.button("simulate", _("Try out"))
         html.button("_generate", _("Generate Event!"))
         html.end_form()
@@ -1090,6 +1290,39 @@ class ABCEventConsoleMode(six.with_metaclass(abc.ABCMeta, WatoMode)):
                           + html.render_br() \
                           + html.render_pre(rfc) \
                           + html.render_reload_sidebar()
+=======
+        html.button("_simulate", _("Try out"))
+        html.button("_generate", _("Generate event"))
+        html.end_form()
+        html.br()
+
+        if html.request.var("_simulate") or html.request.var("_generate"):
+            return self._vs_mkeventd_event().from_html_vars("event")
+        return None
+
+    def _event_simulation_action(self) -> bool:
+        if not html.request.var("_simulate") and not html.request.var("_generate"):
+            return False
+
+        # Validation of input for rule simulation (no further action here)
+        vs = self._vs_mkeventd_event()
+        event = vs.from_html_vars("event")
+        vs.validate_value(event, "event")
+        config.user.save_file("simulated_event", event)
+
+        if html.request.var("_simulate"):
+            return True
+
+        if not event.get("application"):
+            raise MKUserError("event_p_application", _("Please specify an application name"))
+        if not event.get("host"):
+            raise MKUserError("event_p_host", _("Please specify a host name"))
+        rfc = cmk.gui.mkeventd.send_event(event)
+        flash(
+            _("Test event generated and sent to Event Console.") + html.render_br() +
+            html.render_pre(rfc) + html.render_reload_sidebar())
+        return True
+>>>>>>> upstream/master
 
     def _add_change(self, what, message):
         add_change(what,
@@ -1097,6 +1330,7 @@ class ABCEventConsoleMode(six.with_metaclass(abc.ABCMeta, WatoMode)):
                    domains=[ConfigDomainEventConsole],
                    sites=_get_event_console_sync_sites())
 
+<<<<<<< HEAD
     def _changes_button(self):
         changelog_button()
 
@@ -1123,6 +1357,10 @@ class ABCEventConsoleMode(six.with_metaclass(abc.ABCMeta, WatoMode)):
             return {}
         package_info = watolib.check_mk_local_automation("get-package-info")
         return ec.rule_pack_id_to_mkp(package_info)
+=======
+    def _get_rule_pack_to_mkp_map(self):
+        return {} if cmk_version.is_raw_edition() else cmk.utils.packaging.rule_pack_id_to_mkp()
+>>>>>>> upstream/master
 
     def _vs_mkeventd_event(self):
         """Valuespec for simulating an event"""
@@ -1203,6 +1441,7 @@ class ModeEventConsoleRulePacks(ABCEventConsoleMode):
     def title(self):
         return _("Event Console rule packages")
 
+<<<<<<< HEAD
     def buttons(self):
         self._changes_button()
         home_button()
@@ -1270,6 +1509,116 @@ class ModeEventConsoleRulePacks(ABCEventConsoleMode):
         elif html.request.has_var("_move"):
             from_pos = html.get_integer_input("_move")
             to_pos = html.get_integer_input("_index")
+=======
+    def page_menu(self, breadcrumb: Breadcrumb) -> PageMenu:
+        menu = PageMenu(
+            dropdowns=[
+                PageMenuDropdown(
+                    name="rule_packs",
+                    title=_("Rule packs"),
+                    topics=list(self._page_menu_topics_rules()),
+                ),
+                PageMenuDropdown(
+                    name="event_console",
+                    title=_("Event Console"),
+                    topics=list(self._page_menu_topics_mkeventd()),
+                ),
+            ],
+            breadcrumb=breadcrumb,
+            inpage_search=PageMenuSearch(placeholder=_("Filter rule packs")),
+        )
+
+        return menu
+
+    def _page_menu_topics_rules(self) -> Iterator[PageMenuTopic]:
+        if not config.user.may("mkeventd.edit"):
+            return
+
+        yield PageMenuTopic(
+            title=_("Add rule pack"),
+            entries=[
+                PageMenuEntry(
+                    title=_("Add rule pack"),
+                    icon_name="new",
+                    item=make_simple_link(
+                        makeuri_contextless(
+                            request,
+                            [
+                                ("mode", "mkeventd_edit_rule_pack"),
+                            ],
+                        )),
+                    is_shortcut=True,
+                    is_suggested=True,
+                ),
+            ],
+        )
+
+    def _page_menu_topics_mkeventd(self) -> Iterator[PageMenuTopic]:
+        if not config.user.may("mkeventd.edit"):
+            return
+
+        yield PageMenuTopic(
+            title=_("Local Event Console"),
+            entries=[
+                PageMenuEntry(
+                    title=_("Reset counters"),
+                    icon_name="resetcounters",
+                    item=make_simple_link(
+                        make_confirm_link(
+                            url=make_action_link([("mode", "mkeventd_rule_packs"),
+                                                  ("_reset_counters", "1")]),
+                            message=_("Do you really want to reset all rule hit counters "
+                                      "in <b>all rule packs</b> to zero?"),
+                        )),
+                ),
+                _page_menu_entry_status(),
+            ],
+        )
+
+        yield PageMenuTopic(
+            title=_("Setup"),
+            entries=[
+                _page_menu_entry_settings(),
+                _page_menu_entry_rulesets(),
+                _page_menu_entry_snmp_mibs(),
+            ],
+        )
+
+    def action(self) -> ActionResult:
+        if not html.check_transaction():
+            return redirect(self.mode_url())
+
+        if self._event_simulation_action():
+            return None
+
+        # Deletion of rule packs
+        if html.request.has_var("_delete"):
+            nr = html.request.get_integer_input_mandatory("_delete")
+            rule_pack = self._rule_packs[nr]
+            self._add_change("delete-rule-pack", _("Deleted rule pack %s") % rule_pack["id"])
+            del self._rule_packs[nr]
+            save_mkeventd_rules(self._rule_packs)
+
+        # Reset all rule hit counteres
+        elif html.request.has_var("_reset_counters"):
+            cmk.gui.mkeventd.execute_command("RESETCOUNTERS", site=config.omd_site())
+            self._add_change("counter-reset", _("Resetted all rule hit counters to zero"))
+
+        # Copy rules from master
+        elif html.request.has_var("_copy_rules"):
+            self._copy_rules_from_master()
+            self._add_change(
+                "copy-rules-from-master",
+                _("Copied the event rules from the master "
+                  "into the local configuration"))
+            flash(_("Copied rules from master"))
+            return redirect(self.mode_url())
+
+        # Move rule packages
+        elif html.request.has_var("_move"):
+            from_pos = html.request.get_integer_input_mandatory("_move")
+            to_pos = html.request.get_integer_input_mandatory("_index")
+>>>>>>> upstream/master
             rule_pack = self._rule_packs[from_pos]
             del self._rule_packs[from_pos]  # make to_pos now match!
             self._rule_packs[to_pos:to_pos] = [rule_pack]
@@ -1279,7 +1628,11 @@ class ModeEventConsoleRulePacks(ABCEventConsoleMode):
 
         # Export rule pack
         elif html.request.has_var("_export"):
+<<<<<<< HEAD
             nr = html.get_integer_input("_export")
+=======
+            nr = html.request.get_integer_input_mandatory("_export")
+>>>>>>> upstream/master
             try:
                 rule_pack = self._rule_packs[nr]
             except KeyError:
@@ -1293,7 +1646,11 @@ class ModeEventConsoleRulePacks(ABCEventConsoleMode):
 
         # Make rule pack non-exportable
         elif html.request.has_var("_dissolve"):
+<<<<<<< HEAD
             nr = html.get_integer_input("_dissolve")
+=======
+            nr = html.request.get_integer_input_mandatory("_dissolve")
+>>>>>>> upstream/master
             try:
                 self._rule_packs[nr] = self._rule_packs[nr].rule_pack
             except KeyError:
@@ -1305,7 +1662,11 @@ class ModeEventConsoleRulePacks(ABCEventConsoleMode):
 
         # Reset to rule pack provided via MKP
         elif html.request.has_var("_reset"):
+<<<<<<< HEAD
             nr = html.get_integer_input("_reset")
+=======
+            nr = html.request.get_integer_input_mandatory("_reset")
+>>>>>>> upstream/master
             try:
                 self._rule_packs[nr] = ec.MkpRulePackProxy(self._rule_packs[nr]['id'])
             except KeyError:
@@ -1318,7 +1679,11 @@ class ModeEventConsoleRulePacks(ABCEventConsoleMode):
 
         # Synchronize modified rule pack with MKP
         elif html.request.has_var("_synchronize"):
+<<<<<<< HEAD
             nr = html.get_integer_input("_synchronize")
+=======
+            nr = html.request.get_integer_input_mandatory("_synchronize")
+>>>>>>> upstream/master
             export_mkp_rule_pack(self._rule_packs[nr])
             try:
                 self._rule_packs[nr] = ec.MkpRulePackProxy(self._rule_packs[nr]['id'])
@@ -1329,8 +1694,14 @@ class ModeEventConsoleRulePacks(ABCEventConsoleMode):
                 "synchronize-rule-pack",
                 _("Synchronized MKP with the modified rule pack %s") % self._rule_packs[nr].id_)
 
+<<<<<<< HEAD
         # Update data strcuture after actions
         self._rule_packs = load_mkeventd_rules()
+=======
+        # Update data structure after actions
+        self._rule_packs = load_mkeventd_rules()
+        return redirect(self.mode_url())
+>>>>>>> upstream/master
 
     def _copy_rules_from_master(self):
         answer = cmk.gui.mkeventd.query_ec_directly("REPLICATE 0")
@@ -1343,6 +1714,7 @@ class ModeEventConsoleRulePacks(ABCEventConsoleMode):
         self._verify_ec_enabled()
         rep_mode = cmk.gui.mkeventd.replication_mode()
         if rep_mode in ["sync", "takeover"]:
+<<<<<<< HEAD
             copy_url = make_action_link([("mode", "mkeventd_rule_packs"), ("_copy_rules", "1")])
             html.show_warning(_("WARNING: This Event Console is currently running as a replication "
               "slave. The rules edited here will not be used. Instead a copy of the rules of the "
@@ -1350,11 +1722,27 @@ class ModeEventConsoleRulePacks(ABCEventConsoleMode):
               "actions in the global settings.<br><br>If you want you can copy the ruleset of "
               "the master into your local slave configuration: ") + \
               '<a href="%s">' % copy_url + _("Copy Rules From Master") + '</a>')
+=======
+            copy_url = make_confirm_link(
+                url=make_action_link([("mode", "mkeventd_rule_packs"), ("_copy_rules", "1")]),
+                message=_("Do you really want to copy all event rules from the master and "
+                          "replace your local configuration with them?"))
+            html.show_warning(
+                _("WARNING: This Event Console is currently running as a replication "
+                  "slave. The rules edited here will not be used. Instead a copy of the rules of the "
+                  "master are being used in the case of a takeover. The same holds for the event "
+                  "actions in the global settings.<br><br>If you want you can copy the ruleset of "
+                  "the master into your local slave configuration: ") + '<a href="%s">' % copy_url +
+                _("Copy Rules From Master") + '</a>')
+>>>>>>> upstream/master
 
         elif rep_mode == "stopped":
             html.show_error(_("The Event Console is currently not running."))
 
+<<<<<<< HEAD
         search_form("%s: " % _("Search in packs"), "mkeventd_rule_packs")
+=======
+>>>>>>> upstream/master
         search_expression = self._search_expression()
         if search_expression:
             found_packs = self._filter_mkeventd_rule_packs(search_expression, self._rule_packs)
@@ -1366,11 +1754,19 @@ class ModeEventConsoleRulePacks(ABCEventConsoleMode):
         # Simulator
         event = self._show_event_simulator()
         if not self._rule_packs:
+<<<<<<< HEAD
             html.message(
                 _("You have not created any rule packs yet. The Event Console is useless unless "
                   "you have activated <i>Force message archiving</i> in the global settings."))
         elif search_expression and not found_packs:
             html.message(_("Found no rules packs."))
+=======
+            html.show_message(
+                _("You have not created any rule packs yet. The Event Console is useless unless "
+                  "you have activated <i>Force message archiving</i> in the global settings."))
+        elif search_expression and not found_packs:
+            html.show_message(_("Found no rules packs."))
+>>>>>>> upstream/master
             return
 
         id_to_mkp = self._get_rule_pack_to_mkp_map()
@@ -1382,27 +1778,51 @@ class ModeEventConsoleRulePacks(ABCEventConsoleMode):
                 type_ = ec.RulePackType.type_of(rule_pack, id_to_mkp)
 
                 if id_ in found_packs:
+<<<<<<< HEAD
                     css_matches_search = "matches_search"
+=======
+                    css_matches_search: _Optional[str] = "matches_search"
+>>>>>>> upstream/master
                 else:
                     css_matches_search = None
 
                 table.row(css=css_matches_search)
                 table.cell(_("Actions"), css="buttons")
 
+<<<<<<< HEAD
                 edit_url = html.makeuri_contextless([("mode", "mkeventd_edit_rule_pack"),
                                                      ("edit", nr)])
                 html.icon_button(edit_url, _("Edit properties of this rule pack"), "edit")
 
                 # Cloning does not work until we have unique IDs
                 # clone_url  = html.makeuri_contextless([("mode", "mkeventd_edit_rule_pack"), ("clone", nr)])
+=======
+                edit_url = makeuri_contextless(
+                    request,
+                    [("mode", "mkeventd_edit_rule_pack"), ("edit", nr)],
+                )
+                html.icon_button(edit_url, _("Edit properties of this rule pack"), "edit")
+
+                # Cloning does not work until we have unique IDs
+                # clone_url  = makeuri_contextless(request, [("mode", "mkeventd_edit_rule_pack"), ("clone", nr)])
+>>>>>>> upstream/master
                 # html.icon_button(clone_url, _("Create a copy of this rule pack"), "clone")
 
                 drag_url = make_action_link([("mode", "mkeventd_rule_packs"), ("_move", nr)])
                 html.element_dragger_url("tr", base_url=drag_url)
 
                 if type_ == ec.RulePackType.internal:
+<<<<<<< HEAD
                     delete_url = make_action_link([("mode", "mkeventd_rule_packs"),
                                                    ("_delete", nr)])
+=======
+                    delete_url = make_confirm_link(
+                        url=make_action_link([("mode", "mkeventd_rule_packs"), ("_delete", nr)]),
+                        message=_("Do you really want to delete the rule pack <b>%s</b> "
+                                  "<i>%s</i> with <b>%s</b> rules?") %
+                        (rule_pack["id"], rule_pack["title"], len(rule_pack["rules"])),
+                    )
+>>>>>>> upstream/master
                     html.icon_button(delete_url, _("Delete this rule pack"), "delete")
                 elif type_ == ec.RulePackType.exported:
                     dissolve_url = make_action_link([("mode", "mkeventd_rule_packs"),
@@ -1422,7 +1842,11 @@ class ModeEventConsoleRulePacks(ABCEventConsoleMode):
                 rules_url_vars = [("mode", "mkeventd_rules"), ("rule_pack", id_)]
                 if found_packs.get(id_):
                     rules_url_vars.append(("search", search_expression))
+<<<<<<< HEAD
                 rules_url = html.makeuri_contextless(rules_url_vars)
+=======
+                rules_url = makeuri_contextless(request, rules_url_vars)
+>>>>>>> upstream/master
                 html.icon_button(rules_url, _("Edit the rules in this pack"), "mkeventd_rules")
 
                 if type_ == ec.RulePackType.internal:
@@ -1436,6 +1860,7 @@ class ModeEventConsoleRulePacks(ABCEventConsoleMode):
                 # Icons for mkp export and disabling
                 table.cell("", css="buttons")
                 if type_ == ec.RulePackType.unmodified_mkp:
+<<<<<<< HEAD
                     html.icon(
                         _("This rule pack is provided via the MKP %s.") % id_to_mkp[id_], "mkps")
                 elif type_ == ec.RulePackType.exported:
@@ -1451,6 +1876,25 @@ class ModeEventConsoleRulePacks(ABCEventConsoleMode):
                     html.icon(
                         _("This rule pack is currently disabled. None of its rules will be applied."
                          ), "disabled")
+=======
+                    html.icon("mkps",
+                              _("This rule pack is provided via the MKP %s.") % id_to_mkp[id_])
+                elif type_ == ec.RulePackType.exported:
+                    html.icon(
+                        "package",
+                        _("This is rule pack can be packaged with the Extension Packages module."))
+                elif type_ == ec.RulePackType.modified_mkp:
+                    html.icon(
+                        "new_mkp",
+                        _("This rule pack is modified. Originally it was provided via the MKP %s.")
+                        % id_to_mkp[id_])
+
+                if rule_pack["disabled"]:
+                    html.icon(
+                        "disabled",
+                        _("This rule pack is currently disabled. None of its rules will be applied."
+                         ))
+>>>>>>> upstream/master
 
                 # Simulation of all rules in this pack
                 elif event:
@@ -1494,12 +1938,20 @@ class ModeEventConsoleRulePacks(ABCEventConsoleMode):
                             else:
                                 icon = "rulematch"
                                 have_match = True
+<<<<<<< HEAD
                     html.icon(msg, icon)
+=======
+                    html.icon(icon, msg)
+>>>>>>> upstream/master
 
                 table.cell(_("ID"), id_)
                 table.cell(_("Title"), html.render_text(rule_pack["title"]))
 
+<<<<<<< HEAD
                 if cmk.is_managed_edition():
+=======
+                if cmk_version.is_managed_edition():
+>>>>>>> upstream/master
                     table.cell(_("Customer"))
                     if "customer" in rule_pack:
                         html.write_text(managed.get_customer_name(rule_pack))
@@ -1512,7 +1964,11 @@ class ModeEventConsoleRulePacks(ABCEventConsoleMode):
                 table.cell(_("Hits"), hits is not None and hits or '', css="number")
 
     def _filter_mkeventd_rule_packs(self, search_expression, rule_packs):
+<<<<<<< HEAD
         found_packs = {}
+=======
+        found_packs: Dict[str, List[ec.ECRuleSpec]] = {}
+>>>>>>> upstream/master
         for rule_pack in rule_packs:
             if search_expression in rule_pack["id"].lower() \
                or search_expression in rule_pack["title"].lower():
@@ -1525,6 +1981,16 @@ class ModeEventConsoleRulePacks(ABCEventConsoleMode):
         return found_packs
 
 
+<<<<<<< HEAD
+=======
+T = TypeVar('T')
+
+
+def _deref(x: Union[T, Callable[[], T]]) -> T:
+    return x() if callable(x) else x
+
+
+>>>>>>> upstream/master
 @mode_registry.register
 class ModeEventConsoleRules(ABCEventConsoleMode):
     @classmethod
@@ -1535,12 +2001,40 @@ class ModeEventConsoleRules(ABCEventConsoleMode):
     def permissions(cls):
         return ["mkeventd.edit"]
 
+<<<<<<< HEAD
     def _from_vars(self):
         self._rule_pack_id = html.request.var("rule_pack")
+=======
+    @classmethod
+    def parent_mode(cls) -> _Optional[Type[WatoMode]]:
+        return ModeEventConsoleRulePacks
+
+    # pylint does not understand this overloading
+    @overload
+    @classmethod
+    def mode_url(cls, *, rule_pack: str) -> str:  # pylint: disable=arguments-differ
+        ...
+
+    @overload
+    @classmethod
+    def mode_url(cls, **kwargs: str) -> str:
+        ...
+
+    @classmethod
+    def mode_url(cls, **kwargs: str) -> str:
+        return super().mode_url(**kwargs)
+
+    def _breadcrumb_url(self) -> str:
+        return self.mode_url(rule_pack=self._rule_pack_id)
+
+    def _from_vars(self):
+        self._rule_pack_id = html.request.get_ascii_input_mandatory("rule_pack")
+>>>>>>> upstream/master
         self._rule_pack_nr, self._rule_pack = self._rule_pack_with_id(self._rule_pack_id)
         self._rules = self._rule_pack["rules"]
 
     def title(self):
+<<<<<<< HEAD
         return _("Rule Package %s") % self._rule_pack["title"]
 
     def buttons(self):
@@ -1557,10 +2051,80 @@ class ModeEventConsoleRules(ABCEventConsoleMode):
                                           ("edit", self._rule_pack_nr)]), "edit")
 
     def action(self):
+=======
+        return _("Rule package %s") % self._rule_pack["title"]
+
+    def page_menu(self, breadcrumb: Breadcrumb) -> PageMenu:
+        menu = PageMenu(
+            dropdowns=[
+                PageMenuDropdown(
+                    name="rules",
+                    title=_("Rules"),
+                    topics=list(self._page_menu_topics_rules()),
+                ),
+                PageMenuDropdown(
+                    name="related",
+                    title=_("Related"),
+                    topics=[
+                        PageMenuTopic(
+                            title=_("Setup"),
+                            entries=list(_page_menu_entries_related_ec(self.name())),
+                        ),
+                    ],
+                ),
+            ],
+            breadcrumb=breadcrumb,
+            inpage_search=PageMenuSearch(placeholder=_("Filter rules")),
+        )
+
+        return menu
+
+    def _page_menu_topics_rules(self) -> Iterator[PageMenuTopic]:
+        if not config.user.may("mkeventd.edit"):
+            return
+
+        yield PageMenuTopic(
+            title=_("Add rule"),
+            entries=[
+                PageMenuEntry(
+                    title=_("Add rule"),
+                    icon_name="new",
+                    item=make_simple_link(
+                        makeuri_contextless(
+                            request,
+                            [("mode", "mkeventd_edit_rule"), ("rule_pack", self._rule_pack_id)],
+                        )),
+                    is_shortcut=True,
+                    is_suggested=True,
+                ),
+            ],
+        )
+
+        yield PageMenuTopic(
+            title=_("Rule pack"),
+            entries=[
+                PageMenuEntry(
+                    title=_("Edit properties"),
+                    icon_name="edit",
+                    item=make_simple_link(
+                        makeuri_contextless(
+                            request,
+                            [("mode", "mkeventd_edit_rule_pack"), ("edit", self._rule_pack_nr)],
+                        )),
+                ),
+            ],
+        )
+
+    def action(self) -> ActionResult:
+        if not html.check_transaction():
+            return redirect(self.mode_url(rule_pack=self._rule_pack_id))
+
+>>>>>>> upstream/master
         id_to_mkp = self._get_rule_pack_to_mkp_map()
         type_ = ec.RulePackType.type_of(self._rule_pack, id_to_mkp)
 
         if html.request.var("_move_to"):
+<<<<<<< HEAD
             if html.check_transaction():
                 for move_nr, rule in enumerate(self._rules):
                     move_var = "_move_to_%s" % rule["id"]
@@ -1637,11 +2201,80 @@ class ModeEventConsoleRules(ABCEventConsoleMode):
                 save_mkeventd_rules(self._rule_packs)
 
                 self._add_change("move-rule", _("Changed position of rule %s") % rule["id"])
+=======
+            for move_nr, rule in enumerate(self._rules):
+                move_var = "_move_to_%s" % rule["id"]
+                if html.request.var(move_var):
+                    other_pack_nr, other_pack = self._rule_pack_with_id(html.request.var(move_var))
+
+                    other_type_ = ec.RulePackType.type_of(other_pack, id_to_mkp)
+                    if other_type_ == ec.RulePackType.unmodified_mkp:
+                        ec.override_rule_pack_proxy(other_pack_nr, self._rule_packs)
+
+                    if type_ == ec.RulePackType.unmodified_mkp:
+                        ec.override_rule_pack_proxy(self._rule_pack_nr, self._rule_packs)
+
+                    self._rule_packs[other_pack_nr]["rules"][0:0] = [rule]
+                    del self._rule_packs[self._rule_pack_nr]["rules"][move_nr]
+
+                    if other_type_ == ec.RulePackType.exported:
+                        export_mkp_rule_pack(other_pack)
+                    if type_ == ec.RulePackType.exported:
+                        export_mkp_rule_pack(self._rule_pack)
+                    save_mkeventd_rules(self._rule_packs)
+
+                    self._add_change("move-rule-to-pack",
+                                     _("Moved rule %s to pack %s") % (rule["id"], other_pack["id"]))
+                    flash(_("Moved rule %s to pack %s") % (rule["id"], other_pack["title"]))
+                    return None
+
+        if self._event_simulation_action():
+            return None
+
+        if html.request.has_var("_delete"):
+            nr = html.request.get_integer_input_mandatory("_delete")
+            rules = self._rules
+            rule = rules[nr]
+            self._add_change("delete-rule", _("Deleted rule %s") % self._rules[nr]["id"])
+            if type_ == ec.RulePackType.unmodified_mkp:
+                ec.override_rule_pack_proxy(self._rule_pack_nr, self._rule_packs)
+                rules = self._rule_packs[self._rule_pack_nr]['rules']
+
+            del rules[nr]
+
+            if type_ == ec.RulePackType.exported:
+                export_mkp_rule_pack(self._rule_pack)
+            save_mkeventd_rules(self._rule_packs)
+            return redirect(self.mode_url(rule_pack=self._rule_pack_id))
+
+        if html.request.has_var("_move"):
+            from_pos = html.request.get_integer_input_mandatory("_move")
+            to_pos = html.request.get_integer_input_mandatory("_index")
+
+            rules = self._rules
+            if type_ == ec.RulePackType.unmodified_mkp:
+                ec.override_rule_pack_proxy(self._rule_pack_nr, self._rule_packs)
+                rules = self._rule_packs[self._rule_pack_nr]['rules']
+
+            rule = rules[from_pos]
+            del rules[from_pos]  # make to_pos now match!
+            rules[to_pos:to_pos] = [rule]
+
+            if type_ == ec.RulePackType.exported:
+                export_mkp_rule_pack(self._rule_pack)
+            save_mkeventd_rules(self._rule_packs)
+
+            self._add_change("move-rule", _("Changed position of rule %s") % rule["id"])
+        return redirect(self.mode_url(rule_pack=self._rule_pack_id))
+>>>>>>> upstream/master
 
     def page(self):
         self._verify_ec_enabled()
         search_expression = self._search_expression()
+<<<<<<< HEAD
         search_form("%s: " % _("Search in rules"), "mkeventd_rules")
+=======
+>>>>>>> upstream/master
         if search_expression:
             found_rules = self._filter_mkeventd_rules(search_expression, self._rule_pack)
         else:
@@ -1650,25 +2283,44 @@ class ModeEventConsoleRules(ABCEventConsoleMode):
         # Simulator
         event = self._show_event_simulator()
         if not self._rules:
+<<<<<<< HEAD
             html.message(_("This package does not yet contain any rules."))
             return
         elif search_expression and not found_rules:
             html.message(_("No rules found."))
+=======
+            html.show_message(_("This package does not yet contain any rules."))
+            return
+        if search_expression and not found_rules:
+            html.show_message(_("No rules found."))
+>>>>>>> upstream/master
             return
 
         if len(self._rule_packs) > 1:
             html.begin_form("move_to", method="POST")
 
+<<<<<<< HEAD
+=======
+        # TODO: Rethink the typing of syslog_facilites/syslog_priorities.
+        priorities = _deref(cmk.gui.mkeventd.syslog_priorities)
+        facilities = dict(_deref(cmk.gui.mkeventd.syslog_facilities))
+
+>>>>>>> upstream/master
         # Show content of the rule package
         with table_element(css="ruleset", limit=None, sortable=False) as table:
             have_match = False
             for nr, rule in enumerate(self._rules):
                 if rule in found_rules:
+<<<<<<< HEAD
                     css_matches_search = "matches_search"
+=======
+                    css_matches_search: _Optional[str] = "matches_search"
+>>>>>>> upstream/master
                 else:
                     css_matches_search = None
 
                 table.row(css=css_matches_search)
+<<<<<<< HEAD
                 delete_url = make_action_link([("mode", "mkeventd_rules"),
                                                ("rule_pack", self._rule_pack_id), ("_delete", nr)])
                 drag_url = make_action_link([("mode", "mkeventd_rules"),
@@ -1679,6 +2331,32 @@ class ModeEventConsoleRules(ABCEventConsoleMode):
                 clone_url = html.makeuri_contextless([("mode", "mkeventd_edit_rule"),
                                                       ("rule_pack", self._rule_pack_id),
                                                       ("clone", nr)])
+=======
+                delete_url = make_confirm_link(
+                    url=make_action_link([("mode", "mkeventd_rules"),
+                                          ("rule_pack", self._rule_pack_id), ("_delete", nr)]),
+                    message=_("Do you really want to delete the rule <b>%s</b> <i>%s</i>?") %
+                    (nr, rule.get("description", "")),
+                )
+                drag_url = make_action_link([("mode", "mkeventd_rules"),
+                                             ("rule_pack", self._rule_pack_id), ("_move", nr)])
+                edit_url = makeuri_contextless(
+                    request,
+                    [
+                        ("mode", "mkeventd_edit_rule"),
+                        ("rule_pack", self._rule_pack_id),
+                        ("edit", nr),
+                    ],
+                )
+                clone_url = makeuri_contextless(
+                    request,
+                    [
+                        ("mode", "mkeventd_edit_rule"),
+                        ("rule_pack", self._rule_pack_id),
+                        ("clone", nr),
+                    ],
+                )
+>>>>>>> upstream/master
 
                 table.cell(_("Actions"), css="buttons")
                 html.icon_button(edit_url, _("Edit this rule"), "edit")
@@ -1688,12 +2366,21 @@ class ModeEventConsoleRules(ABCEventConsoleMode):
 
                 table.cell("", css="buttons")
                 if rule.get("disabled"):
+<<<<<<< HEAD
                     html.icon(_("This rule is currently disabled and will not be applied"),
                               "disabled")
                 elif event:
                     result = cmk.gui.mkeventd.event_rule_matches(self._rule_pack, rule, event)
                     if not isinstance(result, tuple):
                         html.icon(_("Rule does not match: %s") % result, "rulenmatch")
+=======
+                    html.icon("disabled",
+                              _("This rule is currently disabled and will not be applied"))
+                elif event:
+                    result = cmk.gui.mkeventd.event_rule_matches(self._rule_pack, rule, event)
+                    if not isinstance(result, tuple):
+                        html.icon("rulenmatch", _("Rule does not match: %s") % result)
+>>>>>>> upstream/master
                     else:
                         cancelling, groups = result
                         if have_match:
@@ -1709,6 +2396,7 @@ class ModeEventConsoleRules(ABCEventConsoleMode):
                         if groups:
                             msg += _(" Match groups: %s") % ",".join(
                                 [g or _('&lt;None&gt;') for g in groups])
+<<<<<<< HEAD
                         html.icon(msg, icon)
 
                 if rule.get("invert_matching"):
@@ -1723,6 +2411,22 @@ class ModeEventConsoleRules(ABCEventConsoleMode):
                 table.cell(_("ID"), html.render_a(rule["id"], edit_url))
 
                 if cmk.is_managed_edition():
+=======
+                        html.icon(icon, msg)
+
+                if rule.get("invert_matching"):
+                    html.icon("inverted", _("Matching is inverted in this rule"))
+
+                if rule.get("contact_groups") is not None:
+                    html.icon(
+                        "contactgroups",
+                        _("This rule attaches contact group(s) to the events: %s") %
+                        (", ".join(rule["contact_groups"]["groups"]) or _("(none)")))
+
+                table.cell(_("ID"), html.render_a(rule["id"], edit_url))
+
+                if cmk_version.is_managed_edition():
+>>>>>>> upstream/master
                     table.cell(_("Customer"))
                     if "customer" in self._rule_pack:
                         html.write_text(
@@ -1756,10 +2460,16 @@ class ModeEventConsoleRules(ABCEventConsoleMode):
                 if "match_priority" in rule:
                     prio_from, prio_to = rule["match_priority"]
                     if prio_from == prio_to:
+<<<<<<< HEAD
                         prio_text = cmk.gui.mkeventd.syslog_priorities[prio_from][1]
                     else:
                         prio_text = cmk.gui.mkeventd.syslog_priorities[prio_from][1][:2] + ".." + \
                                     cmk.gui.mkeventd.syslog_priorities[prio_to][1][:2]
+=======
+                        prio_text = priorities[prio_from][1]
+                    else:
+                        prio_text = priorities[prio_from][1][:2] + ".." + priorities[prio_to][1][:2]
+>>>>>>> upstream/master
                 else:
                     prio_text = ""
                 table.cell(_("Priority"), prio_text)
@@ -1768,7 +2478,11 @@ class ModeEventConsoleRules(ABCEventConsoleMode):
                 table.cell(_("Facility"))
                 if "match_facility" in rule:
                     facnr = rule["match_facility"]
+<<<<<<< HEAD
                     html.write("%s" % dict(cmk.gui.mkeventd.syslog_facilities)[facnr])
+=======
+                    html.write("%s" % facilities[facnr])
+>>>>>>> upstream/master
 
                 table.cell(
                     _("Service Level"),
@@ -1794,9 +2508,16 @@ class ModeEventConsoleRules(ABCEventConsoleMode):
                 # Move rule to other pack
                 if len(self._rule_packs) > 1:
                     table.cell(_("Move to pack..."))
+<<<<<<< HEAD
                     choices = [("", "")] + [(pack["id"], pack["title"])
                                             for pack in self._rule_packs
                                             if not pack is self._rule_pack]
+=======
+                    choices: Choices = [("", u"")]
+                    choices += [(pack["id"], pack["title"])
+                                for pack in self._rule_packs
+                                if pack is not self._rule_pack]
+>>>>>>> upstream/master
                     html.dropdown("_move_to_%s" % rule["id"], choices, onchange="move_to.submit();")
 
             if len(self._rule_packs) > 1:
@@ -1824,12 +2545,26 @@ class ModeEventConsoleEditRulePack(ABCEventConsoleMode):
     def permissions(cls):
         return ["mkeventd.edit"]
 
+<<<<<<< HEAD
     def _from_vars(self):
         self._edit_nr = html.get_integer_input("edit", -1)  # missing -> new rule pack
         self._new = self._edit_nr < 0
 
         if self._new:
             self._rule_pack = {"rules": []}
+=======
+    @classmethod
+    def parent_mode(cls) -> _Optional[Type[WatoMode]]:
+        return ModeEventConsoleRulePacks
+
+    def _from_vars(self):
+        self._edit_nr = html.request.get_integer_input_mandatory("edit",
+                                                                 -1)  # missing -> new rule pack
+        self._new = self._edit_nr < 0
+
+        if self._new:
+            self._rule_pack: ec.ECRulePack = {"rules": []}
+>>>>>>> upstream/master
         else:
             try:
                 self._rule_pack = self._rule_packs[self._edit_nr]
@@ -1843,6 +2578,7 @@ class ModeEventConsoleEditRulePack(ABCEventConsoleMode):
 
     def title(self):
         if self._new:
+<<<<<<< HEAD
             return _("Create new rule pack")
         return _("Edit rule pack %s") % self._rule_packs[self._edit_nr]["id"]
 
@@ -1859,6 +2595,30 @@ class ModeEventConsoleEditRulePack(ABCEventConsoleMode):
     def action(self):
         if not html.check_transaction():
             return "mkeventd_rule_packs"
+=======
+            return _("Add rule pack")
+        return _("Edit rule pack %s") % self._rule_packs[self._edit_nr]["id"]
+
+    def page_menu(self, breadcrumb: Breadcrumb) -> PageMenu:
+        menu = make_simple_form_page_menu(breadcrumb, form_name="rule_pack", button_name="save")
+        menu.dropdowns.insert(
+            1,
+            PageMenuDropdown(
+                name="related",
+                title=_("Related"),
+                topics=[
+                    PageMenuTopic(
+                        title=_("Setup"),
+                        entries=list(_page_menu_entries_related_ec(self.name())),
+                    ),
+                ],
+            ))
+        return menu
+
+    def action(self) -> ActionResult:
+        if not html.check_transaction():
+            return redirect(mode_url("mkeventd_rule_packs"))
+>>>>>>> upstream/master
 
         if not self._new:
             existing_rules = self._rule_pack["rules"]
@@ -1895,7 +2655,11 @@ class ModeEventConsoleEditRulePack(ABCEventConsoleMode):
                              _("Created new rule pack with id %s") % self._rule_pack["id"])
         else:
             self._add_change("edit-rule-pack", _("Modified rule pack %s") % self._rule_pack["id"])
+<<<<<<< HEAD
         return "mkeventd_rule_packs"
+=======
+        return redirect(mode_url("mkeventd_rule_packs"))
+>>>>>>> upstream/master
 
     def page(self):
         self._verify_ec_enabled()
@@ -1903,7 +2667,10 @@ class ModeEventConsoleEditRulePack(ABCEventConsoleMode):
         vs = self._valuespec()
         vs.render_input("rule_pack", self._rule_pack)
         vs.set_focus("rule_pack")
+<<<<<<< HEAD
         html.button("save", _("Save"))
+=======
+>>>>>>> upstream/master
         html.hidden_fields()
         html.end_form()
 
@@ -1924,6 +2691,13 @@ class ModeEventConsoleEditRule(ABCEventConsoleMode):
     def permissions(cls):
         return ["mkeventd.edit"]
 
+<<<<<<< HEAD
+=======
+    @classmethod
+    def parent_mode(cls) -> _Optional[Type[WatoMode]]:
+        return ModeEventConsoleRules
+
+>>>>>>> upstream/master
     def _from_vars(self):
         if html.request.has_var("rule_pack"):
             self._rule_pack_nr, self._rule_pack = self._rule_pack_with_id(
@@ -1932,9 +2706,13 @@ class ModeEventConsoleEditRule(ABCEventConsoleMode):
         else:
             # In links from multisite views the rule pack is not known.
             # We just know the rule id and need to find the pack ourselves.
+<<<<<<< HEAD
             rule_id = html.request.var("rule_id")
             if rule_id is None:
                 raise MKUserError("rule_id", _("The rule you are trying to edit does not exist."))
+=======
+            rule_id = html.request.get_ascii_input_mandatory("rule_id")
+>>>>>>> upstream/master
 
             self._rule_pack = None
             for nr, pack in enumerate(self._rule_packs):
@@ -1950,6 +2728,7 @@ class ModeEventConsoleEditRule(ABCEventConsoleMode):
 
         self._rules = self._rule_pack["rules"]
 
+<<<<<<< HEAD
         self._edit_nr = int(html.request.var("edit", -1))  # missing -> new rule
         self._clone_nr = int(html.request.var("clone", -1))  # Only needed in 'new' mode
         self._new = self._edit_nr < 0
@@ -1960,6 +2739,17 @@ class ModeEventConsoleEditRule(ABCEventConsoleMode):
                 self._rule.update(self._rules[self._clone_nr])
             else:
                 self._rule = {}
+=======
+        self._edit_nr = html.request.get_integer_input_mandatory("edit", -1)  # missing -> new rule
+        self._clone_nr = html.request.get_integer_input_mandatory("clone",
+                                                                  -1)  # Only needed in 'new' mode
+        self._new = self._edit_nr < 0
+
+        if self._new:
+            self._rule = {}
+            if self._clone_nr >= 0:
+                self._rule.update(self._rules[self._clone_nr])
+>>>>>>> upstream/master
         else:
             try:
                 self._rule = self._rules[self._edit_nr]
@@ -1968,6 +2758,7 @@ class ModeEventConsoleEditRule(ABCEventConsoleMode):
 
     def title(self):
         if self._new:
+<<<<<<< HEAD
             return _("Create new rule")
         return _("Edit rule %s") % self._rules[self._edit_nr]["id"]
 
@@ -1981,6 +2772,30 @@ class ModeEventConsoleEditRule(ABCEventConsoleMode):
     def action(self):
         if not html.check_transaction():
             return "mkeventd_rules"
+=======
+            return _("Add rule")
+        return _("Edit rule %s") % self._rules[self._edit_nr]["id"]
+
+    def page_menu(self, breadcrumb: Breadcrumb) -> PageMenu:
+        menu = make_simple_form_page_menu(breadcrumb, form_name="rule", button_name="save")
+        menu.dropdowns.insert(
+            1,
+            PageMenuDropdown(
+                name="related",
+                title=_("Related"),
+                topics=[
+                    PageMenuTopic(
+                        title=_("Setup"),
+                        entries=list(_page_menu_entries_related_ec(self.name())),
+                    ),
+                ],
+            ))
+        return menu
+
+    def action(self) -> ActionResult:
+        if not html.check_transaction():
+            return redirect(mode_url("mkeventd_rules", rule_pack=self._rule_pack["id"]))
+>>>>>>> upstream/master
 
         if not self._new:
             old_id = self._rule["id"]
@@ -1990,7 +2805,11 @@ class ModeEventConsoleEditRule(ABCEventConsoleMode):
         if not self._new and old_id != self._rule["id"]:
             raise MKUserError("rule_p_id",
                               _("It is not allowed to change the ID of an existing rule."))
+<<<<<<< HEAD
         elif self._new:
+=======
+        if self._new:
+>>>>>>> upstream/master
             for pack in self._rule_packs:
                 for r in pack["rules"]:
                     if r["id"] == self._rule["id"]:
@@ -2001,7 +2820,11 @@ class ModeEventConsoleEditRule(ABCEventConsoleMode):
 
         try:
             num_groups = re.compile(self._rule["match"]).groups
+<<<<<<< HEAD
         except:
+=======
+        except Exception:
+>>>>>>> upstream/master
             raise MKUserError("rule_p_match", _("Invalid regular expression"))
         if num_groups > 9:
             raise MKUserError(
@@ -2027,7 +2850,11 @@ class ModeEventConsoleEditRule(ABCEventConsoleMode):
         while num_repl > num_groups:
             repl = "\\%d" % num_repl
             for name, value in self._rule.items():
+<<<<<<< HEAD
                 if name.startswith("set_") and isinstance(value, six.string_types):
+=======
+                if name.startswith("set_") and isinstance(value, str):
+>>>>>>> upstream/master
                     if repl in value:
                         raise MKUserError(
                             "rule_p_" + name,
@@ -2036,7 +2863,11 @@ class ModeEventConsoleEditRule(ABCEventConsoleMode):
                             (num_repl, num_groups))
             num_repl -= 1
 
+<<<<<<< HEAD
         if cmk.is_managed_edition() and "customer" in self._rule_pack:
+=======
+        if cmk_version.is_managed_edition() and "customer" in self._rule_pack:
+>>>>>>> upstream/master
             try:
                 del self._rule["customer"]
             except KeyError:
@@ -2067,7 +2898,11 @@ class ModeEventConsoleEditRule(ABCEventConsoleMode):
                              _("Modified event correlation rule %s") % self._rule["id"])
             # Reset hit counters of this rule
             cmk.gui.mkeventd.execute_command("RESETCOUNTERS", [self._rule["id"]], config.omd_site())
+<<<<<<< HEAD
         return "mkeventd_rules"
+=======
+        return redirect(mode_url("mkeventd_rules", rule_pack=self._rule_pack["id"]))
+>>>>>>> upstream/master
 
     def page(self):
         self._verify_ec_enabled()
@@ -2075,7 +2910,10 @@ class ModeEventConsoleEditRule(ABCEventConsoleMode):
         vs = self._valuespec()
         vs.render_input("rule", self._rule)
         vs.set_focus("rule")
+<<<<<<< HEAD
         html.button("save", _("Save"))
+=======
+>>>>>>> upstream/master
         html.hidden_fields()
         html.end_form()
 
@@ -2093,6 +2931,7 @@ class ModeEventConsoleStatus(ABCEventConsoleMode):
     def permissions(cls):
         return []
 
+<<<<<<< HEAD
     def title(self):
         return _("Local server status")
 
@@ -2105,11 +2944,41 @@ class ModeEventConsoleStatus(ABCEventConsoleMode):
     def action(self):
         if not config.user.may("mkeventd.switchmode"):
             return
+=======
+    @classmethod
+    def parent_mode(cls) -> _Optional[Type[WatoMode]]:
+        return ModeEventConsoleRulePacks
+
+    def title(self):
+        return _("Local server status")
+
+    def page_menu(self, breadcrumb: Breadcrumb) -> PageMenu:
+        return PageMenu(
+            dropdowns=[
+                PageMenuDropdown(
+                    name="related",
+                    title=_("Related"),
+                    topics=[
+                        PageMenuTopic(
+                            title=_("Setup"),
+                            entries=list(_page_menu_entries_related_ec(self.name())),
+                        ),
+                    ],
+                ),
+            ],
+            breadcrumb=breadcrumb,
+        )
+
+    def action(self) -> ActionResult:
+        if not config.user.may("mkeventd.switchmode"):
+            return None
+>>>>>>> upstream/master
 
         if html.request.has_var("_switch_sync"):
             new_mode = "sync"
         else:
             new_mode = "takeover"
+<<<<<<< HEAD
         c = wato_confirm(_("Confirm switching replication mode"),
                          _("Do you really want to switch the event daemon to %s mode?") % new_mode)
         if c:
@@ -2120,19 +2989,42 @@ class ModeEventConsoleStatus(ABCEventConsoleMode):
         elif c is False:
             return ""
         return
+=======
+        cmk.gui.mkeventd.execute_command("SWITCHMODE", [new_mode], config.omd_site())
+        watolib.log_audit(None, "mkeventd-switchmode",
+                          _("Switched replication slave mode to %s") % new_mode)
+        flash(_("Switched to %s mode") % new_mode)
+        return None
+>>>>>>> upstream/master
 
     def page(self):
         self._verify_ec_enabled()
 
+<<<<<<< HEAD
         if not cmk.gui.mkeventd.daemon_running():
             warning = _("The Event Console Daemon is currently not running. ")
             warning += _(
                 "Please make sure that you have activated it with <tt>omd config set MKEVENTD on</tt> "
                 "before starting this site.")
+=======
+        warning = _("The Event Console Daemon is currently not running. ")
+        warning += _(
+            "Please make sure that you have activated it with <tt>omd config set MKEVENTD on</tt> "
+            "before starting this site.")
+
+        if not cmk.gui.mkeventd.daemon_running():
+>>>>>>> upstream/master
             html.show_warning(warning)
             return
 
         status = cmk.gui.mkeventd.get_local_ec_status()
+<<<<<<< HEAD
+=======
+        if not status:
+            html.show_warning(warning)
+            return
+
+>>>>>>> upstream/master
         repl_mode = status["status_replication_slavemode"]
         html.h3(_("Current status of local Event Console"))
         html.open_ul()
@@ -2162,6 +3054,11 @@ class ModeEventConsoleStatus(ABCEventConsoleMode):
 
         if config.user.may("mkeventd.switchmode"):
             html.begin_form("switch")
+<<<<<<< HEAD
+=======
+            html.add_confirm_on_submit("switch",
+                                       _("Do you really want to switch the event daemon mode?"))
+>>>>>>> upstream/master
             if repl_mode == "sync":
                 html.button("_switch_takeover", _("Switch to Takeover mode!"))
             elif repl_mode == "takeover":
@@ -2171,7 +3068,11 @@ class ModeEventConsoleStatus(ABCEventConsoleMode):
 
 
 @mode_registry.register
+<<<<<<< HEAD
 class ModeEventConsoleSettings(ABCEventConsoleMode, GlobalSettingsMode):
+=======
+class ModeEventConsoleSettings(ABCEventConsoleMode, ABCGlobalSettingsMode):
+>>>>>>> upstream/master
     @classmethod
     def name(cls):
         return "mkeventd_config"
@@ -2180,8 +3081,17 @@ class ModeEventConsoleSettings(ABCEventConsoleMode, GlobalSettingsMode):
     def permissions(cls):
         return ["mkeventd.config"]
 
+<<<<<<< HEAD
     def __init__(self):
         super(ModeEventConsoleSettings, self).__init__()
+=======
+    @classmethod
+    def parent_mode(cls) -> _Optional[Type[WatoMode]]:
+        return ModeEventConsoleRulePacks
+
+    def __init__(self):
+        super().__init__()
+>>>>>>> upstream/master
 
         self._default_values = ConfigDomainEventConsole().default_globals()
         self._current_settings = watolib.load_configuration_settings()
@@ -2196,6 +3106,7 @@ class ModeEventConsoleSettings(ABCEventConsoleMode, GlobalSettingsMode):
     def title(self):
         if self._search:
             return html.render_text(_("Event Console configuration matching '%s'") % self._search)
+<<<<<<< HEAD
         return _('Event Console Configuration')
 
     def buttons(self):
@@ -2211,6 +3122,36 @@ class ModeEventConsoleSettings(ABCEventConsoleMode, GlobalSettingsMode):
         action = html.request.var("_action")
         if not varname:
             return
+=======
+        return _('Event Console configuration')
+
+    def page_menu(self, breadcrumb: Breadcrumb) -> PageMenu:
+        menu = PageMenu(
+            dropdowns=[
+                PageMenuDropdown(
+                    name="related",
+                    title=_("Related"),
+                    topics=[
+                        PageMenuTopic(
+                            title=_("Setup"),
+                            entries=list(_page_menu_entries_related_ec(self.name())),
+                        ),
+                    ],
+                ),
+            ],
+            breadcrumb=breadcrumb,
+            inpage_search=PageMenuSearch(placeholder=_("Filter settings")),
+        )
+
+        return menu
+
+    # TODO: Consolidate with ModeEditGlobals.action()
+    def action(self) -> ActionResult:
+        varname = html.request.var("_varname")
+        action = html.request.var("_action")
+        if not varname:
+            return None
+>>>>>>> upstream/master
 
         try:
             config_variable = config_variable_registry[varname]()
@@ -2219,6 +3160,7 @@ class ModeEventConsoleSettings(ABCEventConsoleMode, GlobalSettingsMode):
 
         def_value = config_variable.valuespec().default_value()
 
+<<<<<<< HEAD
         if action == "reset" and not isinstance(config_variable.valuespec(), Checkbox):
             c = wato_confirm(
                 _("Resetting configuration variable"),
@@ -2247,6 +3189,25 @@ class ModeEventConsoleSettings(ABCEventConsoleMode, GlobalSettingsMode):
             return "mkeventd_config"
         elif c is False:
             return ""
+=======
+        if not html.check_transaction():
+            return None
+
+        if varname in self._current_settings:
+            self._current_settings[varname] = not self._current_settings[varname]
+        else:
+            self._current_settings[varname] = not def_value
+        msg = _("Changed Configuration variable %s to %s.") % (
+            varname, self._current_settings[varname] and _("on") or _("off"))
+
+        watolib.save_global_settings(self._current_settings)
+
+        self._add_change("edit-configvar", msg)
+
+        if action == "_reset":
+            flash(msg)
+        return redirect(mode_url("mkeventd_config"))
+>>>>>>> upstream/master
 
     def _edit_mode(self):
         return "mkeventd_edit_configvar"
@@ -2288,7 +3249,11 @@ class ConfigVariableGroupEventConsoleSNMP(ConfigVariableGroupEventConsole):
 
 
 @mode_registry.register
+<<<<<<< HEAD
 class ModeEventConsoleEditGlobalSetting(EditGlobalSettingMode):
+=======
+class ModeEventConsoleEditGlobalSetting(ABCEditGlobalSettingMode):
+>>>>>>> upstream/master
     @classmethod
     def name(cls):
         return "mkeventd_edit_configvar"
@@ -2297,6 +3262,7 @@ class ModeEventConsoleEditGlobalSetting(EditGlobalSettingMode):
     def permissions(cls):
         return ["mkeventd.config"]
 
+<<<<<<< HEAD
     def __init__(self):
         super(ModeEventConsoleEditGlobalSetting, self).__init__()
         self._need_restart = None
@@ -2310,6 +3276,18 @@ class ModeEventConsoleEditGlobalSetting(EditGlobalSettingMode):
 
     def _back_mode(self):
         return "mkeventd_config"
+=======
+    @classmethod
+    def parent_mode(cls) -> _Optional[Type[WatoMode]]:
+        return ModeEventConsoleSettings
+
+    def __init__(self):
+        super().__init__()
+        self._need_restart = None
+
+    def title(self):
+        return _("Event Console configuration")
+>>>>>>> upstream/master
 
     def _affected_sites(self):
         return _get_event_console_sync_sites()
@@ -2330,6 +3308,7 @@ class ModeEventConsoleMIBs(ABCEventConsoleMode):
     def permissions(cls):
         return ["mkeventd.config"]
 
+<<<<<<< HEAD
     def title(self):
         return _('SNMP MIBs for Trap Translation')
 
@@ -2341,10 +3320,79 @@ class ModeEventConsoleMIBs(ABCEventConsoleMode):
         self._config_button()
 
     def action(self):
+=======
+    @classmethod
+    def parent_mode(cls) -> _Optional[Type[WatoMode]]:
+        return ModeEventConsoleRulePacks
+
+    def title(self):
+        return _('SNMP MIBs for trap translation')
+
+    def page_menu(self, breadcrumb: Breadcrumb) -> PageMenu:
+        return PageMenu(
+            dropdowns=[
+                PageMenuDropdown(
+                    name="mibs",
+                    title=_("MIBs"),
+                    topics=[
+                        PageMenuTopic(
+                            title=_("Add MIBs"),
+                            entries=[
+                                PageMenuEntry(
+                                    title=_("Add one or multiple MIBs"),
+                                    icon_name="upload",
+                                    item=make_simple_link(
+                                        makeuri_contextless(
+                                            request,
+                                            [("mode", "mkeventd_upload_mibs")],
+                                        )),
+                                ),
+                            ],
+                        ),
+                        PageMenuTopic(
+                            title=_("On selected MIBs"),
+                            entries=[
+                                PageMenuEntry(
+                                    title=_("Delete MIBs"),
+                                    shortcut_title=_("Delete selected MIBs"),
+                                    icon_name="delete",
+                                    item=make_confirmed_form_submit_link(
+                                        form_name="bulk_delete_form",
+                                        button_name="_bulk_delete_custom_mibs",
+                                        message=_(
+                                            "Do you really want to delete the selected MIBs?"),
+                                    ),
+                                    is_shortcut=True,
+                                    is_suggested=True,
+                                ),
+                            ],
+                        ),
+                    ],
+                ),
+                PageMenuDropdown(
+                    name="related",
+                    title=_("Related"),
+                    topics=[
+                        PageMenuTopic(
+                            title=_("Setup"),
+                            entries=list(_page_menu_entries_related_ec(self.name())),
+                        ),
+                    ],
+                ),
+            ],
+            breadcrumb=breadcrumb,
+        )
+
+    def action(self) -> ActionResult:
+        if not html.check_transaction():
+            return redirect(self.mode_url())
+
+>>>>>>> upstream/master
         if html.request.has_var("_delete"):
             filename = html.request.var("_delete")
             mibs = self._load_snmp_mibs(cmk.gui.mkeventd.mib_upload_dir())
             if filename in mibs:
+<<<<<<< HEAD
                 c = wato_confirm(
                     _("Confirm MIB deletion"),
                     _("Do you really want to delete the MIB file <b>%s</b>?") % filename)
@@ -2369,11 +3417,186 @@ class ModeEventConsoleMIBs(ABCEventConsoleMode):
 
         elif html.request.var("_bulk_delete_custom_mibs"):
             return self._bulk_delete_custom_mibs_after_confirm()
+=======
+                self._delete_mib(filename, mibs[filename]["name"])
+        elif html.request.var("_bulk_delete_custom_mibs"):
+            self._bulk_delete_custom_mibs_after_confirm()
+
+        return redirect(self.mode_url())
+
+    def _bulk_delete_custom_mibs_after_confirm(self):
+        custom_mibs = self._load_snmp_mibs(cmk.gui.mkeventd.mib_upload_dir())
+        selected_custom_mibs = []
+        for varname, _value in html.request.itervars(prefix="_c_mib_"):
+            if html.get_checkbox(varname):
+                filename = varname.split("_c_mib_")[-1]
+                if filename in custom_mibs:
+                    selected_custom_mibs.append(filename)
+
+        for filename in selected_custom_mibs:
+            self._delete_mib(filename, custom_mibs[filename]["name"])
+
+    def _delete_mib(self, filename, mib_name):
+        self._add_change("delete-mib", _("Deleted MIB %s") % filename)
+
+        # Delete the uploaded mib file
+        (cmk.gui.mkeventd.mib_upload_dir() / filename).unlink()
+
+        # Also delete the compiled files
+        compiled_mibs_dir = _compiled_mibs_dir()
+        for f in [
+                compiled_mibs_dir + "/" + mib_name + ".py",
+                compiled_mibs_dir + "/" + mib_name + ".pyc",
+                compiled_mibs_dir + "/" + filename.rsplit('.', 1)[0].upper() + ".py",
+                compiled_mibs_dir + "/" + filename.rsplit('.', 1)[0].upper() + ".pyc",
+        ]:
+            if os.path.exists(f):
+                os.remove(f)
+
+    def page(self):
+        self._verify_ec_enabled()
+        for path, title in cmk.gui.mkeventd.mib_dirs():
+            self._show_mib_table(path, title)
+
+    def _show_mib_table(self, path: Path, title: str) -> None:
+        is_custom_dir = path == cmk.gui.mkeventd.mib_upload_dir()
+
+        if is_custom_dir:
+            html.begin_form("bulk_delete_form", method="POST")
+
+        with table_element("mibs_%s" % path, title, searchable=False) as table:
+            for filename, mib in sorted(self._load_snmp_mibs(path).items()):
+                table.row()
+
+                if is_custom_dir:
+                    table.cell("<input type=button class=checkgroup name=_toggle_group"
+                               " onclick=\"cmk.selection.toggle_all_rows();\" value=\"%s\" />" %
+                               _('X'),
+                               sortable=False,
+                               css="buttons")
+                    html.checkbox("_c_mib_%s" % filename, deflt=False)
+
+                table.cell(_("Actions"), css="buttons")
+                if is_custom_dir:
+                    delete_url = make_confirm_link(
+                        url=make_action_link([("mode", "mkeventd_mibs"), ("_delete", filename)]),
+                        message=_("Do you really want to delete the MIB file <b>%s</b>?") %
+                        filename)
+                    html.icon_button(delete_url, _("Delete this MIB"), "delete")
+
+                table.text_cell(_("Filename"), filename)
+                table.text_cell(_("MIB"), mib.get("name", ""))
+                table.text_cell(_("Organization"), mib.get("organization", ""))
+                table.text_cell(_("Size"),
+                                cmk.utils.render.fmt_bytes(mib.get("size", 0)),
+                                css="number")
+
+        if is_custom_dir:
+            html.hidden_fields()
+            html.end_form()
+
+    def _load_snmp_mibs(self, path: Path) -> Dict[str, Dict]:
+        found: Dict[str, Dict] = {}
+
+        if not path.exists():
+            return found
+
+        for file_obj in path.iterdir():
+            if file_obj.is_dir():
+                continue
+
+            if file_obj.name.startswith("."):
+                continue
+
+            found[file_obj.name] = self._parse_snmp_mib_header(file_obj)
+        return found
+
+    def _parse_snmp_mib_header(self, path: Path) -> Dict[str, Union[int, str]]:
+        mib: Dict[str, Union[int, str]] = {"size": path.stat().st_size}
+
+        # read till first "OBJECT IDENTIFIER" declaration
+        head = ''
+        with path.open() as f:
+            for line in f:
+                if not line.startswith("--"):
+                    if 'OBJECT IDENTIFIER' in line:
+                        break  # seems the header is finished
+                    head += line
+
+        # now try to extract some relevant information from the header
+
+        matches = re.search('ORGANIZATION[^"]+"([^"]+)"', head, re.M)
+        if matches:
+            mib['organization'] = matches.group(1)
+
+        matches = re.search(r'^\s*([A-Z0-9][A-Z0-9-]+)\s', head, re.I | re.M)
+        if matches:
+            mib['name'] = matches.group(1)
+
+        return mib
+
+
+@mode_registry.register
+class ModeEventConsoleUploadMIBs(ABCEventConsoleMode):
+    @classmethod
+    def name(cls):
+        return "mkeventd_upload_mibs"
+
+    @classmethod
+    def permissions(cls):
+        return ["mkeventd.config"]
+
+    @classmethod
+    def parent_mode(cls) -> _Optional[Type[WatoMode]]:
+        return ModeEventConsoleMIBs
+
+    def title(self):
+        return _('Upload SNMP MIBs')
+
+    def page_menu(self, breadcrumb: Breadcrumb) -> PageMenu:
+        menu = make_simple_form_page_menu(breadcrumb,
+                                          form_name="upload_form",
+                                          button_name="upload_button",
+                                          save_title=_("Upload"))
+        menu.dropdowns.insert(
+            1,
+            PageMenuDropdown(
+                name="related",
+                title=_("Related"),
+                topics=[
+                    PageMenuTopic(
+                        title=_("Setup"),
+                        entries=list(_page_menu_entries_related_ec(self.name())),
+                    ),
+                ],
+            ))
+        return menu
+
+    def action(self) -> ActionResult:
+        if not html.request.uploaded_file("_upload_mib"):
+            return None
+
+        uploaded_mib = html.request.uploaded_file("_upload_mib")
+        filename, mimetype, content = uploaded_mib
+        if filename:
+            try:
+                flash(self._upload_mib(filename, mimetype, content))
+                return None
+            except Exception as e:
+                if config.debug:
+                    raise
+                raise MKUserError("_upload_mib", "%s" % e)
+        return None
+>>>>>>> upstream/master
 
     def _upload_mib(self, filename, mimetype, content):
         self._validate_mib_file_name(filename)
 
+<<<<<<< HEAD
         if self._is_zipfile(cStringIO.StringIO(content)):
+=======
+        if self._is_zipfile(io.BytesIO(content)):
+>>>>>>> upstream/master
             msg = self._process_uploaded_zip_file(filename, content)
         else:
             if mimetype == "application/tar" or filename.lower().endswith(
@@ -2384,7 +3607,11 @@ class ModeEventConsoleMIBs(ABCEventConsoleMode):
 
         return msg
 
+<<<<<<< HEAD
     # Used zipfile.is_zipfile(cStringIO.StringIO(content)) before, but this only
+=======
+    # Used zipfile.is_zipfile(io.BytesIO(content)) before, but this only
+>>>>>>> upstream/master
     # possible with python 2.7. zipfile is only supporting checking of files by
     # their path.
     def _is_zipfile(self, fo):
@@ -2395,7 +3622,11 @@ class ModeEventConsoleMIBs(ABCEventConsoleMode):
             return False
 
     def _process_uploaded_zip_file(self, filename, content):
+<<<<<<< HEAD
         zip_obj = zipfile.ZipFile(cStringIO.StringIO(content))
+=======
+        zip_obj = zipfile.ZipFile(io.BytesIO(content))
+>>>>>>> upstream/master
         messages = []
         for entry in zip_obj.infolist():
             success, fail = 0, 0
@@ -2423,7 +3654,12 @@ class ModeEventConsoleMIBs(ABCEventConsoleMode):
             mibname = filename
 
         msg = self._validate_and_compile_mib(mibname.upper(), content)
+<<<<<<< HEAD
         with cmk.gui.mkeventd.mib_upload_dir().joinpath(filename).open("w") as f:
+=======
+        cmk.gui.mkeventd.mib_upload_dir().mkdir(parents=True, exist_ok=True)
+        with (cmk.gui.mkeventd.mib_upload_dir() / filename).open("wb") as f:
+>>>>>>> upstream/master
             f.write(content)
         self._add_change("uploaded-mib", _("MIB %s: %s") % (filename, msg))
         return msg
@@ -2456,7 +3692,12 @@ class ModeEventConsoleMIBs(ABCEventConsoleMode):
 
         # Directories containing ASN1 MIB files which may be used for
         # dependency resolution
+<<<<<<< HEAD
         compiler.addSources(*[FileReader(path) for path, _title in cmk.gui.mkeventd.mib_dirs()])
+=======
+        compiler.addSources(
+            *[FileReader(str(path)) for path, _title in cmk.gui.mkeventd.mib_dirs()])
+>>>>>>> upstream/master
 
         # check for already compiled MIBs
         compiler.addSearchers(PyFileSearcher(compiled_mibs_dir))
@@ -2494,6 +3735,7 @@ class ModeEventConsoleMIBs(ABCEventConsoleMode):
                 raise e
             raise Exception(_('Failed to process your MIB file (%s): %s') % (mibname, e))
 
+<<<<<<< HEAD
     def _bulk_delete_custom_mibs_after_confirm(self):
         custom_mibs = self._load_snmp_mibs(cmk.gui.mkeventd.mib_upload_dir())
         selected_custom_mibs = []
@@ -2532,6 +3774,8 @@ class ModeEventConsoleMIBs(ABCEventConsoleMode):
             if os.path.exists(f):
                 os.remove(f)
 
+=======
+>>>>>>> upstream/master
     def page(self):
         self._verify_ec_enabled()
         html.h3(_("Upload MIB file"))
@@ -2549,6 +3793,7 @@ class ModeEventConsoleMIBs(ABCEventConsoleMode):
         html.upload_file("_upload_mib")
         forms.end()
 
+<<<<<<< HEAD
         html.button("upload_button", _("Upload MIB(s)"), "submit")
         html.hidden_fields()
         html.end_form()
@@ -2639,6 +3884,69 @@ class ModeEventConsoleMIBs(ABCEventConsoleMode):
             mib['name'] = matches.group(1)
 
         return mib
+=======
+        html.hidden_fields()
+        html.end_form()
+
+
+def _page_menu_entries_related_ec(mode_name: str) -> Iterator[PageMenuEntry]:
+    if mode_name != "mkeventd_rule_packs":
+        yield PageMenuEntry(
+            title=_("Rule packs"),
+            icon_name="event",
+            item=make_simple_link(makeuri_contextless(
+                request,
+                [("mode", "mkeventd_rule_packs")],
+            )),
+        )
+
+    if config.user.may("mkeventd.config") and config.user.may("wato.rulesets"):
+        yield _page_menu_entry_rulesets()
+
+    if mode_name != "mkeventd_status":
+        yield _page_menu_entry_status()
+
+    if mode_name != "mkeventd_config" and config.user.may("mkeventd.config"):
+        yield _page_menu_entry_settings()
+
+    if mode_name != "mkeventd_mibs":
+        yield _page_menu_entry_snmp_mibs()
+
+
+def _page_menu_entry_rulesets():
+    return PageMenuEntry(
+        title=_("Rules"),
+        icon_name="rulesets",
+        item=make_simple_link(
+            makeuri_contextless(request, [("mode", "rulesets"), ("group", "eventconsole")])),
+    )
+
+
+def _page_menu_entry_status():
+    return PageMenuEntry(
+        title=_("Status"),
+        icon_name="status",
+        item=make_simple_link(makeuri_contextless(request, [("mode", "mkeventd_status")])),
+    )
+
+
+def _page_menu_entry_settings():
+    return PageMenuEntry(
+        title=_("Settings"),
+        icon_name="configuration",
+        is_shortcut=True,
+        is_suggested=True,
+        item=make_simple_link(makeuri_contextless(request, [("mode", "mkeventd_config")])),
+    )
+
+
+def _page_menu_entry_snmp_mibs():
+    return PageMenuEntry(
+        title=_("SNMP MIBs"),
+        icon_name="snmpmib",
+        item=make_simple_link(makeuri_contextless(request, [("mode", "mkeventd_mibs")])),
+    )
+>>>>>>> upstream/master
 
 
 #.
@@ -2653,6 +3961,7 @@ class ModeEventConsoleMIBs(ABCEventConsoleMode):
 #   | Declaration of Event Console specific permissions for Multisite      |
 #   '----------------------------------------------------------------------'
 
+<<<<<<< HEAD
 
 @permission_registry.register
 class PermissionECConfig(Permission):
@@ -2753,17 +4062,75 @@ class PermissionECSwitchMode(Permission):
 
 @main_module_registry.register
 class MainModuleEventConsole(MainModule):
+=======
+permission_registry.register(
+    Permission(
+        section=cmk.gui.mkeventd.PermissionSectionEventConsole,
+        name="config",
+        title=_l("Configuration of Event Console"),
+        description=_l("This permission allows to configure the global settings "
+                       "of the event console."),
+        defaults=["admin"],
+    ))
+
+permission_registry.register(
+    Permission(
+        section=cmk.gui.mkeventd.PermissionSectionEventConsole,
+        name="edit",
+        title=_l("Configuration of event rules"),
+        description=_l("This permission allows the creation, modification and "
+                       "deletion of event correlation rules."),
+        defaults=["admin"],
+    ))
+
+permission_registry.register(
+    Permission(
+        section=cmk.gui.mkeventd.PermissionSectionEventConsole,
+        name="activate",
+        title=_l("Activate changes for event console"),
+        description=_l("Activation of changes for the event console (rule modification, "
+                       "global settings) is done separately from the monitoring configuration "
+                       "and needs this permission."),
+        defaults=["admin"],
+    ))
+
+permission_registry.register(
+    Permission(
+        section=cmk.gui.mkeventd.PermissionSectionEventConsole,
+        name="switchmode",
+        title=_l("Switch slave replication mode"),
+        description=_l("This permission is only useful if the Event Console is "
+                       "setup as a replication slave. It allows a manual switch "
+                       "between sync and takeover mode."),
+        defaults=["admin"],
+    ))
+
+
+@main_module_registry.register
+class MainModuleEventConsole(ABCMainModule):
+>>>>>>> upstream/master
     @property
     def mode_or_url(self):
         return "mkeventd_rule_packs"
 
     @property
+<<<<<<< HEAD
+=======
+    def topic(self):
+        return MainModuleTopicEvents
+
+    @property
+>>>>>>> upstream/master
     def title(self):
         return _("Event Console")
 
     @property
     def icon(self):
+<<<<<<< HEAD
         return "mkeventd"
+=======
+        return "event"
+>>>>>>> upstream/master
 
     @property
     def permission(self):
@@ -2775,12 +4142,23 @@ class MainModuleEventConsole(MainModule):
 
     @property
     def sort_index(self):
+<<<<<<< HEAD
         return 68
+=======
+        return 20
+>>>>>>> upstream/master
 
     @property
     def enabled(self):
         return config.mkeventd_enabled
 
+<<<<<<< HEAD
+=======
+    @property
+    def is_show_more(self):
+        return True
+
+>>>>>>> upstream/master
 
 #.
 #   .--Settings & Rules----------------------------------------------------.
@@ -2809,6 +4187,7 @@ class ConfigVariableEventConsoleRemoteStatus(ConfigVariable):
 
     def valuespec(self):
         return Optional(
+<<<<<<< HEAD
         Tuple(
             elements = [
               Integer(
@@ -2850,6 +4229,48 @@ class ConfigVariableEventConsoleRemoteStatus(ConfigVariable):
                  "by the event status checks nor by Multisite so we propose not allowing commands via TCP.") % \
                                                    "wato.py?mode=edit_ruleset&varname=active_checks%3Amkevents",
         none_label = _("no access via TCP"),
+=======
+            Tuple(elements=[
+                Integer(
+                    title=_("Port number:"),
+                    help=_(
+                        "If you are running the Event Console as a non-root (such as in an OMD site) "
+                        "please choose port number greater than 1024."),
+                    minvalue=1,
+                    maxvalue=65535,
+                    default_value=6558,
+                ),
+                Checkbox(
+                    title=_("Security"),
+                    label=_("allow execution of commands and actions via TCP"),
+                    help=_("Without this option the access is limited to querying the current "
+                           "and historic event status."),
+                    default_value=False,
+                    true_label=_("allow commands"),
+                    false_label=_("no commands"),
+                ),
+                Optional(
+                    ListOfStrings(
+                        help=_("The access to the event status via TCP will only be allowed from "
+                               "this source IP addresses"),
+                        valuespec=IPv4Address(),
+                        orientation="horizontal",
+                        allow_empty=False,
+                    ),
+                    label=_("Restrict access to the following source IP addresses"),
+                    none_label=_("access unrestricted"),
+                )
+            ],),
+            title=_("Access to event status via TCP"),
+            help=
+            _("In Multisite setups if you want <a href=\"%s\">event status checks</a> for hosts that "
+              "live on a remote site you need to activate remote access to the event status socket "
+              "via TCP. This allows to query the current event status via TCP. If you do not restrict "
+              "this to queries also event actions are possible from remote. This feature is not used "
+              "by the event status checks nor by Multisite so we propose not allowing commands via TCP."
+             ) % "wato.py?mode=edit_ruleset&varname=active_checks%3Amkevents",
+            none_label=_("no access via TCP"),
+>>>>>>> upstream/master
         )
 
 
@@ -3071,6 +4492,7 @@ class ConfigVariableEventConsoleActions(ConfigVariable):
 
     def valuespec(self):
         return ActionList(
+<<<<<<< HEAD
         Foldable(
           Dictionary(
             title = _("Action"),
@@ -3182,6 +4604,114 @@ class ConfigVariableEventConsoleActions(ConfigVariable):
              "rule triggers and also manually by a user."),
         totext = _("%d actions"),
         add_label = _("Add new action"),
+=======
+            Foldable(
+                Dictionary(
+                    title=_("Action"),
+                    optional_keys=False,
+                    elements=[
+                        ("id",
+                         ID(
+                             title=_("Action ID"),
+                             help=_("A unique ID of this action that is used as an internal "
+                                    "reference in the configuration. Changing the ID is not "
+                                    "possible if still rules refer to this ID."),
+                             allow_empty=False,
+                             size=12,
+                         )),
+                        ("title",
+                         TextUnicode(
+                             title=_("Title"),
+                             help=_("A descriptive title of this action."),
+                             allow_empty=False,
+                             size=64,
+                             attrencode=True,
+                         )),
+                        ("disabled",
+                         Checkbox(
+                             title=_("Disable"),
+                             label=_("Currently disable execution of this action"),
+                         )),
+                        (
+                            "hidden",
+                            Checkbox(
+                                title=_("Hide from Status GUI"),
+                                label=_("Do not offer this action as a command on open events"),
+                                help=_("If you enabled this option, then this action will not "
+                                       "be available as an interactive user command. It is usable "
+                                       "as an ad-hoc action when a rule fires, nevertheless."),
+                            ),
+                        ),
+                        (
+                            "action",
+                            CascadingDropdown(
+                                title=_("Type of Action"),
+                                help=_("Choose the type of action to perform"),
+                                choices=[
+                                    ("email", _("Send Email"),
+                                     Dictionary(optional_keys=False,
+                                                elements=[
+                                                    (
+                                                        "to",
+                                                        TextAscii(
+                                                            title=_("Recipient Email address"),
+                                                            allow_empty=False,
+                                                            attrencode=True,
+                                                        ),
+                                                    ),
+                                                    (
+                                                        "subject",
+                                                        TextUnicode(
+                                                            title=_("Subject"),
+                                                            allow_empty=False,
+                                                            size=64,
+                                                            attrencode=True,
+                                                        ),
+                                                    ),
+                                                    (
+                                                        "body",
+                                                        TextAreaUnicode(
+                                                            title=_("Body"),
+                                                            help=lambda: _(
+                                                                "Text-body of the email to send. ")
+                                                            + substitute_help(),
+                                                            cols=64,
+                                                            rows=10,
+                                                            attrencode=True,
+                                                        ),
+                                                    ),
+                                                ])),
+                                    ("script", _("Execute Shell Script"),
+                                     Dictionary(
+                                         optional_keys=False,
+                                         elements=[
+                                             ("script",
+                                              TextAreaUnicode(
+                                                  title=_("Script body"),
+                                                  help=lambda:
+                                                  _("This script will be executed using the BASH shell. "
+                                                   ) + substitute_help() + "<br>" +
+                                                  _("These information are also available as environment variables with the prefix "
+                                                    "<tt>CMK_</tt>. For example the text of the event is available as "
+                                                    "<tt>CMK_TEXT</tt> as environment variable."),
+                                                  cols=64,
+                                                  rows=10,
+                                                  attrencode=True,
+                                              )),
+                                         ])),
+                                ]),
+                        ),
+                    ],
+                ),
+                title_function=lambda value: not value["id"] and _("New Action") or
+                (value["id"] + " - " + value["title"]),
+            ),
+            title=_("Actions (Emails & Scripts)"),
+            help=_("Configure that possible actions that can be performed when a "
+                   "rule triggers and also manually by a user."),
+            totext=_("%d actions"),
+            add_label=_("Add new action"),
+>>>>>>> upstream/master
         )
 
     # TODO: Why? Can we drop this?
@@ -3490,7 +5020,11 @@ class ConfigVariableEventConsoleSNMPCredentials(ConfigVariable):
             Dictionary(
                 elements=[
                     ("description", TextUnicode(title=_("Description"),)),
+<<<<<<< HEAD
                     ("credentials", SNMPCredentials()),
+=======
+                    ("credentials", SNMPCredentials(for_ec=True)),
+>>>>>>> upstream/master
                     ("engine_ids",
                      ListOfStrings(
                          valuespec=TextAscii(
@@ -3769,17 +5303,29 @@ class RulespecGroupEventConsole(RulespecGroup):
 
     @property
     def help(self):
+<<<<<<< HEAD
         return _("Settings and Checks dealing with the Check_MK Event Console")
+=======
+        return _("Settings and Checks dealing with the Checkmk Event Console")
+>>>>>>> upstream/master
 
 
 def convert_mkevents_hostspec(value):
     if isinstance(value, list):
         return value
+<<<<<<< HEAD
     elif value == "$HOSTADDRESS$":
         return ["$HOSTADDRESS$"]
     elif value == "$HOSTNAME$":
         return ["$HOSTNAME$"]
     elif value == "$HOSTNAME$/$HOSTADDRESS$":
+=======
+    if value == "$HOSTADDRESS$":
+        return ["$HOSTADDRESS$"]
+    if value == "$HOSTNAME$":
+        return ["$HOSTNAME$"]
+    if value == "$HOSTNAME$/$HOSTADDRESS$":
+>>>>>>> upstream/master
         return ["$HOSTNAME$", "$HOSTADDRESS$"]
     # custom
     return value
@@ -3865,7 +5411,10 @@ def _valuespec_active_checks_mkevents():
             ("remote",
              Alternative(
                  title=_("Access to the Event Console"),
+<<<<<<< HEAD
                  style="dropdown",
+=======
+>>>>>>> upstream/master
                  elements=[
                      FixedValue(
                          None,
@@ -3918,6 +5467,7 @@ rulespec_registry.register(
 
 
 def _sl_help():
+<<<<<<< HEAD
     return _("A service level is a number that describes the business impact of a host or "
             "service. This level can be used in rules for notifications, as a filter in "
             "views or as a criteria in rules for the Event Console. A higher service level "
@@ -3929,6 +5479,19 @@ def _sl_help():
             "is equal to defining a level of 0.<br><br>The list of available service "
             "levels is configured via a <a href='%s'>global option.</a>") % \
             "wato.py?varname=mkeventd_service_levels&mode=edit_configvar"
+=======
+    return (_("A service level is a number that describes the business impact of a host or "
+              "service. This level can be used in rules for notifications, as a filter in "
+              "views or as a criteria in rules for the Event Console. A higher service level "
+              "is assumed to be more business critical. This ruleset allows to assign service "
+              "levels to hosts and/or services. Note: if you assign a service level to "
+              "a host with the ruleset <i>Service Level of hosts</i>, then this level is "
+              "inherited to all services that do <b>not</b> have explicitely assigned a service "
+              "with the ruleset <i>Service Level of services</i>. Assigning no service level "
+              "is equal to defining a level of 0.<br><br>The list of available service "
+              "levels is configured via a <a href='%s'>global option.</a>") %
+            "wato.py?varname=mkeventd_service_levels&mode=edit_configvar")
+>>>>>>> upstream/master
 
 
 def _valuespec_extra_host_conf__ec_sl():
@@ -3941,7 +5504,11 @@ def _valuespec_extra_host_conf__ec_sl():
 
 rulespec_registry.register(
     HostRulespec(
+<<<<<<< HEAD
         group=RulespecGroupGrouping,
+=======
+        group=RulespecGroupHostsMonitoringRulesVarious,
+>>>>>>> upstream/master
         name="extra_host_conf:_ec_sl",
         valuespec=_valuespec_extra_host_conf__ec_sl,
     ))
@@ -3958,7 +5525,11 @@ def _valuespec_extra_service_conf__ec_sl():
 
 rulespec_registry.register(
     ServiceRulespec(
+<<<<<<< HEAD
         group=RulespecGroupGrouping,
+=======
+        group=RulespecGroupMonitoringConfigurationVarious,
+>>>>>>> upstream/master
         item_type="service",
         name="extra_service_conf:_ec_sl",
         valuespec=_valuespec_extra_service_conf__ec_sl,
@@ -4028,8 +5599,13 @@ def mkeventd_update_notifiation_configuration(hosts):
     if not contactgroup and os.path.exists(path):
         os.remove(path)
     elif contactgroup:
+<<<<<<< HEAD
         open(path, "w").write(
             """# Created by Check_MK Event Console
+=======
+        store.save_text_to_file(
+            path, u"""# Created by Check_MK Event Console
+>>>>>>> upstream/master
 # This configuration will send notifications about hosts and
 # services in the contact group '%(group)s' to the Event Console.
 

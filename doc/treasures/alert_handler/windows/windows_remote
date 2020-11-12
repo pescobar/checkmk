@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/env python
 # PowerShell Remoting Protocol Client
 
@@ -7,6 +8,26 @@ import sys
 from pypsrp.client import Client
 
 import cmk.password_store
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# PowerShell Remoting Protocol Client
+
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+import os
+import sys
+
+try:
+    from pypsrp.client import Client
+except:
+    print("Python module ""pypsrp"" not available. Please install with: pip3 install pypsrp")
+    sys.exit(2)
+
+import cmk.utils.password_store
+>>>>>>> upstream/master
 
 
 def from_environment(env):
@@ -16,7 +37,11 @@ def from_environment(env):
     address = os.environ.get("ALERT_HOSTADDRESS")
 
     if not user or not command or not password:
+<<<<<<< HEAD
         sys.stdout.write("Need user, password and command as arguments")
+=======
+        sys.stdout.write("Need user, password and command as arguments\n")
+>>>>>>> upstream/master
         sys.exit(3)
 
     if not address:

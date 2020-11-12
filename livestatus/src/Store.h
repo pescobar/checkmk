@@ -1,31 +1,16 @@
-// +------------------------------------------------------------------+
-// |             ____ _               _        __  __ _  __           |
-// |            / ___| |__   ___  ___| | __   |  \/  | |/ /           |
-// |           | |   | '_ \ / _ \/ __| |/ /   | |\/| | ' /            |
-// |           | |___| | | |  __/ (__|   <    | |  | | . \            |
-// |            \____|_| |_|\___|\___|_|\_\___|_|  |_|_|\_\           |
-// |                                                                  |
-// | Copyright Mathias Kettner 2014             mk@mathias-kettner.de |
-// +------------------------------------------------------------------+
-//
-// This file is part of Check_MK.
-// The official homepage is at http://mathias-kettner.de/check_mk.
-//
-// check_mk is free software;  you can redistribute it and/or modify it
-// under the  terms of the  GNU General Public License  as published by
-// the Free Software Foundation in version 2.  check_mk is  distributed
-// in the hope that it will be useful, but WITHOUT ANY WARRANTY;  with-
-// out even the implied warranty of  MERCHANTABILITY  or  FITNESS FOR A
-// PARTICULAR PURPOSE. See the  GNU General Public License for more de-
-// tails. You should have  received  a copy of the  GNU  General Public
-// License along with GNU Make; see the file  COPYING.  If  not,  write
-// to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
-// Boston, MA 02110-1301 USA.
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the
+// terms and conditions defined in the file COPYING, which is part of this
+// source code package.
 
 #ifndef Store_h
 #define Store_h
 
 #include "config.h"  // IWYU pragma: keep
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/master
 #include <cstddef>
 #include <list>
 #include <map>
@@ -41,6 +26,7 @@
 #include "TableComments.h"
 #include "TableContactGroups.h"
 #include "TableContacts.h"
+#include "TableCrashReports.h"
 #include "TableDowntimes.h"
 #include "TableEventConsoleEvents.h"
 #include "TableEventConsoleHistory.h"
@@ -66,11 +52,19 @@ class OutputBuffer;
 
 #ifdef CMC
 #include <cstdint>
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/master
 #include "TableCachedStatehist.h"
 class Core;
 class Object;
 #else
 #include <mutex>
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/master
 #include "DowntimesOrComments.h"
 #include "nagios.h"
 #endif
@@ -83,17 +77,29 @@ public:
     bool answerRequest(InputBuffer *, OutputBuffer *);
     bool answerGetRequest(const std::list<std::string> &lines,
                           OutputBuffer &output, const std::string &tablename);
+<<<<<<< HEAD
     void answerCommandRequest(const char *command, Logger *logger);
+=======
+>>>>>>> upstream/master
     void switchStatehistTable();
     void buildStatehistCache();
     void flushStatehistCache();
     void tryFinishStatehistCache();
+<<<<<<< HEAD
     bool addObjectHistcache(Object *object);
     void addAlertToStatehistCache(Object *object, int state,
                                   const std::string &output,
                                   const std::string &long_output);
     void addDowntimeToStatehistCache(Object *object, bool started);
     void addFlappingToStatehistCache(Object *object, bool started);
+=======
+    void addObjectHistcache(Object *object);
+    void addAlertToStatehistCache(const Object &object, int state,
+                                  const std::string &output,
+                                  const std::string &long_output);
+    void addDowntimeToStatehistCache(const Object &object, bool started);
+    void addFlappingToStatehistCache(const Object &object, bool started);
+>>>>>>> upstream/master
 #else
     explicit Store(MonitoringCore *mc);
     bool answerRequest(InputBuffer &input, OutputBuffer &output);
@@ -101,14 +107,25 @@ public:
     void registerDowntime(nebstruct_downtime_data *data);
     void registerComment(nebstruct_comment_data *data);
 #endif
+<<<<<<< HEAD
     Logger *logger() const;
+=======
+    [[nodiscard]] Logger *logger() const;
+>>>>>>> upstream/master
     size_t numCachedLogMessages();
 
 private:
     struct TableDummy : public Table {
         explicit TableDummy(MonitoringCore *mc) : Table(mc) {}
+<<<<<<< HEAD
         std::string name() const override { return "dummy"; }
         std::string namePrefix() const override { return "dummy_"; }
+=======
+        [[nodiscard]] std::string name() const override { return "dummy"; }
+        [[nodiscard]] std::string namePrefix() const override {
+            return "dummy_";
+        }
+>>>>>>> upstream/master
         void answerQuery(Query * /*unused*/) override {}
     };
 
@@ -134,6 +151,10 @@ private:
     TableComments _table_comments;
     TableContactGroups _table_contactgroups;
     TableContacts _table_contacts;
+<<<<<<< HEAD
+=======
+    TableCrashReports _table_crash_reports;
+>>>>>>> upstream/master
     TableDowntimes _table_downtimes;
     TableEventConsoleEvents _table_eventconsoleevents;
     TableEventConsoleHistory _table_eventconsolehistory;
@@ -167,18 +188,30 @@ private:
     uint32_t horizon() const;
 #else
     void logRequest(const std::string &line,
+<<<<<<< HEAD
                     const std::list<std::string> &lines);
+=======
+                    const std::list<std::string> &lines) const;
+>>>>>>> upstream/master
     bool answerGetRequest(const std::list<std::string> &lines,
                           OutputBuffer &output, const std::string &tablename);
 
     class ExternalCommand {
     public:
         explicit ExternalCommand(const std::string &str);
+<<<<<<< HEAD
         ExternalCommand withName(const std::string &name) const;
         std::string name() const { return _name; }
         std::string arguments() const { return _arguments; }
         std::string str() const;
         std::vector<std::string> args() const;
+=======
+        [[nodiscard]] ExternalCommand withName(const std::string &name) const;
+        [[nodiscard]] std::string name() const { return _name; }
+        [[nodiscard]] std::string arguments() const { return _arguments; }
+        [[nodiscard]] std::string str() const;
+        [[nodiscard]] std::vector<std::string> args() const;
+>>>>>>> upstream/master
 
     private:
         std::string _prefix;  // including brackets and space
@@ -194,6 +227,10 @@ private:
 
     void answerCommandRequest(const ExternalCommand &command);
     void answerCommandMkLogwatchAcknowledge(const ExternalCommand &command);
+<<<<<<< HEAD
+=======
+    void answerCommandDelCrashReport(const ExternalCommand &command);
+>>>>>>> upstream/master
     void answerCommandEventConsole(const ExternalCommand &command);
     void answerCommandNagios(const ExternalCommand &command);
 #endif

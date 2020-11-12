@@ -12,6 +12,7 @@ _PWD=`pwd`
 include Makefile.omd
 -include .config
 
+<<<<<<< HEAD
 build: patch build-stamp
 build-stamp:
 	dh_testdir
@@ -22,6 +23,13 @@ clean: clean-patched unpatch
 	dh_testdir
 	dh_testroot
 	rm -f build-stamp
+=======
+.PHONY: clean binary-indep binary-arch binary install
+
+clean:
+	dh_testdir
+	dh_testroot
+>>>>>>> upstream/master
 
 	$(MAKE) EDITION=$(EDITION) clean
 	rm -f $(_PWD)/debian/postinst
@@ -31,6 +39,7 @@ clean: clean-patched unpatch
 	rm -f $(_PWD)/debian/init
 	rm -f $(_PWD)/debian/links
 	rm -f $(_PWD)/debian/*.debhelper
+<<<<<<< HEAD
 	rm -rf  $(_PWD)/debian/check-mk-*-[0-9].[0-9.]*
 	rm -rf  $(_PWD)/debian/check-mk-*-[1-9][0-9].[0-9.]*
 
@@ -69,6 +78,49 @@ install: build
 	rm -f $(_PWD)/debian/`dh_listpackages`/etc/init.d/omd
 	rm -f $(_PWD)/debian/`dh_listpackages`/etc/systemd/system/omd.service
 	mv -f $(_PWD)/check-mk-$(EDITION)-bin-$(OMD_VERSION).tar.gz $(_PWD)/..
+=======
+	rm -rf $(_PWD)/debian/check-mk-*-[0-9].[0-9.]*
+	rm -rf $(_PWD)/debian/check-mk-*-[1-9][0-9].[0-9.]*
+
+	dh_clean
+
+install:
+	dh_testdir
+	#dh_testroot
+	# Keep the package installation directory for incremental builds. In case a
+	# fresh build is requested, debuild will be called with "clean"
+	dh_prep --exclude=`dh_listpackages`
+	dh_installdirs
+
+	# This target compiles and installs everything needed into our DESTDIR
+	$(MAKE) EDITION=$(EDITION) DESTDIR=$(_PWD)/debian/`dh_listpackages` install
+
+	# Remove version independent things that will be created later by postinst
+	set -e ; \
+	for F in usr/bin/omd \
+		 usr/bin \
+		 usr/share/man/man8/omd.8.gz \
+		 usr/share/man/man8 \
+		 usr/share/man \
+		 usr/share \
+		 usr \
+		 omd \
+		 opt/omd/apache \
+		 opt/omd/sites \
+		 opt/omd/versions/default \
+		 etc/apache2/conf.d/zzz_omd.conf \
+		 etc/apache2/conf.d \
+		 etc/apache2 \
+		 etc/init.d/omd \
+		 etc/systemd/system/omd.service; do \
+	    ABS_PATH="$(_PWD)/debian/`dh_listpackages`/$$F" ; \
+            if [ -f "$$ABS_PATH" ] || [ -h "$$ABS_PATH" ] ; then \
+                rm -f "$$ABS_PATH" ; \
+            elif [ -d "$$ABS_PATH" ]; then \
+                rmdir "$$ABS_PATH" ; \
+            fi \
+	done
+>>>>>>> upstream/master
 
 	sed -e 's/###OMD_VERSION###/$(OMD_VERSION)/g' \
 	    -e 's/###OMD_SERIAL###/$(OMD_SERIAL)/g' \
@@ -84,12 +136,24 @@ install: build
 	sed -e 's/###OMD_VERSION###/$(OMD_VERSION)/g' \
 	   $(_PWD)/debian/links.in > $(_PWD)/debian/links
 
+<<<<<<< HEAD
 # Build architecture-independent files here.
 binary-indep: install
 # We have nothing to do by default.
 
 # Build architecture-dependent files here.
 binary-arch: install
+=======
+binary-indep:
+
+# Please note: This target is run in context of "fakeroot" (see "man
+# dpkg-buildpackage") for further information.
+# In the past we used this phase for building our packages, but we experienced
+# some hardly reproducable random IO errors when executing our build in this
+# phase. For this reason we now build our stuff in the build-arch phase which
+# is executed in the current users context.
+binary-arch:
+>>>>>>> upstream/master
 	dh_testdir
 	dh_testroot
 	dh_installchangelogs
@@ -124,5 +188,11 @@ binary-arch: install
 	dh_md5sums
 	dh_builddeb
 
+<<<<<<< HEAD
 binary: binary-indep binary-arch
 .PHONY: build clean binary-indep binary-arch binary install
+=======
+build-arch: install
+
+binary: binary-indep binary-arch
+>>>>>>> upstream/master

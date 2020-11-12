@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -24,12 +25,35 @@
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
 
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# NOTE: Careful when replacing the *-import below with a more specific import. This can cause
+# problems because it might remove variables from the check-context which are necessary for
+# resolving legacy discovery results such as [("SUMMARY", "diskstat_default_levels")]. Furthermore,
+# it might also remove variables needed for accessing discovery rulesets.
+from cmk.base.check_legacy_includes.netapp_api import *  # pylint: disable=wildcard-import,unused-wildcard-import
+>>>>>>> upstream/master
 # consideration of health status and port speed availability status quo
 discovery_netapp_api_ports_ignored = []
 
 
 def parse_netapp_ports(info):
+<<<<<<< HEAD
     return netapp_api_parse_lines(info, ports=True)
+=======
+    def port_name(name, values):
+        try:
+            return "%s port %s" % (values["port-type"].capitalize(), name)
+        except KeyError:
+            return name
+
+    return netapp_api_parse_lines(info, item_func=port_name)
+>>>>>>> upstream/master
 
 
 def _identify_ignored_port_types(discovery_ignored):
@@ -38,7 +62,11 @@ def _identify_ignored_port_types(discovery_ignored):
 
 def discovery_netapp_api_port(parsed):
     ignored_ports = _identify_ignored_port_types(discovery_netapp_api_ports_ignored)
+<<<<<<< HEAD
     for item, values in parsed.iteritems():
+=======
+    for item, values in parsed.items():
+>>>>>>> upstream/master
         if values.get("port-type") in ignored_ports:
             continue
         if "health-status" in values:
@@ -58,5 +86,8 @@ check_info["netapp_api_ports"] = {
     'inventory_function': discovery_netapp_api_port,
     'parse_function': parse_netapp_ports,
     'service_description': '%s',
+<<<<<<< HEAD
     'includes': ['netapp_api.include'],
+=======
+>>>>>>> upstream/master
 }

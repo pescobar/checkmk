@@ -17,14 +17,127 @@
 #include "common/wtools.h"
 #include "glob_match.h"
 #include "section_header.h"  // we have logging here
+<<<<<<< HEAD
 #include "windows_service_api.h"
 
 namespace cma {
+=======
+#include "service_processor.h"
+#include "windows_service_api.h"
+
+namespace cma {
+
+namespace security {
+void ProtectFiles(const std::filesystem::path& root) {
+    using namespace cma::cfg;
+
+    for (const auto& p : {
+             root / kAppDataAppName / files::kUserYmlFile,
+             root / kAppDataAppName / dirs::kBakery / files::kBakeryYmlFile,
+             root / kAppDataAppName / dirs::kInstall,
+             root / kAppDataAppName / dirs::kBackup,
+             root / kAppDataAppName / dirs::kPluginConfig,
+             root / kAppDataAppName / dirs::kUpdate,
+
+         }) {
+        if (!wtools::ProtectPathFromUserAccess(p)) {
+            XLOG::l.e("Protection of the '{}' failed!", p.u8string());
+        }
+    }
+}
+
+void ProtectAll(const std::filesystem::path& root) {
+    if (!wtools::ProtectPathFromUserWrite(root)) {
+        XLOG::l.crit("Protection of the folder '{}' failed!", root.u8string());
+        return;
+    }
+
+    ProtectFiles(root);
+}
+
+}  // namespace security
+
+namespace ntfs {
+bool G_SimulateBadRemove = false;
+
+static bool WindowsDeleteFile(const std::filesystem::path& Target,
+                              std::error_code& Ec) noexcept {
+    auto ret = ::DeleteFileW(Target.wstring().c_str());
+    if (ret) {
+        Ec.clear();
+        return true;
+    }
+    auto err = GetLastError();
+
+    // this is virtually impossible
+    XLOG::d(
+        "File '{}' can't be removed Also with Windows RemoveFile, this is not normal",
+        Target.u8string());
+
+    if (err == 2 || err == 0)
+        Ec.clear();  // this is to simulate behavior of the fs::remove
+    else
+        Ec.assign(err, std::generic_category());
+    //
+    return false;
+}
+
+bool Remove(const std::filesystem::path& Target, std::error_code& Ec) noexcept {
+    if (G_SimulateBadRemove) {
+        Ec.assign(1,
+                  std::generic_category());  // situation on the VMWare SCSI HDD
+    } else {
+        const auto result = std::filesystem::remove(Target, Ec);
+        if (result) return true;
+    }
+
+    // false here
+    if (Ec.value() != 1) return false;  // problems with deletion get away
+    XLOG::t(
+        "File '{}' can't be removed with std::filesystem::remove with error 1, try Windows remove",
+        Target.u8string());
+
+    // special case for FS without support Posix mode
+    // this code is hack for old Windows ST libraries
+    return WindowsDeleteFile(Target, Ec);
+}
+}  // namespace ntfs
+
+>>>>>>> upstream/master
 // we are counting threads in to have control exit/stop/wait
 std::atomic<int> PluginEntry::thread_count_ = 0;
 
 namespace tools {
 
+<<<<<<< HEAD
+=======
+bool AreFilesSame(const std::filesystem::path& tgt,
+                  const std::filesystem::path& src) {
+    try {
+        std::ifstream f1(tgt, std::ifstream::binary | std::ifstream::ate);
+        std::ifstream f2(src, std::ifstream::binary | std::ifstream::ate);
+
+        if (f1.fail() || f2.fail()) {
+            return false;  // file problem
+        }
+
+        if (f1.tellg() != f2.tellg()) {
+            return false;  // size mismatch
+        }
+
+        // seek back to beginning and use std::equal to compare contents
+        f1.seekg(0, std::ifstream::beg);
+        f2.seekg(0, std::ifstream::beg);
+        return std::equal(std::istreambuf_iterator<char>(f1.rdbuf()),
+                          std::istreambuf_iterator<char>(),
+                          std::istreambuf_iterator<char>(f2.rdbuf()));
+    } catch (const std::exception& e) {
+        XLOG::l(XLOG_FUNC + " exception '{}'", e.what());
+        return false;
+    }
+}
+
+>>>>>>> upstream/master
 bool CheckArgvForValue(int argc, const wchar_t* argv[], int pos,
                        std::string_view value) noexcept {
     return argv && argc > pos && pos > 0 && argv[pos] &&
@@ -293,7 +406,11 @@ bool AddUniqStringToSetIgnoreCase(std::set<std::string>& cache,
 }
 
 bool AddUniqStringToSetAsIs(std::set<std::string>& cache,
+<<<<<<< HEAD
                             const std::string value) noexcept {
+=======
+                            const std::string& value) noexcept {
+>>>>>>> upstream/master
     auto found = cache.find(value);
 
     if (found == cache.end()) {
@@ -604,7 +721,20 @@ std::vector<char> PluginEntry::getResultsSync(const std::wstring& Id,
                                               int MaxTimeout) {
     if (failed()) return {};
 
+<<<<<<< HEAD
     auto started = minibox_.start(L"id", path(), TheMiniBox::StartMode::job);
+=======
+    auto exec = cmd_line_.empty() ? ConstructCommandToExec(path()) : cmd_line_;
+    if (exec.empty()) {
+        XLOG::l(
+            "Failed to start minibox sync '{}', can't find executables for the '{}'",
+            wtools::ConvertToUTF8(Id), path().u8string());
+        return {};
+    }
+
+    auto started =
+        minibox_.startEx(L"id", exec, TheMiniBox::StartMode::job, iu_);
+>>>>>>> upstream/master
     if (!started) {
         XLOG::l("Failed to start minibox sync '{}'", wtools::ConvertToUTF8(Id));
         return {};
@@ -648,6 +778,11 @@ std::vector<char> PluginEntry::getResultsSync(const std::wstring& Id,
     return accu;
 }
 
+<<<<<<< HEAD
+=======
+void PluginEntry::setCmdLine(std::wstring_view name) { cmd_line_ = name; }
+
+>>>>>>> upstream/master
 // stop with asyncing
 void PluginEntry::breakAsync() {
     XLOG::t("breakAsync {}", path().u8string());
@@ -700,6 +835,56 @@ bool TheMiniBox::waitForStop(std::chrono::milliseconds interval) {
     return stopped || stop_set_;
 }
 
+<<<<<<< HEAD
+=======
+bool TheMiniBox::startEx(std::wstring_view uniq_id, std::wstring exec,
+                         StartMode start_mode,
+                         wtools::InternalUser internal_user) {
+    std::lock_guard lk(lock_);
+    if (process_) return false;
+
+    sw_.start();
+    id_ = uniq_id;
+    exec_ = exec;
+
+    // send exec array entries to internal
+    try {
+        // now exec
+        auto ar = new wtools::AppRunner;
+        XLOG::d.t("Exec app '{}', mode [{}]", wtools::ConvertToUTF8(exec),
+                  static_cast<int>(start_mode));
+
+        switch (start_mode) {
+            case StartMode::job:
+                if (internal_user.first.empty())
+                    proc_id_ = ar->goExecAsJob(exec);
+                else
+                    proc_id_ = ar->goExecAsJobAndUser(
+                        internal_user.first, internal_user.second, exec);
+                break;
+            case StartMode::updater:
+                proc_id_ = ar->goExecAsUpdater(exec);
+                break;
+        }
+
+        if (proc_id_) {
+            process_ = ar;
+            return true;
+        }
+
+        delete ar;  // start failed
+    } catch (const std::exception& e) {
+        XLOG::l(XLOG_FLINE + " exception {}", e.what());
+    }
+    sw_.stop();
+    // cleaning up
+    id_.clear();
+    exec_.clear();
+
+    return false;
+}
+
+>>>>>>> upstream/master
 // #TODO to be deprecated in 1.7 for Windows
 bool TheMiniBox::waitForEnd(std::chrono::milliseconds timeout) {
     using namespace std::chrono;
@@ -715,7 +900,11 @@ bool TheMiniBox::waitForEnd(std::chrono::milliseconds timeout) {
         auto grane = kGraneLong;
         auto ready = checkProcessExit(pi.waiting_processes) ||  // process exit?
                      cma::srv::IsGlobalStopSignaled();  // agent is exiting?
+<<<<<<< HEAD
         auto buf = readFromHandle<std::vector<char>>(read_handle);
+=======
+        auto buf = cma::tools::ReadFromHandle<std::vector<char>>(read_handle);
+>>>>>>> upstream/master
         if (!buf.empty()) {
             pi.added += buf.size();
             pi.blocks++;
@@ -769,7 +958,12 @@ bool TheMiniBox::waitForEndWindows(std::chrono::milliseconds Timeout) {
             2, handles, FALSE, static_cast<DWORD>(kGraneWindows.count()));
 
         if (ret == WAIT_OBJECT_0) {
+<<<<<<< HEAD
             auto buf = readFromHandle<std::vector<char>>(read_handle);
+=======
+            auto buf =
+                cma::tools::ReadFromHandle<std::vector<char>>(read_handle);
+>>>>>>> upstream/master
             if (!buf.empty()) {
                 pi.added += buf.size();
                 pi.blocks++;
@@ -826,7 +1020,11 @@ bool TheMiniBox::waitForUpdater(std::chrono::milliseconds timeout) {
     auto read_handle = getReadHandle();
     int safety_poll_count = 5;
     for (;;) {
+<<<<<<< HEAD
         auto buf = readFromHandle<std::vector<char>>(read_handle);
+=======
+        auto buf = cma::tools::ReadFromHandle<std::vector<char>>(read_handle);
+>>>>>>> upstream/master
         if (buf.size()) {
             appendResult(read_handle, buf);
             XLOG::d.t("Appended [{}] bytes from '{}'",
@@ -895,7 +1093,20 @@ void PluginEntry::threadCore(const std::wstring& Id) {
 
     // core
     auto mode = GetStartMode(path());
+<<<<<<< HEAD
     auto started = minibox_.start(Id, path(), mode);
+=======
+
+    auto exec = cmd_line_.empty() ? ConstructCommandToExec(path()) : cmd_line_;
+    if (exec.empty()) {
+        XLOG::l(
+            "Failed to start minibox '{}', can't find executables for the '{}'",
+            wtools::ConvertToUTF8(Id), path().u8string());
+        return;
+    }
+
+    auto started = minibox_.startEx(Id, exec, mode, iu_);
+>>>>>>> upstream/master
     if (!started) {
         XLOG::l("Failed to start minibox thread {}", wtools::ConvertToUTF8(Id));
         return;
@@ -935,6 +1146,38 @@ void PluginEntry::threadCore(const std::wstring& Id) {
     XLOG::d.t("Thread OFF: '{}'", path().u8string());
 }
 
+<<<<<<< HEAD
+=======
+wtools::InternalUser PluginsExecutionUser2Iu(std::string_view user) {
+    auto table = tools::SplitStringExact(wtools::ConvertToUTF16(user), L" ", 2);
+    if (table.empty()) return {};
+    if (table.size() == 2) return {table[0], table[1]};
+
+    return {table[0], L""};
+}
+
+void PluginEntry::fillInternalUser() {
+    // reset all to be safe due to possible future errors in logic
+    iu_.first.clear();
+    iu_.second.clear();
+
+    // group is coming first
+    if (!group_.empty()) {
+        iu_ = ObtainInternalUser(wtools::ConvertToUTF16(group_));
+        XLOG::t("Entry '{}' uses user '{}' as group config", path().string(),
+                wtools::ConvertToUTF8(iu_.first));
+        return;
+    }
+
+    if (user_.empty()) return;  // situation when both fields are empty
+
+    // user
+    iu_ = PluginsExecutionUser2Iu(user_);
+    XLOG::t("Entry '{}' uses user '{}' as direct config", path().string(),
+            wtools::ConvertToUTF8(iu_.first));
+}
+
+>>>>>>> upstream/master
 // if thread finished join old and start new thread again
 // if thread NOT finished quit
 void PluginEntry::restartAsyncThreadIfFinished(const std::wstring& Id) {
@@ -1196,6 +1439,10 @@ void RemoveDuplicatedPlugins(PluginMap& Out, bool CheckExists) {
 
 namespace provider::config {
 const bool G_AsyncPluginWithoutCacheAge_RunAsync = true;
+<<<<<<< HEAD
+=======
+const bool G_SetLogwatchPosToEnd = true;
+>>>>>>> upstream/master
 
 bool IsRunAsync(const PluginEntry& plugin) noexcept {
     auto run_async = plugin.async();
@@ -1349,8 +1596,14 @@ std::vector<char> RunAsyncPlugins(PluginMap& Plugins, int& Count,
         cma::tools::AddVector(out, ret);
 
         /*
+<<<<<<< HEAD
                 if (provider::config::G_AsyncPluginWithoutCacheAge_RunAsync)
            { if (entry.cacheAge() == 0) { timeout = std::max(timeout,
+=======
+                if
+           (provider::config::G_AsyncPluginWithoutCacheAge_RunAsync) {
+           if (entry.cacheAge() == 0) { timeout = std::max(timeout,
+>>>>>>> upstream/master
            entry.timeout()); async_0s.emplace_back(false, entry_name);
                     }
                 }
@@ -1366,5 +1619,32 @@ std::vector<char> RunAsyncPlugins(PluginMap& Plugins, int& Count,
 
     return out;
 }
+<<<<<<< HEAD
+=======
+}  // namespace cma
+
+namespace cma {
+std::mutex G_UsersLock;
+std::unordered_map<std::wstring, wtools::InternalUser> G_Users;
+
+wtools::InternalUser ObtainInternalUser(std::wstring_view group) {
+    std::lock_guard lk(G_UsersLock);
+    for (auto& iu : G_Users)
+        if (iu.first == group) return iu.second;
+
+    auto iu = wtools::CreateCmaUserInGroup(std::wstring(group));
+    if (iu.first.empty()) return {};
+
+    G_Users[std::wstring(group)] = iu;
+
+    return iu;
+}
+
+void KillAllInternalUsers() {
+    std::lock_guard lk(G_UsersLock);
+    for (auto& iu : G_Users) wtools::RemoveCmaUser(iu.second.first);
+    G_Users.clear();
+}
+>>>>>>> upstream/master
 
 }  // namespace cma

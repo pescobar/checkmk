@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // +------------------------------------------------------------------+
 // |             ____ _               _        __  __ _  __           |
 // |            / ___| |__   ___  ___| | __   |  \/  | |/ /           |
@@ -21,6 +22,11 @@
 // License along with GNU Make; see the file  COPYING.  If  not,  write
 // to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 // Boston, MA 02110-1301 USA.
+=======
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+// conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 #ifndef types_h
 #define types_h
@@ -28,7 +34,11 @@
 #include <limits.h>
 #include <stdint.h>
 
+<<<<<<< HEAD
 #include <experimental/filesystem>
+=======
+#include <filesystem>
+>>>>>>> upstream/master
 #include <functional>
 #include <iostream>
 #include <stdexcept>
@@ -92,8 +102,13 @@ template <>
 std::string from_string<std::string>(const std::string &value);
 
 template <>
+<<<<<<< HEAD
 std::experimental::filesystem::path
 from_string<std::experimental::filesystem::path>(const std::string &value);
+=======
+std::filesystem::path from_string<std::filesystem::path>(
+    const std::string &value);
+>>>>>>> upstream/master
 
 // Needed for only_from
 struct ipspec {

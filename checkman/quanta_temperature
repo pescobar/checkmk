@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: Temperature sensors (by QCT-RACK-MIB)
+=======
+title: Quanta Devices: Temperature Sensors
+>>>>>>> upstream/master
 agents: snmp
 catalog: hw/environment/quanta
 license: GPL
@@ -13,5 +17,9 @@ item:
  The name of the sensor as provided by the device.
 
 inventory:
+<<<<<<< HEAD
  One check for each available sensor is created.
+=======
+ One service is created for each available sensor.
+>>>>>>> upstream/master
 

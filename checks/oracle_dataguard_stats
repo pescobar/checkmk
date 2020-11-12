@@ -1,28 +1,8 @@
-#!/usr/bin/python
-# -*- encoding: utf-8; py-indent-offset: 4 -*-
-# +------------------------------------------------------------------+
-# |             ____ _               _        __  __ _  __           |
-# |            / ___| |__   ___  ___| | __   |  \/  | |/ /           |
-# |           | |   | '_ \ / _ \/ __| |/ /   | |\/| | ' /            |
-# |           | |___| | | |  __/ (__|   <    | |  | | . \            |
-# |            \____|_| |_|\___|\___|_|\_\___|_|  |_|_|\_\           |
-# |                                                                  |
-# | Copyright Mathias Kettner 2014             mk@mathias-kettner.de |
-# +------------------------------------------------------------------+
-#
-# This file is part of Check_MK.
-# The official homepage is at http://mathias-kettner.de/check_mk.
-#
-# check_mk is free software;  you can redistribute it and/or modify it
-# under the  terms of the  GNU General Public License  as published by
-# the Free Software Foundation in version 2.  check_mk is  distributed
-# in the hope that it will be useful, but WITHOUT ANY WARRANTY;  with-
-# out even the implied warranty of  MERCHANTABILITY  or  FITNESS FOR A
-# PARTICULAR PURPOSE. See the  GNU General Public License for more de-
-# tails. You should have  received  a copy of the  GNU  General Public
-# License along with GNU Make; see the file  COPYING.  If  not,  write
-# to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
-# Boston, MA 02110-1301 USA.
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
 
 # In cooperation with Thorsten Bruhns from OPITZ Consulting
 
@@ -43,6 +23,7 @@ factory_settings["oracle_dataguard_stats"] = {
 
 
 def inventory_oracle_dataguard_stats(parsed):
+<<<<<<< HEAD
     for instance in parsed.iterkeys():
         yield instance, {}
 
@@ -89,6 +70,54 @@ def parsed_oracle_dataguard_stats(info):
                 'open_mode': line[13],
             })
 
+=======
+    for instance in parsed:
+        yield instance, {}
+
+
+def parsed_oracle_dataguard_stats(info):
+
+    parsed = {}
+
+    for line in info:
+        instance = {}
+        if len(line) >= 5:
+            db_name, db_unique_name, database_role, dgstat_parm, dgstat_value = line[:5]
+            instance = parsed.setdefault("%s.%s" % (db_name, db_unique_name), {
+                'database_role': database_role,
+                'dgstat': {},
+            })
+            instance['dgstat'][dgstat_parm] = dgstat_value
+
+        if len(line) >= 6:
+            # new plugin output with switchover_status
+            instance['switchover_status'] = line[5]
+
+        if len(line) >= 13:
+            # new format for Broker and Observer information
+            instance.update({
+                'broker_state': line[6],
+                'protection_mode': line[7],
+                'fs_failover_status': line[8],
+                'fs_failover_observer_present': line[9],
+                'fs_failover_observer_host': line[10],
+                'fs_failover_target': line[11],
+                'mrp_status': line[12],
+            })
+        if len(line) >= 14:
+            # new format with open_mode
+            instance.update({
+                'broker_state': line[6],
+                'protection_mode': line[7],
+                'fs_failover_status': line[8],
+                'fs_failover_observer_present': line[9],
+                'fs_failover_observer_host': line[10],
+                'fs_failover_target': line[11],
+                'mrp_status': line[12],
+                'open_mode': line[13],
+            })
+
+>>>>>>> upstream/master
     return parsed
 
 
@@ -185,12 +214,17 @@ def check_oracle_dataguard_stats(item, params, parsed):
             else:
                 yield 2, "Managed Recovery Process not started"
 
+<<<<<<< HEAD
         for dgstat_param in sorted(dgdata['dgstat'].keys()):
+=======
+        for dgstat_param in sorted(dgdata['dgstat']):
+>>>>>>> upstream/master
 
             if dgstat_param in ('apply lag', 'transport lag') and dgdata['dgstat'][dgstat_param]:
                 seconds = get_seconds(dgdata['dgstat'][dgstat_param])
                 state = 0
                 if dgdata['dgstat'][dgstat_param]:
+<<<<<<< HEAD
 
                     paramtext = ""
                     warn = None
@@ -212,6 +246,29 @@ def check_oracle_dataguard_stats(item, params, parsed):
                                                      get_age_human_readable(crit))
                             state = 1
 
+=======
+
+                    paramtext = ""
+                    warn = None
+                    crit = None
+
+                    if params.get(dgstat_param.replace(' ', '_')):
+
+                        warn, crit = params.get(dgstat_param.replace(' ', '_'))
+
+                        if seconds is None:
+                            # => This is only for safety. This point is not reached with soconds=None from parsed function!
+                            state = 3
+                        elif crit <= seconds:
+                            paramtext = '(%s/%s)' % (get_age_human_readable(warn),
+                                                     get_age_human_readable(crit))
+                            state = 2
+                        elif warn <= seconds:
+                            paramtext = '(%s/%s)' % (get_age_human_readable(warn),
+                                                     get_age_human_readable(crit))
+                            state = 1
+
+>>>>>>> upstream/master
                         # apply_lag_min is a MINIMUM value!
                         if dgstat_param == 'apply lag' and params.get('apply_lag_min'):
                             warn, crit = params.get('apply_lag_min')

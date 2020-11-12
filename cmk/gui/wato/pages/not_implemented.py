@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/env python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,12 +24,22 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 from cmk.gui.plugins.wato.utils.base_modes import WatoMode
 from cmk.gui.plugins.wato.utils import mode_registry
 from cmk.gui.i18n import _
 from cmk.gui.globals import html
+<<<<<<< HEAD
 from cmk.gui.plugins.wato.utils.context_buttons import home_button
+=======
+>>>>>>> upstream/master
 
 
 @mode_registry.register
@@ -44,8 +55,11 @@ class ModeNotImplemented(WatoMode):
     def title(self):
         return _("Sorry")
 
+<<<<<<< HEAD
     def buttons(self):
         home_button()
 
+=======
+>>>>>>> upstream/master
     def page(self):
         html.show_error(_("This module has not yet been implemented."))

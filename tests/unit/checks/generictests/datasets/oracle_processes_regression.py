@@ -1,5 +1,17 @@
+<<<<<<< HEAD
 # -*- encoding: utf-8
 # yapf: disable
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# yapf: disable
+# type: ignore
+
+>>>>>>> upstream/master
 
 
 checkname = 'oracle_processes'
@@ -57,4 +69,8 @@ checks = {'': [(u'DB1DEV2',
                 {'levels': (70.0, 90.0)},
                 [(0,
                   '122 of 500 processes are used (24%, warn/crit at 70%/90%)',
+<<<<<<< HEAD
                   [('processes', 122, 350.0, 450.0, None, None)])])]}
+=======
+                  [('processes', 122, 350.0, 450.0, None, None)])])]}
+>>>>>>> upstream/master

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/env python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -27,12 +28,28 @@
 import cmk.gui.notifications as notifications
 from cmk.gui.i18n import _
 from cmk.gui.globals import html
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+import cmk.gui.notifications as notifications
+from cmk.gui.i18n import _
+from cmk.gui.globals import html, request
+>>>>>>> upstream/master
 
 from cmk.gui.plugins.dashboard import (
     Dashlet,
     dashlet_registry,
 )
 
+<<<<<<< HEAD
+=======
+from cmk.gui.utils.urls import makeuri_contextless
+
+>>>>>>> upstream/master
 
 @dashlet_registry.register
 class FailedNotificationsDashlet(Dashlet):
@@ -97,14 +114,26 @@ class FailedNotificationsDashlet(Dashlet):
         html.open_div(class_="has_failed_notifications")
         html.open_div(class_="failed_notifications_inner")
 
+<<<<<<< HEAD
         confirm_url = html.makeuri_contextless([], filename="clear_failed_notifications.py")
+=======
+        confirm_url = makeuri_contextless(request, [], filename="clear_failed_notifications.py")
+>>>>>>> upstream/master
         html.icon_button(confirm_url,
                          _("Clear failed notifications"),
                          "closetimewarp",
                          target="main")
 
+<<<<<<< HEAD
         view_url = html.makeuri_contextless([("view_name", "failed_notifications")],
                                             filename="view.py")
+=======
+        view_url = makeuri_contextless(
+            request,
+            [("view_name", "failed_notifications")],
+            filename="view.py",
+        )
+>>>>>>> upstream/master
         html.a(_("%d failed notifications") % failed_notifications, href=view_url)
 
         html.close_div()

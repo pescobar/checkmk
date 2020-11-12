@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,6 +24,13 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 from cmk.gui.i18n import _
 from cmk.gui.valuespec import (
@@ -38,6 +46,7 @@ from cmk.gui.plugins.wato import (
 )
 
 
+<<<<<<< HEAD
 def _parameter_valuespec_cisco_stack():
     return Dictionary(
         elements=[
@@ -76,6 +85,44 @@ def _parameter_valuespec_cisco_stack():
                              help=_(u"State machine in invalid state"))),
             ("removed",
              MonitoringState(title=u"removed", default_value=2, help=_(u"Removed from stack"))),
+=======
+def _parameter_valuespec_cisco_stack() -> Dictionary:
+    return Dictionary(
+        elements=[
+            ("waiting",
+             MonitoringState(title="waiting",
+                             default_value=0,
+                             help=_("Waiting for other switches to come online"))),
+            ("progressing",
+             MonitoringState(title="progressing",
+                             default_value=0,
+                             help=_("Master election or mismatch checks in progress"))),
+            ("added", MonitoringState(title="added", default_value=0, help=_("Added to stack"))),
+            ("ready", MonitoringState(title="ready", default_value=0, help=_("Ready"))),
+            ("sdmMismatch",
+             MonitoringState(title="sdmMismatch", default_value=1,
+                             help=_("SDM template mismatch"))),
+            ("verMismatch",
+             MonitoringState(title="verMismatch", default_value=1, help=_("OS version mismatch"))),
+            ("featureMismatch",
+             MonitoringState(title="featureMismatch",
+                             default_value=1,
+                             help=_("Configured feature mismatch"))),
+            ("newMasterInit",
+             MonitoringState(title="newMasterInit",
+                             default_value=0,
+                             help=_("Waiting for new master initialization"))),
+            ("provisioned",
+             MonitoringState(title="provisioned",
+                             default_value=0,
+                             help=_("Not an active member of the stack"))),
+            ("invalid",
+             MonitoringState(title="invalid",
+                             default_value=2,
+                             help=_("State machine in invalid state"))),
+            ("removed",
+             MonitoringState(title="removed", default_value=2, help=_("Removed from stack"))),
+>>>>>>> upstream/master
         ],
         optional_keys=[],
     )

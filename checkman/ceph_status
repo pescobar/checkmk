@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: Ceph Storage: Health status
+=======
+title: Ceph Storage: Health Status
+>>>>>>> upstream/master
 agents: linux
 catalog: os/storage
 license: GPL

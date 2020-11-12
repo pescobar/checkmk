@@ -1,28 +1,10 @@
-// +------------------------------------------------------------------+
-// |             ____ _               _        __  __ _  __           |
-// |            / ___| |__   ___  ___| | __   |  \/  | |/ /           |
-// |           | |   | '_ \ / _ \/ __| |/ /   | |\/| | ' /            |
-// |           | |___| | | |  __/ (__|   <    | |  | | . \            |
-// |            \____|_| |_|\___|\___|_|\_\___|_|  |_|_|\_\           |
-// |                                                                  |
-// | Copyright Mathias Kettner 2014             mk@mathias-kettner.de |
-// +------------------------------------------------------------------+
-//
-// This file is part of Check_MK.
-// The official homepage is at http://mathias-kettner.de/check_mk.
-//
-// check_mk is free software;  you can redistribute it and/or modify it
-// under the  terms of the  GNU General Public License  as published by
-// the Free Software Foundation in version 2.  check_mk is  distributed
-// in the hope that it will be useful, but WITHOUT ANY WARRANTY;  with-
-// out even the implied warranty of  MERCHANTABILITY  or  FITNESS FOR A
-// PARTICULAR PURPOSE. See the  GNU General Public License for more de-
-// tails. You should have  received  a copy of the  GNU  General Public
-// License along with GNU Make; see the file  COPYING.  If  not,  write
-// to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
-// Boston, MA 02110-1301 USA.
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the
+// terms and conditions defined in the file COPYING, which is part of this
+// source code package.
 
 #include "HostListStateColumn.h"
+<<<<<<< HEAD
 #include "LogEntry.h"
 #include "Row.h"
 
@@ -116,6 +98,32 @@ void HostListStateColumn::update(host *hst, const contact *auth_user,
             if (worse(static_cast<HostState>(current_state),
                       static_cast<HostState>(result))) {
                 result = current_state;
+=======
+
+#include "Row.h"
+
+#ifdef CMC
+#include <unordered_set>
+
+#include "Host.h"
+#include "State.h"
+#else
+#include "auth.h"
+#endif
+
+int32_t HostListStateColumn::getValue(Row row, const contact *auth_user) const {
+    int32_t result = 0;
+#ifdef CMC
+    if (const auto *p = columnData<std::unordered_set<Host *>>(row)) {
+        for (auto *hst : *p) {
+            if (auth_user == nullptr || hst->hasContact(auth_user)) {
+                const auto *state = hst->state();
+                update(auth_user, static_cast<HostState>(state->_current_state),
+                       state->_has_been_checked, &hst->_services,
+                       state->_acknowledged ||
+                           state->_scheduled_downtime_depth > 0,
+                       result);
+>>>>>>> upstream/master
             }
             break;
         case Type::num_svc_hard_ok:
@@ -125,5 +133,149 @@ void HostListStateColumn::update(host *hst, const contact *auth_user,
         case Type::worst_svc_hard_state:
             // TODO(sp) Why are these not handled?
             break;
+    }
+<<<<<<< HEAD
+=======
+#else
+    if (const auto *p = columnData<hostsmember *>(row)) {
+        for (hostsmember *mem = *p; mem != nullptr; mem = mem->next) {
+            host *hst = mem->host_ptr;
+            if (auth_user == nullptr ||
+                is_authorized_for(_mc, auth_user, hst, nullptr)) {
+                update(auth_user, static_cast<HostState>(hst->current_state),
+                       hst->has_been_checked != 0, hst->services,
+                       hst->problem_has_been_acknowledged != 0 ||
+                           hst->scheduled_downtime_depth > 0,
+                       result);
+            }
+        }
+    }
+#endif
+    return result;
+>>>>>>> upstream/master
+}
+
+void HostListStateColumn::update(const contact *auth_user,
+                                 HostState current_state, bool has_been_checked,
+                                 ServiceListStateColumn::service_list services,
+                                 bool handled, int32_t &result) const {
+    switch (_logictype) {
+        case Type::num_hst:
+            result++;
+            break;
+        case Type::num_hst_pending:
+            if (!has_been_checked) {
+                result++;
+            }
+            break;
+        case Type::num_hst_handled_problems:
+            if (has_been_checked && current_state != HostState::up && handled) {
+                result++;
+            }
+            break;
+        case Type::num_hst_unhandled_problems:
+            if (has_been_checked && current_state != HostState::up &&
+                !handled) {
+                result++;
+            }
+            break;
+        case Type::num_hst_up:
+            if (has_been_checked && current_state == HostState::up) {
+                result++;
+            }
+            break;
+        case Type::num_hst_down:
+            if (has_been_checked && current_state == HostState::down) {
+                result++;
+            }
+            break;
+        case Type::num_hst_unreach:
+            if (has_been_checked && current_state == HostState::unreachable) {
+                result++;
+            }
+            break;
+        case Type::worst_hst_state:
+            if (worse(current_state, static_cast<HostState>(result))) {
+                result = static_cast<int32_t>(current_state);
+            }
+            break;
+        case Type::num_svc:
+            result += ServiceListStateColumn::getValueFromServices(
+                _mc, ServiceListStateColumn::Type::num, services, auth_user);
+            break;
+        case Type::num_svc_pending:
+            result += ServiceListStateColumn::getValueFromServices(
+                _mc, ServiceListStateColumn::Type::num_pending, services,
+                auth_user);
+            break;
+        case Type::num_svc_handled_problems:
+            result += ServiceListStateColumn::getValueFromServices(
+                _mc, ServiceListStateColumn::Type::num_handled_problems,
+                services, auth_user);
+            break;
+        case Type::num_svc_unhandled_problems:
+            result += ServiceListStateColumn::getValueFromServices(
+                _mc, ServiceListStateColumn::Type::num_unhandled_problems,
+                services, auth_user);
+            break;
+        case Type::num_svc_ok:
+            result += ServiceListStateColumn::getValueFromServices(
+                _mc, ServiceListStateColumn::Type::num_ok, services, auth_user);
+            break;
+        case Type::num_svc_warn:
+            result += ServiceListStateColumn::getValueFromServices(
+                _mc, ServiceListStateColumn::Type::num_warn, services,
+                auth_user);
+            break;
+        case Type::num_svc_crit:
+            result += ServiceListStateColumn::getValueFromServices(
+                _mc, ServiceListStateColumn::Type::num_crit, services,
+                auth_user);
+            break;
+        case Type::num_svc_unknown:
+            result += ServiceListStateColumn::getValueFromServices(
+                _mc, ServiceListStateColumn::Type::num_unknown, services,
+                auth_user);
+            break;
+        case Type::worst_svc_state: {
+            auto state = ServiceListStateColumn::getValueFromServices(
+                _mc, ServiceListStateColumn::Type::worst_state, services,
+                auth_user);
+            if (worse(static_cast<ServiceState>(state),
+                      static_cast<ServiceState>(result))) {
+                result = state;
+            }
+            break;
+        }
+        case Type::num_svc_hard_ok:
+            result += ServiceListStateColumn::getValueFromServices(
+                _mc, ServiceListStateColumn::Type::num_hard_ok, services,
+                auth_user);
+            break;
+        case Type::num_svc_hard_warn:
+            result += ServiceListStateColumn::getValueFromServices(
+                _mc, ServiceListStateColumn::Type::num_hard_warn, services,
+                auth_user);
+            break;
+        case Type::num_svc_hard_crit:
+            result += ServiceListStateColumn::getValueFromServices(
+                _mc, ServiceListStateColumn::Type::num_hard_crit, services,
+                auth_user);
+            break;
+        case Type::num_svc_hard_unknown:
+            result += ServiceListStateColumn::getValueFromServices(
+                _mc, ServiceListStateColumn::Type::num_hard_unknown, services,
+                auth_user);
+            break;
+        case Type::worst_svc_hard_state: {
+            auto state = ServiceListStateColumn::getValueFromServices(
+                _mc, ServiceListStateColumn::Type::worst_hard_state, services,
+                auth_user);
+            if (worse(static_cast<ServiceState>(state),
+                      static_cast<ServiceState>(result))) {
+                result = state;
+            }
+            break;
+        }
     }
 }

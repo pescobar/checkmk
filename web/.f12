@@ -1,13 +1,24 @@
 #!/bin/bash
 set -e
 
+<<<<<<< HEAD
 SITE=${SITE:-$(cat ../.site 2>/dev/null || true)}
+=======
+SITE=${SITE:-$(until [ $PWD == / ]; do if [ -e .site ]; then
+    cat .site
+    break
+else cd ..; fi; done)}
+>>>>>>> upstream/master
 SITE=${SITE:-$(omd sites --bare | head -n 1)}
 ROOT=/omd/sites/$SITE
 
 # HACK: Keep this and the rsync below in sync with top-level Makefile.
 JAVASCRIPT_MINI=$(for jmini in main mobile side; do echo "web/htdocs/js/${jmini}_min.js"; done)
+<<<<<<< HEAD
 THEMES="classic facelift modern-dark"
+=======
+THEMES="facelift modern-dark"
+>>>>>>> upstream/master
 THEME_CSS_FILES=$(for theme in $THEMES; do echo "web/htdocs/themes/${theme}/theme.css"; done)
 THEME_JSON_FILES=$(for theme in $THEMES; do echo "web/htdocs/themes/${theme}/theme.json"; done)
 THEME_IMAGE_DIRS=$(for theme in $THEMES; do echo "web/htdocs/themes/${theme}/images"; done)
@@ -20,6 +31,7 @@ echo "Update site $SITE..."
 
 echo "Copy CRE files..."
 sudo rsync -arxR \
+<<<<<<< HEAD
       app \
       htdocs/css \
       htdocs/images \
@@ -29,12 +41,31 @@ sudo rsync -arxR \
       htdocs/sounds \
       $(for i in ${THEME_RESOURCES}; do echo ${i#web/}; done) \
       $ROOT/share/check_mk/web/
+=======
+    app \
+    htdocs/css \
+    htdocs/images \
+    htdocs/jquery \
+    htdocs/openapi \
+    $(for i in ${JAVASCRIPT_MINI}; do echo ${i#web/}; done) \
+    $(for i in ${JAVASCRIPT_MINI}; do echo ${i#web/}.map; done) \
+    htdocs/sounds \
+    $(for i in ${THEME_RESOURCES}; do echo ${i#web/}; done) \
+    $ROOT/share/check_mk/web/
+>>>>>>> upstream/master
 
 # Also deploy all other directories of same type
 if [ ${ALL_EDITIONS:-1} != 0 ]; then
     for WHAT in enterprise managed; do
         if [ -e ../$WHAT/web/.f12 ]; then
+<<<<<<< HEAD
             (cd ../$WHAT/web ; ONLY_COPY=1 ALL_EDITIONS=0 bash .f12)
+=======
+            (
+                cd ../$WHAT/web
+                ONLY_COPY=1 ALL_EDITIONS=0 bash .f12
+            )
+>>>>>>> upstream/master
         fi
     done
 fi
@@ -45,7 +76,11 @@ if [ "$KILL_SITE_APACHE" = "1" ]; then
 fi
 
 if [ -z $ONLY_COPY ]; then
+<<<<<<< HEAD
     if [ "$SITE" != - ] ; then
+=======
+    if [ "$SITE" != - ]; then
+>>>>>>> upstream/master
         sudo omd reload $SITE apache
     fi
 fi

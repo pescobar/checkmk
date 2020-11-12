@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // +------------------------------------------------------------------+
 // |             ____ _               _        __  __ _  __           |
 // |            / ___| |__   ___  ___| | __   |  \/  | |/ /           |
@@ -25,6 +26,16 @@
 #include "StringUtils.h"
 #include <algorithm>
 #include <boost/algorithm/string/replace.hpp>
+=======
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the
+// terms and conditions defined in the file COPYING, which is part of this
+// source code package.
+
+#include "StringUtils.h"
+
+#include <algorithm>
+>>>>>>> upstream/master
 #include <cctype>
 #include <sstream>
 #include <type_traits>
@@ -64,6 +75,7 @@ std::vector<std::string> split(const std::string &str, char delimiter) {
     return result;
 }
 
+<<<<<<< HEAD
 std::string lstrip(const std::string &str, const std::string &chars) {
     auto pos = str.find_first_not_of(chars);
     return pos == std::string::npos ? "" : str.substr(pos);
@@ -72,6 +84,46 @@ std::string lstrip(const std::string &str, const std::string &chars) {
 std::string rstrip(const std::string &str, const std::string &chars) {
     auto pos = str.find_last_not_of(chars);
     return pos == std::string::npos ? "" : str.substr(0, pos + 1);
+=======
+std::string join(const std::vector<std::string> &values,
+                 const std::string &separator) {
+    std::string result;
+    auto it = values.cbegin();
+    auto end = values.cend();
+    if (it != end) {
+        result.append(*it++);
+    }
+    while (it != end) {
+        result.append(separator).append(*it++);
+    }
+    return result;
+}
+
+std::string lstrip(const std::string &str, const std::string &chars) {
+    auto pos = str.find_first_not_of(chars);
+    return pos == std::string::npos ? "" : str.substr(pos);
+}
+
+std::string rstrip(const std::string &str, const std::string &chars) {
+    auto pos = str.find_last_not_of(chars);
+    return pos == std::string::npos ? "" : str.substr(0, pos + 1);
+}
+
+// TODO (sk): unit tests
+std::string_view rstrip(std::string_view str, std::string_view chars) {
+    auto pos = str.find_last_not_of(chars);
+    return (pos == std::string_view::npos)
+               ? std::string_view{str.data(), 0}         // empty
+               : std::string_view{str.data(), pos + 1};  // with data
+}
+
+// TODO (sk): unit tests
+std::string_view lstrip(std::string_view str, std::string_view chars) {
+    auto pos = str.find_first_not_of(chars);
+    return (pos == std::string_view::npos)
+               ? std::string_view{str.data(), 0}
+               : std::string_view{str.data() + pos, str.size() - pos};
+>>>>>>> upstream/master
 }
 
 std::string strip(const std::string &str, const std::string &chars) {
@@ -87,12 +139,53 @@ std::pair<std::string, std::string> nextField(const std::string &str,
                : std::make_pair(s.substr(0, pos), s.substr(pos + 1));
 }
 
+<<<<<<< HEAD
 std::string from_multi_line(const std::string &str) {
     return boost::replace_all_copy(str, "\n", R"(\n)");
 }
 
 std::string to_multi_line(const std::string &str) {
     return boost::replace_all_copy(str, R"(\n)", "\n");
+=======
+std::string replace_first(const std::string &str, const std::string &from,
+                          const std::string &to) {
+    if (str.empty() && from.empty()) {
+        return "";
+    }
+    size_t match = str.find(from);
+    if (match == std::string::npos) {
+        return str;
+    }
+    std::string result;
+    result.reserve(str.size() + to.size() - from.size());
+    return result.append(str, 0, match)
+        .append(to)
+        .append(str, match + from.size());
+}
+
+std::string replace_all(const std::string &str, const std::string &from,
+                        const std::string &to) {
+    std::string result;
+    result.reserve(str.size());
+    size_t added_after_match = from.empty() ? 1 : 0;
+    size_t pos = 0;
+    size_t match = 0;
+    while ((match = str.find(from, pos)) != std::string::npos) {
+        result.append(str, pos, match - pos)
+            .append(to)
+            .append(str, pos, added_after_match);
+        pos = match + from.size() + added_after_match;
+    }
+    return result.append(str, pos - added_after_match);
+}
+
+std::string from_multi_line(const std::string &str) {
+    return replace_all(str, "\n", R"(\n)");
+}
+
+std::string to_multi_line(const std::string &str) {
+    return replace_all(str, R"(\n)", "\n");
+>>>>>>> upstream/master
 }
 
 #ifdef CMC

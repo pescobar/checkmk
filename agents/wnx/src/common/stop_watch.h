@@ -1,3 +1,10 @@
+<<<<<<< HEAD
+=======
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+// conditions defined in the file COPYING, which is part of this source code package.
+
+>>>>>>> upstream/master
 // wtools.h
 //
 // Windows Specific Tools
@@ -20,14 +27,20 @@ class StopWatch {
 public:
     StopWatch() = default;
     StopWatch(const StopWatch& sw) {
+<<<<<<< HEAD
         std::lock_guard lk(lock_);
+=======
+>>>>>>> upstream/master
         auto [c, t] = sw.get();
         counter_ = c;
         time_ = t;
         started_ = false;
     }
     StopWatch(StopWatch&& sw) {
+<<<<<<< HEAD
         std::lock_guard lk(lock_);
+=======
+>>>>>>> upstream/master
         auto [c, t] = sw.getAndReset();
         counter_ = c;
         time_ = t;
@@ -68,6 +81,14 @@ public:
         return last_.count();
     }
 
+<<<<<<< HEAD
+=======
+    void skip() {
+        std::lock_guard lk(lock_);
+        started_ = false;
+    }
+
+>>>>>>> upstream/master
     uint64_t check() const {
         std::lock_guard lk(lock_);
         if (!started_) return 0;

@@ -8,7 +8,14 @@ description:
  ruleset for filesystems can be used to set thresholds.
 
 item:
+<<<<<<< HEAD
  The PD id is used as item
 
 inventory:
  One service for each protection domain is created
+=======
+ The PD id
+
+inventory:
+ One service is created for each protection domain.
+>>>>>>> upstream/master

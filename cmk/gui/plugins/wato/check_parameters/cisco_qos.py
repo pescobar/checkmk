@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,14 +24,27 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 from cmk.gui.i18n import _
 from cmk.gui.valuespec import (
     Alternative,
     Dictionary,
+<<<<<<< HEAD
     Integer,
     Percentage,
     RadioChoice,
+=======
+    DropdownChoice,
+    Integer,
+    Percentage,
+>>>>>>> upstream/master
     TextAscii,
     Tuple,
 )
@@ -45,7 +59,11 @@ from cmk.gui.plugins.wato import (
 def _parameter_valuespec_cisco_qos():
     return Dictionary(elements=[
         ("unit",
+<<<<<<< HEAD
          RadioChoice(
+=======
+         DropdownChoice(
+>>>>>>> upstream/master
              title=_("Measurement unit"),
              help=_("Here you can specifiy the measurement unit of the network interface"),
              default_value="bit",

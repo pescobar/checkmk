@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/env python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,6 +24,13 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 """WATO can be set into read only mode manually using this mode"""
 
 import time
@@ -34,6 +42,14 @@ import cmk.gui.config as config
 import cmk.gui.watolib as watolib
 from cmk.gui.i18n import _
 from cmk.gui.globals import html
+<<<<<<< HEAD
+=======
+from cmk.gui.breadcrumb import Breadcrumb
+from cmk.gui.page_menu import (
+    PageMenu,
+    make_simple_form_page_menu,
+)
+>>>>>>> upstream/master
 
 from cmk.gui.valuespec import (
     Tuple,
@@ -47,8 +63,16 @@ from cmk.gui.valuespec import (
 
 from cmk.gui.plugins.wato import (
     WatoMode,
+<<<<<<< HEAD
     mode_registry,
     global_buttons,
+=======
+    ActionResult,
+    mode_registry,
+    flash,
+    redirect,
+    mode_url,
+>>>>>>> upstream/master
 )
 
 
@@ -69,17 +93,33 @@ class ModeManageReadOnly(WatoMode):
     def title(self):
         return _("Manage configuration read only mode")
 
+<<<<<<< HEAD
     def buttons(self):
         global_buttons()
         html.context_button(_("Back"), watolib.folder_preserving_link([("mode", "globalvars")]),
                             "back")
 
     def action(self):
+=======
+    def page_menu(self, breadcrumb: Breadcrumb) -> PageMenu:
+        return make_simple_form_page_menu(
+            breadcrumb,
+            form_name="read_only",
+            button_name="_save",
+        )
+
+    def action(self) -> ActionResult:
+>>>>>>> upstream/master
         settings = self._vs().from_html_vars("_read_only")
         self._vs().validate_value(settings, "_read_only")
         self._settings = settings
 
         self._save()
+<<<<<<< HEAD
+=======
+        flash(_("Saved read only settings"))
+        return redirect(mode_url("read_only"))
+>>>>>>> upstream/master
 
     def _save(self):
         store.save_to_mk_file(watolib.multisite_dir() + "read_only.mk",
@@ -94,7 +134,10 @@ class ModeManageReadOnly(WatoMode):
               "read only can disable it again when another permitted user enabled it before."))
         html.begin_form("read_only", method="POST")
         self._vs().render_input("_read_only", self._settings)
+<<<<<<< HEAD
         html.button('_save', _('Save'), 'submit')
+=======
+>>>>>>> upstream/master
         html.hidden_fields()
         html.end_form()
 
@@ -105,7 +148,10 @@ class ModeManageReadOnly(WatoMode):
                           elements=[
                               ("enabled",
                                Alternative(title=_("Enabled"),
+<<<<<<< HEAD
                                            style="dropdown",
+=======
+>>>>>>> upstream/master
                                            elements=[
                                                FixedValue(
                                                    False,

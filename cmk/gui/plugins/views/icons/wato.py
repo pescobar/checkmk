@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -29,6 +30,20 @@ from cmk.gui.globals import html
 from cmk.gui.i18n import _
 from cmk.gui.plugins.views import display_options
 from cmk.gui.plugins.views.icons import Icon, icon_and_action_registry
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+import cmk.gui.config as config
+from cmk.gui.globals import html, request
+from cmk.gui.i18n import _
+from cmk.gui.plugins.views import display_options
+from cmk.gui.plugins.views.icons import Icon, icon_and_action_registry
+from cmk.gui.utils.urls import makeuri, makeuri_contextless
+>>>>>>> upstream/master
 
 
 @icon_and_action_registry.register
@@ -46,6 +61,7 @@ class WatoIcon(Icon):
               (config.user.may("wato.seeall") or config.user.may("wato.hosts"))
 
         if not may_see_hosts() or html.mobile:
+<<<<<<< HEAD
             return
 
         wato_folder = _wato_folder_from_filename(row["host_filename"])
@@ -58,6 +74,23 @@ class WatoIcon(Icon):
     def _wato_link(self, folder, site, hostname, where):
         if not config.wato_enabled:
             return
+=======
+            return None
+
+        wato_folder = _wato_folder_from_filename(row["host_filename"])
+        if wato_folder is None:
+            return None
+
+        if what == "host":
+            return self._wato_link(wato_folder, row["site"], row["host_name"], "edithost")
+
+        if row["service_description"] in ["Check_MK inventory", "Check_MK Discovery"]:
+            return self._wato_link(wato_folder, row["site"], row["host_name"], "inventory")
+
+    def _wato_link(self, folder, site, hostname, where):
+        if not config.wato_enabled:
+            return None
+>>>>>>> upstream/master
 
         if display_options.enabled(display_options.X):
             url = "wato.py?folder=%s&host=%s" % \
@@ -71,8 +104,13 @@ class WatoIcon(Icon):
                 help_txt = _("Edit this host")
                 icon = "wato"
             return icon, help_txt, url
+<<<<<<< HEAD
         else:
             return
+=======
+
+        return None
+>>>>>>> upstream/master
 
 
 @icon_and_action_registry.register
@@ -112,7 +150,11 @@ class DownloadSnmpWalkIcon(Icon):
 def _paint_download_host_info(what, row, tags, host_custom_vars, ty):
     if (what == "host" or (what == "service" and row["service_description"] == "Check_MK")) \
        and config.user.may("wato.download_agent_output") \
+<<<<<<< HEAD
        and not row["host_check_type"] == 2: # Not for shadow hosts
+=======
+       and not row["host_check_type"] == 2:  # Not for shadow hosts
+>>>>>>> upstream/master
 
         # Not 100% acurate to use the tags here, but this is the best we can do
         # with the available information.
@@ -120,7 +162,12 @@ def _paint_download_host_info(what, row, tags, host_custom_vars, ty):
         # be piggyback data available which should be downloadable.
         if ty == "walk" and "snmp" not in tags:
             return
+<<<<<<< HEAD
         elif ty == "agent" and "snmp" in tags and "tcp" not in tags:
+=======
+
+        if ty == "agent" and "snmp" in tags and "tcp" not in tags:
+>>>>>>> upstream/master
             return
 
         params = [
@@ -132,8 +179,13 @@ def _paint_download_host_info(what, row, tags, host_custom_vars, ty):
 
         # When the download icon is part of the host/service action menu, then
         # the _back_url set in paint_action_menu() needs to be used. Otherwise
+<<<<<<< HEAD
         # html.makeuri([]) (not html.requested_uri()) is the right choice.
         back_url = html.get_url_input("_back_url", html.makeuri([]))
+=======
+        # makeuri(request, []) (not html.requested_uri()) is the right choice.
+        back_url = html.get_url_input("_back_url", makeuri(request, []))
+>>>>>>> upstream/master
         if back_url:
             params.append(("back_url", back_url))
 
@@ -142,7 +194,11 @@ def _paint_download_host_info(what, row, tags, host_custom_vars, ty):
         else:
             title = _("Download SNMP walk")
 
+<<<<<<< HEAD
         url = html.makeuri_contextless(params, filename="fetch_agent_output.py")
+=======
+        url = makeuri_contextless(request, params, filename="fetch_agent_output.py")
+>>>>>>> upstream/master
         return "agent_output", title, url
 
 

@@ -1,5 +1,17 @@
+<<<<<<< HEAD
 # -*- encoding: utf-8
 # yapf: disable
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# yapf: disable
+# type: ignore
+
+>>>>>>> upstream/master
 
 
 checkname = 'systemd_units'
@@ -8,7 +20,11 @@ checkname = 'systemd_units'
 info = [['[list-unit-files]'],
         ['[all]'],
         ['UNIT', 'LOAD', 'ACTIVE', 'SUB', 'DESCRIPTION'],
+<<<<<<< HEAD
         ['proc-sys-fs-binfmt_misc.automount',
+=======
+        ['proc-sys-fs-.service.binfmt_misc.automount',  # <- nasty ".service."!
+>>>>>>> upstream/master
          'loaded',
          'active',
          'running',
@@ -387,6 +403,7 @@ info = [['[list-unit-files]'],
          'startup']]
 
 
+<<<<<<< HEAD
 discovery = {'': [], 'services': [], 'services_summary': [('Summary', {})]}
 
 
@@ -398,3 +415,40 @@ checks = {'services_summary': [('Summary',
                                  (2,
                                   '1 service failed (systemd-cryptsetup@cryptswap1)',
                                   [])])]}
+=======
+mock_host_conf = {
+    'services': [{"names": ["~virtualbox.*"]}],
+}
+
+
+discovery = {
+    '': [],
+    'services': [('virtualbox', {})],
+    'services_summary': [('Summary', {})],
+}
+
+
+DEFAULT_PARAMS = {
+    'else': 2,
+    'states': {'active': 0, 'failed': 2, 'inactive': 0},
+    'states_default': 2,
+}
+
+
+checks = {
+    'services': [
+        ('virtualbox', DEFAULT_PARAMS, [
+            (0, 'Status: active', []),
+            (0, 'LSB: VirtualBox Linux kernel module', []),
+        ]),
+    ],
+    'services_summary': [
+        ('Summary', DEFAULT_PARAMS, [
+            (0, 'Total: 32', []),
+            (0, 'Disabled: 0', []),
+            (0, 'Failed: 1', []),
+            (2, '1 service failed (systemd-cryptsetup@cryptswap1)', []),
+        ]),
+    ],
+}
+>>>>>>> upstream/master

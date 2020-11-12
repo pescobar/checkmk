@@ -8,6 +8,7 @@ else
     DEFAULT_RUNLEVELS=2 3 4 5
 endif
 
+<<<<<<< HEAD
 OMD_INSTALL := $(BUILD_HELPER_DIR)/$(OMD_DIR)-install
 OMD_SKEL := $(BUILD_HELPER_DIR)/$(OMD_DIR)-skel
 
@@ -19,6 +20,16 @@ $(OMD)-install: $(OMD_INSTALL)
 $(OMD)-skel: $(OMD_SKEL)
 
 $(OMD_INSTALL): omdlib-install
+=======
+OMD_BUILD := $(BUILD_HELPER_DIR)/$(OMD_DIR)-build
+OMD_INSTALL := $(BUILD_HELPER_DIR)/$(OMD_DIR)-install
+
+$(OMD_BUILD):
+	$(TOUCH) $@
+
+$(OMD_INSTALL): omdlib-install
+	$(MKDIR) $(DESTDIR)$(OMD_ROOT)/bin
+>>>>>>> upstream/master
 	install -m 755 $(PACKAGE_DIR)/$(OMD)/omd.bin $(DESTDIR)$(OMD_ROOT)/bin/omd
 	sed -i 's|###OMD_VERSION###|$(OMD_VERSION)|g' $(DESTDIR)$(OMD_ROOT)/bin/omd
 	$(MKDIR) $(DESTDIR)$(OMD_ROOT)/share/omd/htdocs
@@ -37,6 +48,7 @@ $(OMD_INSTALL): omdlib-install
 	install -m 644 $(PACKAGE_DIR)/$(OMD)/bash_completion $(DESTDIR)$(OMD_ROOT)/lib/omd/
 	$(MKDIR) $(DESTDIR)$(OMD_ROOT)/lib/omd/scripts/post-create
 	$(MKDIR) $(DESTDIR)$(OMD_ROOT)/lib/omd/scripts/post-update
+<<<<<<< HEAD
 	install -m 755 $(PACKAGE_DIR)/$(OMD)/hooks/* $(DESTDIR)$(OMD_ROOT)/lib/omd/hooks/
 	$(TOUCH) $@
 
@@ -54,3 +66,17 @@ $(OMD_SKEL): $(OMD_INSTALL)
 	$(TOUCH) $@
 
 $(OMD)-clean:
+=======
+	$(MKDIR) $(DESTDIR)$(OMD_ROOT)/lib/omd/hooks
+	install -m 755 $(PACKAGE_DIR)/$(OMD)/hooks/* $(DESTDIR)$(OMD_ROOT)/lib/omd/hooks/
+	$(MKDIR) $(SKEL)/etc/bash_completion.d
+	$(TOUCH) $@
+
+omdlib-install: $(PYTHON3_CACHE_PKG_PROCESS)
+	$(MKDIR) $(DESTDIR)$(OMD_ROOT)/lib/python3/omdlib
+	install -m 644 $(PACKAGE_DIR)/$(OMD)/omdlib/*.py $(DESTDIR)$(OMD_ROOT)/lib/python3/omdlib/
+	sed -i 's|###OMD_VERSION###|$(OMD_VERSION)|g' $(DESTDIR)$(OMD_ROOT)/lib/python3/omdlib/__init__.py
+	LD_LIBRARY_PATH="$(PACKAGE_PYTHON3_LD_LIBRARY_PATH)" \
+	    $(PACKAGE_PYTHON3_EXECUTABLE) -m py_compile \
+	    $(DESTDIR)$(OMD_ROOT)/lib/python3/omdlib/*.py
+>>>>>>> upstream/master

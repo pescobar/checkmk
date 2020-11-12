@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,6 +24,13 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 import cmk.gui.utils as utils
 from cmk.gui.config import theme_choices
@@ -127,7 +135,10 @@ class StartURLUserAttribute(UserAttribute):
         return Transform(
             Alternative(
                 title=_("Start URL to display in main frame"),
+<<<<<<< HEAD
                 style="dropdown",
+=======
+>>>>>>> upstream/master
                 orientation="horizontal",
                 elements=[
                     FixedValue(
@@ -163,12 +174,19 @@ class UIThemeUserAttribute(UserAttribute):
         return "ui_theme"
 
     def topic(self):
+<<<<<<< HEAD
         return "personal"
+=======
+        return "interface"
+>>>>>>> upstream/master
 
     def valuespec(self):
         return Alternative(
             title=_("User interface theme"),
+<<<<<<< HEAD
             style="dropdown",
+=======
+>>>>>>> upstream/master
             orientation="horizontal",
             elements=[
                 FixedValue(
@@ -185,3 +203,75 @@ class UIThemeUserAttribute(UserAttribute):
 
     def domain(self):
         return "multisite"
+<<<<<<< HEAD
+=======
+
+
+@user_attribute_registry.register
+class UISidebarPosition(UserAttribute):
+    @classmethod
+    def name(cls):
+        return "ui_sidebar_position"
+
+    def topic(self):
+        return "interface"
+
+    def valuespec(self):
+        return DropdownChoice(
+            title=_("Sidebar position"),
+            choices=[(None, _("Right")), ("left", _("Left"))],
+            no_preselect_value=False,
+        )
+
+    def domain(self):
+        return "multisite"
+
+
+@user_attribute_registry.register
+class UIIconPlacement(UserAttribute):
+    @classmethod
+    def name(cls):
+        return "icons_per_item"
+
+    def topic(self):
+        return "interface"
+
+    def valuespec(self):
+        return DropdownChoice(
+            title=_("Main menu icons"),
+            choices=[(None, _("Per topic")), ("entry", _("Per entry"))],
+            no_preselect_value=False,
+        )
+
+    def domain(self):
+        return "multisite"
+
+
+@user_attribute_registry.register
+class UIBasicAdvancedToggle(UserAttribute):
+    @classmethod
+    def name(cls):
+        return "show_mode"
+
+    def topic(self):
+        return "interface"
+
+    def valuespec(self):
+        return DropdownChoice(
+            title=_("Show more / Show less"),
+            help=_("In some places like e.g. the main menu Checkmk divides "
+                   "features, filters, input fields etc. in two categories, showing "
+                   "more or less entries. With this option you can set a default "
+                   "mode for unvisited menus. Alternatively, you can enforce to "
+                   "show more, so that the round button with the three dots is not "
+                   "shown at all."),
+            choices=[
+                (None, _("Default to show less")),
+                ("default_show_more", _("Default to show more")),
+                ("enforce_show_more", _("Enforce show more")),
+            ],
+        )
+
+    def domain(self):
+        return "multisite"
+>>>>>>> upstream/master

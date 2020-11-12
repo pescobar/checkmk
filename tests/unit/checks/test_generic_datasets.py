@@ -1,3 +1,11 @@
+<<<<<<< HEAD
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 """Run all possible tests on every dataset found in generictests/datasets/
 
 For simple check tests there is a framework which allows the creation of tests
@@ -16,15 +24,41 @@ required variables manually (as in ''veritas_vcs_*.py''), or create a
 regression test dataset as described in ''checks/generictests/regression.py''
 """
 from importlib import import_module
+<<<<<<< HEAD
 from pathlib2 import Path
 import pytest  # type: ignore
 from testlib import cmk_path
+=======
+import pytest  # type: ignore[import]
+
+from testlib import on_time  # type: ignore[import]
+>>>>>>> upstream/master
 import generictests
 
 pytestmark = pytest.mark.checks
 
 
+<<<<<<< HEAD
 @pytest.mark.parametrize("datasetname", generictests.DATASET_NAMES)
 def test_dataset(check_manager, datasetname):
     dataset = import_module("generictests.datasets.%s" % datasetname)
     generictests.run(check_manager, dataset)
+=======
+# TODO: Shouldn't we enable this by default for all unit tests?
+@pytest.fixture(name="mock_time", scope="module")
+def fixture_mock_time():
+    """Use this fixture for simple time + zone mocking
+
+    Use this fixture instead of directly invoking on_time in case you don't need a specific time.
+    Calling this once instead of on_time() a lot of times saves execution time.
+    """
+    with on_time(1572247138, "CET"):
+        yield
+
+
+@pytest.mark.usefixtures("mock_time", "config_load_all_checks")
+@pytest.mark.parametrize("datasetname", generictests.DATASET_NAMES)
+def test_dataset(datasetname, config_check_info):
+    dataset = import_module("generictests.datasets.%s" % datasetname)
+    generictests.run(config_check_info, dataset)
+>>>>>>> upstream/master

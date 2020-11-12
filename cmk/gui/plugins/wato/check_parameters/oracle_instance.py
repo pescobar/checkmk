@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,15 +24,28 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 from cmk.gui.i18n import _
 from cmk.gui.valuespec import (
     Transform,
+<<<<<<< HEAD
     Age,
     Dictionary,
     MonitoringState,
     TextAscii,
     Tuple,
+=======
+    Dictionary,
+    MonitoringState,
+    TextAscii,
+>>>>>>> upstream/master
 )
 
 from cmk.gui.plugins.wato import (
@@ -46,6 +60,11 @@ def _oracle_instance_transform_oracle_instance_params(p):
         if p["ignore_noarchivelog"]:
             p["noarchivelog"] = 0
         del p["ignore_noarchivelog"]
+<<<<<<< HEAD
+=======
+    if "uptime_min" in p:
+        del p["uptime_min"]
+>>>>>>> upstream/master
     return p
 
 
@@ -93,6 +112,7 @@ def _parameter_valuespec_oracle_instance():
                     title=_("State in case of Database is PRIMARY and not OPEN: "),
                 ),
             ),
+<<<<<<< HEAD
             ('uptime_min',
              Tuple(
                  title=_("Minimum required uptime"),
@@ -101,6 +121,8 @@ def _parameter_valuespec_oracle_instance():
                      Age(title=_("Critical if below")),
                  ],
              )),
+=======
+>>>>>>> upstream/master
         ],
     ),
                      forth=_oracle_instance_transform_oracle_instance_params)

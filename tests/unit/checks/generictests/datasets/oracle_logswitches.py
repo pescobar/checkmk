@@ -1,5 +1,17 @@
+<<<<<<< HEAD
 # -*- encoding: utf-8
 # yapf: disable
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# yapf: disable
+# type: ignore
+
+>>>>>>> upstream/master
 
 
 checkname = 'oracle_logswitches'
@@ -52,4 +64,8 @@ checks = {'': [('eln',
                 {'levels': (50, 100), 'levels_lower': (-1, -1)},
                 [(0,
                   '22 log switches in the last 60 minutes (warn/crit below -1/-1) (warn/crit at 50/100)',
+<<<<<<< HEAD
                   [('logswitches', 22, 50, 100, 0, None)])])]}
+=======
+                  [('logswitches', 22, 50, 100, 0, None)])])]}
+>>>>>>> upstream/master

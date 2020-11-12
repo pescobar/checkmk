@@ -7,19 +7,34 @@
 #include <chrono>
 #include <string>
 
+<<<<<<< HEAD
 #include "asio.h"
 #include "asio/ip/address_v4.hpp"
 #include "asio/ip/address_v6.hpp"
 #include "asio/ip/network_v4.hpp"
 #include "asio/ip/network_v6.hpp"
+=======
+//
+#include "asio.h"
+//
+#include <asio/ip/address_v4.hpp>
+#include <asio/ip/address_v6.hpp>
+#include <asio/ip/network_v4.hpp>
+#include <asio/ip/network_v6.hpp>
+
+>>>>>>> upstream/master
 #include "cfg.h"
 #include "check_mk.h"
 #include "common/version.h"
 #include "onlyfrom.h"
 
+<<<<<<< HEAD
 namespace cma {
 
 namespace provider {
+=======
+namespace cma::provider {
+>>>>>>> upstream/master
 
 // According to requirements from check only_from
 // 10.2.3.1  -> 10.2.3.1/32
@@ -35,7 +50,11 @@ static std::string AddressV4ToCheckMkNetworkV4(std::string_view addr) {
 // Based on integration tests from Legacy Windows Agent
 
 // asio::ip::address_v6 -> to hex word represntation
+<<<<<<< HEAD
 static std::string AddressV6ToHex(asio::ip::address_v6 addr) {
+=======
+static std::string AddressV6ToHex(const asio::ip::address_v6& addr) {
+>>>>>>> upstream/master
     auto bytes = addr.to_bytes();  // network order raw of bytes
 
     // bytes to words without changing order:
@@ -184,7 +203,13 @@ std::string CheckMk::makeBody() {
     out += makeOnlyFrom();
     out += '\n';
     return out;
+<<<<<<< HEAD
 }  // namespace provider
 
 }  // namespace provider
 };  // namespace cma
+=======
+}
+
+};  // namespace cma::provider
+>>>>>>> upstream/master

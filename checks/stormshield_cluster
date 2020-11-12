@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -24,6 +25,19 @@
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
 
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# NOTE: Careful when replacing the *-import below with a more specific import. This can cause
+# problems because it might remove variables from the check-context which are necessary for
+# resolving legacy discovery results such as [("SUMMARY", "diskstat_default_levels")]. Furthermore,
+# it might also remove variables needed for accessing discovery rulesets.
+from cmk.base.check_legacy_includes.stormshield import *  # pylint: disable=wildcard-import,unused-wildcard-import
+>>>>>>> upstream/master
 # Older versions replay an empty string if the state is Unknown / Error state
 
 sync_name_mapping = {
@@ -82,5 +96,8 @@ check_info['stormshield_cluster'] = {
             '8',  # snsHASyncStatus
         ]),
     'snmp_scan_function': stormshield_cluster_scan_function,
+<<<<<<< HEAD
     'includes': ['stormshield.include'],
+=======
+>>>>>>> upstream/master
 }

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,11 +24,19 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 import errno
 import logging
 import os
 import re
+<<<<<<< HEAD
 import signal
 import subprocess
 import traceback
@@ -35,6 +44,21 @@ from pathlib2 import Path
 
 import cmk
 import cmk.utils.store as store
+=======
+from pathlib import Path
+import signal
+import subprocess
+import traceback
+from typing import Any, Dict, List, Tuple, Set
+
+from six import ensure_binary, ensure_str
+
+import cmk.utils.version as cmk_version
+import cmk.utils.store as store
+import cmk.utils.paths
+
+import cmk.ec.export as ec  # pylint: disable=cmk-module-layer-violation
+>>>>>>> upstream/master
 
 import cmk.gui.hooks as hooks
 import cmk.gui.config as config
@@ -105,13 +129,24 @@ class ConfigDomainLiveproxy(ABCConfigDomain):
 
     @classmethod
     def enabled(cls):
+<<<<<<< HEAD
         return not cmk.is_raw_edition() and config.liveproxyd_enabled
+=======
+        return not cmk_version.is_raw_edition() and config.liveproxyd_enabled
+>>>>>>> upstream/master
 
     def config_dir(self):
         return liveproxyd_config_dir()
 
+<<<<<<< HEAD
     def save(self, settings, site_specific=False):
         super(ConfigDomainLiveproxy, self).save(settings, site_specific=site_specific)
+=======
+    def save(self, settings, site_specific=False, custom_site_path=None):
+        super(ConfigDomainLiveproxy, self).save(settings,
+                                                site_specific=site_specific,
+                                                custom_site_path=custom_site_path)
+>>>>>>> upstream/master
         self.activate()
 
     def activate(self):
@@ -119,6 +154,7 @@ class ConfigDomainLiveproxy(ABCConfigDomain):
                   _("Activating changes of Livestatus Proxy configuration"))
 
         try:
+<<<<<<< HEAD
             pidfile = cmk.utils.paths.livestatus_unix_socket + "proxyd.pid"
             try:
                 pid = int(open(pidfile).read().strip())
@@ -130,6 +166,18 @@ class ConfigDomainLiveproxy(ABCConfigDomain):
             except OSError as e:
                 # PID in pidfiles does not exist: No reload needed.
                 if e.errno != errno.ESRCH:  # [Errno 3] No such process
+=======
+            pidfile = Path(cmk.utils.paths.livestatus_unix_socket).with_name("liveproxyd.pid")
+            try:
+                with pidfile.open(encoding="utf-8") as f:
+                    pid = int(f.read().strip())
+
+                os.kill(pid, signal.SIGUSR1)
+            except OSError as e:
+                # ENOENT: No liveproxyd running: No reload needed.
+                # ESRCH: PID in pidfiles does not exist: No reload needed.
+                if e.errno not in (errno.ENOENT, errno.ESRCH):
+>>>>>>> upstream/master
                     raise
             except ValueError:
                 # ignore empty pid file (may happen during locking in
@@ -179,7 +227,11 @@ class ConfigDomainEventConsole(ABCConfigDomain):
         return config.mkeventd_enabled
 
     def config_dir(self):
+<<<<<<< HEAD
         return str(cmk.ec.export.rule_pack_dir())
+=======
+        return str(ec.rule_pack_dir())
+>>>>>>> upstream/master
 
     def activate(self):
         if getattr(config, "mkeventd_enabled", False):
@@ -190,7 +242,11 @@ class ConfigDomainEventConsole(ABCConfigDomain):
                 hooks.call("mkeventd-activate-changes")
 
     def default_globals(self):
+<<<<<<< HEAD
         return cmk.ec.defaults.default_config()
+=======
+        return ec.default_config()
+>>>>>>> upstream/master
 
 
 @config_domain_registry.register
@@ -212,7 +268,11 @@ class ConfigDomainCACertificates(ABCConfigDomain):
     ]
 
     _PEM_RE = re.compile(b"-----BEGIN CERTIFICATE-----\r?.+?\r?-----END CERTIFICATE-----\r?\n?"
+<<<<<<< HEAD
                          "", re.DOTALL)
+=======
+                         b"", re.DOTALL)
+>>>>>>> upstream/master
 
     def config_dir(self):
         return multisite_dir()
@@ -222,8 +282,15 @@ class ConfigDomainCACertificates(ABCConfigDomain):
             return os.path.join(self.config_dir(), "ca-certificates_sitespecific.mk")
         return os.path.join(self.config_dir(), "ca-certificates.mk")
 
+<<<<<<< HEAD
     def save(self, settings, site_specific=False):
         super(ConfigDomainCACertificates, self).save(settings, site_specific=site_specific)
+=======
+    def save(self, settings, site_specific=False, custom_site_path=None):
+        super(ConfigDomainCACertificates, self).save(settings,
+                                                     site_specific=site_specific,
+                                                     custom_site_path=custom_site_path)
+>>>>>>> upstream/master
 
         current_config = settings.get("trusted_certificate_authorities", {
             "use_system_wide_cas": True,
@@ -236,7 +303,12 @@ class ConfigDomainCACertificates(ABCConfigDomain):
         # Since this can be called from any WATO page it is not possible to report
         # errors to the user here. The self._update_trusted_cas() method logs the
         # errors - this must be enough for the moment.
+<<<<<<< HEAD
         self._update_trusted_cas(current_config)
+=======
+        if not site_specific and custom_site_path is None:
+            self._update_trusted_cas(current_config)
+>>>>>>> upstream/master
 
         if ConfigDomainLiveproxy.enabled():
             ConfigDomainLiveproxy().activate()
@@ -252,12 +324,18 @@ class ConfigDomainCACertificates(ABCConfigDomain):
             ]
 
     def _update_trusted_cas(self, current_config):
+<<<<<<< HEAD
         trusted_cas, errors = [], []
+=======
+        trusted_cas: List[bytes] = []
+        errors: List[str] = []
+>>>>>>> upstream/master
 
         if current_config["use_system_wide_cas"]:
             trusted, errors = self._get_system_wide_trusted_ca_certificates()
             trusted_cas += trusted
 
+<<<<<<< HEAD
         trusted_cas += current_config["trusted_cas"]
 
         store.save_file(self.trusted_cas_file, "\n".join(trusted_cas))
@@ -265,6 +343,16 @@ class ConfigDomainCACertificates(ABCConfigDomain):
 
     def _get_system_wide_trusted_ca_certificates(self):
         trusted_cas, errors = set([]), []
+=======
+        trusted_cas += [ensure_binary(e) for e in current_config["trusted_cas"]]
+
+        store.save_bytes_to_file(self.trusted_cas_file, b"\n".join(trusted_cas))
+        return errors
+
+    def _get_system_wide_trusted_ca_certificates(self) -> Tuple[List[bytes], List[str]]:
+        trusted_cas: Set[bytes] = set()
+        errors: List[str] = []
+>>>>>>> upstream/master
         for p in self.system_wide_trusted_ca_search_paths:
             cert_path = Path(p)
 
@@ -279,7 +367,11 @@ class ConfigDomainCACertificates(ABCConfigDomain):
 
                     trusted_cas.update(self._get_certificates_from_file(cert_file_path))
                 except IOError:
+<<<<<<< HEAD
                     logger.exception("error updating CA")
+=======
+                    logger.exception("Error reading certificates from %s", cert_file_path)
+>>>>>>> upstream/master
 
                     # This error is shown to the user as warning message during "activate changes".
                     # We keep this message for the moment because we think that it is a helpful
@@ -299,15 +391,30 @@ class ConfigDomainCACertificates(ABCConfigDomain):
 
         return list(trusted_cas), errors
 
+<<<<<<< HEAD
     def _get_certificates_from_file(self, path):
         try:
             return [match.group(0) for match in self._PEM_RE.finditer(open("%s" % path).read())]
+=======
+    def _get_certificates_from_file(self, path: Path) -> List[bytes]:
+        try:
+            # This IO is done as binary IO, even if the files are text files. Since we work with
+            # arbitrary files here, we can not be sure about the encoding of these files. Since we
+            # only want to concatenate them to a Checkmk global file, it is OK to treat them all as
+            # binary.
+            with path.open("rb") as f:
+                return [match.group(0) for match in self._PEM_RE.finditer(f.read())]
+>>>>>>> upstream/master
         except IOError as e:
             if e.errno == errno.ENOENT:
                 # Silently ignore e.g. dangling symlinks
                 return []
+<<<<<<< HEAD
             else:
                 raise
+=======
+            raise
+>>>>>>> upstream/master
 
     def default_globals(self):
         return {
@@ -323,7 +430,11 @@ class ConfigDomainOMD(ABCConfigDomain):
     needs_sync = True
     needs_activation = True
     ident = "omd"
+<<<<<<< HEAD
     omd_config_dir = "%s/etc/omd" % (cmk.utils.paths.omd_root)
+=======
+    omd_config_dir = "%s/etc/omd" % (cmk.utils.paths.omd_root,)
+>>>>>>> upstream/master
 
     def __init__(self):
         super(ConfigDomainOMD, self).__init__()
@@ -360,12 +471,24 @@ class ConfigDomainOMD(ABCConfigDomain):
 
         self._logger.debug("Executing \"omd config change\"")
         self._logger.debug("  Commands: %r" % config_change_commands)
+<<<<<<< HEAD
         p = subprocess.Popen(["omd", "config", "change"],
                              stdout=subprocess.PIPE,
                              stderr=subprocess.STDOUT,
                              stdin=subprocess.PIPE,
                              close_fds=True)
         stdout = p.communicate(cmk.utils.make_utf8("\n".join(config_change_commands)))[0]
+=======
+        p = subprocess.Popen(
+            ["omd", "config", "change"],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            stdin=subprocess.PIPE,
+            close_fds=True,
+            encoding="utf-8",
+        )
+        stdout, _stderr = p.communicate(input="\n".join(config_change_commands))
+>>>>>>> upstream/master
         self._logger.debug("  Exit code: %d" % p.returncode)
         self._logger.debug("  Output: %r" % stdout)
         if p.returncode != 0:
@@ -380,6 +503,7 @@ class ConfigDomainOMD(ABCConfigDomain):
     def _load_omd_config(self, path):
         settings = {}
 
+<<<<<<< HEAD
         if not os.path.exists(path):
             return {}
 
@@ -399,6 +523,30 @@ class ConfigDomainOMD(ABCConfigDomain):
                 val = value.strip().strip("'")
 
                 settings[key] = val
+=======
+        file_path = Path(path)
+
+        if not file_path.exists():
+            return {}
+
+        try:
+            with file_path.open(encoding="utf-8") as f:
+                for line in f:
+                    line = ensure_str(line.strip())
+
+                    if line == "" or line.startswith("#"):
+                        continue
+
+                    var, value = line.split("=", 1)
+
+                    if not var.startswith("CONFIG_"):
+                        continue
+
+                    key = var[7:].strip()
+                    val = value.strip().strip("'")
+
+                    settings[key] = val
+>>>>>>> upstream/master
         except Exception as e:
             raise MKGeneralException(_("Cannot read configuration file %s: %s") % (path, e))
 
@@ -411,7 +559,11 @@ class ConfigDomainOMD(ABCConfigDomain):
     # Sadly we can not use the Transform() valuespecs, because each configvar
     # only get's the value associated with it's config key.
     def _from_omd_config(self, omd_config):
+<<<<<<< HEAD
         settings = {}
+=======
+        settings: Dict[str, Any] = {}
+>>>>>>> upstream/master
 
         for key, value in omd_config.items():
             if value == "on":
@@ -458,7 +610,11 @@ class ConfigDomainOMD(ABCConfigDomain):
                 settings["MKEVENTD"] = None
 
         # Convert from OMD key (to lower, add "site_" prefix)
+<<<<<<< HEAD
         settings = dict([("site_%s" % key.lower(), val) for key, val in settings.items()])
+=======
+        settings = {"site_%s" % key.lower(): val for key, val in settings.items()}
+>>>>>>> upstream/master
 
         return settings
 
@@ -466,7 +622,11 @@ class ConfigDomainOMD(ABCConfigDomain):
     # Counterpart of the _from_omd_config() method.
     def _to_omd_config(self, settings):
         # Convert to OMD key
+<<<<<<< HEAD
         settings = dict([(key.upper()[5:], val) for key, val in settings.items()])
+=======
+        settings = {key.upper()[5:]: val for key, val in settings.items()}
+>>>>>>> upstream/master
 
         if "LIVESTATUS_TCP" in settings:
             if settings["LIVESTATUS_TCP"] is not None:

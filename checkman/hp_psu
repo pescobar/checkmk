@@ -10,7 +10,14 @@ description:
  in the MIB, appears to mean the device is unplugged, which we treat as CRIT.
 
 item:
+<<<<<<< HEAD
  The power supplies' index.
 
 inventory:
  One service per power supply is created.
+=======
+ The index of the power supply
+
+inventory:
+ One service is created for each power supply.
+>>>>>>> upstream/master

@@ -1,4 +1,16 @@
+<<<<<<< HEAD
 # yapf: disable
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# yapf: disable
+# type: ignore
+
+>>>>>>> upstream/master
 
 
 checkname = 'postgres_stats'
@@ -34,20 +46,35 @@ discovery = {'': [(u'ANALYZE adwebconnect', {}),
 checks = {
     '': [
         (u'ANALYZE adwebconnect', {'never_analyze_vacuum': (1000, 1100)}, [
+<<<<<<< HEAD
             (0, u'Table: auftrag', []),
             (0, u'Time since last vacuum: 674 d', []),
+=======
+            (0, u'Table: serveraktion', []),
+            (0, u'Time since last analyse: 676 d', []),
+>>>>>>> upstream/master
             (0, u'2 tables were never analyzed: anrede/auftrag_mediadaten', []),
             (2, u'Unhandled tables for: 20 m (warn/crit at 16 m/18 m)', []),
         ]),
         (u'ANALYZE adwebconnect', {'never_analyze_vacuum': (0, 1000 * 365 * 24 * 3600)}, [
+<<<<<<< HEAD
             (0, u'Table: auftrag', []),
             (0, u'Time since last vacuum: 674 d', []),
+=======
+            (0, u'Table: serveraktion', []),
+            (0, u'Time since last analyse: 676 d', []),
+>>>>>>> upstream/master
             (0, u'2 tables were never analyzed: anrede/auftrag_mediadaten', []),
             (1, u'Unhandled tables for: 20 m (warn/crit at 0.00 s/1000 y)', []),
         ]),
         (u'ANALYZE adwebconnect', {'never_analyze_vacuum': None}, [
+<<<<<<< HEAD
             (0, u'Table: auftrag', []),
             (0, u'Time since last vacuum: 674 d', []),
+=======
+            (0, u'Table: serveraktion', []),
+            (0, u'Time since last analyse: 676 d', []),
+>>>>>>> upstream/master
             (0, u'2 tables were never analyzed: anrede/auftrag_mediadaten', []),
             (0, u'Unhandled tables for: 20 m', []),
         ]),
@@ -55,8 +82,13 @@ checks = {
             (0, u'No never checked tables', []),
         ]),
         (u'VACUUM adwebconnect', {}, [
+<<<<<<< HEAD
             (0, u'Table: auftrag', []),
             (0, u'Time since last vacuum: 674 d', []),
+=======
+            (0, u'Table: serveraktion', []),
+            (0, u'Time since last vacuum: 676 d', []),
+>>>>>>> upstream/master
             (0, u'2 tables were never vacuumed: anrede/auftrag_mediadaten', []),
             (0, u'Unhandled tables for: 20 m', []),
         ]),

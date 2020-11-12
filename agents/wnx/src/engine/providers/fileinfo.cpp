@@ -4,6 +4,11 @@
 
 #include "providers/fileinfo.h"
 
+<<<<<<< HEAD
+=======
+#include <fmt/format.h>
+
+>>>>>>> upstream/master
 #include <filesystem>
 #include <regex>
 #include <string>
@@ -12,11 +17,18 @@
 #include "cfg.h"
 #include "cma_core.h"
 #include "common/wtools.h"
+<<<<<<< HEAD
 #include "fmt/format.h"
+=======
+>>>>>>> upstream/master
 #include "glob_match.h"
 #include "logger.h"
 #include "providers/fileinfo_details.h"
 #include "tools/_raii.h"
+<<<<<<< HEAD
+=======
+#include "tools/_win.h"
+>>>>>>> upstream/master
 #include "tools/_xlog.h"
 
 namespace cma::provider::details {
@@ -27,35 +39,60 @@ std::filesystem::path ReadBaseNameWithCase(
     const std::filesystem::path &FilePath) {
     WIN32_FIND_DATAW file_data{0};
     auto handle = ::FindFirstFileW(FilePath.wstring().c_str(), &file_data);
+<<<<<<< HEAD
     if (handle == INVALID_HANDLE_VALUE) {
         XLOG::l.e("Unexpected status {} when reading file {} ", GetLastError(),
                   FilePath.u8string());
         return FilePath.wstring();
+=======
+    if (wtools::IsInvalidHandle(handle)) {
+        XLOG::t.w("Unexpected status [{}] when reading file '{}'",
+                  GetLastError(), FilePath.u8string());
+        return FilePath;
+>>>>>>> upstream/master
     }
     ON_OUT_OF_SCOPE(FindClose(handle));
     return {file_data.cFileName};
 }
 
+<<<<<<< HEAD
 // read file name preserving case
 // on error - nothing
 std::filesystem::path GetOsPathWithCase(
     const std::filesystem::path &FilePath) noexcept {
     auto [head_part, body] = details::SplitFileInfoPathSmart(FilePath);
+=======
+// read file name preserving case the head is uppercased
+std::filesystem::path GetOsPathWithCase(
+    const std::filesystem::path &file_path) noexcept {
+    auto [head_part, body] = details::SplitFileInfoPathSmart(file_path);
+
+>>>>>>> upstream/master
     {
         auto head = head_part.wstring();
         cma::tools::WideUpper(head);
         head_part = head;
     }
+<<<<<<< HEAD
+=======
+    if (head_part.empty() && body.empty())
+        body = file_path;  // unusual case, only name
+>>>>>>> upstream/master
 
     // Scan all path and read for every chunk correct representation
     // from OS
     for (const auto &part : body) {
         head_part /= ReadBaseNameWithCase(head_part / part);
     }
+<<<<<<< HEAD
 
     return head_part;
 }
 
+=======
+    return head_part;
+}
+>>>>>>> upstream/master
 // Find out if input param contains any of the glob patterns **, * or ?.
 //
 // return               An enumeration value: None if no glob pattern
@@ -463,11 +500,23 @@ std::string ProcessFileInfoPathEntry(std::string_view entry,
         return ret;
     }
 
+<<<<<<< HEAD
     // glob entries
     auto mask = wtools::ConvertToUTF16(entry);
     const auto file_paths = FindFilesByMask(mask);
 
     if (file_paths.empty()) return {};
+=======
+    // entries with glob patterns
+    auto mask = wtools::ConvertToUTF16(entry);
+    const auto file_paths = FindFilesByMask(mask);
+
+    if (file_paths.empty()) {
+        // no files? place missing entry(as 1.5 Agent)!
+        auto ret = MakeFileInfoStringMissing(entry, mode);
+        return ret;
+    }
+>>>>>>> upstream/master
 
     std::string out;
     for (const auto &f : file_paths) {

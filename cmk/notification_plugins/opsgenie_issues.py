@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/env python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -32,13 +33,37 @@ from opsgenie.swagger_client.rest import ApiException  # type: ignore
 from opsgenie.swagger_client.models import CloseAlertRequest  # type: ignore
 from opsgenie.swagger_client.models import CreateAlertRequest  # type: ignore
 from opsgenie.swagger_client.models import TeamRecipient  # type: ignore
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+import sys
+from typing import Optional
+
+from six import ensure_str
+from opsgenie.swagger_client import AlertApi  # type: ignore[import]  # pylint: disable=import-error
+from opsgenie.swagger_client import configuration  # pylint: disable=import-error
+from opsgenie.swagger_client.models import AcknowledgeAlertRequest  # type: ignore[import] # pylint: disable=import-error
+from opsgenie.swagger_client.rest import ApiException  # type: ignore[import] # pylint: disable=import-error
+from opsgenie.swagger_client.models import CloseAlertRequest  # pylint: disable=import-error
+from opsgenie.swagger_client.models import CreateAlertRequest  # pylint: disable=import-error
+from opsgenie.swagger_client.models import TeamRecipient  # pylint: disable=import-error
+
+>>>>>>> upstream/master
 from cmk.notification_plugins import utils
 from cmk.notification_plugins.utils import retrieve_from_passwordstore
 
 
 def main():
     context = utils.collect_context()
+<<<<<<< HEAD
     priority = 'P3'
+=======
+    priority: Optional[str] = u'P3'
+>>>>>>> upstream/master
     teams_list = []
     tags_list = None
     action_list = None
@@ -51,6 +76,7 @@ def main():
     note_created = 'Alert created by Check_MK' or context.get('PARAMETER_NOTE_CREATED')
     note_closed = 'Alert closed by Check_MK' or context.get('PARAMETER_NOTE_CLOSED')
     priority = context.get('PARAMETER_PRIORITY')
+<<<<<<< HEAD
     alert_source = None or context.get('PARAMETER_SOURCE')
     owner = None or context.get('PARAMETER_OWNER')
     entity_value = None or context.get('PARAMETER_ENTITY')
@@ -60,6 +86,18 @@ def main():
 
     if context.get('PARAMETER_ACTIONSS'):
         action_list = None or context.get('PARAMETER_ACTIONSS').split(" ")
+=======
+    alert_source = context.get('PARAMETER_SOURCE')
+    owner = context.get('PARAMETER_OWNER')
+    entity_value = context.get('PARAMETER_ENTITY')
+    host_url = context.get("PARAMETER_URL")
+
+    if context.get('PARAMETER_TAGSS'):
+        tags_list = None or context.get('PARAMETER_TAGSS', u'').split(" ")
+
+    if context.get('PARAMETER_ACTIONSS'):
+        action_list = None or context.get('PARAMETER_ACTIONSS', u'').split(" ")
+>>>>>>> upstream/master
 
     if context.get('PARAMETER_TEAMSS'):
         for team in context['PARAMETER_TEAMSS'].split(" "):
@@ -110,6 +148,7 @@ $LONGSERVICEOUTPUT$
             alias,
             owner,
             entity_value,
+<<<<<<< HEAD
         )
     elif context['NOTIFICATIONTYPE'] == 'RECOVERY':
         handle_alert_deletion(key, owner, alias, alert_source, note_closed)
@@ -142,6 +181,45 @@ def handle_alert_creation(
     configure_authorization(key)
 
     body = CreateAlertRequest(  # type: ignore
+=======
+            host_url,
+        )
+    elif context['NOTIFICATIONTYPE'] == 'RECOVERY':
+        handle_alert_deletion(key, owner, alias, alert_source, note_closed, host_url)
+    elif context['NOTIFICATIONTYPE'] == 'ACKNOWLEDGEMENT':
+        handle_alert_ack(key, ack_author, ack_comment, alias, alert_source, host_url)
+    else:
+        sys.stdout.write(
+            ensure_str('Notification type %s not supported\n' % (context['NOTIFICATIONTYPE'])))
+        return 0
+
+
+def configure_authorization(key, host_url):
+    configuration.api_key['Authorization'] = key
+    configuration.api_key_prefix['Authorization'] = 'GenieKey'
+    if host_url is not None:
+        configuration.host = '%s' % host_url
+
+
+def handle_alert_creation(
+    key,
+    note_created,
+    action_list,
+    desc,
+    alert_source,
+    msg,
+    priority,
+    teams_list,
+    tags_list,
+    alias,
+    owner,
+    entity_value,
+    host_url,
+):
+    configure_authorization(key, host_url)
+
+    body = CreateAlertRequest(
+>>>>>>> upstream/master
         note=note_created,
         actions=action_list,
         description=desc,
@@ -165,8 +243,13 @@ def handle_alert_creation(
         return 2
 
 
+<<<<<<< HEAD
 def handle_alert_deletion(key, owner, alias, alert_source, note_closed):
     configure_authorization(key)
+=======
+def handle_alert_deletion(key, owner, alias, alert_source, note_closed, host_url):
+    configure_authorization(key, host_url)
+>>>>>>> upstream/master
 
     body = CloseAlertRequest(
         source=alert_source,
@@ -184,10 +267,17 @@ def handle_alert_deletion(key, owner, alias, alert_source, note_closed):
         return 2
 
 
+<<<<<<< HEAD
 def handle_alert_ack(key, ack_author, ack_comment, alias, alert_source):
     configure_authorization(key)
 
     body = AcknowledgeAlertRequest(  # type: ignore
+=======
+def handle_alert_ack(key, ack_author, ack_comment, alias, alert_source, host_url):
+    configure_authorization(key, host_url)
+
+    body = AcknowledgeAlertRequest(
+>>>>>>> upstream/master
         source=alert_source,
         user=ack_author,
         note=ack_comment,

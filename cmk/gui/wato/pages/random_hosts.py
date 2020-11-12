@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/env python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -28,15 +29,38 @@ for test and development."""
 
 import random
 
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+"""This module allows the creation of large numbers of random hosts
+for test and development."""
+
+from typing import List, Tuple, Dict, Optional, Type
+
+import random
+
+from cmk.utils.type_defs import HostName
+
+>>>>>>> upstream/master
 import cmk.gui.watolib as watolib
 import cmk.gui.forms as forms
 from cmk.gui.i18n import _
 from cmk.gui.globals import html
+<<<<<<< HEAD
 
 from cmk.gui.plugins.wato import (
     WatoMode,
     mode_registry,
 )
+=======
+from cmk.gui.breadcrumb import Breadcrumb
+from cmk.gui.page_menu import PageMenu, make_simple_form_page_menu
+from cmk.gui.wato.pages.folders import ModeFolder
+from cmk.gui.plugins.wato import (WatoMode, ActionResult, mode_registry, flash, redirect, mode_url)
+>>>>>>> upstream/master
 
 
 @mode_registry.register
@@ -50,6 +74,7 @@ class ModeRandomHosts(WatoMode):
         return ["hosts", "random_hosts"]
 
     def title(self):
+<<<<<<< HEAD
         return _("Random Hosts")
 
     def buttons(self):
@@ -81,12 +106,58 @@ class ModeRandomHosts(WatoMode):
 
         forms.end()
         html.button("start", _("Start!"), "submit")
+=======
+        return _("Add random hosts")
+
+    @classmethod
+    def parent_mode(cls) -> Optional[Type[WatoMode]]:
+        return ModeFolder
+
+    def page_menu(self, breadcrumb: Breadcrumb) -> PageMenu:
+        return make_simple_form_page_menu(
+            breadcrumb,
+            form_name="random",
+            button_name="start",
+            save_title=_("Start!"),
+        )
+
+    def action(self) -> ActionResult:
+        if not html.check_transaction():
+            return redirect(mode_url("folder", folder=watolib.Folder.current().path()))
+
+        count = html.request.get_integer_input_mandatory("count")
+        folders = html.request.get_integer_input_mandatory("folders")
+        levels = html.request.get_integer_input_mandatory("levels")
+        created = self._create_random_hosts(watolib.Folder.current(), count, folders, levels)
+        flash(_("Added %d random hosts.") % created)
+        return redirect(mode_url("folder", folder=watolib.Folder.current().path()))
+
+    def page(self):
+        html.begin_form("random")
+        forms.header(_("Add random hosts"))
+        forms.section(_("Number to create"))
+        html.write_text("%s: " % _("Hosts to create in each folder"))
+        html.text_input("count", default_value="10", cssclass="number")
+        html.set_focus("count")
+        html.br()
+        html.write_text("%s: " % _("Number of folders to create in each level"))
+        html.text_input("folders", default_value="10", cssclass="number")
+        html.br()
+        html.write_text("%s: " % _("Levels of folders to create"))
+        html.text_input("levels", default_value="1", cssclass="number")
+
+        forms.end()
+>>>>>>> upstream/master
         html.hidden_fields()
         html.end_form()
 
     def _create_random_hosts(self, folder, count, folders, levels):
         if levels == 0:
+<<<<<<< HEAD
             hosts_to_create = []
+=======
+            hosts_to_create: List[Tuple[HostName, Dict, None]] = []
+>>>>>>> upstream/master
             while len(hosts_to_create) < count:
                 host_name = "random_%010d" % int(random.random() * 10000000000)
                 hosts_to_create.append((host_name, {"ipaddress": "127.0.0.1"}, None))

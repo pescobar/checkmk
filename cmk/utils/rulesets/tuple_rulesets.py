@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/env python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -25,6 +26,15 @@
 # Boston, MA 02110-1301 USA.
 
 from typing import Dict, Generator, List, NamedTuple, Optional, Pattern, Text, Tuple  # pylint: disable=unused-import
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+from typing import List, Optional, Pattern
+>>>>>>> upstream/master
 
 import cmk.utils.debug
 from cmk.utils.regex import regex
@@ -106,7 +116,11 @@ def in_extraconf_hostlist(hostlist, hostname):
             if not use_regex and hostname == hostentry:
                 return not negate
             # Handle Regex. Note: hostname == True -> generic unknown host
+<<<<<<< HEAD
             elif use_regex and hostname != True:
+=======
+            if use_regex and hostname is not True:
+>>>>>>> upstream/master
                 if regex(hostentry).match(hostname) is not None:
                     return not negate
         except MKGeneralException:
@@ -141,8 +155,12 @@ def hosttags_match_taglist(hosttags, required_tags):
     return True
 
 
+<<<<<<< HEAD
 def convert_pattern_list(patterns):
     # type: (List[Text]) -> Optional[Pattern[Text]]
+=======
+def convert_pattern_list(patterns: List[str]) -> Optional[Pattern[str]]:
+>>>>>>> upstream/master
     """Compiles a list of service match patterns to a single regex
 
     Reducing the number of individual regex matches improves the performance dramatically.

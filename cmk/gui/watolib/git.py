@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,12 +24,27 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 import errno
 import glob
 import os
+<<<<<<< HEAD
 import subprocess
 
+=======
+from pathlib import Path
+import subprocess
+
+from six import ensure_str
+
+>>>>>>> upstream/master
 import cmk.utils
 
 import cmk.gui.config as config
@@ -64,7 +80,11 @@ def do_git_commit():
         _git_add_files()
         _git_command([
             "commit", "--untracked-files=no", "--author", author, "-m",
+<<<<<<< HEAD
             _("Initialized GIT for Check_MK")
+=======
+            _("Initialized GIT for Checkmk")
+>>>>>>> upstream/master
         ])
 
     if _git_has_pending_changes():
@@ -92,19 +112,29 @@ def _git_add_files():
 
 
 def _git_command(args):
+<<<<<<< HEAD
     command = ["git"] + [a.encode("utf-8") for a in args]
+=======
+    command = ["git"] + [ensure_str(a) for a in args]
+>>>>>>> upstream/master
     logger.debug("GIT: Execute in %s: %s", cmk.utils.paths.default_config_dir,
                  subprocess.list2cmdline(command))
     try:
         p = subprocess.Popen(command,
                              cwd=cmk.utils.paths.default_config_dir,
                              stdout=subprocess.PIPE,
+<<<<<<< HEAD
                              stderr=subprocess.STDOUT)
+=======
+                             stderr=subprocess.STDOUT,
+                             encoding="utf-8")
+>>>>>>> upstream/master
     except OSError as e:
         if e.errno == errno.ENOENT:
             raise MKGeneralException(
                 _("Error executing GIT command <tt>%s</tt>:<br><br>%s") %
                 (subprocess.list2cmdline(command), e))
+<<<<<<< HEAD
         else:
             raise
 
@@ -113,10 +143,21 @@ def _git_command(args):
         raise MKGeneralException(
             _("Error executing GIT command <tt>%s</tt>:<br><br>%s") %
             (subprocess.list2cmdline(command), p.stdout.read().replace("\n", "<br>\n")))
+=======
+        raise
+
+    status = p.wait()
+    if status != 0:
+        out = u"" if p.stdout is None else ensure_str(p.stdout.read())
+        raise MKGeneralException(
+            _("Error executing GIT command <tt>%s</tt>:<br><br>%s") %
+            (subprocess.list2cmdline(command), out.replace("\n", "<br>\n")))
+>>>>>>> upstream/master
 
 
 def _git_has_pending_changes():
     try:
+<<<<<<< HEAD
         return subprocess.Popen(["git", "status", "--porcelain"],
                                 cwd=cmk.utils.paths.default_config_dir,
                                 stdout=subprocess.PIPE).stdout.read() != ""
@@ -125,6 +166,17 @@ def _git_has_pending_changes():
             return False  # ignore missing git command
         else:
             raise
+=======
+        p = subprocess.Popen(["git", "status", "--porcelain"],
+                             cwd=cmk.utils.paths.default_config_dir,
+                             stdout=subprocess.PIPE,
+                             encoding="utf-8")
+        return p.stdout is not None and p.stdout.read() != ""
+    except OSError as e:
+        if e.errno == errno.ENOENT:
+            return False  # ignore missing git command
+        raise
+>>>>>>> upstream/master
 
 
 # TODO: Use cmk.store
@@ -133,6 +185,7 @@ def _write_gitignore_files():
 
     Only files below the "wato" directories should be under git control. The files in
     etc/check_mk/*.mk should not be put under control."""
+<<<<<<< HEAD
     open(cmk.utils.paths.default_config_dir + "/.gitignore",
          "w").write("# This file is under control of Check_MK. Please don't modify it.\n"
                     "# Your changes will be overwritten.\n"
@@ -152,3 +205,27 @@ def _write_gitignore_files():
             if os.path.exists(cmk.utils.paths.default_config_dir + "/" + subdir + "/wato"):
                 open(cmk.utils.paths.default_config_dir + "/" + subdir + "/wato/.gitignore",
                      "w").write("!*\n")
+=======
+    config_dir = Path(cmk.utils.paths.default_config_dir)
+
+    with config_dir.joinpath(".gitignore").open("w", encoding="utf-8") as f:
+        f.write("# This file is under control of Checkmk. Please don't modify it.\n"
+                "# Your changes will be overwritten.\n"
+                "\n"
+                "*\n"
+                "!*.d\n"
+                "!.gitignore\n"
+                "*swp\n"
+                "*.mk.new\n")
+
+    for subdir in config_dir.iterdir():
+        if not subdir.name.endswith(".d"):
+            continue
+
+        with subdir.joinpath(".gitignore").open("w", encoding="utf-8") as f:
+            f.write("*\n!wato\n")
+
+        if subdir.joinpath("wato").exists():
+            with subdir.joinpath("wato/.gitignore").open("w", encoding="utf-8") as f:
+                f.write("!*\n")
+>>>>>>> upstream/master

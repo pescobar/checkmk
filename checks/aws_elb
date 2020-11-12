@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -27,6 +28,23 @@
 
 def parse_aws_elb(info):
     metrics = _extract_aws_metrics_by_labels([
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# NOTE: Careful when replacing the *-import below with a more specific import. This can cause
+# problems because it might remove variables from the check-context which are necessary for
+# resolving legacy discovery results such as [("SUMMARY", "diskstat_default_levels")]. Furthermore,
+# it might also remove variables needed for accessing discovery rulesets.
+from cmk.base.check_legacy_includes.aws import *  # pylint: disable=wildcard-import,unused-wildcard-import
+
+
+def parse_aws_elb(info):
+    metrics = extract_aws_metrics_by_labels([
+>>>>>>> upstream/master
         "RequestCount",
         "SurgeQueueLength",
         "SpilloverCount",
@@ -44,7 +62,11 @@ def parse_aws_elb(info):
     # We get exactly one entry: {INST-ID: METRICS}
     # INST-ID is the piggyback host name
     try:
+<<<<<<< HEAD
         return metrics.values()[-1]
+=======
+        return list(metrics.values())[-1]
+>>>>>>> upstream/master
     except IndexError:
         return {}
 
@@ -63,6 +85,7 @@ def parse_aws_elb(info):
 # Spillover count metric is incremented. In a healthy system, this metric is
 # Always equal to zero.
 
+<<<<<<< HEAD
 factory_settings['aws_elb_statistics'] = {
     'levels_surge_queue_length': (1024, 1024),
     'levels_spillover': (1, 1),
@@ -83,15 +106,52 @@ def check_aws_elb_statistics(item, params, parsed):
                            'aws_spillover',
                            params['levels_spillover'],
                            infoname='Spillover')
+=======
+# levels_spillover depends on the cache_interval of the class ELB in cmk/special_agents/agent_aws.py
+# we want levels_spillover < 1 / (2 * cache_interval), such that the service goes CRIT as soon as
+# there is a single count; the factor of 2 comes from AWSSection.period in
+# cmk/special_agents/agent_aws.py
+factory_settings['aws_elb_statistics'] = {
+    'levels_surge_queue_length': (1024, 1024),
+    'levels_spillover': (0.001, 0.001),
+}
+
+_aws_elb_statistics_metrics = [
+    'SurgeQueueLength',
+    'SpilloverCount',
+]
+
+
+def check_aws_elb_statistics(item, params, parsed):
+    metric_infos = []
+    for cw_metric_name, info_name, human_readable_func in zip(
+            _aws_elb_statistics_metrics, ['Surge queue length', 'Spillover'],
+        [int, aws_get_counts_rate_human_readable]):
+        key = '_'.join(word.lower() for word in info_name)
+        metric_infos.append({
+            'metric_val': parsed.get(cw_metric_name),
+            'metric_name': 'aws_%s' % key,
+            'levels': params.get('levels_%s' % key),
+            'human_readable_func': human_readable_func,
+            'info_name': info_name
+        })
+    return check_aws_metrics(metric_infos)
+>>>>>>> upstream/master
 
 
 check_info['aws_elb'] = {
     'parse_function': parse_aws_elb,
+<<<<<<< HEAD
     'inventory_function': lambda p: inventory_aws_generic_single(
         p, ['SurgeQueueLength', 'SpilloverCount']),
     'check_function': check_aws_elb_statistics,
     'service_description': 'AWS/ELB Statistics',
     'includes': ['aws.include'],
+=======
+    'inventory_function': lambda p: inventory_aws_generic_single(p, _aws_elb_statistics_metrics),
+    'check_function': check_aws_elb_statistics,
+    'service_description': 'AWS/ELB Statistics',
+>>>>>>> upstream/master
     'has_perfdata': True,
     'default_levels_variable': 'aws_elb_statistics',
     'group': 'aws_elb_statistics',
@@ -109,19 +169,31 @@ check_info['aws_elb'] = {
 
 
 def check_aws_elb_latency(item, params, parsed):
+<<<<<<< HEAD
     latency = parsed.get("Latency")
     if latency is not None:
         yield check_levels(latency,
                            'aws_load_balancer_latency',
                            params.get('levels_latency'),
                            human_readable_func=get_age_human_readable)
+=======
+    return check_aws_metrics([{
+        'metric_val': parsed.get("Latency"),
+        'metric_name': 'aws_load_balancer_latency',
+        'levels': params.get('levels_latency'),
+        'human_readable_func': get_age_human_readable
+    }])
+>>>>>>> upstream/master
 
 
 check_info['aws_elb.latency'] = {
     'inventory_function': lambda p: inventory_aws_generic_single(p, ['Latency']),
     'check_function': check_aws_elb_latency,
     'service_description': 'AWS/ELB Latency',
+<<<<<<< HEAD
     'includes': ['aws.include'],
+=======
+>>>>>>> upstream/master
     'has_perfdata': True,
     'group': 'aws_elb_latency',
 }
@@ -138,6 +210,7 @@ check_info['aws_elb.latency'] = {
 
 
 def check_aws_elb_http_elb(item, params, parsed):
+<<<<<<< HEAD
     now = time.time()
     request_count = parsed.get('RequestCount')
     if request_count is not None:
@@ -173,6 +246,20 @@ check_info['aws_elb.http_elb'] = {
     'check_function': check_aws_elb_http_elb,
     'service_description': 'AWS/ELB HTTP ELB',
     'includes': ['aws.include'],
+=======
+    return check_aws_http_errors(
+        params.get("levels_load_balancers", params),
+        parsed,
+        ['4xx', '5xx'],
+        'HTTPCode_ELB_%s',
+    )
+
+
+check_info['aws_elb.http_elb'] = {
+    'inventory_function': lambda p: inventory_aws_generic_single(p, ['RequestCount']),
+    'check_function': check_aws_elb_http_elb,
+    'service_description': 'AWS/ELB HTTP ELB',
+>>>>>>> upstream/master
     'has_perfdata': True,
     'group': 'aws_elb_http',
 }
@@ -189,6 +276,7 @@ check_info['aws_elb.http_elb'] = {
 
 
 def check_aws_elb_http_backend(item, params, parsed):
+<<<<<<< HEAD
     now = time.time()
     request_count = parsed.get('RequestCount')
     if request_count is not None:
@@ -234,6 +322,20 @@ check_info['aws_elb.http_backend'] = {
     'check_function': check_aws_elb_http_backend,
     'service_description': 'AWS/ELB HTTP Backend',
     'includes': ['aws.include'],
+=======
+    return check_aws_http_errors(
+        params.get("levels_backend_targets", params),
+        parsed,
+        ['2xx', '3xx', '4xx', '5xx'],
+        'HTTPCode_Backend_%s',
+    )
+
+
+check_info['aws_elb.http_backend'] = {
+    'inventory_function': lambda p: inventory_aws_generic_single(p, ['RequestCount']),
+    'check_function': check_aws_elb_http_backend,
+    'service_description': 'AWS/ELB HTTP Backend',
+>>>>>>> upstream/master
     'has_perfdata': True,
     'group': 'aws_elb_http',
 }
@@ -250,16 +352,35 @@ check_info['aws_elb.http_backend'] = {
 
 
 def check_aws_elb_healthy_hosts(item, params, parsed):
+<<<<<<< HEAD
     try:
         healthy_hosts = int(parsed["HealthyHostCount"])
+=======
+
+    go_stale = True
+
+    try:
+        healthy_hosts = int(parsed["HealthyHostCount"])
+        go_stale = False
+>>>>>>> upstream/master
     except (KeyError, ValueError):
         healthy_hosts = None
 
     try:
         unhealthy_hosts = int(parsed["UnHealthyHostCount"])
+<<<<<<< HEAD
     except (KeyError, ValueError):
         unhealthy_hosts = None
 
+=======
+        go_stale = False
+    except (KeyError, ValueError):
+        unhealthy_hosts = None
+
+    if go_stale:
+        raise MKCounterWrapped("Currently no data from AWS")
+
+>>>>>>> upstream/master
     if healthy_hosts is not None:
         yield 0, 'Healthy hosts: %s' % healthy_hosts
 
@@ -288,7 +409,10 @@ check_info['aws_elb.healthy_hosts'] = {
         p, ['HealthyHostCount', 'UnHealthyHostCount']),
     'check_function': check_aws_elb_healthy_hosts,
     'service_description': 'AWS/ELB Healthy Hosts',
+<<<<<<< HEAD
     'includes': ['aws.include'],
+=======
+>>>>>>> upstream/master
     'group': 'aws_elb_healthy_hosts',
 }
 
@@ -310,19 +434,32 @@ check_info['aws_elb.healthy_hosts'] = {
 
 
 def check_aws_elb_backend_connection_errors(item, params, parsed):
+<<<<<<< HEAD
     now = time.time()
     backend_connection_errors = parsed.get("BackendConnectionErrors")
     if backend_connection_errors is not None:
         yield check_levels(
             get_rate('aws_elb_backend_connection_errors', now, backend_connection_errors),
             'backend_connection_errors_rate', params.get('levels_backend_connection_errors_rate'))
+=======
+    return check_aws_metrics([{
+        'metric_val': parsed.get("BackendConnectionErrors"),
+        'metric_name': 'aws_backend_connection_errors_rate',
+        'levels': params.get('levels_backend_connection_errors_rate'),
+        'human_readable_func': aws_get_counts_rate_human_readable,
+        'info_name': 'Backend connection errors'
+    }])
+>>>>>>> upstream/master
 
 
 check_info['aws_elb.backend_connection_errors'] = {
     'inventory_function': lambda p: inventory_aws_generic_single(p, ['BackendConnectionErrors']),
     'check_function': check_aws_elb_backend_connection_errors,
     'service_description': 'AWS/ELB Backend Connection Errors',
+<<<<<<< HEAD
     'includes': ['aws.include'],
+=======
+>>>>>>> upstream/master
     'has_perfdata': True,
     'group': 'aws_elb_backend_connection_errors',
 }

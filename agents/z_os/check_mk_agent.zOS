@@ -36,8 +36,12 @@ dir=$(pwd)
 
 # Processes
 echo '<<<ps>>>'
+<<<<<<< HEAD
 echo 'ps -ef -o user,vsz,vsz64,pcpu,comm' | su | sed -e 1d -e 's/ *\([^ ]*\) *\([^ ]*\) *\([^ ]*\) *\([^ ]*\) */(\1,\2,\3,\4) /'
 
+=======
+echo 'COLUMNS=10000 ps -ef -o user,vsz,vsz64,time,etime,pid,args' | su | sed -e 1d -e 's/ *\([^ ]*\) *\([^ ]*\) *\([^ ]*\  ) *\([^ ]*\) *\([^ ]*\) *\([^ ]*\) */(\1,\2,\3,\4\/\5,\6) /'
+>>>>>>> upstream/master
 
 # Uptime
 echo '<<<uptime>>>'
@@ -63,7 +67,11 @@ fi
 
 
 # Local checks
+<<<<<<< HEAD
 echo '<<<local>>>'
+=======
+echo '<<<local:sep(0)>>>'
+>>>>>>> upstream/master
 if cd $LOCALDIR ; then
     for skript in $(ls) ; do
         if [ -f "$skript" -a -x "$skript" ] ; then

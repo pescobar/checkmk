@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,13 +24,27 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 # {
 #     'port': 9000,
 #     'password': 'yeah',
 #     'sections': ['jvm', 'cluster_health', 'failures'],
 #     'since': 30,
+<<<<<<< HEAD
 #     'user': 'hell'
+=======
+#     'user': 'hell',
+#     'display_node_details': 'node',
+#     'display_sidecar_details': 'sidecar',
+#     'display_source_details': 'source',
+>>>>>>> upstream/master
 # }
 
 
@@ -45,6 +60,15 @@ def agent_graylog_arguments(params, hostname, ipaddress):
         params["user"],
         "-s",
         passwordstore_get_cmdline("%s", params["password"]),
+<<<<<<< HEAD
+=======
+        "--display_node_details",
+        params["display_node_details"],
+        "--display_sidecar_details",
+        params["display_sidecar_details"],
+        "--display_source_details",
+        params["display_source_details"],
+>>>>>>> upstream/master
     ]
 
     if "port" in params:

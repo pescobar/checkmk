@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # +------------------------------------------------------------------+
 # |             ____ _               _        __  __ _  __           |
 # |            / ___| |__   ___  ___| | __   |  \/  | |/ /           |
@@ -21,12 +22,23 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 # This script creates an ASCII email. It replaces the builtin ASCII email feature and
 # is configurable via WATO with named parameters (only).
 
 import sys
 from email.mime.text import MIMEText
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/master
 from cmk.notification_plugins import utils
 
 opt_debug = '-d' in sys.argv
@@ -144,7 +156,11 @@ def main():
     if bulk_mode:
         content_txt = ""
         parameters, contexts = utils.read_bulk_contexts()
+<<<<<<< HEAD
         hosts = set([])
+=======
+        hosts = set()
+>>>>>>> upstream/master
         for context in contexts:
             context.update(parameters)
             content_txt += construct_content(context)
@@ -168,8 +184,16 @@ def main():
         sys.exit(2)
 
     # Create the mail and send it
+<<<<<<< HEAD
     from_address = context.get("PARAMETER_FROM")
     reply_to = context.get("PARAMETER_REPLY_TO")
+=======
+    from_address = utils.format_address(
+        context.get("PARAMETER_FROM_DISPLAY_NAME", u""),
+        context.get("PARAMETER_FROM_ADDRESS", utils.default_from_address()))
+    reply_to = utils.format_address(context.get("PARAMETER_REPLY_TO_DISPLAY_NAME", u""),
+                                    context.get("PARAMETER_REPLY_TO_ADDRESS", u""))
+>>>>>>> upstream/master
     m = utils.set_mail_headers(mailto, subject, from_address, reply_to,
                                MIMEText(content_txt, 'plain', _charset='utf-8'))
     try:

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/env python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -25,6 +26,15 @@
 # Boston, MA 02110-1301 USA.
 
 # Future convention within all Check_MK modules for variable names:
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# Future convention within all Checkmk modules for variable names:
+>>>>>>> upstream/master
 #
 # - host_name     - Monitoring name of a host (string)
 # - node_name     - Name of cluster member (string)
@@ -35,6 +45,11 @@ import logging
 import os
 import sys
 import getopt
+<<<<<<< HEAD
+=======
+import socket
+import errno
+>>>>>>> upstream/master
 
 # Needs to be placed before cmk modules, because they are not available
 # when executed as non site user. Alas, this screws up our import ordering
@@ -48,6 +63,7 @@ from cmk.utils.exceptions import MKGeneralException, MKTerminate, MKBailOut
 import cmk.utils.debug
 import cmk.utils.log
 import cmk.utils.paths
+<<<<<<< HEAD
 
 import cmk_base
 import cmk_base.console as console
@@ -55,17 +71,39 @@ import cmk_base.config as config
 import cmk_base.profiling as profiling
 from cmk_base.modes import modes
 import cmk_base.check_api as check_api
+=======
+from cmk.utils.log import console
+
+import cmk.base.caching  # pylint: disable=cmk-module-layer-violation
+import cmk.base.config as config  # pylint: disable=cmk-module-layer-violation
+import cmk.base.profiling as profiling  # pylint: disable=cmk-module-layer-violation
+from cmk.base.modes import modes  # pylint: disable=cmk-module-layer-violation
+import cmk.base.check_api as check_api  # pylint: disable=cmk-module-layer-violation
+import cmk.base.crash_reporting  # pylint: disable=cmk-module-layer-violation
+import cmk.base.utils  # pylint: disable=cmk-module-layer-violation
+>>>>>>> upstream/master
 
 cmk.utils.log.setup_console_logging()
 logger = logging.getLogger("cmk.base")
 
+<<<<<<< HEAD
 cmk_base.utils.register_sigint_handler()
+=======
+cmk.base.utils.register_sigint_handler()
+>>>>>>> upstream/master
 
 try:
     opts, args = getopt.getopt(sys.argv[1:], modes.short_getopt_specs(), modes.long_getopt_specs())
 except getopt.GetoptError as err:
     console.error("ERROR: %s\n\n" % err)
+<<<<<<< HEAD
     modes.get("help").handler_function()
+=======
+    help_function = modes.get("help").handler_function
+    if help_function is None:
+        raise TypeError()
+    help_function()
+>>>>>>> upstream/master
     sys.exit(1)
 
 # First load the general modifying options
@@ -82,7 +120,11 @@ try:
     # At least in case the config is needed, the checks are needed too, because
     # the configuration may refer to check config variable names.
     if mode_name not in modes.non_checks_options():
+<<<<<<< HEAD
         config.load_all_checks(check_api.get_check_api_context)
+=======
+        config.load_all_agent_based_plugins(check_api.get_check_api_context)
+>>>>>>> upstream/master
 
     # Read the configuration files (main.mk, autochecks, etc.), but not for
     # certain operation modes that does not need them and should not be harmed
@@ -95,11 +137,16 @@ try:
         exit_status = modes.call(mode_name, mode_args, opts, args)
         done = True
 
+<<<<<<< HEAD
     # When no mode was found, Check_MK is running the "check" mode
+=======
+    # When no mode was found, Checkmk is running the "check" mode
+>>>>>>> upstream/master
     if not done:
         if (args and len(args) <= 2) or "--keepalive" in [o[0] for o in opts]:
             exit_status = modes.call("--check", None, opts, args)
         else:
+<<<<<<< HEAD
             modes.get("help").handler_function()
             exit_status = 0
 
@@ -108,6 +155,18 @@ try:
 
 except MKTerminate as e:
     console.output("<Interrupted>\n", stream=sys.stderr)
+=======
+            help_function = modes.get("help").handler_function
+            if help_function is None:
+                raise TypeError()
+            help_function()
+            exit_status = 0
+
+    sys.exit(exit_status)
+
+except MKTerminate:
+    sys.stderr.write("<Interrupted>\n")
+>>>>>>> upstream/master
     sys.exit(1)
 
 except (MKGeneralException, MKBailOut) as e:
@@ -115,3 +174,22 @@ except (MKGeneralException, MKBailOut) as e:
     if cmk.utils.debug.enabled():
         raise
     sys.exit(3)
+<<<<<<< HEAD
+=======
+
+except socket.error as e:
+    if e.errno == errno.EPIPE:
+        # this is not an error, caller closes socket(s) and will kill cmk too
+        sys.exit(4)
+    crash = cmk.base.crash_reporting.CMKBaseCrashReport.from_exception()
+    cmk.base.crash_reporting.CrashReportStore().save(crash)
+    raise
+
+except Exception:
+    crash = cmk.base.crash_reporting.CMKBaseCrashReport.from_exception()
+    cmk.base.crash_reporting.CrashReportStore().save(crash)
+    raise
+
+finally:
+    profiling.output_profile()
+>>>>>>> upstream/master

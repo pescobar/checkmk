@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/env python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,6 +24,15 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+from cmk.base.check_legacy_includes.k8s import *  # pylint: disable=wildcard-import,unused-wildcard-import
+>>>>>>> upstream/master
 
 
 def inv_k8s_job_container(info, inventory_tree, status_data_tree):
@@ -32,7 +42,11 @@ def inv_k8s_job_container(info, inventory_tree, status_data_tree):
     path = "software.applications.kubernetes.job_container:"
     inv_node = inventory_tree.get_list(path)
 
+<<<<<<< HEAD
     for container_name, container_data in sorted(parsed.iteritems()):
+=======
+    for container_name, container_data in sorted(parsed.items()):
+>>>>>>> upstream/master
         inv_node.append({
             'name': container_name,
             'image': container_data['image'],
@@ -42,5 +56,8 @@ def inv_k8s_job_container(info, inventory_tree, status_data_tree):
 
 inv_info['k8s_job_container'] = {
     'inv_function': inv_k8s_job_container,
+<<<<<<< HEAD
     'includes': ['k8s.include'],
+=======
+>>>>>>> upstream/master
 }

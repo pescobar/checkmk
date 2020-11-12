@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // +------------------------------------------------------------------+
 // |             ____ _               _        __  __ _  __           |
 // |            / ___| |__   ___  ___| | __   |  \/  | |/ /           |
@@ -21,6 +22,11 @@
 // License along with GNU Make; see the file  COPYING.  If  not,  write
 // to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 // Boston, MA 02110-1301 USA.
+=======
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+// conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 import * as utils from "utils";
 
@@ -32,23 +38,33 @@ var g_reload_pause_timer = null;
 // the user with a pause overlay icon. The icon also shows the time when
 // the pause ends. Once the user clicks on the pause icon or the time
 // is reached, the whole page is reloaded.
+<<<<<<< HEAD
 export function pause(seconds)
 {
+=======
+export function pause(seconds) {
+>>>>>>> upstream/master
     utils.stop_reload_timer();
     draw_overlay(seconds);
     set_timer(seconds);
 }
 
+<<<<<<< HEAD
 
 export function stop()
 {
     if (!g_reload_pause_timer)
         return;
+=======
+export function stop() {
+    if (!g_reload_pause_timer) return;
+>>>>>>> upstream/master
 
     clearTimeout(g_reload_pause_timer);
     g_reload_pause_timer = null;
 
     var counter = document.getElementById("reload_pause_counter");
+<<<<<<< HEAD
     if (counter)
         counter.style.display = "none";
 }
@@ -58,36 +74,59 @@ function set_timer(seconds)
 {
     if (g_reload_pause_timer)
         clearTimeout(g_reload_pause_timer);
+=======
+    if (counter) counter.style.display = "none";
+}
+
+function set_timer(seconds) {
+    if (g_reload_pause_timer) clearTimeout(g_reload_pause_timer);
+>>>>>>> upstream/master
 
     g_reload_pause_timer = setTimeout(function () {
         update_timer(seconds);
     }, 1000);
 }
 
+<<<<<<< HEAD
 
 function update_timer(seconds_left)
 {
+=======
+function update_timer(seconds_left) {
+>>>>>>> upstream/master
     seconds_left -= 1;
 
     if (seconds_left <= 0) {
         window.location.reload(false);
+<<<<<<< HEAD
     }
     else {
+=======
+    } else {
+>>>>>>> upstream/master
         // update the pause counter
         var counter = document.getElementById("reload_pause_counter");
         if (counter) {
             counter.innerHTML = seconds_left;
         }
 
+<<<<<<< HEAD
         g_reload_pause_timer = setTimeout(function() {
+=======
+        g_reload_pause_timer = setTimeout(function () {
+>>>>>>> upstream/master
             update_timer(seconds_left);
         }, 1000);
     }
 }
 
+<<<<<<< HEAD
 
 function draw_overlay(seconds)
 {
+=======
+function draw_overlay(seconds) {
+>>>>>>> upstream/master
     var container = document.getElementById("reload_pause");
     var counter;
     if (container) {

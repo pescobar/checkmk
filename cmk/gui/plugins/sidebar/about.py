@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/env python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -27,6 +28,17 @@
 from cmk.gui.i18n import _
 from cmk.gui.globals import html
 from . import SidebarSnapin, snapin_registry, bulletlink
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+from cmk.gui.i18n import _
+from cmk.gui.globals import html
+from cmk.gui.plugins.sidebar import SidebarSnapin, snapin_registry, bulletlink
+>>>>>>> upstream/master
 
 
 @snapin_registry.register
@@ -37,11 +49,19 @@ class About(SidebarSnapin):
 
     @classmethod
     def title(cls):
+<<<<<<< HEAD
         return _("About Check_MK")
 
     @classmethod
     def description(cls):
         return _("Links to webpage, documentation and download of Check_MK")
+=======
+        return _("About Checkmk")
+
+    @classmethod
+    def description(cls):
+        return _("Links to webpage, documentation and download of Checkmk")
+>>>>>>> upstream/master
 
     def show(self):
         html.open_ul()

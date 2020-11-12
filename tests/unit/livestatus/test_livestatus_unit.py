@@ -1,4 +1,13 @@
+<<<<<<< HEAD
 # -*- coding: utf-8 -*-
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+>>>>>>> upstream/master
 # pylint: disable=redefined-outer-name
 
 import errno
@@ -6,13 +15,18 @@ import socket
 import ssl
 from contextlib import closing
 
+<<<<<<< HEAD
 import six
 import pytest  # type: ignore
+=======
+import pytest  # type: ignore[import]
+>>>>>>> upstream/master
 
 import omdlib.certs as certs
 import livestatus
 
 
+<<<<<<< HEAD
 @pytest.mark.parametrize("source, utf8str", [
     ('hi', u'hi'),
     ("há li", u"há li"),
@@ -29,6 +43,12 @@ def test_ensure_unicode(source, utf8str):
 ])
 def test_ensure_bytestr(source, bytestr):
     assert livestatus.ensure_bytestr(source) == bytestr
+=======
+# Override top level fixture to make livestatus connects possible here
+@pytest.fixture
+def prevent_livestatus_connect():
+    pass
+>>>>>>> upstream/master
 
 
 @pytest.fixture
@@ -43,7 +63,11 @@ def sock_path(monkeypatch, tmp_path):
     sock_path = omd_root / "tmp" / "run" / "live"
     monkeypatch.setenv("OMD_ROOT", "%s" % omd_root)
     # Will be fixed with pylint >2.0
+<<<<<<< HEAD
     sock_path.parent.mkdir(parents=True)  # pylint: disable=no-member
+=======
+    sock_path.parent.mkdir(parents=True)
+>>>>>>> upstream/master
     return sock_path
 
 
@@ -64,7 +88,11 @@ def test_lqencode(query_part):
 ])
 def test_quote_dict(inp, expected_result):
     result = livestatus.quote_dict(inp)
+<<<<<<< HEAD
     assert isinstance(result, six.text_type)
+=======
+    assert isinstance(result, str)
+>>>>>>> upstream/master
     assert result == expected_result
 
 
@@ -101,6 +129,7 @@ def test_livestatus_local_connection(sock_path):
 
 def test_livestatus_ipv4_connection():
     with closing(socket.socket(socket.AF_INET)) as sock:
+<<<<<<< HEAD
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)  # pylint: disable=no-member
 
         # Pick a random port
@@ -108,6 +137,15 @@ def test_livestatus_ipv4_connection():
         port = sock.getsockname()[1]  # pylint: disable=no-member
 
         sock.listen(1)  # pylint: disable=no-member
+=======
+        sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+
+        # Pick a random port
+        sock.bind(("127.0.0.1", 0))
+        port = sock.getsockname()[1]
+
+        sock.listen(1)
+>>>>>>> upstream/master
 
         live = livestatus.SingleSiteConnection("tcp:127.0.0.1:%d" % port)
         live.connect()
@@ -115,20 +153,34 @@ def test_livestatus_ipv4_connection():
 
 def test_livestatus_ipv6_connection():
     with closing(socket.socket(socket.AF_INET6)) as sock:
+<<<<<<< HEAD
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)  # pylint: disable=no-member
 
         # Pick a random port
         try:
             sock.bind(("::1", 0))  # pylint: disable=no-member
+=======
+        sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+
+        # Pick a random port
+        try:
+            sock.bind(("::1", 0))
+>>>>>>> upstream/master
         except socket.error as e:
             # Skip this test in case ::1 can not be bound to
             # (happened in docker container with IPv6 disabled)
             if e.errno == errno.EADDRNOTAVAIL:
                 pytest.skip("Unable to bind to ::1 (%s)" % e)
 
+<<<<<<< HEAD
         port = sock.getsockname()[1]  # pylint: disable=no-member
 
         sock.listen(1)  # pylint: disable=no-member
+=======
+        port = sock.getsockname()[1]
+
+        sock.listen(1)
+>>>>>>> upstream/master
 
         live = livestatus.SingleSiteConnection("tcp6:::1:%d" % port)
         live.connect()
@@ -162,8 +214,13 @@ def test_create_socket(tls, verify, ca, ca_file_path, monkeypatch, tmp_path):
 
     ssl_dir = tmp_path / "var/ssl"
     ssl_dir.mkdir(parents=True)
+<<<<<<< HEAD
     with ssl_dir.joinpath("ca-certificates.crt").open(mode="w", encoding="utf-8") as f:  # pylint: disable=no-member
         f.write(ca.ca_path.joinpath("ca.pem").open(encoding="utf-8").read())
+=======
+    with (ssl_dir / "ca-certificates.crt").open(mode="w", encoding="utf-8") as f:
+        f.write((ca.ca_path / "ca.pem").open(encoding="utf-8").read())
+>>>>>>> upstream/master
 
     monkeypatch.setenv("OMD_ROOT", str(tmp_path))
 

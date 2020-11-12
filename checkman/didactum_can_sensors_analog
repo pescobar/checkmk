@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: Didactum devices: Temperature
+=======
+title: Didactum Devices: Temperature
+>>>>>>> upstream/master
 agents: snmp
 catalog: hw/environment/didactum
 license: GPL
@@ -14,4 +18,8 @@ item:
  The temperature sensor identifier.
 
 inventory:
+<<<<<<< HEAD
  One service per sensor is created.
+=======
+ One service is created for each sensor.
+>>>>>>> upstream/master

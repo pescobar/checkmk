@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -34,6 +35,26 @@ from cmk.gui.plugins.sidebar import (
     visuals_by_topic,
     bulletlink,
     footnotelinks,
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+from typing import List
+
+import cmk.gui.config as config
+import cmk.gui.dashboard as dashboard
+from cmk.gui.i18n import _
+from cmk.gui.type_defs import TopicMenuTopic
+from cmk.gui.plugins.sidebar import (
+    SidebarSnapin,
+    snapin_registry,
+    footnotelinks,
+    make_topic_menu,
+    show_topic_menu,
+>>>>>>> upstream/master
 )
 
 
@@ -52,6 +73,7 @@ class Dashboards(SidebarSnapin):
         return _("Links to all dashboards")
 
     def show(self):
+<<<<<<< HEAD
         dashboard.load_dashboards()
 
         def render_topic(topic, s, foldable=True):
@@ -87,6 +109,9 @@ class Dashboards(SidebarSnapin):
         else:
             for topic, s in by_topic:
                 render_topic(topic, s)
+=======
+        show_topic_menu(treename="dashboards", menu=self._get_dashboard_menu_items())
+>>>>>>> upstream/master
 
         links = []
         if config.user.may("general.edit_dashboards"):
@@ -94,3 +119,11 @@ class Dashboards(SidebarSnapin):
                 links.append((_("Export"), "export_dashboards.py"))
             links.append((_("Edit"), "edit_dashboards.py"))
             footnotelinks(links)
+<<<<<<< HEAD
+=======
+
+    def _get_dashboard_menu_items(self) -> List[TopicMenuTopic]:
+        return make_topic_menu([
+            ("dashboards", e) for e in dashboard.get_permitted_dashboards().items()
+        ])
+>>>>>>> upstream/master

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -24,6 +25,29 @@
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
 
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# NOTE: Careful when replacing the *-import below with a more specific import. This can cause
+# problems because it might remove variables from the check-context which are necessary for
+# resolving legacy discovery results such as [("SUMMARY", "diskstat_default_levels")]. Furthermore,
+# it might also remove variables needed for accessing discovery rulesets.
+from cmk.base.check_legacy_includes.enviromux import *  # pylint: disable=wildcard-import,unused-wildcard-import
+# NOTE: Careful when replacing the *-import below with a more specific import. This can cause
+# problems because it might remove variables from the check-context which are necessary for
+# resolving legacy discovery results such as [("SUMMARY", "diskstat_default_levels")]. Furthermore,
+# it might also remove variables needed for accessing discovery rulesets.
+from cmk.base.check_legacy_includes.humidity import *  # pylint: disable=wildcard-import,unused-wildcard-import
+# NOTE: Careful when replacing the *-import below with a more specific import. This can cause
+# problems because it might remove variables from the check-context which are necessary for
+# resolving legacy discovery results such as [("SUMMARY", "diskstat_default_levels")]. Furthermore,
+# it might also remove variables needed for accessing discovery rulesets.
+from cmk.base.check_legacy_includes.temperature import *  # pylint: disable=wildcard-import,unused-wildcard-import
+>>>>>>> upstream/master
 #.
 #   .--temperature---------------------------------------------------------.
 #   |      _                                      _                        |
@@ -36,6 +60,11 @@
 #   |                                                                      |
 #   '----------------------------------------------------------------------'
 
+<<<<<<< HEAD
+=======
+factory_settings['enviromux_default_levels'] = ENVIROMUX_CHECK_DEFAULT_PARAMETERS
+
+>>>>>>> upstream/master
 check_info['enviromux'] = {
     'parse_function': parse_enviromux,
     'inventory_function': inventory_enviromux_temperature,
@@ -59,7 +88,10 @@ check_info['enviromux'] = {
             #"12", # intSensorMinWarnThreshold
             #"13", # intSensorMaxWarnThreshold
         ]),
+<<<<<<< HEAD
     'includes': ["temperature.include", "enviromux.include"],
+=======
+>>>>>>> upstream/master
     'has_perfdata': True,
     'snmp_scan_function': enviromux_scan_function,
     'group': "temperature",
@@ -84,7 +116,10 @@ check_info['enviromux.voltage'] = {
     'has_perfdata': True,
     'group': "voltage",
     'default_levels_variable': "enviromux_default_levels",
+<<<<<<< HEAD
     'includes': ["enviromux.include"],
+=======
+>>>>>>> upstream/master
 }
 
 #.
@@ -104,6 +139,9 @@ check_info['enviromux.humidity'] = {
     'check_function': check_enviromux_humidity,
     'service_description': 'Sensor %s',
     'has_perfdata': True,
+<<<<<<< HEAD
     'includes': ["humidity.include", "enviromux.include"],
+=======
+>>>>>>> upstream/master
     'group': "humidity",
 }

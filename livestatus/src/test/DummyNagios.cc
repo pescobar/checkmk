@@ -1,8 +1,19 @@
+<<<<<<< HEAD
 #include <ctime>
 
 extern "C" {
 // dummy types -----------------------------------------------------------------
 
+=======
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the
+// terms and conditions defined in the file COPYING, which is part of this
+// source code package.
+
+#include <ctime>
+extern "C" {
+// dummy types -----------------------------------------------------------------
+>>>>>>> upstream/master
 struct circular_buffer {
     int dummy;
 };
@@ -15,9 +26,13 @@ struct scheduled_downtime;
 struct servicegroup;
 struct service;
 struct timeperiod;
+<<<<<<< HEAD
 
 // official exports ------------------------------------------------------------
 
+=======
+// official exports ------------------------------------------------------------
+>>>>>>> upstream/master
 int accept_passive_host_checks;
 int accept_passive_service_checks;
 int check_time_against_period(time_t /*unused*/, timeperiod * /*unused*/) {
@@ -70,9 +85,13 @@ int schedule_new_event(int /*unused*/, int /*unused*/, time_t /*unused*/,
 }
 int submit_external_command(char * /*unused*/, int * /*unused*/) { return 0; }
 int write_to_all_logs(char * /*unused*/, unsigned long /*unused*/) { return 0; }
+<<<<<<< HEAD
 
 // inofficial exports ----------------------------------------------------------
 
+=======
+// inofficial exports ----------------------------------------------------------
+>>>>>>> upstream/master
 int check_external_commands;
 int check_host_freshness;
 int check_service_freshness;

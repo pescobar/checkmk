@@ -1,4 +1,16 @@
+<<<<<<< HEAD
 # yapf: disable
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# yapf: disable
+# type: ignore
+
+>>>>>>> upstream/master
 
 
 checkname = 'netapp_api_vs_status'
@@ -31,4 +43,8 @@ checks = {'': [('kermit1_ng-mc',
                ('kermit4_ng-mc',
                 {},
                 [(0, 'State: stopped', []), (0, 'Subtype: dp_destination', [])]),
+<<<<<<< HEAD
                ('kermit6_ng-mc', {}, [(0, 'State: running', [])])]}
+=======
+               ('kermit6_ng-mc', {}, [(0, 'State: running', [])])]}
+>>>>>>> upstream/master

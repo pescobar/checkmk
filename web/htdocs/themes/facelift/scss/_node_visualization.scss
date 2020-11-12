@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /*
 +------------------------------------------------------------------+
 |             ____ _               _        __  __ _  __           |
@@ -37,6 +38,21 @@ Boston, MA 02110-1301 USA.
   right: 10px;
   bottom: 10px;
   left: 10px;
+=======
+@charset "UTF-8";
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+// conditions defined in the file COPYING, which is part of this source code package.
+
+#svg_content {
+  min-height: 630px;
+  background-color: $bg-color-secondary;
+}
+
+#node_visualization {
+  position: relative;
+  height: 100%;
+>>>>>>> upstream/master
 }
 
 #topology_filters {
@@ -48,11 +64,21 @@ Boston, MA 02110-1301 USA.
   pointer-events: none;
 }
 
+<<<<<<< HEAD
 .topology_center, .topology_remote {
   fill: transparent;
 }
 
 #topology_filters div.floatfilter, #topology_filters input#search {
+=======
+.topology_center,
+.topology_remote {
+  fill: transparent;
+}
+
+#topology_filters div.floatfilter,
+#topology_filters input#search {
+>>>>>>> upstream/master
   pointer-events: all;
   background-color: $topology-filter-bg-color;
   border-color: $topology-filter-border-color;
@@ -78,10 +104,23 @@ div.node_vis {
     top: 25px;
   }
 
+<<<<<<< HEAD
   #togglebuttons {
     position: absolute;
     top: 16px;
     left: 280px;
+=======
+  #toolbar #toolbar_controls {
+    position: absolute;
+    top: 16px;
+    left: 280px;
+    display: flex;
+
+    #custom {
+      display: flex;
+      flex-direction: column;
+    }
+>>>>>>> upstream/master
   }
 
   .togglebutton {
@@ -90,12 +129,24 @@ div.node_vis {
     padding: 5px;
     padding-left: 3px;
 
+<<<<<<< HEAD
+=======
+    img {
+      width: 28px;
+      height: 28px;
+    }
+
+>>>>>>> upstream/master
     &.down {
       background-color: $node-vis-toggle-down-bg-color; // light grey
       border-color: $node-vis-toggle-down-bg-color; // light grey
 
       img {
+<<<<<<< HEAD
 	left: 0;
+=======
+        left: 0;
+>>>>>>> upstream/master
       }
     }
 
@@ -105,18 +156,33 @@ div.node_vis {
   }
 
   .node_element .growth_root {
+<<<<<<< HEAD
       stroke: $node-vis-growth-root-color;
       stroke-width: 1;
    }
 
   div.box, img.box {
     background-color: $primary-bg-color;
+=======
+    stroke: $node-vis-growth-root-color;
+    stroke-width: 1;
+  }
+
+  div.box,
+  img.box {
+    background-color: $bg-color;
+>>>>>>> upstream/master
     border: $node-vis-box-border;
     border-radius: 4px;
     box-shadow: $node-vis-box-shadow;
   }
 
+<<<<<<< HEAD
   img.layouting_icon, img.node_icon {
+=======
+  img.layouting_icon,
+  img.node_icon {
+>>>>>>> upstream/master
     width: 24px;
     height: 24px;
   }
@@ -164,6 +230,7 @@ div.node_vis {
 
   /* topology depth */
   div.topology_slider {
+<<<<<<< HEAD
       float: left;
       padding-top: 4px;
       padding-right: 8px;
@@ -171,6 +238,14 @@ div.node_vis {
 
   div.topology_slider input {
       width: 80px;
+=======
+    padding-top: 8px;
+    padding-right: 8px;
+  }
+
+  div.topology_slider input {
+    width: 80px;
+>>>>>>> upstream/master
   }
 
   /* datasources */
@@ -224,7 +299,11 @@ div.node_vis {
 
   div#history_icons {
     position: absolute;
+<<<<<<< HEAD
     top: 8px;
+=======
+    top: 12px;
+>>>>>>> upstream/master
     right: 339px;
     width: 60px;
 
@@ -237,11 +316,19 @@ div.node_vis {
       filter: $node-vis-history-filter;
 
       &.disabled {
+<<<<<<< HEAD
 	opacity: 0.3;
       }
 
       &:hover {
 	cursor: pointer;
+=======
+        opacity: 0.3;
+      }
+
+      &:hover {
+        cursor: pointer;
+>>>>>>> upstream/master
       }
     }
   }
@@ -266,10 +353,13 @@ div.node_vis {
     height: 48px;
   }
 
+<<<<<<< HEAD
   img.treeangle {
     filter: invert($filter-inversion-percentage);
   }
 
+=======
+>>>>>>> upstream/master
   .path_details table {
     padding-left: 12px;
 
@@ -278,7 +368,12 @@ div.node_vis {
     }
   }
 
+<<<<<<< HEAD
   .node_element, .infobox_entry {
+=======
+  .node_element,
+  .infobox_entry {
+>>>>>>> upstream/master
     cursor: pointer;
   }
 
@@ -309,6 +404,7 @@ div.node_vis {
 
   .state0 {
     color: $black;
+<<<<<<< HEAD
     fill: #13d389;
   }
 
@@ -322,15 +418,38 @@ div.node_vis {
 
   .state3 {
     fill: #f91;
+=======
+    fill: rgb(19, 211, 137);
+  }
+
+  .state1 {
+    fill: rgb(255, 254, 68);
+  }
+
+  .state2 {
+    fill: rgb(255, 50, 50);
+  }
+
+  .state3 {
+    fill: rgb(255, 153, 17);
+>>>>>>> upstream/master
   }
 
   // state pending
   .state-1 {
+<<<<<<< HEAD
     fill: #888;
   }
 
   circle.state_circle {
     stroke: black;
+=======
+    fill: rgb(136, 136, 136);
+  }
+
+  circle.state_circle {
+    stroke: #000;
+>>>>>>> upstream/master
     stroke-width: 1;
   }
 
@@ -364,7 +483,11 @@ div.node_vis {
 
   circle.style_indicator.focus {
     opacity: 0.5;
+<<<<<<< HEAD
     stroke: #fffe44;
+=======
+    stroke: rgb(255, 254, 68);
+>>>>>>> upstream/master
     stroke-width: 3;
   }
 
@@ -391,24 +514,40 @@ div.node_vis {
 
   #reset_pan_and_zoom {
     position: absolute;
+<<<<<<< HEAD
     top: 13px;
+=======
+    top: 17px;
+>>>>>>> upstream/master
     right: 408px;
   }
 
   #translation_infobox {
     position: absolute;
+<<<<<<< HEAD
     top: 50px;
+=======
+    top: 54px;
+>>>>>>> upstream/master
     right: 369px;
     width: 200px;
   }
 
   g.generic_stop_growth text.stop_growth_text {
+<<<<<<< HEAD
       display: unset;
+=======
+    display: unset;
+>>>>>>> upstream/master
   }
 
   g.generic_stop_growth circle {
     stroke-width: 1;
+<<<<<<< HEAD
     stroke: black;
+=======
+    stroke: #000;
+>>>>>>> upstream/master
   }
 
   g.generic_growth_possible circle {
@@ -424,9 +563,45 @@ div.node_vis {
   image.growth_possible {
     filter: $node-vis-growth-img-filter;
   }
+<<<<<<< HEAD
 }
 
 div.node_vis line.dashed, div.node_vis path.dashed, .style_indicator {
+=======
+
+  div#togglebuttons {
+    display: flex;
+
+    div#togglebutton_layouting_toolbar + div.togglebox {
+      padding-top: 6px;
+      margin: 7px;
+      box-sizing: border-box;
+    }
+  }
+}
+
+@media only screen and (max-width: 1350px) {
+  div.node_vis {
+    #reset_pan_and_zoom {
+      top: 88px;
+    }
+
+    #translation_infobox {
+      top: 124px;
+    }
+  }
+}
+
+@media only screen and (max-width: 1150px) {
+  div.node_vis div#layouting_toolbar {
+    top: 84px;
+  }
+}
+
+div.node_vis line.dashed,
+div.node_vis path.dashed,
+.style_indicator {
+>>>>>>> upstream/master
   animation-duration: 25s;
   animation-iteration-count: infinite;
   animation-name: dash;
@@ -485,3 +660,11 @@ div.node_vis line.dashed, div.node_vis path.dashed, .style_indicator {
 svg text {
   fill: $primary-font-color;
 }
+<<<<<<< HEAD
+=======
+
+div#main_window_layered {
+  width: 100%;
+  height: 100%;
+}
+>>>>>>> upstream/master

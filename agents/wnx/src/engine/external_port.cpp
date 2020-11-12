@@ -24,24 +24,39 @@ void AsioSession::do_read() {
     auto self(shared_from_this());
     socket_.async_read_some(
         asio::buffer(data_, kMaxLength),  // data will be ignored
+<<<<<<< HEAD
         [this, self](std::error_code ec, std::size_t length) {
             if (!ec) {
                 char internal_data[124] = "Answer!\n";
+=======
+        [this, self](std::error_code ec, [[maybe_unused]] size_t length) {
+            if (!ec) {
+                auto internal_data = "Answer!\n";
+>>>>>>> upstream/master
                 do_write(internal_data, strlen(internal_data) + 1, nullptr);
             }
         });
 }
 
+<<<<<<< HEAD
 size_t AsioSession::allocCryptBuffer(
     const cma::encrypt::Commander *Crypt) noexcept {
     if (!Crypt) return 0;
+=======
+size_t AsioSession::allocCryptBuffer(const cma::encrypt::Commander *Crypt) {
+    if (nullptr == Crypt) return 0;
+>>>>>>> upstream/master
 
     if (!Crypt->blockSize().has_value()) {
         XLOG::l("Impossible situation, crypt engine is absent");
         return 0;
     }
 
+<<<<<<< HEAD
     if (!Crypt->blockSize().value()) {
+=======
+    if (0 == Crypt->blockSize().value()) {
+>>>>>>> upstream/master
         XLOG::l("Impossible situation, block is too short");
         return 0;
     }
@@ -51,7 +66,11 @@ size_t AsioSession::allocCryptBuffer(
         // calculating length and allocating persistent memory
         auto block_size = Crypt->blockSize().value();
         crypt_segment_size = (segment_size_ / block_size + 1) * block_size;
+<<<<<<< HEAD
         crypt_buf_.reset(new char[crypt_segment_size]);
+=======
+        crypt_buf_.resize(crypt_segment_size);
+>>>>>>> upstream/master
         XLOG::d.i("Encrypted output block {} bytes, crypt buffer {} bytes...",
                   block_size, crypt_segment_size);
 
@@ -64,7 +83,11 @@ size_t AsioSession::allocCryptBuffer(
 
 // returns 0 on failure
 static size_t WriteDataToSocket(asio::ip::tcp::socket &sock, const char *data,
+<<<<<<< HEAD
                                 size_t sz) noexcept {
+=======
+                                size_t sz) {
+>>>>>>> upstream/master
     using namespace asio;
 
     if (nullptr == data) {
@@ -89,7 +112,11 @@ static size_t WriteDataToSocket(asio::ip::tcp::socket &sock, const char *data,
 
 // returns 0 on failure
 static size_t WriteStringToSocket(asio::ip::tcp::socket &sock,
+<<<<<<< HEAD
                                   std::string_view str) noexcept {
+=======
+                                  std::string_view str) {
+>>>>>>> upstream/master
     return WriteDataToSocket(sock, str.data(), str.size());
 }
 
@@ -101,7 +128,11 @@ void AsioSession::do_write(const void *Data, std::size_t Length,
     auto data = static_cast<const char *>(Data);
     auto crypt_buf_len = allocCryptBuffer(Crypt);
 
+<<<<<<< HEAD
     while (Length) {
+=======
+    while (0 != Length) {
+>>>>>>> upstream/master
         // we will send data in relatively small chunks
         // asio is stupid enough and cannot send big data blocks
         auto to_send = std::min(Length, segment_size_);
@@ -112,8 +143,13 @@ void AsioSession::do_write(const void *Data, std::size_t Length,
             // terrible and absolutely unpredictable
             asio::async_write(
                 socket_, asio::buffer(data, to_send),
+<<<<<<< HEAD
                 [this, self, to_send, Length](std::error_code ec,
                                               std::size_t length) {
+=======
+                [self, to_send, Length](std::error_code ec,
+                                        std::size_t length) {
+>>>>>>> upstream/master
                     XLOG::t.i(
                         "Send [{}] from [{}] data with code [{}] left to send [{}]",
                         length, to_send, ec.value(), Length);
@@ -121,14 +157,23 @@ void AsioSession::do_write(const void *Data, std::size_t Length,
         } else {
             // correct code is here
             size_t written_bytes = 0;
+<<<<<<< HEAD
             if (Crypt) {
                 if (!crypt_buf_len) {
+=======
+            if (nullptr != Crypt) {
+                if (0 == crypt_buf_len) {
+>>>>>>> upstream/master
                     XLOG::l("Encrypt is requested, but encryption is failed");
                     return;
                 }
 
                 // encryption
+<<<<<<< HEAD
                 auto buf = crypt_buf_.get();
+=======
+                auto buf = crypt_buf_.data();
+>>>>>>> upstream/master
                 memcpy(buf, data, to_send);
                 auto [success, len] = Crypt->encode(buf, to_send, crypt_buf_len,
                                                     Length == to_send);
@@ -170,7 +215,11 @@ void ExternalPort::putOnQueue(AsioSession::s_ptr asio_session) {
     std::unique_lock lk(queue_lock_);
     auto size = session_queue_.size();
     if (size < kMaxSessionQueueLength) {
+<<<<<<< HEAD
         session_queue_.push(asio_session);
+=======
+        session_queue_.push(std::move(asio_session));
+>>>>>>> upstream/master
         loaded = true;
         size = session_queue_.size();
     }
@@ -229,7 +278,11 @@ static void OverLoadMemory() {
 }
 
 // singleton thread
+<<<<<<< HEAD
 void ExternalPort::processQueue(cma::world::ReplyFunc reply) noexcept {
+=======
+void ExternalPort::processQueue(const cma::world::ReplyFunc &reply) {
+>>>>>>> upstream/master
     for (;;) {
         // we must to catch exception in every thread, even so simple one
         try {
@@ -285,7 +338,11 @@ void ExternalPort::wakeThread() {
     wake_thread_.notify_one();
 }
 
+<<<<<<< HEAD
 bool sinkProc(cma::world::AsioSession::s_ptr asio_session,
+=======
+bool sinkProc(const cma::world::AsioSession::s_ptr &asio_session,
+>>>>>>> upstream/master
               ExternalPort *ex_port) {
     ex_port->putOnQueue(asio_session);
     return true;
@@ -295,21 +352,35 @@ bool sinkProc(cma::world::AsioSession::s_ptr asio_session,
 // MAY BE RESTARTED if we have new port/ipv6 mode in config
 // OneShot - true, CMK way, connect, send data back, disconnect
 //         - false, accept send data back, no disconnect
+<<<<<<< HEAD
 void ExternalPort::ioThreadProc(cma::world::ReplyFunc Reply) {
+=======
+void ExternalPort::ioThreadProc(const cma::world::ReplyFunc &reply_func) {
+>>>>>>> upstream/master
     using namespace cma::cfg;
     XLOG::t(XLOG_FUNC + " started");
     // all threads must control exceptions
     try {
+<<<<<<< HEAD
         auto ipv6 = groups::global.ipv6();
 
         // important diagnostic
         {
             if (owner_) owner_->preContextCall();
+=======
+        // important diagnostic
+        {
+            if (nullptr != owner_) owner_->preContextCall();
+>>>>>>> upstream/master
 
             // asio magic here
             asio::io_context context;
 
+<<<<<<< HEAD
             ipv6 = groups::global.ipv6();
+=======
+            auto ipv6 = groups::global.ipv6();
+>>>>>>> upstream/master
             auto port =
                 default_port_ == 0 ? groups::global.port() : default_port_;
 
@@ -322,7 +393,11 @@ void ExternalPort::ioThreadProc(cma::world::ReplyFunc Reply) {
 
             // server thread start
             auto processor_thread =
+<<<<<<< HEAD
                 std::thread(&ExternalPort::processQueue, this, Reply);
+=======
+                std::thread(&ExternalPort::processQueue, this, reply_func);
+>>>>>>> upstream/master
 
             // tcp body
             auto ret = context.run();  // run itself

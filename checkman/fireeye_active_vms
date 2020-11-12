@@ -10,9 +10,12 @@ description:
  The check goes WARN or CRIT if the number of
  active VMs exceeds configurable values.
 
+<<<<<<< HEAD
 item:
  No item.
 
+=======
+>>>>>>> upstream/master
 inventory:
  One service is created.
 

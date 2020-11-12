@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,6 +24,13 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 # <<<jenkins_instance>>>
 # {"quietingDown": false, "nodeDescription": "the master Jenkins node",
@@ -53,6 +61,7 @@ def inventory_jenkins_instance(parsed):
     yield None, {}
 
 
+<<<<<<< HEAD
 factory_settings["jenkins_instance_default_levels"] = {'mode': 'NORMAL'}
 
 
@@ -62,6 +71,17 @@ def check_jenkins_instance(no_item, params, parsed):
 
     for key, value, infotext in [("mode", params["mode"], "Mode"),
                                  ("quietingDown", False, "Quieting Down"),
+=======
+def check_jenkins_instance(_no_item, _no_params, parsed):
+    if not parsed:
+        return
+
+    inst_desc = parsed.get("nodeDescription")
+    if inst_desc is not None:
+        yield 0, "Description: %s" % inst_desc.title()
+
+    for key, value, infotext in [("quietingDown", False, "Quieting Down"),
+>>>>>>> upstream/master
                                  ("useSecurity", True, "Security used")]:
 
         state = 0
@@ -79,7 +99,11 @@ check_info["jenkins_instance"] = {
     "parse_function": parse_jenkins_instance,
     "check_function": check_jenkins_instance,
     "inventory_function": inventory_jenkins_instance,
+<<<<<<< HEAD
     "default_levels_variable": "jenkins_instance_default_levels",
     "service_description": "Jenkins Instance",
     "group": "jenkins_instance",
+=======
+    "service_description": "Jenkins Instance",
+>>>>>>> upstream/master
 }

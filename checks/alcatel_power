@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -35,6 +36,32 @@ alcatel_power_operstate_map = {
     "9": "master",
 }
 
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# NOTE: Careful when replacing the *-import below with a more specific import. This can cause
+# problems because it might remove variables from the check-context which are necessary for
+# resolving legacy discovery results such as [("SUMMARY", "diskstat_default_levels")]. Furthermore,
+# it might also remove variables needed for accessing discovery rulesets.
+from cmk.base.check_legacy_includes.alcatel import *  # pylint: disable=wildcard-import,unused-wildcard-import
+factory_settings['alcatel_temp'] = ALCATEL_TEMP_CHECK_DEFAULT_PARAMETERS
+
+alcatel_power_operstate_map = {
+    "1": "up",
+    "2": "down",
+    "3": "testing",
+    "4": "unknown",
+    "5": "secondary",
+    "6": "not present",
+    "7": "unpowered",
+    "9": "master",
+}
+
+>>>>>>> upstream/master
 alcatel_power_no_power_supply_info = "no power supply"
 
 alcatel_power_type_map = {
@@ -92,5 +119,8 @@ check_info["alcatel_power"] = {
             36,  # MIB object "chasEntPhysPowerType":
             #     0 no power supply, 1 ac, 2 dc (not available on old devices)
         ]),
+<<<<<<< HEAD
     "includes": ["alcatel.include"],
+=======
+>>>>>>> upstream/master
 }

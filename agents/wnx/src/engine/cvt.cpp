@@ -3,6 +3,7 @@
 
 #include "cvt.h"
 
+<<<<<<< HEAD
 #include <cstdint>
 #include <filesystem>
 #include <string>
@@ -31,3 +32,10 @@ YAML::Node LoadIni(const std::filesystem::path& IniFile) {
     return {};
 }
 }  // namespace cma::cfg::cvt
+=======
+#include <filesystem>
+
+#include "logger.h"
+
+namespace cma::cfg::cvt {}  // namespace cma::cfg::cvt
+>>>>>>> upstream/master

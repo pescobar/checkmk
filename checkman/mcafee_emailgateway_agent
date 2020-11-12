@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: McAfee Email gateway: Agent info
+=======
+title: McAfee Email Gateway: Agent Info
+>>>>>>> upstream/master
 agents: snmp
 catalog: app/mcafee
 license: GPL

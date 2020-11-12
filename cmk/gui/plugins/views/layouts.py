@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,10 +24,23 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 import abc
 import re
 import json
+<<<<<<< HEAD
+=======
+from typing import Any, Dict, List, Optional, Tuple
+
+from six import ensure_str
+>>>>>>> upstream/master
 
 import cmk.gui.utils as utils
 import cmk.gui.config as config
@@ -55,7 +69,11 @@ def init_rowselect(view):
     if not config.user.may("general.act"):
         return
 
+<<<<<<< HEAD
     selected = weblib.get_rowselection('view-' + view['name'])
+=======
+    selected = config.user.get_rowselection(weblib.selection_id(), 'view-' + view['name'])
+>>>>>>> upstream/master
     selection_properties = {
         "page_id": "view-%s" % view['name'],
         "selection_id": weblib.selection_id(),
@@ -67,8 +85,13 @@ def init_rowselect(view):
 def render_checkbox(view, row, num_tds):
     # value contains the number of columns of this datarow. This is
     # needed for hiliting the correct number of TDs
+<<<<<<< HEAD
     html.input(type_="checkbox", name=row_id(view, row), value=(num_tds + 1))
     html.label("", row_id(view, row))
+=======
+    html.input(type_="checkbox", name=ensure_str(row_id(view, row)), value=(num_tds + 1))
+    html.label("", ensure_str(row_id(view, row)))
+>>>>>>> upstream/master
 
 
 def render_checkbox_td(view, row, num_tds):
@@ -104,10 +127,13 @@ class LayoutSingleDataset(Layout):
     def can_display_checkboxes(self):
         return False
 
+<<<<<<< HEAD
     @property
     def is_hidden(self):
         return False
 
+=======
+>>>>>>> upstream/master
     def render(self, rows, view, group_cells, cells, num_columns, show_checkboxes):
         html.open_table(class_="data single")
         rownum = 0
@@ -152,13 +178,22 @@ class GroupedBoxesLayout(Layout):
             this_group = group_value(row, group_cells)
             if this_group != last_group:
                 last_group = this_group
+<<<<<<< HEAD
                 current_group = []
+=======
+                current_group: List[Tuple[str, Any]] = []
+>>>>>>> upstream/master
                 groups.append((this_group, current_group))
             current_group.append((row_id(view, row), row))
 
         # Create empty columns
+<<<<<<< HEAD
         columns = []
         for _x in xrange(num_columns):
+=======
+        columns: List[List[Any]] = []
+        for _x in range(num_columns):
+>>>>>>> upstream/master
             columns.append([])
 
         # First put everything into the first column
@@ -189,7 +224,11 @@ class GroupedBoxesLayout(Layout):
                       show_checkboxes):
         repeat_heading_every = 20  # in case column_headers is "repeat"
 
+<<<<<<< HEAD
         html.open_table(class_="groupheader", cellspacing=0, cellpadding=0, border=0)
+=======
+        html.open_table(class_="groupheader", cellspacing="0", cellpadding="0", border="0")
+>>>>>>> upstream/master
         html.open_tr(class_="groupheader")
         painted = False
         for cell in group_cells:
@@ -301,7 +340,11 @@ def grouped_row_title(index, group_spec, num_rows, trclass, num_cells):
                  onclick="cmk.views.toggle_grouped_rows('grouped_rows', '%s', this, %d)" %
                  (index, num_rows))
 
+<<<<<<< HEAD
     html.img(html.theme_url("images/tree_black_closed.png"),
+=======
+    html.img(html.theme_url("images/tree_closed.png"),
+>>>>>>> upstream/master
              align="absbottom",
              class_=["treeangle", "nform", "open" if is_open else "closed"])
     html.write_text("%s (%d)" % (group_spec["title"], num_rows))
@@ -327,7 +370,11 @@ def calculate_view_grouping_of_services(rows, row_group_cells):
 
     # First create dictionaries for each found group containing the
     # group spec and the row indizes of the grouped rows
+<<<<<<< HEAD
     groups = {}
+=======
+    groups: Dict[Any, Tuple[Any, List[Any]]] = {}
+>>>>>>> upstream/master
     current_group = None
     group_id = None
     last_row_group = None
@@ -359,7 +406,11 @@ def calculate_view_grouping_of_services(rows, row_group_cells):
             if current_group is None or current_group != group_spec:
                 continue  # skip grouping first row
 
+<<<<<<< HEAD
             elif current_group == group_spec:
+=======
+            if current_group == group_spec:
+>>>>>>> upstream/master
                 row = rows.pop(index)
                 rows.insert(index - len(groups[group_id][1]), row)
                 continue
@@ -401,10 +452,13 @@ class LayoutBalancedBoxes(GroupedBoxesLayout):
     def can_display_checkboxes(self):
         return True
 
+<<<<<<< HEAD
     @property
     def is_hidden(self):
         return False
 
+=======
+>>>>>>> upstream/master
     def _css_class(self):
         return None
 
@@ -424,10 +478,13 @@ class LayoutBalancedGraphBoxes(GroupedBoxesLayout):
     def can_display_checkboxes(self):
         return True
 
+<<<<<<< HEAD
     @property
     def is_hidden(self):
         return False
 
+=======
+>>>>>>> upstream/master
     def _css_class(self):
         return "graph"
 
@@ -447,10 +504,13 @@ class LayoutTiled(Layout):
     def can_display_checkboxes(self):
         return True
 
+<<<<<<< HEAD
     @property
     def is_hidden(self):
         return False
 
+=======
+>>>>>>> upstream/master
     def render(self, rows, view, group_cells, cells, num_columns, show_checkboxes):
         html.open_table(class_="data tiled")
 
@@ -580,10 +640,13 @@ class LayoutTable(Layout):
     def can_display_checkboxes(self):
         return True
 
+<<<<<<< HEAD
     @property
     def is_hidden(self):
         return False
 
+=======
+>>>>>>> upstream/master
     def render(self, rows, view, group_cells, cells, num_columns, show_checkboxes):
         repeat_heading_every = 20  # in case column_headers is "repeat"
 
@@ -612,7 +675,11 @@ class LayoutTable(Layout):
                 this_group = group_value(row, group_cells)
                 if this_group != last_group:
                     if column != 1:  # not a the beginning of a new line
+<<<<<<< HEAD
                         for _i in xrange(column - 1, num_columns):
+=======
+                        for _i in range(column - 1, num_columns):
+>>>>>>> upstream/master
                             html.td('', class_="gap")
                             html.td('', class_="fillup", colspan=num_cells)
                         html.close_tr()
@@ -634,9 +701,15 @@ class LayoutTable(Layout):
                         html.open_td(class_="groupheader",
                                      colspan=(num_cells * (num_columns + 2) + (num_columns - 1)))
                         html.open_table(class_="groupheader",
+<<<<<<< HEAD
                                         cellspacing=0,
                                         cellpadding=0,
                                         border=0)
+=======
+                                        cellspacing="0",
+                                        cellpadding="0",
+                                        border="0")
+>>>>>>> upstream/master
                         html.open_tr()
                         painted = False
                         for cell in group_cells:
@@ -721,7 +794,11 @@ class LayoutTable(Layout):
             column += 1
 
         if group_open:
+<<<<<<< HEAD
             for _i in xrange(column - 1, num_columns):
+=======
+            for _i in range(column - 1, num_columns):
+>>>>>>> upstream/master
                 html.td('', class_="gap")
                 html.td('', class_="fillup", colspan=num_cells)
             html.close_tr()
@@ -766,10 +843,13 @@ class LayoutMatrix(Layout):
         return False
 
     @property
+<<<<<<< HEAD
     def is_hidden(self):
         return False
 
     @property
+=======
+>>>>>>> upstream/master
     def has_individual_csv_export(self):
         return True
 
@@ -801,7 +881,11 @@ class LayoutMatrix(Layout):
                         continue
 
                 table.row()
+<<<<<<< HEAD
                 _tdclass, content = cells[0].render(matrix_cells[rid].values()[0])
+=======
+                _tdclass, content = cells[0].render(list(matrix_cells[rid].values())[0])
+>>>>>>> upstream/master
                 table.cell("", content)
 
                 for group_id, group_row in groups:
@@ -857,7 +941,11 @@ class LayoutMatrix(Layout):
 
                 odd = "even" if odd == "odd" else "odd"
                 html.open_tr(class_="data %s0" % odd)
+<<<<<<< HEAD
                 tdclass, content = cells[0].render(matrix_cells[rid].values()[0])
+=======
+                tdclass, content = cells[0].render(list(matrix_cells[rid].values())[0])
+>>>>>>> upstream/master
                 html.open_td(class_=["left", tdclass])
                 html.write(content)
                 html.close_td()
@@ -901,6 +989,7 @@ class LayoutMatrix(Layout):
         return majorities.get(None, {})
 
     def _matrix_find_majorities(self, rows, cells, for_header=False):
+<<<<<<< HEAD
         counts = {}  # dict row_id -> cell_nr -> value -> count
 
         for row in rows:
@@ -908,6 +997,17 @@ class LayoutMatrix(Layout):
                 rid = None
             else:
                 rid = tuple(group_value(row, [cells[0]]))
+=======
+        # dict row_id -> cell_nr -> value -> count
+        counts: Dict[Any, Dict[Any, Any]] = {}
+
+        for row in rows:
+            if for_header:
+                rid: Optional[Tuple] = None
+            else:
+                # TODO: WTF???
+                rid = tuple(group_value(row, [cells[0]]))  # type: ignore[arg-type]
+>>>>>>> upstream/master
 
             for cell_nr, cell in enumerate(cells[1:]):
                 value = group_value(row, [cell])
@@ -917,7 +1017,12 @@ class LayoutMatrix(Layout):
                 cell_entry[value] += 1
 
         # Now find majorities for each row
+<<<<<<< HEAD
         majorities = {}  # row_id -> cell_nr -> majority value
+=======
+        # row_id -> cell_nr -> majority value
+        majorities: Dict[Any, Dict[Any, Any]] = {}
+>>>>>>> upstream/master
         for rid, row_entry in counts.items():
             maj_entry = majorities.setdefault(rid, {})
             for cell_nr, cell_entry in row_entry.items():
@@ -951,10 +1056,19 @@ def create_matrices(rows, group_cells, cells, num_columns):
     # First find the groups - all rows that have the same values for
     # all group columns. Usually these should correspond with the hosts
     # in the matrix
+<<<<<<< HEAD
     groups = []
     last_group_id = None
     unique_row_ids = []  # not a set, but a list. Need to keep sort order!
     matrix_cells = {}  # Dict from row_id -> group_id -> row
+=======
+    groups: List[Tuple[Any, Any]] = []
+    last_group_id = None
+    # not a set, but a list. Need to keep sort order!
+    unique_row_ids: List[Any] = []
+    # Dict from row_id -> group_id -> row
+    matrix_cells: Dict[Any, Dict[Any, Any]] = {}
+>>>>>>> upstream/master
     col_num = 0
 
     for row in rows:

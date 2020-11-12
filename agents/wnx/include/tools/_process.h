@@ -1,3 +1,11 @@
+<<<<<<< HEAD
+=======
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the
+// terms and conditions defined in the file COPYING, which is part of this
+// source code package.
+
+>>>>>>> upstream/master
 // Assorted process management routines
 #pragma once
 
@@ -14,13 +22,21 @@
 #include "tools/_xlog.h"
 
 namespace cma::tools {
+<<<<<<< HEAD
 inline bool RunCommandAndWait(const std::wstring& Command) {
     STARTUPINFOW si{0};
     memset(&si, 0, sizeof(si));
+=======
+inline bool RunCommandAndWait(const std::wstring& command,
+                              const std::wstring& work_dir) {
+    STARTUPINFOW si{0};
+    ::memset(&si, 0, sizeof(si));
+>>>>>>> upstream/master
     si.cb = sizeof(STARTUPINFO);
     si.dwFlags |= STARTF_USESTDHANDLES;  // SK: not sure with this flag
 
     PROCESS_INFORMATION pi{nullptr};
+<<<<<<< HEAD
     memset(&pi, 0, sizeof(pi));
     // CREATE_NEW_CONSOLE
 
@@ -37,11 +53,38 @@ inline bool RunCommandAndWait(const std::wstring& Command) {
         CloseHandle(pi.hProcess);
         CloseHandle(pi.hThread);
 
+=======
+    ::memset(&pi, 0, sizeof(pi));
+    // CREATE_NEW_CONSOLE
+
+    auto working_folder = work_dir.empty() ? nullptr : work_dir.data();
+
+    if (::CreateProcessW(nullptr,  // stupid windows want null here
+                         const_cast<wchar_t*>(command.c_str()),  // win32!
+                         nullptr,         // security attribute
+                         nullptr,         // thread attribute
+                         FALSE,           // no handle inheritance
+                         0,               // Creation Flags
+                         nullptr,         // environment
+                         working_folder,  // current directory
+                         &si, &pi)) {
+        ::WaitForSingleObject(pi.hProcess, INFINITE);
+        ::CloseHandle(pi.hProcess);
+        ::CloseHandle(pi.hThread);
+>>>>>>> upstream/master
         return true;
     }
     return false;
 }
 
+<<<<<<< HEAD
+=======
+inline bool RunCommandAndWait(const std::wstring& command) {
+    std::wstring path{L""};
+    return RunCommandAndWait(command, path);
+}
+
+>>>>>>> upstream/master
 inline bool RunDetachedCommand(const std::string& Command) {
     STARTUPINFOA si{0};
     memset(&si, 0, sizeof(si));
@@ -179,7 +222,11 @@ inline bool IsElevated() {
     return false;
 }
 
+<<<<<<< HEAD
 inline std::wstring GetSomeSystemFolder(const KNOWNFOLDERID& rfid) {
+=======
+inline std::wstring GetSomeSystemFolder(const KNOWNFOLDERID& rfid) noexcept {
+>>>>>>> upstream/master
     wchar_t* str = nullptr;
     if (SHGetKnownFolderPath(rfid, KF_FLAG_DEFAULT, NULL, &str) != S_OK ||
         !str)  // probably impossible case when executed ok, but str is nullptr
@@ -190,6 +237,7 @@ inline std::wstring GetSomeSystemFolder(const KNOWNFOLDERID& rfid) {
     return path;
 }
 
+<<<<<<< HEAD
 // ASCIIZ Version
 inline std::string GetSomeSystemFolderA(const KNOWNFOLDERID& rfid) {
     wchar_t* str = nullptr;
@@ -204,6 +252,8 @@ inline std::string GetSomeSystemFolderA(const KNOWNFOLDERID& rfid) {
     return path;
 }
 
+=======
+>>>>>>> upstream/master
 inline std::wstring GetSystem32Folder() {
     return GetSomeSystemFolder(FOLDERID_System);
 }

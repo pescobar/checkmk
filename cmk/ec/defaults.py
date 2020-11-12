@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/env python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -27,12 +28,27 @@
 
 import logging
 from typing import Any, AnyStr, Dict, List  # pylint: disable=unused-import
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+"""Defaults for rule pack and configuration"""
+
+import logging
+from typing import Any, Dict, List
+>>>>>>> upstream/master
 
 from cmk.utils.i18n import _
 
 
+<<<<<<< HEAD
 def default_rule_pack(rules):
     # type: (List[Dict[str, Any]]) -> Dict[str, Any]
+=======
+def default_rule_pack(rules: List[Dict[str, Any]]) -> Dict[str, Any]:
+>>>>>>> upstream/master
     """Returns the default rule pack"""
     return {
         "id": "default",
@@ -42,8 +58,12 @@ def default_rule_pack(rules):
     }
 
 
+<<<<<<< HEAD
 def default_config():
     # type: () -> Dict[str, Any]
+=======
+def default_config() -> Dict[str, Any]:
+>>>>>>> upstream/master
     """Returns the default configuration"""
     v1_v2_credential = {
         "description": '"public" default for receiving SNMPv1/v2 traps',

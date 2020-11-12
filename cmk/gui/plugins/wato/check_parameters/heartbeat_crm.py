@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -26,6 +27,23 @@
 
 from cmk.gui.i18n import _
 from cmk.gui.valuespec import (Checkbox, Dictionary, Integer, TextAscii, Transform, RadioChoice)
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+from cmk.gui.i18n import _
+from cmk.gui.valuespec import (
+    Checkbox,
+    Dictionary,
+    DropdownChoice,
+    Integer,
+    TextAscii,
+    Transform,
+)
+>>>>>>> upstream/master
 
 from cmk.gui.plugins.wato import (
     CheckParameterRulespecWithoutItem,
@@ -38,7 +56,11 @@ from cmk.gui.plugins.wato import (
 
 def _valuespec_inventory_heartbeat_crm_rules():
     return Dictionary(
+<<<<<<< HEAD
         title=_("Heartbeat CRM Discovery"),
+=======
+        title=_("Heartbeat CRM discovery"),
+>>>>>>> upstream/master
         elements=[
             ("naildown_dc",
              Checkbox(
@@ -116,9 +138,14 @@ def _parameter_valuespec_heartbeat_crm():
                  help=_("The expected number of resources in the cluster"),
              )),
             ("show_failed_actions",
+<<<<<<< HEAD
              RadioChoice(
                  title=_('Show "Failed Actions"'),
                  orientation='vertical',
+=======
+             DropdownChoice(
+                 title=_('Show "Failed Actions"'),
+>>>>>>> upstream/master
                  choices=[
                      (False, _('Don\'t show or warn if "Failed Actions" are present (default)')),
                      (True, _('Show "Failed Actions" and warn if any is present')),

@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: SAP HANA Events
+=======
+title: SAP HANA: Events
+>>>>>>> upstream/master
 agents: linux
 catalog: app/sap_hana
 license: GPL
@@ -13,7 +17,14 @@ description:
  WARN and if there are high alerts then the check goes CRIT.
 
 item:
+<<<<<<< HEAD
  The instance name
 
 inventory:
  One service is created per instance.
+=======
+ The sid instance name
+
+inventory:
+ One service is created for each instance.
+>>>>>>> upstream/master

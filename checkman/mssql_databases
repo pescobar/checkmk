@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: MSSQL Database properties
+=======
+title: MS SQL Database: Properties
+>>>>>>> upstream/master
 agents: windows
 catalog: app/mssql
 license: GPL
@@ -8,13 +12,31 @@ description:
  states of MSSQL databases reported by MSSQL.
 
  Default configuration for auto close and -shrink is:
+<<<<<<< HEAD
  - on is CRIT
  - off if OK
+=======
+
+ - on is CRIT
+
+ - off if OK
+
+>>>>>>> upstream/master
  These states are configurable.
 
 item:
  The MSSQL database identifier.
 
 inventory:
+<<<<<<< HEAD
  One separate check for each database will be created.
 
+=======
+ One service is created for each database.
+
+cluster:
+ On a cluster all databases found on the nodes are checked. Note one nodes
+ data may overwrite another ones, if the item is the same. In this case you
+ will be monitoring only the node that occures latest in the list of clustered
+ nodes.
+>>>>>>> upstream/master

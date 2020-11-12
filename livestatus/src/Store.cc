@@ -1,28 +1,10 @@
-// +------------------------------------------------------------------+
-// |             ____ _               _        __  __ _  __           |
-// |            / ___| |__   ___  ___| | __   |  \/  | |/ /           |
-// |           | |   | '_ \ / _ \/ __| |/ /   | |\/| | ' /            |
-// |           | |___| | | |  __/ (__|   <    | |  | | . \            |
-// |            \____|_| |_|\___|\___|_|\_\___|_|  |_|_|\_\           |
-// |                                                                  |
-// | Copyright Mathias Kettner 2014             mk@mathias-kettner.de |
-// +------------------------------------------------------------------+
-//
-// This file is part of Check_MK.
-// The official homepage is at http://mathias-kettner.de/check_mk.
-//
-// check_mk is free software;  you can redistribute it and/or modify it
-// under the  terms of the  GNU General Public License  as published by
-// the Free Software Foundation in version 2.  check_mk is  distributed
-// in the hope that it will be useful, but WITHOUT ANY WARRANTY;  with-
-// out even the implied warranty of  MERCHANTABILITY  or  FITNESS FOR A
-// PARTICULAR PURPOSE. See the  GNU General Public License for more de-
-// tails. You should have  received  a copy of the  GNU  General Public
-// License along with GNU Make; see the file  COPYING.  If  not,  write
-// to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
-// Boston, MA 02110-1301 USA.
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the
+// terms and conditions defined in the file COPYING, which is part of this
+// source code package.
 
 #include "Store.h"
+<<<<<<< HEAD
 #include <ctime>
 #include <memory>
 #include <mutex>
@@ -30,6 +12,16 @@
 #include <stdexcept>
 #include <utility>
 #include <vector>
+=======
+
+#include <ctime>
+#include <filesystem>
+#include <memory>
+#include <sstream>
+#include <stdexcept>
+
+#include "CrashReport.h"
+>>>>>>> upstream/master
 #include "EventConsoleConnection.h"
 #include "InputBuffer.h"
 #include "Logger.h"
@@ -37,7 +29,10 @@
 #include "OutputBuffer.h"
 #include "Query.h"
 #include "StringUtils.h"
+<<<<<<< HEAD
 #include "Table.h"
+=======
+>>>>>>> upstream/master
 #include "mk_logwatch.h"
 
 Store::Store(MonitoringCore *mc)
@@ -50,6 +45,10 @@ Store::Store(MonitoringCore *mc)
     , _table_comments(mc)
     , _table_contactgroups(mc)
     , _table_contacts(mc)
+<<<<<<< HEAD
+=======
+    , _table_crash_reports(mc)
+>>>>>>> upstream/master
     , _table_downtimes(mc)
     , _table_eventconsoleevents(mc)
     , _table_eventconsolehistory(mc)
@@ -73,6 +72,10 @@ Store::Store(MonitoringCore *mc)
     addTable(_table_comments);
     addTable(_table_contactgroups);
     addTable(_table_contacts);
+<<<<<<< HEAD
+=======
+    addTable(_table_crash_reports);
+>>>>>>> upstream/master
     addTable(_table_downtimes);
     addTable(_table_hostgroups);
     addTable(_table_hostsbygroup);
@@ -136,7 +139,11 @@ std::list<std::string> getLines(InputBuffer &input) {
 }  // namespace
 
 void Store::logRequest(const std::string &line,
+<<<<<<< HEAD
                        const std::list<std::string> &lines) {
+=======
+                       const std::list<std::string> &lines) const {
+>>>>>>> upstream/master
     Informational log(logger());
     log << "request: " << line;
     if (logger()->isLoggable(LogLevel::debug)) {
@@ -235,10 +242,18 @@ bool Store::answerRequest(InputBuffer &input, OutputBuffer &output) {
 void Store::answerCommandRequest(const ExternalCommand &command) {
     if (command.name() == "MK_LOGWATCH_ACKNOWLEDGE") {
         answerCommandMkLogwatchAcknowledge(command);
+<<<<<<< HEAD
+=======
+        return;
+    }
+    if (command.name() == "DEL_CRASH_REPORT") {
+        answerCommandDelCrashReport(command);
+>>>>>>> upstream/master
         return;
     }
     if (mk::starts_with(command.name(), "EC_")) {
         answerCommandEventConsole(command);
+<<<<<<< HEAD
         return;
     }
     // Nagios doesn't have a LOG command, so we map it to the custom command
@@ -255,6 +270,33 @@ void Store::answerCommandMkLogwatchAcknowledge(const ExternalCommand &command) {
         return;
     }
     mk_logwatch_acknowledge(logger(), _mc->mkLogwatchPath(), args[0], args[1]);
+=======
+        return;
+    }
+    // Nagios doesn't have a LOG command, so we map it to the custom command
+    // _LOG, which we implement for ourselves.
+    answerCommandNagios(command.name() == "LOG" ? command.withName("_LOG")
+                                                : command);
+}
+
+void Store::answerCommandMkLogwatchAcknowledge(const ExternalCommand &command) {
+    // COMMAND [1462191638] MK_LOGWATCH_ACKNOWLEDGE;host123;\var\log\syslog
+    auto args = command.args();
+    if (args.size() != 2) {
+        Warning(logger()) << "MK_LOGWATCH_ACKNOWLEDGE expects 2 arguments";
+        return;
+    }
+    mk_logwatch_acknowledge(logger(), _mc->mkLogwatchPath(), args[0], args[1]);
+}
+
+void Store::answerCommandDelCrashReport(const ExternalCommand &command) {
+    auto args = command.args();
+    if (args.size() != 1) {
+        Warning(logger()) << "DEL_CRASH_REPORT expects 1 argument";
+        return;
+    }
+    mk::crash_report::delete_id(_mc->crashReportPath(), args[0], logger());
+>>>>>>> upstream/master
 }
 
 namespace {
@@ -276,6 +318,7 @@ void Store::answerCommandEventConsole(const ExternalCommand &command) {
         Notice(logger()) << "event console disabled, ignoring command '"
                          << command.str() << "'";
         return;
+<<<<<<< HEAD
     }
     try {
         ECTableConnection(
@@ -285,13 +328,28 @@ void Store::answerCommandEventConsole(const ExternalCommand &command) {
     } catch (const std::runtime_error &err) {
         Alert(logger()) << err.what();
     }
+=======
+    }
+    try {
+        ECTableConnection(
+            logger(), _mc->mkeventdSocketPath(),
+            "COMMAND " + command.name().substr(3) + command.arguments())
+            .run();
+    } catch (const std::runtime_error &err) {
+        Alert(logger()) << err.what();
+    }
+>>>>>>> upstream/master
 }
 
 void Store::answerCommandNagios(const ExternalCommand &command) {
     std::lock_guard<std::mutex> lg(_command_mutex);
     auto command_str = command.str();
     // The Nagios headers are (once again) not const-correct...
+<<<<<<< HEAD
     auto cmd = const_cast<char *>(command_str.c_str());
+=======
+    auto *cmd = const_cast<char *>(command_str.c_str());
+>>>>>>> upstream/master
 #ifdef NAGIOS4
     process_external_command1(cmd);
 #else

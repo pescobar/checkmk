@@ -50,6 +50,10 @@ AC_DEFUN([AX_CXX_COMPILE_STDCXX], [dnl
   m4_if([$1], [11], [ax_cxx_compile_alternatives="11 0x"],
         [$1], [14], [ax_cxx_compile_alternatives="14 1y"],
         [$1], [17], [ax_cxx_compile_alternatives="17 1z"],
+<<<<<<< HEAD
+=======
+        [$1], [20], [ax_cxx_compile_alternatives="20 2a"],
+>>>>>>> upstream/master
         [m4_fatal([invalid first argument `$1' to AX_CXX_COMPILE_STDCXX])])dnl
   m4_if([$2], [], [],
         [$2], [ext], [],
@@ -163,6 +167,16 @@ m4_define([_AX_CXX_COMPILE_STDCXX_testbody_17],
   _AX_CXX_COMPILE_STDCXX_testbody_new_in_17
 )
 
+<<<<<<< HEAD
+=======
+m4_define([_AX_CXX_COMPILE_STDCXX_testbody_20],
+_AX_CXX_COMPILE_STDCXX_testbody_new_in_11
+_AX_CXX_COMPILE_STDCXX_testbody_new_in_14
+_AX_CXX_COMPILE_STDCXX_testbody_new_in_17
+_AX_CXX_COMPILE_STDCXX_testbody_new_in_20
+)
+
+>>>>>>> upstream/master
 dnl  Tests for new features in C++11
 
 m4_define([_AX_CXX_COMPILE_STDCXX_testbody_new_in_11], [[
@@ -587,7 +601,11 @@ m4_define([_AX_CXX_COMPILE_STDCXX_testbody_new_in_17], [[
 
 #error "This is not a C++ compiler"
 
+<<<<<<< HEAD
 #elif __cplusplus <= 201402L
+=======
+#elif __cplusplus <= 201703L
+>>>>>>> upstream/master
 
 #error "This is not a C++17 compiler"
 
@@ -977,6 +995,32 @@ namespace cxx17
 
 }  // namespace cxx17
 
+<<<<<<< HEAD
 #endif  // __cplusplus <= 201402L
+=======
+#endif  // __cplusplus <= 201703L
+
+]])
+
+dnl  Tests for new features in C++20
+
+m4_define([_AX_CXX_COMPILE_STDCXX_testbody_new_in_20], [[
+
+// If the compiler admits that it is not ready for C++20, why torture it?
+// Hopefully, this will speed up the test.
+
+#ifndef __cplusplus
+
+#error "This is not a C++ compiler"
+
+// preliminary value, taken from g++-10
+#elif __cplusplus < 201709L
+
+#error "This is not a C++20 compiler"
+
+#else
+
+#endif  // __cplusplus < 201709L
+>>>>>>> upstream/master
 
 ]])

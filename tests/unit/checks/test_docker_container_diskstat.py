@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # *--encoding: UTF-8--*
 # yapf: disable
 import pytest
@@ -7,6 +8,21 @@ from checktestlib import (
     CheckResult,
     assertDiscoveryResultsEqual,
     assertCheckResultsEqual,
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# yapf: disable
+import pytest  # type: ignore[import]
+from testlib import Check  # type: ignore[import]
+from cmk.base.check_api import MKCounterWrapped
+from checktestlib import (
+    DiscoveryResult,
+    assertDiscoveryResultsEqual,
+>>>>>>> upstream/master
     MockItemState,
 )
 
@@ -19,8 +35,14 @@ INFO_MISSING_COUNTERS = [
 ]
 
 
+<<<<<<< HEAD
 def test_docker_container_diskstat_wrapped(check_manager):
     check = check_manager.get_check('docker_container_diskstat')
+=======
+@pytest.mark.usefixtures("config_load_all_checks")
+def test_docker_container_diskstat_wrapped():
+    check = Check('docker_container_diskstat')
+>>>>>>> upstream/master
     parsed = check.run_parse(INFO_MISSING_COUNTERS)
 
     with pytest.raises(MKCounterWrapped):
@@ -35,8 +57,14 @@ def test_docker_container_diskstat_wrapped(check_manager):
 @pytest.mark.parametrize("info, discovery_expected", [
     (INFO_MISSING_COUNTERS, DiscoveryResult([("SUMMARY", {})])),
 ])
+<<<<<<< HEAD
 def test_docker_container_diskstat_discovery(check_manager, info, discovery_expected):
     check = check_manager.get_check('docker_container_diskstat')
+=======
+@pytest.mark.usefixtures("config_load_all_checks")
+def test_docker_container_diskstat_discovery(info, discovery_expected):
+    check = Check('docker_container_diskstat')
+>>>>>>> upstream/master
     parsed = check.run_parse(info)
     discovery_actual = DiscoveryResult(check.run_discovery(parsed))
     assertDiscoveryResultsEqual(check, discovery_actual, discovery_expected)

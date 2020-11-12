@@ -2,13 +2,20 @@ FROM debian:stretch-slim
 LABEL maintainer="feedback@checkmk.com"
 
 # Pure build time variable declarations (docker build --build-arg KEY=val)
+<<<<<<< HEAD
 ARG CMK_VERSION="1.7.0i1"
+=======
+ARG CMK_VERSION="2.0.0i2"
+>>>>>>> upstream/master
 # Choose one of: raw, enterprise, managed
 ARG CMK_EDITION="raw"
 
 ARG CMK_DL_URL="https://checkmk.com/support"
+<<<<<<< HEAD
 # Give download credentials in "USER:PASSWORD" format. You can only use Raw Edition without
 ARG CMK_DL_CREDENTIALS=""
+=======
+>>>>>>> upstream/master
 
 # The following variables can be set during container init (docker run -e KEY=val)
 ARG CMK_SITE_ID
@@ -28,7 +35,11 @@ ENV MAIL_RELAY_HOST=""
 COPY needed-packages /needed-packages
 
 # First install the tools we need for fetching the package and installation
+<<<<<<< HEAD
 # Then fetch the package and install it. This will make sure all Check_MK
+=======
+# Then fetch the package and install it. This will make sure all Checkmk
+>>>>>>> upstream/master
 # containers will share all dependencies, including this step.
 # hadolint ignore=SC2046,DL3008
 RUN set -e \
@@ -53,11 +64,19 @@ RUN set -e \
     && rm needed-packages
 
 #
+<<<<<<< HEAD
 # Optionally copy an existing Check_MK debian package to the container. In case the file is
 # available that is later used by the build procedure the file will not be downloaded.
 COPY check-mk-${CMK_EDITION}-${CMK_VERSION}_0.stretch_*.deb Check_MK-pubkey*gpg needed-packages /
 
 # Now install the Check_MK version specific things
+=======
+# Optionally copy an existing Checkmk debian package to the container. In case the file is
+# available that is later used by the build procedure the file will not be downloaded.
+COPY check-mk-${CMK_EDITION}-${CMK_VERSION}_0.stretch_*.deb Check_MK-pubkey*gpg needed-packages /
+
+# Now install the Checkmk version specific things
+>>>>>>> upstream/master
 # hadolint ignore=DL3003,DL3008,DL4006
 RUN set -e \
     && mkdir -p /usr/share/man/man8 \
@@ -66,7 +85,14 @@ RUN set -e \
     && export DEBIAN_FRONTEND=noninteractive \
     && PKG_NAME="check-mk-${CMK_EDITION}-${CMK_VERSION}" \
     && PKG_FILE="${PKG_NAME}_0.stretch_$(dpkg --print-architecture).deb" \
+<<<<<<< HEAD
     && if [ ! -e "/${PKG_FILE}" ]; then \
+=======
+    && CREDENTIALS_URL="http://localhost:8000/secret" \
+    && if [ ! -e "/${PKG_FILE}" ]; then \
+        echo "Receive download credentials from ${CREDENTIALS_URL}..." && \
+        CMK_DL_CREDENTIALS=$(curl -sS "${CREDENTIALS_URL}") && \
+>>>>>>> upstream/master
         echo "Downloading ${PKG_FILE}..." && \
         echo "--user \"${CMK_DL_CREDENTIALS}\"" \
             | curl -o "${PKG_FILE}" -K - "${CMK_DL_URL}/${CMK_VERSION}/${PKG_FILE}" ; \
@@ -80,7 +106,11 @@ RUN set -e \
        fi \
     && dpkg-sig --verify "${PKG_FILE}" \
     && dpkg -i "${PKG_FILE}" \
+<<<<<<< HEAD
     && dpkg -i "/omd/versions/default/share/check_mk/agents/check-mk-agent_${CMK_VERSION}-1_all.deb" \
+=======
+    && dpkg -i "$(ls /omd/versions/default/share/check_mk/agents/check-mk-agent_*-1_all.deb)" \
+>>>>>>> upstream/master
     && rm -f -- *.deb *.gpg needed-packages \
     && apt-get clean \
     && rm /usr/sbin/policy-rc.d \
@@ -95,7 +125,11 @@ LABEL \
     org.opencontainers.image.url="https://checkmk.com/"
 
 # Ports:
+<<<<<<< HEAD
 # 5000 - Serves the Check_MK GUI
+=======
+# 5000 - Serves the Checkmk GUI
+>>>>>>> upstream/master
 # 6557 - Serves Livestatus (if enabled via "omd config")
 EXPOSE 5000 6557
 

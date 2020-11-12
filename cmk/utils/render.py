@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,18 +24,32 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 """This module contains functions that transform Python values into
 text representations optimized for human beings - with optional localization.
 The resulting strings are not ment to be parsed into values again later. They
 are just for optical output purposes."""
+<<<<<<< HEAD
 from __future__ import division
+=======
+>>>>>>> upstream/master
 
 # THIS IS STILL EXPERIMENTAL
 
 import time
 import math
 from datetime import timedelta
+<<<<<<< HEAD
 from typing import Tuple, Union  # pylint: disable=unused-import
+=======
+from typing import Optional, Tuple, Union
+>>>>>>> upstream/master
 
 from cmk.utils.i18n import _
 
@@ -49,6 +64,7 @@ from cmk.utils.i18n import _
 #   '----------------------------------------------------------------------'
 
 
+<<<<<<< HEAD
 def date(timestamp):
     return time.strftime(_("%Y-%m-%d"), time.localtime(timestamp))
 
@@ -89,6 +105,48 @@ class Age(object):
         elif secs < 60:
             return "%.1f %s" % (secs, _("s"))
         elif secs < 240:
+=======
+# NOTE: strftime's format *must* be of type str, both in Python 2 and 3.
+def date(timestamp: Optional[float]) -> str:
+    return time.strftime(str(_("%Y-%m-%d")), time.localtime(timestamp))
+
+
+def date_and_time(timestamp: Optional[float]) -> str:
+    return "%s %s" % (date(timestamp), time_of_day(timestamp))
+
+
+# NOTE: strftime's format *must* be of type str, both in Python 2 and 3.
+def time_of_day(timestamp: Optional[float]) -> str:
+    return time.strftime(str(_("%H:%M:%S")), time.localtime(timestamp))
+
+
+def timespan(seconds: Union[float, int]) -> str:
+    return str(timedelta(seconds=int(seconds)))
+
+
+def time_since(timestamp: int) -> str:
+    return timespan(time.time() - timestamp)
+
+
+class Age:
+    """Format time difference seconds into approximated human readable text"""
+    def __init__(self, secs: float) -> None:
+        super(Age, self).__init__()
+        self.__secs = secs
+
+    def __str__(self) -> str:
+        secs = self.__secs
+
+        if secs < 0:
+            return "-" + approx_age(-secs)
+        if 0 < secs < 1:  # ms
+            return physical_precision(secs, 3, _("s"))
+        if secs < 10:
+            return "%.2f %s" % (secs, _("s"))
+        if secs < 60:
+            return "%.1f %s" % (secs, _("s"))
+        if secs < 240:
+>>>>>>> upstream/master
             return "%d %s" % (secs, _("s"))
 
         mins = int(secs / 60.0)
@@ -103,6 +161,7 @@ class Age(object):
         if days < 6:
             d = ("%.1f" % days).rstrip("0").rstrip(".")
             return "%s %s" % (d, _("d"))
+<<<<<<< HEAD
         elif days < 999:
             return "%.0f %s" % (days, _("d"))
         else:
@@ -113,11 +172,26 @@ class Age(object):
             return "%.0f %s" % (years, _("y"))
 
     def __float__(self):
+=======
+        if days < 999:
+            return "%.0f %s" % (days, _("d"))
+        years = days / 365.0
+        if years < 10:
+            return "%.1f %s" % (years, _("y"))
+
+        return "%.0f %s" % (years, _("y"))
+
+    def __float__(self) -> float:
+>>>>>>> upstream/master
         return float(self.__secs)
 
 
 # TODO: Make call sites use Age() directly?
+<<<<<<< HEAD
 def approx_age(secs):
+=======
+def approx_age(secs: float) -> str:
+>>>>>>> upstream/master
     return "%s" % Age(secs)
 
 
@@ -132,8 +206,14 @@ def approx_age(secs):
 #   '----------------------------------------------------------------------'
 
 
+<<<<<<< HEAD
 def scale_factor_prefix(value, base, prefixes=('', 'k', 'M', 'G', 'T', 'P')):
     # type: (int, float, Tuple[str, ...]) -> Tuple[float, str]
+=======
+def scale_factor_prefix(
+    value: float, base: float,
+    prefixes: Tuple[str, ...] = ('', 'k', 'M', 'G', 'T', 'P')) -> Tuple[float, str]:
+>>>>>>> upstream/master
     base = float(base)
 
     prefix = prefixes[-1]
@@ -146,8 +226,12 @@ def scale_factor_prefix(value, base, prefixes=('', 'k', 'M', 'G', 'T', 'P')):
     return factor / base, prefix  # fixed: true-division
 
 
+<<<<<<< HEAD
 def drop_dotzero(v, digits=2):
     # type: (float, int) -> str
+=======
+def drop_dotzero(v: float, digits: int = 2) -> str:
+>>>>>>> upstream/master
     """Renders a number as a floating point number and drops useless
     zeroes at the end of the fraction
 
@@ -160,6 +244,7 @@ def drop_dotzero(v, digits=2):
     return t
 
 
+<<<<<<< HEAD
 def fmt_number_with_precision(v, *args, **kwargs):
     factor, prefix = scale_factor_prefix(v, base=kwargs.get('base', 1000.0))
     value = float(v) / factor
@@ -175,6 +260,20 @@ def fmt_number_with_precision(v, *args, **kwargs):
 
 def fmt_bytes(b, base=1024.0, precision=2, unit="B"):
     # type: (int, float, int, str) -> str
+=======
+def fmt_number_with_precision(v: float,
+                              base: float = 1000.0,
+                              precision: int = 2,
+                              drop_zeroes: bool = False,
+                              unit: str = "") -> str:
+    factor, prefix = scale_factor_prefix(v, base)
+    value = float(v) / factor
+    number = drop_dotzero(value, precision) if drop_zeroes else '%.*f' % (precision, value)
+    return '%s %s' % (number, prefix + unit)
+
+
+def fmt_bytes(b: int, base: float = 1024.0, precision: int = 2, unit: str = "B") -> str:
+>>>>>>> upstream/master
     """Formats byte values to be used in texts for humans.
 
     Takes bytes as integer and returns a string which represents the bytes in a
@@ -186,6 +285,7 @@ def fmt_bytes(b, base=1024.0, precision=2, unit="B"):
 # Precise size of a file - separated decimal separator
 # 1234 -> "1234"
 # 12345 => "12,345"
+<<<<<<< HEAD
 def filesize(size):
     dec_sep = ","
     if size < 10000:
@@ -193,6 +293,15 @@ def filesize(size):
     elif size < 1000000:
         return str(size)[:-3] + dec_sep + str(size)[-3:]
     elif size < 1000000000:
+=======
+def filesize(size: float) -> str:
+    dec_sep = ","
+    if size < 10000:
+        return str(size)
+    if size < 1000000:
+        return str(size)[:-3] + dec_sep + str(size)[-3:]
+    if size < 1000000000:
+>>>>>>> upstream/master
         return str(size)[:-6] + dec_sep + str(size)[-6:-3] + dec_sep + str(size)[-3:]
 
     return str(size)[:-9] + dec_sep + str(size)[-9:-6] + dec_sep + str(size)[-6:-3] + dec_sep + str(
@@ -210,7 +319,11 @@ def filesize(size):
 #   '----------------------------------------------------------------------'
 
 
+<<<<<<< HEAD
 def percent(perc, scientific_notation=False):
+=======
+def percent(perc: float, scientific_notation: bool = False) -> str:
+>>>>>>> upstream/master
     """Renders a given number as percentage string"""
     # 0 / 0.0 -> 0%
     # 9.0e-05 -> 0.00009%
@@ -268,16 +381,28 @@ def percent(perc, scientific_notation=False):
     return result + "%"
 
 
+<<<<<<< HEAD
 def scientific(v, precision=3):
     """Renders a given number in scientific notation (E-notation)"""
     if v == 0:
         return "0"
     elif v < 0:
+=======
+def scientific(v: float, precision: int = 3) -> str:
+    """Renders a given number in scientific notation (E-notation)"""
+    if v == 0:
+        return "0"
+    if v < 0:
+>>>>>>> upstream/master
         return "-" + scientific(v * -1, precision)
 
     mantissa, exponent = _frexp10(float(v))
     # Render small numbers without exponent
+<<<<<<< HEAD
     if exponent >= -3 and exponent <= 4:
+=======
+    if -3 <= exponent <= 4:
+>>>>>>> upstream/master
         return "%%.%df" % max(0, precision - exponent) % v
 
     return "%%.%dfe%%d" % precision % (mantissa, exponent)
@@ -294,7 +419,11 @@ def scientific(v, precision=3):
 #
 # Note if the type of v is integer, then the precision cut
 # down to the precision of the actual number
+<<<<<<< HEAD
 def physical_precision(v, precision, unit_symbol):
+=======
+def physical_precision(v: float, precision: int, unit_symbol: str) -> str:
+>>>>>>> upstream/master
     if v < 0:
         return "-" + physical_precision(-v, precision, unit_symbol)
 
@@ -304,7 +433,11 @@ def physical_precision(v, precision, unit_symbol):
     return (u"%%.%df %%s%%s" % places_after_comma) % (scaled_value, scale_symbol, unit_symbol)
 
 
+<<<<<<< HEAD
 def calculate_physical_precision(v, precision):
+=======
+def calculate_physical_precision(v: float, precision: int) -> Tuple[str, int, int]:
+>>>>>>> upstream/master
     if v == 0:
         return "", precision - 1, 1
 
@@ -324,7 +457,11 @@ def calculate_physical_precision(v, precision):
         -2: u"µ",
         -1: "m",
         0: "",
+<<<<<<< HEAD
         1: "K",
+=======
+        1: "k",
+>>>>>>> upstream/master
         2: "M",
         3: "G",
         4: "T",
@@ -348,7 +485,11 @@ def calculate_physical_precision(v, precision):
     return scale_symbols[scale], places_after_comma, 1000**scale
 
 
+<<<<<<< HEAD
 def fmt_nic_speed(speed):
+=======
+def fmt_nic_speed(speed: str) -> str:
+>>>>>>> upstream/master
     """Format network speed (bit/s) for humans."""
     try:
         speedi = int(speed)
@@ -373,12 +514,20 @@ def fmt_nic_speed(speed):
 #   '----------------------------------------------------------------------'
 
 
+<<<<<<< HEAD
 def _frexp10(x):
     return _frexpb(x, 10)
 
 
 def _frexpb(x, base):
     # type: (float, int) -> Tuple[float, int]
+=======
+def _frexp10(x: float) -> Tuple[float, int]:
+    return _frexpb(x, 10)
+
+
+def _frexpb(x: float, base: int) -> Tuple[float, int]:
+>>>>>>> upstream/master
     exp = int(math.log(x, base))
     mantissa = x / base**exp
     if mantissa < 1:

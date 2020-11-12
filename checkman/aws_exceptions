@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: AWS/Exceptions
+=======
+title: AWS: Exceptions
+>>>>>>> upstream/master
 agents: aws
 catalog: cloud/aws
 license: GPL
@@ -6,7 +10,13 @@ distribution: check_mk
 description:
  This check collects all exceptions during the execution of the
  special agent {agent_aws} for monitoring Amazon Web Service.
+<<<<<<< HEAD
  If no exceptions occur the check is OK, otherwise CRIT.
+=======
+
+ The service is {OK} if no exceptions occur
+ otherwise it goes {CRIT}.
+>>>>>>> upstream/master
 
 inventory:
  One service is created.

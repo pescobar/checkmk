@@ -1,18 +1,40 @@
+<<<<<<< HEAD
 import logging
 import time
 import pytest
 import cmk.ec.defaults
 import cmk.ec.main as main
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# pylint: disable=redefined-outer-name
+import logging
+import pytest  # type: ignore[import]
+from testlib import on_time
+import cmk.ec.export as ec
+import cmk.ec.main
+>>>>>>> upstream/master
 
 
 @pytest.fixture
 def event_creator():
     logger = logging.getLogger("cmk.mkeventd")
 
+<<<<<<< HEAD
     config = cmk.ec.defaults.default_config()
     config["debug_rules"] = True
 
     return main.EventCreator(logger, config)
+=======
+    config = ec.default_config()
+    config["debug_rules"] = True
+
+    return cmk.ec.main.EventCreator(logger, config)
+>>>>>>> upstream/master
 
 
 @pytest.mark.parametrize(
@@ -30,7 +52,11 @@ def event_creator():
                 'host_in_downtime': False,
                 'application': 'CRON',
                 'host': 'Klapprechner',
+<<<<<<< HEAD
                 'time': 1558874701.0,
+=======
+                'time': 1558871101.0,
+>>>>>>> upstream/master
                 'ipaddress': '127.0.0.1',
             },
         ),
@@ -62,7 +88,11 @@ def event_creator():
                 'pid': '8046',
                 'priority': 6,
                 'text': 'message',
+<<<<<<< HEAD
                 'time': 1558874701.0
+=======
+                'time': 1558871101.0
+>>>>>>> upstream/master
             },
         ),
         (
@@ -82,6 +112,7 @@ def event_creator():
         ),
         (
             # Variant 3: local Nagios alert posted by mkevent -n
+<<<<<<< HEAD
             "<154>@1341847712;5;Contact Info;  MyHost My Service: CRIT - This che",
             {
                 # TODO: Found a bug? This is not parsed corectly. Check whether or not mkevent
@@ -93,6 +124,17 @@ def event_creator():
                 'host_in_downtime': False,
                 'ipaddress': '127.0.0.1',
                 'pid': 0,
+=======
+            "<154>@1341847712;5;Contact Info; MyHost My Service: CRIT - This che",
+            {
+                'application': 'My Service',
+                'contact': 'Contact Info',
+                'core_host': '',
+                'facility': 19,
+                'host': 'MyHost',
+                'host_in_downtime': False,
+                'ipaddress': '127.0.0.1',
+>>>>>>> upstream/master
                 'priority': 2,
                 'sl': 5,
                 'text': 'CRIT - This che',
@@ -233,6 +275,7 @@ def event_creator():
         ),
     ])
 def test_create_event_from_line(event_creator, monkeypatch, line, expected):
+<<<<<<< HEAD
     monkeypatch.setattr(
         time,
         'time',
@@ -246,3 +289,8 @@ def test_create_event_from_line(event_creator, monkeypatch, line, expected):
 
     address = ("127.0.0.1", 1234)
     assert event_creator.create_event_from_line(line, address) == expected
+=======
+    address = ("127.0.0.1", 1234)
+    with on_time(1550000000.0, "CET"):
+        assert event_creator.create_event_from_line(line, address) == expected
+>>>>>>> upstream/master

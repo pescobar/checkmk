@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -24,6 +25,19 @@
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
 
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# NOTE: Careful when replacing the *-import below with a more specific import. This can cause
+# problems because it might remove variables from the check-context which are necessary for
+# resolving legacy discovery results such as [("SUMMARY", "diskstat_default_levels")]. Furthermore,
+# it might also remove variables needed for accessing discovery rulesets.
+from cmk.base.check_legacy_includes.prism import *  # pylint: disable=wildcard-import,unused-wildcard-import
+>>>>>>> upstream/master
 # <<<prism_containers:sep(9)>>>
 # name    usage   capacity
 # DS01_NFS_Nutanix_B2B_Intern_SAS_Contrainer      2518694292480   38575532134515
@@ -43,8 +57,11 @@ def check_prism_container(item, params, parsed):
         if row['name'] == item:
             usage, capacity = map(int, (row['usage'], row['capacity']))
 
+            yield 0, "Total: %s" % get_bytes_human_readable(capacity)
+
             warn, crit = params['levels']
             if isinstance(warn, float):
+<<<<<<< HEAD
                 warn, crit = [x * capacity for x in (warn, crit)]
 
             if usage >= crit:
@@ -59,11 +76,17 @@ def check_prism_container(item, params, parsed):
                     (get_bytes_human_readable(warn), get_bytes_human_readable(crit))
             else:
                 warntxt = ""
+=======
+                warn, crit = [x * capacity * 0.01 for x in (warn, crit)]
+>>>>>>> upstream/master
 
-            return status, "%s of %s used%s" %\
-                (get_bytes_human_readable(usage),
-                 get_bytes_human_readable(capacity),
-                 warntxt), [('fs_used', usage, warn, crit, 0, capacity)]
+            yield check_levels(
+                usage,
+                'fs_used',
+                (warn, crit),
+                infoname='Used',
+                human_readable_func=get_bytes_human_readable,
+            )
 
 
 check_info['prism_containers'] = {
@@ -73,6 +96,9 @@ check_info['prism_containers'] = {
     'group': "prism_container",
     'has_perfdata': True,
     'service_description': "Container %s",
+<<<<<<< HEAD
     'includes': ["prism.include"],
+=======
+>>>>>>> upstream/master
     'default_levels_variable': 'prism_container_default_levels'
 }

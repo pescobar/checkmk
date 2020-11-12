@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/env python
 # encoding: utf-8
 # pylint: disable=redefined-outer-name
@@ -8,12 +9,34 @@ import pytest  # type: ignore
 import six
 
 from testlib import web, create_linux_test_host  # pylint: disable=unused-import
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+import collections
+import json as _json
+import time as _time
+import uuid as _uuid
+from typing import Dict, List
+
+import pytest  # type: ignore[import]
+
+from testlib import web, create_linux_test_host  # noqa: F401 # pylint: disable=unused-import
+>>>>>>> upstream/master
 
 DefaultConfig = collections.namedtuple("DefaultConfig", ["core"])
 
 
+<<<<<<< HEAD
 @pytest.fixture(scope="module", params=["nagios", "cmc"])
 def default_cfg(request, site, web):
+=======
+@pytest.fixture(name="default_cfg", scope="module", params=["nagios", "cmc"])
+def default_cfg_fixture(request, site, web):  # noqa: F811 # pylint: disable=redefined-outer-name
+>>>>>>> upstream/master
     config = DefaultConfig(core=request.param)
     site.set_config("CORE", config.core, with_restart=True)
 
@@ -28,6 +51,7 @@ def default_cfg(request, site, web):
 # Simply detects all tables by querying the columns table and then
 # queries each of those tables without any columns and filters
 def test_tables(default_cfg, site):
+<<<<<<< HEAD
     existing_tables = set([])
 
     for row in site.live.query_table_assoc("GET columns\n"):
@@ -36,6 +60,16 @@ def test_tables(default_cfg, site):
     assert len(existing_tables) > 5
 
     for table in existing_tables:
+=======
+    columns_per_table: Dict[str, List[str]] = {}
+    for row in site.live.query_table_assoc("GET columns\n"):
+        columns_per_table.setdefault(row["table"], []).append(row["name"])
+    assert len(columns_per_table) > 5
+
+    for table, _columns in columns_per_table.items():
+        print("Test table: %s" % table)
+
+>>>>>>> upstream/master
         if default_cfg.core == "nagios" and table == "statehist":
             continue  # the statehist table in nagios can not be fetched without time filter
 
@@ -70,7 +104,11 @@ def test_host_custom_variables(default_cfg, site):
         u'ip-v4': u'ip-v4',
         u'networking': u'lan',
         u'piggyback': u'auto-piggyback',
+<<<<<<< HEAD
         u'site': six.text_type(site.id),
+=======
+        u'site': str(site.id),
+>>>>>>> upstream/master
         u'snmp_ds': u'no-snmp',
         u'tcp': u'tcp',
     }
@@ -116,8 +154,22 @@ def test_service_table(default_cfg, site):
     assert "Memory" in descriptions
 
 
+<<<<<<< HEAD
 @pytest.fixture()
 def configure_service_tags(site, web, default_cfg):
+=======
+def test_usage_counters(default_cfg, site):
+    rows = site.live.query(
+        "GET status\nColumns: helper_usage_cmk helper_usage_fetcher helper_usage_checker\n")
+    assert isinstance(rows, list)
+    assert len(rows) == 1
+    assert isinstance(rows[0], list)
+    assert all(isinstance(v, (int, float)) for v in rows[0])
+
+
+@pytest.fixture(name="configure_service_tags")
+def configure_service_tags_fixture(site, web, default_cfg):  # noqa: F811 # pylint: disable=redefined-outer-name
+>>>>>>> upstream/master
     web.set_ruleset(
         "service_tag_rules", {
             "ruleset": {
@@ -139,9 +191,12 @@ def configure_service_tags(site, web, default_cfg):
 
 
 def test_service_custom_variables(configure_service_tags, default_cfg, site):
+<<<<<<< HEAD
     if default_cfg.core == "nagios":
         pytest.skip("Disabled until tags column is supported by play nagios")
 
+=======
+>>>>>>> upstream/master
     rows = site.live.query("GET services\n"
                            "Columns: custom_variables tags\n"
                            "Filter: host_name = livestatus-test-host\n"
@@ -150,3 +205,64 @@ def test_service_custom_variables(configure_service_tags, default_cfg, site):
     custom_variables, tags = rows[0]
     assert custom_variables == {}
     assert tags == {u'criticality': u'prod'}
+<<<<<<< HEAD
+=======
+
+
+@pytest.mark.usefixtures("default_cfg")
+class TestCrashReport:
+    @pytest.fixture
+    def uuid(self):
+        return str(_uuid.uuid4())
+
+    @pytest.fixture
+    def component(self):
+        return "cmp"
+
+    @pytest.fixture
+    def crash_info(self, component, uuid):
+        return {"component": component, "id": uuid}
+
+    @pytest.fixture(autouse=True)
+    def crash_report(self, site, component, uuid, crash_info):
+        assert site.file_exists("var/check_mk/crashes")
+        dir_path = "var/check_mk/crashes/%s/%s/" % (component, uuid)
+        site.makedirs(dir_path)
+        site.write_file(dir_path + "crash.info", _json.dumps(crash_info))
+        yield
+        site.delete_dir("var/check_mk/crashes/%s" % component)
+
+    def test_list_crash_report(self, site, component, uuid):
+        rows = site.live.query("GET crashreports")
+        assert rows
+        assert [u"component", u"id"] in rows
+        assert [component, uuid] in rows
+
+    def test_read_crash_report(self, site, component, uuid, crash_info):
+        rows = site.live.query("\n".join(
+            ("GET crashreports", "Columns: file:f0:%s/%s/crash.info" % (component, uuid),
+             "Filter: id = %s" % uuid)))
+        assert rows
+        assert _json.loads(rows[0][0]) == crash_info
+
+    def test_del_crash_report(self, site, component, uuid):
+        before = site.live.query("GET crashreports")
+        assert [component, uuid] in before
+
+        site.live.command("[%i] DEL_CRASH_REPORT;%s" % (_time.mktime(_time.gmtime()), uuid))
+        _time.sleep(0.1)  # Kindly let it complete.
+
+        after = site.live.query("GET crashreports")
+        assert after != before
+        assert [component, uuid] not in after
+
+    def test_other_crash_report(self, site, component, uuid):
+        before = site.live.query("GET crashreports")
+        assert [component, uuid] in before
+
+        site.live.command("[%i] DEL_CRASH_REPORT;%s" %
+                          (_time.mktime(_time.gmtime()), "01234567-0123-4567-89ab-0123456789ab"))
+
+        after = site.live.query("GET crashreports")
+        assert [component, uuid] in after
+>>>>>>> upstream/master

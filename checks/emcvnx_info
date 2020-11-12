@@ -1,29 +1,14 @@
-#!/usr/bin/python
-# -*- encoding: utf-8; py-indent-offset: 4 -*-
-# +------------------------------------------------------------------+
-# |             ____ _               _        __  __ _  __           |
-# |            / ___| |__   ___  ___| | __   |  \/  | |/ /           |
-# |           | |   | '_ \ / _ \/ __| |/ /   | |\/| | ' /            |
-# |           | |___| | | |  __/ (__|   <    | |  | | . \            |
-# |            \____|_| |_|\___|\___|_|\_\___|_|  |_|_|\_\           |
-# |                                                                  |
-# | Copyright Mathias Kettner 2014             mk@mathias-kettner.de |
-# +------------------------------------------------------------------+
-#
-# This file is part of Check_MK.
-# The official homepage is at http://mathias-kettner.de/check_mk.
-#
-# check_mk is free software;  you can redistribute it and/or modify it
-# under the  terms of the  GNU General Public License  as published by
-# the Free Software Foundation in version 2.  check_mk is  distributed
-# in the hope that it will be useful, but WITHOUT ANY WARRANTY;  with-
-# out even the implied warranty of  MERCHANTABILITY  or  FITNESS FOR A
-# PARTICULAR PURPOSE. See the  GNU General Public License for more de-
-# tails. You should have  received  a copy of the  GNU  General Public
-# License along with GNU Make; see the file  COPYING.  If  not,  write
-# to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
-# Boston, MA 02110-1301 USA.
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
 
+# NOTE: Careful when replacing the *-import below with a more specific import. This can cause
+# problems because it might remove variables from the check-context which are necessary for
+# resolving legacy discovery results such as [("SUMMARY", "diskstat_default_levels")]. Furthermore,
+# it might also remove variables needed for accessing discovery rulesets.
+from cmk.base.check_legacy_includes.emcvnx import *  # pylint: disable=wildcard-import,unused-wildcard-import
 # Example output from agent:
 # <<<emcvnx_info>>>
 #
@@ -110,6 +95,7 @@ def parse_emcvnx_info(info):
         'Write_cache_flushes': 'io',
         'Write_cache_blocks_flushed': 'io',
     }
+<<<<<<< HEAD
 
     preparsed, errors = preparse_emcvnx_info(info)
 
@@ -139,6 +125,37 @@ def inventory_emcvnx_info(parsed, subcheck):
 def check_emcvnx_info(item, _no_params, parsed):
     output, errors = parsed
 
+=======
+
+    preparsed, errors = preparse_emcvnx_info(info)
+
+    for key, value in preparsed:
+        subcheck = key_to_subcheck.get(key)
+        if subcheck:
+            parsed[subcheck].append((key, value))
+    return parsed, errors
+
+
+def inventory_emcvnx_info(parsed, subcheck):
+    output, _errors = parsed
+    if output[subcheck]:
+        return [(None, None)]
+
+
+#   .--Info----------------------------------------------------------------.
+#   |                         ___        __                                |
+#   |                        |_ _|_ __  / _| ___                           |
+#   |                         | || '_ \| |_ / _ \                          |
+#   |                         | || | | |  _| (_) |                         |
+#   |                        |___|_| |_|_|  \___/                          |
+#   |                                                                      |
+#   '----------------------------------------------------------------------'
+
+
+def check_emcvnx_info(item, _no_params, parsed):
+    output, errors = parsed
+
+>>>>>>> upstream/master
     if errors:
         yield 2, ('Error(s) while parsing the output. This may effect the '
                   'discovery of other emcvnx services. Please check your naviseccli '
@@ -156,7 +173,10 @@ check_info['emcvnx_info'] = {
     "inventory_function": lambda x: inventory_emcvnx_info(x, 'info'),
     "check_function": check_emcvnx_info,
     "service_description": "EMC VNX Info",
+<<<<<<< HEAD
     "includes": ["emcvnx.include"],
+=======
+>>>>>>> upstream/master
 }
 
 #   .--Storage-------------------------------------------------------------.

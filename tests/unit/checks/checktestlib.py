@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import types
 import copy
 import mock
@@ -7,11 +8,37 @@ from cmk_base.discovered_labels import DiscoveredHostLabels, HostLabel
 
 
 class Tuploid(object):
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+import copy
+import os
+import types
+from typing import List
+
+import mock
+import pytest  # type: ignore[import]
+
+from cmk.base.item_state import MKCounterWrapped
+from cmk.base.discovered_labels import DiscoveredHostLabels, HostLabel
+from cmk.base.check_api_utils import Service
+
+
+class Tuploid:
+>>>>>>> upstream/master
     """Base class for values with (potentially variadic) tuple representations"""
     def __eq__(self, other_value):
         if isinstance(other_value, self.__class__):
             return other_value.tuple == self.tuple
+<<<<<<< HEAD
         elif isinstance(other_value, tuple):
+=======
+        if isinstance(other_value, tuple):
+>>>>>>> upstream/master
             return all(x == y for x, y in zip(other_value, self.tuple))
 
     def __ne__(self, other_value):
@@ -40,7 +67,11 @@ class PerfValue(Tuploid):
         # TODO: This is very basic. There is more way more magic involved
         #       in what kind of values are allowed as metric names.
         #       I'm not too sure unicode should be allowed, either.
+<<<<<<< HEAD
         assert type(key) in [str, unicode],\
+=======
+        assert isinstance(key, str),\
+>>>>>>> upstream/master
                "PerfValue: key %r must be of type str or unicode" % key
         #       Whitespace leads to serious errors
         assert len(key.split()) == 1, \
@@ -50,6 +81,7 @@ class PerfValue(Tuploid):
             assert c not in key, "PerfValue: key %r must not contain %r" % (key, c)
         # NOTE: The CMC as well as all other Nagios-compatible cores do accept a
         #       string value that may contain a unit, which is in turn available
+<<<<<<< HEAD
         #       for use in PNP4Nagios templates. Check_MK defines its own semantic
         #       context for performance values using Check_MK metrics. It is therefore
         #       preferred to return a "naked" scalar.
@@ -59,6 +91,17 @@ class PerfValue(Tuploid):
         for n in ('warn', 'crit', 'minimum', 'maximum'):
             v = getattr(self, n)
             assert type(v) in [int, float, type(None)], msg % (n, v, type(v))
+=======
+        #       for use in PNP4Nagios templates. Checkmk defines its own semantic
+        #       context for performance values using Checkmk metrics. It is therefore
+        #       preferred to return a "naked" scalar.
+        msg = "PerfValue: %s parameter %r must be of type int, float or None - not %r"
+        assert isinstance(value, (int, float)),\
+               msg.replace(' or None', '') % ('value', value, type(value))
+        for n in ('warn', 'crit', 'minimum', 'maximum'):
+            v = getattr(self, n)
+            assert v is None or isinstance(v, (int, float)), msg % (n, v, type(v))
+>>>>>>> upstream/master
 
     @property
     def tuple(self):
@@ -106,10 +149,16 @@ class BasicCheckResult(Tuploid):
         assert status in [0, 1, 2, 3], \
                "BasicCheckResult: status must be in (0, 1, 2, 3) - not %r" % (status,)
 
+<<<<<<< HEAD
         ti = type(infotext)
         assert ti in [str, unicode], \
                "BasicCheckResult: infotext %r must be of type str or unicode - not %r" \
                % (infotext, ti)
+=======
+        assert isinstance(infotext, str), \
+                "BasicCheckResult: infotext %r must be of type str or unicode - not %r" % \
+                (infotext, type(infotext))
+>>>>>>> upstream/master
         if "\n" in infotext:
             self.infotext, \
             self.multiline = infotext.split("\n", 1)
@@ -145,6 +194,7 @@ def assertBasicCheckResultsEqual(actual, expected):
     """
     assert isinstance(actual, BasicCheckResult), "not a BasicCheckResult: %r" % actual
     assert isinstance(expected, BasicCheckResult), "not a BasicCheckResult: %r" % expected
+<<<<<<< HEAD
     assert expected.status == actual.status, "expected %r, but status is %r" % (expected,
                                                                                 actual.status)
     assert expected.infotext == actual.infotext, "expected %r, but infotext is %r" % (
@@ -158,6 +208,25 @@ def assertBasicCheckResultsEqual(actual, expected):
 
 
 class CheckResult(object):
+=======
+
+    msg = "expected %s, but %%s is %%r" % repr(expected).replace('%', '%%')
+    assert expected.status == actual.status, msg % ("status", actual.status)
+
+    diff_idx = len(os.path.commonprefix((expected.infotext, actual.infotext)))
+    diff_msg = ", differing at char %r" % diff_idx
+    assert expected.infotext == actual.infotext, msg % ("infotext", actual.infotext) + diff_msg
+
+    perf_count = len(actual.perfdata)
+    assert len(expected.perfdata) == perf_count, msg % ("perfdata count", perf_count)
+    for pact, pexp in zip(actual.perfdata, expected.perfdata):
+        assertPerfValuesEqual(pact, pexp)
+
+    assert expected.multiline == actual.multiline, msg % ("multiline", actual.multiline)
+
+
+class CheckResult:
+>>>>>>> upstream/master
     """
     A check result potentially consisting of multiple subresults,
     as returned by yield-style checks
@@ -253,11 +322,23 @@ def assertCheckResultsEqual(actual, expected):
 class DiscoveryEntry(Tuploid):
     """A single entry as returned by the discovery (or in oldspeak: inventory) function."""
     def __init__(self, entry):
+<<<<<<< HEAD
         self.item, self.default_params = entry
         ti = type(self.item)
         assert ti in [str, unicode, type(None)], \
                "DiscoveryEntry: item %r must be of type str, unicode or None - not %r" \
                % (self.item, ti)
+=======
+        # hack for ServiceLabel
+        if isinstance(entry, Service):
+            self.item, self.default_params, self.service_labels = entry.item, entry.parameters, entry.service_labels
+        else:
+            self.item, self.default_params = entry
+        ti = type(self.item)
+        assert self.item is None or isinstance(self.item, str), \
+               "DiscoveryEntry: item %r must be of type str, unicode or None - not %r" \
+               % (self.item, type(ti))
+>>>>>>> upstream/master
 
     @property
     def tuple(self):
@@ -267,7 +348,11 @@ class DiscoveryEntry(Tuploid):
         return "DiscoveryEntry(%r, %r)" % self.tuple
 
 
+<<<<<<< HEAD
 class DiscoveryResult(object):
+=======
+class DiscoveryResult:
+>>>>>>> upstream/master
     """
     The result of the discovery as a whole.
 
@@ -288,11 +373,18 @@ class DiscoveryResult(object):
                 self.labels += entry
             elif isinstance(entry, HostLabel):
                 self.labels.add_label(entry)
+<<<<<<< HEAD
+=======
+            # preparation for ServiceLabel Discovery
+            #elif isinstance(entry, Service):
+            #
+>>>>>>> upstream/master
             else:
                 self.entries.append(DiscoveryEntry(entry))
         self.entries.sort(key=repr)
 
     def __eq__(self, other):
+<<<<<<< HEAD
         return (self.entries == other.entries and self.labels == other.labels)
 
     def __repr__(self):
@@ -301,6 +393,21 @@ class DiscoveryResult(object):
 
     def __str__(self):
         return "%s%s" % (map(tuple, self.entries), [self.labels[k].label for k in self.labels])
+=======
+        return self.entries == other.entries and self.labels == other.labels
+
+    # TODO: Very questionable __repr__ conversion, leading to even more
+    # interesting typing Kung Fu...
+    def __repr__(self) -> str:
+        entries: List[object] = [o for o in self.entries if isinstance(o, object)]
+        host_labels: List[object] = [HostLabel(str(k), str(self.labels[k])) for k in self.labels]
+        return "DiscoveryResult(%r)" % (entries + host_labels,)
+
+    # TODO: Very obscure and inconsistent __str__ conversion...
+    def __str__(self):
+        return "%s%s" % ([tuple(e) for e in self.entries
+                         ], [self.labels[k].label for k in self.labels])
+>>>>>>> upstream/master
 
 
 def assertDiscoveryResultsEqual(check, actual, expected):
@@ -314,7 +421,11 @@ def assertDiscoveryResultsEqual(check, actual, expected):
     assert isinstance(expected, DiscoveryResult), \
            "%r is not a DiscoveryResult instance" % expected
     assert len(actual.entries) == len(expected.entries), \
+<<<<<<< HEAD
            "DiscoveryResults entries are not of equal length: %s != %s" % (actual, expected)
+=======
+           "DiscoveryResults entries are not of equal length: %r != %r" % (actual, expected)
+>>>>>>> upstream/master
 
     for enta, ente in zip(actual.entries, expected.entries):
         item_a, default_params_a = enta
@@ -337,7 +448,11 @@ def assertDiscoveryResultsEqual(check, actual, expected):
         assert laba == labe, "discovered host labels differ: expected %r got %r" % (laba, labe)
 
 
+<<<<<<< HEAD
 class BasicItemState(object):
+=======
+class BasicItemState:
+>>>>>>> upstream/master
     """Item state as returned by get_item_state
 
     We assert that we have exactly two values,
@@ -358,6 +473,7 @@ class BasicItemState(object):
         # We want to be able to test time anomalies.
 
 
+<<<<<<< HEAD
 class MockItemState(object):
     """Mock the calls to item_state API.
 
@@ -366,6 +482,16 @@ class MockItemState(object):
     in running checks!)
     Instead, this context manager mocks
     cmk_base.item_state._cached_item_states.get_item_state.
+=======
+class MockItemState:
+    """Mock the calls to item_state API.
+
+    Due to our rather unorthodox import structure, we cannot mock
+    cmk.base.item_state.get_item_state directly (it's a global var
+    in running checks!)
+    Instead, this context manager mocks
+    cmk.base.item_state._cached_item_states.get_item_state.
+>>>>>>> upstream/master
 
     This will affect get_rate and get_average as well as
     get_item_state.
@@ -375,7 +501,11 @@ class MockItemState(object):
     with MockItemState(mock_state):
         # run your check test here
         mocked_time_diff, mocked_value = \
+<<<<<<< HEAD
             cmk_base.item_state.get_item_state('whatever_key', default="IGNORED")
+=======
+            cmk.base.item_state.get_item_state('whatever_key', default="IGNORED")
+>>>>>>> upstream/master
 
     There are three different types of arguments to pass to MockItemState:
 
@@ -385,11 +515,16 @@ class MockItemState(object):
 
     2) Dictionary:
         The dictionary will replace the item states.
+<<<<<<< HEAD
         Basically `get_item_state` gets replaced by the dictionarys GET method.
+=======
+        Basically `get_item_state` gets replaced by the dictionaries GET method.
+>>>>>>> upstream/master
 
     3) Anything else:
         All calls to the item_state API behave as if the last state had
         been `value`, recorded
+<<<<<<< HEAD
         `time_diff` seeconds ago.
 
     See for example 'test_statgrab_cpu_check.py'.
@@ -407,6 +542,21 @@ class MockItemState(object):
         # in dict case check values
         if isinstance(mock_state, dict):
             self.get_val_function = mock_state.get
+=======
+        `time_diff` seconds ago.
+
+    See for example 'test_statgrab_cpu_check.py'.
+    """
+    TARGET = 'cmk.base.item_state._cached_item_states.get_item_state'
+
+    def __init__(self, mock_state):
+        self.context = None
+
+        if hasattr(mock_state, '__call__'):
+            self.get_val_function = mock_state
+        elif isinstance(mock_state, dict):
+            self.get_val_function = mock_state.get  # in dict case check values
+>>>>>>> upstream/master
         else:
             self.get_val_function = lambda key, default: mock_state
 
@@ -423,10 +573,18 @@ class MockItemState(object):
         return self.context.__enter__()
 
     def __exit__(self, *exc_info):
+<<<<<<< HEAD
         return self.context.__exit__(*exc_info)
 
 
 class assertMKCounterWrapped(object):
+=======
+        assert self.context is not None
+        return self.context.__exit__(*exc_info)
+
+
+class assertMKCounterWrapped:
+>>>>>>> upstream/master
     """Contextmanager in which a MKCounterWrapped exception is expected
 
     If you can choose to also assert a certain error message:
@@ -463,12 +621,20 @@ class assertMKCounterWrapped(object):
         return True
 
 
+<<<<<<< HEAD
 class MockHostExtraConf(object):
+=======
+class MockHostExtraConf:
+>>>>>>> upstream/master
     """Mock the calls to host_extra_conf.
 
     Due to our rather unorthodox import structure, we cannot mock
     host_extra_conf_merged directly (it's a global var in running checks!)
+<<<<<<< HEAD
     Instead, we mock the calls to cmk_base.config.host_extra_conf.
+=======
+    Instead, we mock the calls to cmk.base.config.host_extra_conf.
+>>>>>>> upstream/master
 
     Passing a single dict to this objects init method will result in
     host_extra_conf_merged returning said dict.
@@ -507,8 +673,13 @@ class MockHostExtraConf(object):
 
     def __enter__(self):
         '''The default context: just mock get_item_state'''
+<<<<<<< HEAD
         import cmk_base.config
         config_cache = cmk_base.config.get_config_cache()
+=======
+        import cmk.base.config  # pylint: disable=import-outside-toplevel
+        config_cache = cmk.base.config.get_config_cache()
+>>>>>>> upstream/master
         self.context = mock.patch.object(
             config_cache,
             self.target,
@@ -517,6 +688,10 @@ class MockHostExtraConf(object):
         return self.context.__enter__()
 
     def __exit__(self, *exc_info):
+<<<<<<< HEAD
+=======
+        assert self.context is not None
+>>>>>>> upstream/master
         return self.context.__exit__(*exc_info)
 
 
@@ -524,7 +699,11 @@ class ImmutablesChangedError(AssertionError):
     pass
 
 
+<<<<<<< HEAD
 class Immutables(object):
+=======
+class Immutables:
+>>>>>>> upstream/master
     """Store some data and ensure it is not changed"""
     def __init__(self):
         self.refs = {}
@@ -537,11 +716,19 @@ class Immutables(object):
         self.copies.__setitem__(k, copy.deepcopy(v))
 
     def test(self, descr=''):
+<<<<<<< HEAD
         for k in self.refs.keys():
             try:
                 assertEqual(self.refs[k], self.copies[k], repr(k) + descr)
             except AssertionError as exc:
                 raise ImmutablesChangedError(*exc)
+=======
+        for k in self.refs:
+            try:
+                assertEqual(self.refs[k], self.copies[k], repr(k) + descr)
+            except AssertionError as exc:
+                raise ImmutablesChangedError(exc) from exc
+>>>>>>> upstream/master
 
 
 def assertEqual(first, second, descr=''):
@@ -549,12 +736,18 @@ def assertEqual(first, second, descr=''):
     if first == second:
         return
 
+<<<<<<< HEAD
     assert isinstance(first, type(second)), "%sdiffering type: %r != %r for values %r and %r" \
         % (descr, type(first), type(second), first, second)
+=======
+    assert isinstance(first, type(second)), ("%sdiffering type: %r != %r for values %r and %r" %
+                                             (descr, type(first), type(second), first, second))
+>>>>>>> upstream/master
 
     if isinstance(first, dict):
         remainder = set(second.keys())
         for k in first:
+<<<<<<< HEAD
             assert k in second, "%sadditional key %r in %r" \
                 % (descr, k, first)
             remainder.remove(k)
@@ -567,5 +760,16 @@ def assertEqual(first, second, descr=''):
             % (descr, first, second)
         for c in range(len(first)):
             assertEqual(first[c], second[c], descr + "[%d] " % c)
+=======
+            assert k in second, "%sadditional key %r in %r" % (descr, k, first)
+            remainder.remove(k)
+            assertEqual(first[k], second[k], descr + " [%s]" % repr(k))
+        assert not remainder, "%smissing keys %r in %r" % (descr, list(remainder), first)
+
+    if isinstance(first, (list, tuple)):
+        assert len(first) == len(second), "%svarying length: %r != %r" % (descr, first, second)
+        for (c, fst), snd in zip(enumerate(first), second):
+            assertEqual(fst, snd, descr + "[%d] " % c)
+>>>>>>> upstream/master
 
     raise AssertionError("%snot equal (%r): %r != %r" % (descr, type(first), first, second))

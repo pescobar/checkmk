@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // +------------------------------------------------------------------+
 // |             ____ _               _        __  __ _  __           |
 // |            / ___| |__   ___  ___| | __   |  \/  | |/ /           |
@@ -21,17 +22,28 @@
 // License along with GNU Make; see the file  COPYING.  If  not,  write
 // to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 // Boston, MA 02110-1301 USA.
+=======
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+// conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 import * as utils from "utils";
 import * as ajax from "ajax";
 
+<<<<<<< HEAD
 export function refresh_job_details(url, ident, is_site)
 {
     setTimeout(function() {
+=======
+export function refresh_job_details(url, ident, is_site) {
+    setTimeout(function () {
+>>>>>>> upstream/master
         do_job_detail_refresh(url, ident, is_site);
     }, 1000);
 }
 
+<<<<<<< HEAD
 function do_job_detail_refresh(url, ident, is_site)
 {
     ajax.call_ajax(url, {
@@ -49,6 +61,23 @@ function do_job_detail_refresh(url, ident, is_site)
 
 function handle_job_detail_response(handler_data, response_body)
 {
+=======
+function do_job_detail_refresh(url, ident, is_site) {
+    ajax.call_ajax(url, {
+        method: "GET",
+        post_data: "job=" + encodeURIComponent(ident),
+        response_handler: handle_job_detail_response,
+        error_handler: handle_job_detail_error,
+        handler_data: {
+            url: url,
+            ident: ident,
+            is_site: is_site,
+        },
+    });
+}
+
+function handle_job_detail_response(handler_data, response_body) {
+>>>>>>> upstream/master
     // when a message was shown and now not anymore, assume the job has finished
     var had_message = document.getElementById("job_detail_msg") ? true : false;
 
@@ -57,19 +86,30 @@ function handle_job_detail_response(handler_data, response_body)
 
     if (!had_message) {
         refresh_job_details(handler_data["url"], handler_data["ident"], handler_data["is_site"]);
+<<<<<<< HEAD
     }
     else {
+=======
+    } else {
+>>>>>>> upstream/master
         utils.reload_sidebar();
         window.location.reload();
     }
 }
 
+<<<<<<< HEAD
 function handle_job_detail_error(handler_data, status_code, error_msg)
 {
     hide_job_detail_msg();
 
     if (status_code == 0)
         return; // ajax request aborted. Stop refresh.
+=======
+function handle_job_detail_error(handler_data, status_code, error_msg) {
+    hide_job_detail_msg();
+
+    if (status_code == 0) return; // ajax request aborted. Stop refresh.
+>>>>>>> upstream/master
 
     var container = document.getElementById("job_details");
 
@@ -79,6 +119,7 @@ function handle_job_detail_error(handler_data, status_code, error_msg)
     msg.className = "message";
 
     var txt = "Could not update the job details.";
+<<<<<<< HEAD
     if (handler_data.is_site)
         txt += " The site will be started again after the restore.";
     else
@@ -89,15 +130,30 @@ function handle_job_detail_error(handler_data, status_code, error_msg)
     txt += "<br><br>HTTP status code: "+status_code;
     if (error_msg)
         txt += ", Error: "+error_msg;
+=======
+    if (handler_data.is_site) txt += " The site will be started again after the restore.";
+    else txt += " Maybe the device is currently being rebooted.";
+
+    txt += "<br>Will continue trying to refresh the job details.";
+
+    txt += "<br><br>HTTP status code: " + status_code;
+    if (error_msg) txt += ", Error: " + error_msg;
+>>>>>>> upstream/master
 
     msg.innerHTML = txt;
 
     refresh_job_details(handler_data["url"], handler_data["ident"], handler_data["is_site"]);
 }
 
+<<<<<<< HEAD
 function hide_job_detail_msg()
 {
     var msg = document.getElementById("job_detail_msg");
     if (msg)
         msg.parentNode.removeChild(msg);
+=======
+function hide_job_detail_msg() {
+    var msg = document.getElementById("job_detail_msg");
+    if (msg) msg.parentNode.removeChild(msg);
+>>>>>>> upstream/master
 }

@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: HP devices: Module Temperature
+=======
+title: HP Devices: Module Temperature
+>>>>>>> upstream/master
 agents: snmp
 catalog: hw/network/hp
 license: GPL
@@ -14,4 +18,8 @@ item:
  The module name from ENTITY-MIB.
 
 inventory:
+<<<<<<< HEAD
  One service per module is created.
+=======
+ One service is created for each module.
+>>>>>>> upstream/master

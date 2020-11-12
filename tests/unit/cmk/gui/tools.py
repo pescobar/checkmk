@@ -1,8 +1,19 @@
+<<<<<<< HEAD
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 import re
 from bs4 import BeautifulSoup as bs  # type: ignore
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+import re
+from bs4 import BeautifulSoup as bs  # type: ignore[import]
+>>>>>>> upstream/master
 from bs4 import NavigableString
 
 
@@ -13,7 +24,11 @@ def prettify(html_text):
 
 def encode_attribute(value):
     if isinstance(value, list):
+<<<<<<< HEAD
         return map(encode_attribute, value)
+=======
+        return [encode_attribute(v) for v in value]
+>>>>>>> upstream/master
 
     return value.replace("&", "&amp;")\
                 .replace('"', "&quot;")\
@@ -23,16 +38,25 @@ def encode_attribute(value):
 
 def undo_encode_attribute(value):
     if isinstance(value, list):
+<<<<<<< HEAD
         return map(undo_encode_attribute, value)
+=======
+        return [undo_encode_attribute(v) for v in value]
+>>>>>>> upstream/master
 
     return value.replace("&quot;", '"')\
                 .replace("&lt;", '<')\
                 .replace("&gt;", '>')\
+<<<<<<< HEAD
                 .replace("&amp;", '&')\
+=======
+                .replace("&amp;", '&')
+>>>>>>> upstream/master
 
 
 def subber(value):
     if isinstance(value, list):
+<<<<<<< HEAD
         return map(subber, value)
 
     return re.sub('>', ' ',\
@@ -41,6 +65,16 @@ def subber(value):
            re.sub("'", '&quot;',\
            re.sub('"', '&quot;',\
            re.sub('\n', '', value))))))
+=======
+        return [subber(v) for v in value]
+
+    return re.sub(
+        '>', ' ',
+        re.sub(
+            '<', ' ',
+            re.sub('\\\\', '', re.sub("'", '&quot;', re.sub('"', '&quot;', re.sub('\n', '',
+                                                                                  value))))))
+>>>>>>> upstream/master
 
 
 def compare_soup(html1, html2):
@@ -63,12 +97,26 @@ def compare_soup(html1, html2):
 
         else:
             assert len(list(d1.children)) == len(list(d2.children)), '%s\n%s' % (html1, html2)
+<<<<<<< HEAD
             attrs1 = {k: [x for x in (v) if x != ''] for k, v in d1.attrs.iteritems() if len(v) > 0}
             attrs2 = {k: [x for x in (v) if x != ''] for k, v in d2.attrs.iteritems() if len(v) > 0}
+=======
+            attrs1 = {
+                k: [x for x in (v) if x != '']  #
+                for k, v in d1.attrs.items()
+                if isinstance(v, list) and len(v) > 0
+            }
+            attrs2 = {
+                k: [x for x in (v) if x != '']  #
+                for k, v in d2.attrs.items()
+                if isinstance(v, list) and len(v) > 0
+            }
+>>>>>>> upstream/master
 
             for key in attrs1.keys():
                 assert key in attrs2, '%s\n%s\n\n%s' % (key, d1, d2)
                 if key.startswith("on") or key == "style":
+<<<<<<< HEAD
                     val1 = [
                         x for x in
                         [unify_attrs(x).strip(' ') for x in attrs1.pop(key, '').split(';') if x]
@@ -77,6 +125,15 @@ def compare_soup(html1, html2):
                         x for x in
                         [unify_attrs(x).strip(' ') for x in attrs2.pop(key, '').split(';') if x]
                     ]
+=======
+                    value1 = attrs1.pop(key, '')
+                    assert isinstance(value1, str)
+                    value2 = attrs2.pop(key, '')
+                    assert isinstance(value2, str)
+
+                    val1 = [unify_attrs(x).strip(' ') for x in value1.split(';') if x]
+                    val2 = [unify_attrs(x).strip(' ') for x in value2.split(';') if x]
+>>>>>>> upstream/master
                     assert val1 == val2, '\n%s\n%s' % (val1, val2)
 
             assert attrs1 == attrs2, '\n%s\n%s' % (html1, html2)

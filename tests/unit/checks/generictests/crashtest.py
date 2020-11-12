@@ -1,3 +1,11 @@
+<<<<<<< HEAD
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 """Script to run generic tests on crash reports
 
 This is actually a script, but we need all the test magic,
@@ -30,6 +38,7 @@ append new files)
 Note that this will only work, if the crash report contains the
 local variables 'parsed' or 'info'.
 """
+<<<<<<< HEAD
 from __future__ import print_function
 import base64
 import json
@@ -40,6 +49,20 @@ from pathlib2 import Path
 
 import generictests
 from generictests.regression import WritableDataset
+=======
+import base64
+import json
+from pathlib import Path
+import pprint
+import tarfile
+from typing import Any, Dict
+
+import pytest  # type: ignore[import]
+
+import generictests
+from generictests.regression import WritableDataset
+from testlib import Check  # type: ignore[import]
+>>>>>>> upstream/master
 from checktestlib import CheckResult
 
 pytestmark = pytest.mark.checks
@@ -61,7 +84,13 @@ class CrashDataset(WritableDataset):
         in a SKIP-state in the state file.
         '''
         with tarfile.open(crash_report_fn, "r:gz") as tar:
+<<<<<<< HEAD
             content = tar.extractfile('crash.info').read()
+=======
+            tar_entry = tar.extractfile('crash.info')
+            assert tar_entry is not None
+            content = tar_entry.read()
+>>>>>>> upstream/master
         crashinfo = json.loads(content)
 
         if crashinfo['crash_type'] != 'check':
@@ -88,10 +117,17 @@ class CrashDataset(WritableDataset):
             raise SkipReport("no local_vars")
 
         # can't use json.loads here :-(
+<<<<<<< HEAD
         exec_scope = {}
         exec_command = 'local_vars = ' + base64.b64decode(local_vars_encoded)
         try:
             exec (exec_command, exec_scope)  # pylint: disable=exec-used
+=======
+        exec_scope: Dict[str, Any] = {}
+        exec_command = 'local_vars = ' + base64.b64decode(local_vars_encoded).decode('utf-8')
+        try:
+            exec(exec_command, exec_scope)  # pylint: disable=exec-used
+>>>>>>> upstream/master
         except Exception as exc:
             raise SkipReport("failed to load local_vars: %r" % exc)
 
@@ -106,7 +142,11 @@ class CrashDataset(WritableDataset):
         init_dict['info'] = local_vars.get('info')
         self.vars = local_vars
         self.crash_id = crash_report_fn.split("/")[-1].replace(".gz", "").replace(".tar", "")
+<<<<<<< HEAD
         super(CrashDataset, self).__init__('%s_%s.py' % (checkname, self.crash_id), init_dict)
+=======
+        super(CrashDataset, self).__init__(init_dict)
+>>>>>>> upstream/master
 
     def _find_checkname_from_traceback(self, traceback):
         for line in traceback[::-1]:
@@ -145,7 +185,11 @@ class CrashReportList(list):
                 continue
 
             crash_report_path = CRASHDATA_DIR / Path("%s.tar.gz" % cr_info[0])
+<<<<<<< HEAD
             if not crash_report_path.exists():  # pylint: disable=no-member
+=======
+            if not crash_report_path.exists():
+>>>>>>> upstream/master
                 continue
 
             try:
@@ -155,10 +199,18 @@ class CrashReportList(list):
                 cr_info[3] = 'Exception: %s' % exc
 
 
+<<<<<<< HEAD
 def test_crashreport(check_manager, crashdata):
     try:
         generictests.run(check_manager, crashdata)
         check = check_manager.get_check(crashdata.full_checkname)
+=======
+@pytest.mark.usefixtures("config_load_all_checks")
+def test_crashreport(config_check_info, crashdata):
+    try:
+        generictests.run(config_check_info, crashdata)
+        check = Check(crashdata.full_checkname)
+>>>>>>> upstream/master
         if 'item' in crashdata.vars:
             item = crashdata.vars['item']
             params = crashdata.vars.get('params', {})
@@ -167,7 +219,11 @@ def test_crashreport(check_manager, crashdata):
             else:
                 raw_result = check.run_check(item, params, crashdata.info)
             print(CheckResult(raw_result))
+<<<<<<< HEAD
     except:
+=======
+    except Exception:
+>>>>>>> upstream/master
         pprint.pprint(crashdata.__dict__)
         crashdata.write('/tmp')
         raise

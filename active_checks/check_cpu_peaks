@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/env python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,10 +24,25 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# TODO: Totally ignore type issues for this file. The check is totally broken, because it has not
+# been updated since the TimeSeries refactoring. This will be cleaned up with CMK-3556
+# type: ignore[arg-type,assignment,call-overload,var-annotated]
+>>>>>>> upstream/master
 
 import sys
 import time
 import getopt
+<<<<<<< HEAD
+=======
+from typing import Optional
+>>>>>>> upstream/master
 
 import cmk.utils.prediction as prediction
 from cmk.utils.exceptions import MKGeneralException
@@ -67,8 +83,13 @@ opt_debug = False
 host = None
 warn_level = None
 crit_level = None
+<<<<<<< HEAD
 fromtime = None
 untiltime = None
+=======
+fromtime: Optional[float] = None
+untiltime: Optional[float] = None
+>>>>>>> upstream/master
 
 for o, a in opts:
     if o in ['-v']:
@@ -105,7 +126,11 @@ try:
         datasets.append(data[1])
         step_secs = data[0]
         #util_total = [ x for x in datasets[0] if x is not None ]
+<<<<<<< HEAD
         util_total = [x for x in datasets[0]]
+=======
+        util_total = datasets[0]
+>>>>>>> upstream/master
     except Exception as e:
         if opt_debug:
             raise
@@ -119,10 +144,17 @@ try:
         def sumsum(_a):
             if None in _a:
                 return None
+<<<<<<< HEAD
             return int(sum([y for y in _a]))
 
         #util_total = map(lambda x: int(sum([y for y in x if y is not None])),
         util_total = map(sumsum, zip(datasets[0], datasets[1], datasets[2]))
+=======
+            return int(sum(y for y in _a))
+
+        #util_total = map(lambda x: int(sum([y for y in x if y is not None])),
+        util_total = [sumsum(x) for x in zip(datasets[0], datasets[1], datasets[2])]
+>>>>>>> upstream/master
 
     cpu_peak = max(util_total)
     peak_time = time.localtime(fromtime + step_secs * util_total.index(cpu_peak))
@@ -135,6 +167,7 @@ try:
             sys.stdout.write("%s\n" % int(datasets[2][idx] or -1))
 
     if is_windows:
+<<<<<<< HEAD
         info = [ "CPU utilization from %s until %s" %\
             (time.strftime("%b %d %H:%M:%S", time.localtime(fromtime)),
              time.strftime("%b %d %H:%M:%S", time.localtime(untiltime))) ]
@@ -142,6 +175,19 @@ try:
         info = [ "CPU utilization (user, system, wait) from %s until %s" %\
             (time.strftime("%b %d %H:%M:%S", time.localtime(fromtime)),
              time.strftime("%b %d %H:%M:%S", time.localtime(untiltime))) ]
+=======
+        info = [
+            "CPU utilization from %s until %s" %
+            (time.strftime("%b %d %H:%M:%S", time.localtime(fromtime)),
+             time.strftime("%b %d %H:%M:%S", time.localtime(untiltime)))
+        ]
+    else:
+        info = [
+            "CPU utilization (user, system, wait) from %s until %s" %
+            (time.strftime("%b %d %H:%M:%S", time.localtime(fromtime)),
+             time.strftime("%b %d %H:%M:%S", time.localtime(untiltime)))
+        ]
+>>>>>>> upstream/master
 
     if cpu_peak:
         info.append("Highest Peak of %d%% at %s" %

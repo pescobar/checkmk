@@ -1,16 +1,30 @@
+<<<<<<< HEAD
 #!/usr/bin/env python
 # -*- coding: utf-8; py-indent-offset: 4 -*-
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+>>>>>>> upstream/master
 import contextlib
 from itertools import chain, repeat
 import math
 import os
 import platform
 import re
+<<<<<<< HEAD
 import win32evtlog
+=======
+import win32evtlog  # type: ignore
+>>>>>>> upstream/master
 from local import (actual_output, assert_subprocess, make_yaml_config, user_dir, local_test,
                    wait_agent, write_config, host)
 import sys
 
+<<<<<<< HEAD
 import pytest
 
 try:
@@ -18,6 +32,10 @@ try:
 except ImportError:
     if platform.system() == 'Windows':
         raise
+=======
+import pytest  # type: ignore
+import winreg  # type: ignore
+>>>>>>> upstream/master
 
 
 class Globals(object):
@@ -64,11 +82,22 @@ def eventlog(logtype):
 
 
 def get_last_record(logtype):
+<<<<<<< HEAD
     with eventlog(logtype) as log_handle:
         oldest = win32evtlog.GetOldestEventLogRecord(log_handle)
         total = win32evtlog.GetNumberOfEventLogRecords(log_handle)
         result = oldest + total - 1
         return result if result >= 0 else 0
+=======
+    try:
+        with eventlog(logtype) as log_handle:
+            oldest = win32evtlog.GetOldestEventLogRecord(log_handle)
+            total = win32evtlog.GetNumberOfEventLogRecords(log_handle)
+            result = oldest + total - 1
+            return result if result >= 0 else 0
+    except Exception:
+        return 0
+>>>>>>> upstream/master
 
 
 def get_log_state(line):

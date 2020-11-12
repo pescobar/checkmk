@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /*
 +------------------------------------------------------------------+
 |             ____ _               _        __  __ _  __           |
@@ -23,18 +24,33 @@ License along with GNU Make; see the file  COPYING.  If  not,  write
 to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 Boston, MA 02110-1301 USA.
 */
+=======
+@charset "UTF-8";
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+// conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 /* Styles used in the logwatch pages */
 
 #logwatch {
   margin-top: 6px;
+<<<<<<< HEAD
   color: #000;
+=======
+  color: rgb(0, 0, 0);
+>>>>>>> upstream/master
 
   div.chunk {
     padding: 3px;
     margin-bottom: 11px;
+<<<<<<< HEAD
     background-color: #fff;
     border-color: #bbb #555 #222 #bbb;
+=======
+    background-color: rgb(255, 255, 255);
+    border-color: rgb(187, 187, 187) rgb(85, 85, 85) rgb(34, 34, 34) rgb(187, 187, 187);
+>>>>>>> upstream/master
     border-style: solid;
     border-width: 1px;
   }
@@ -43,20 +59,35 @@ Boston, MA 02110-1301 USA.
     width: 26px;
     font-family: sans-serif;
     font-weight: bold;
+<<<<<<< HEAD
     color: #008;
 
     /* TODO: Reproduce this html element */
     b {
       color: #08f;
+=======
+    color: rgb(0, 0, 136);
+
+    /* TODO: Reproduce this html element */
+    b {
+      color: rgb(0, 136, 255);
+>>>>>>> upstream/master
     }
 
     /* TODO: Reproduce this html element */
     &.ack {
       padding: 2.1px 7px;
+<<<<<<< HEAD
       color: #fff;
       text-decoration: none;
       background-color: #33c;
       border-color: #ccc #888 #333 #777;
+=======
+      color: rgb(255, 255, 255);
+      text-decoration: none;
+      background-color: rgb(51, 51, 204);
+      border-color: rgb(204, 204, 204) rgb(136, 136, 136) rgb(51, 51, 51) rgb(119, 119, 119);
+>>>>>>> upstream/master
       border-style: solid;
       border-width: 2px;
       border-radius: 6px;
@@ -69,6 +100,7 @@ Boston, MA 02110-1301 USA.
     font-family: courier, monospace;
     font-size: 13px;
     text-indent: -8px;
+<<<<<<< HEAD
     word-wrap: break-word;    /* IE */
     white-space: pre-wrap;      /* CSS3 */
     white-space: -moz-pre-wrap; /* Firefox */
@@ -77,6 +109,16 @@ Boston, MA 02110-1301 USA.
     background-color: #ddd;
     border-right: 1px solid #888;
     border-left: 1px solid #888;
+=======
+    word-wrap: break-word; /* IE */
+    white-space: pre-wrap; /* CSS3 */
+    white-space: -moz-pre-wrap; /* Firefox */
+    white-space: -pre-wrap; /* Opera <7 */
+    white-space: -o-pre-wrap; /* Opera 7 */
+    background-color: rgb(221, 221, 221);
+    border-right: 1px solid rgb(136, 136, 136);
+    border-left: 1px solid rgb(136, 136, 136);
+>>>>>>> upstream/master
 
     img {
       margin-right: 2px;
@@ -84,6 +126,7 @@ Boston, MA 02110-1301 USA.
   }
 
   .WARN {
+<<<<<<< HEAD
     background-color: #ff8;
     border-bottom: 1px solid #cc0;
   }
@@ -99,11 +142,31 @@ Boston, MA 02110-1301 USA.
   }
 
   td.WARN, td.CRIT, td.OK {
+=======
+    background-color: rgb(255, 255, 136);
+    border-bottom: 1px solid rgb(204, 204, 0);
+  }
+
+  .CRIT {
+    background-color: rgb(255, 136, 136);
+    border-bottom: 1px solid rgb(204, 0, 0);
+  }
+
+  .OK {
+    background-color: rgb(0, 187, 51);
+    border-bottom: 1px solid rgb(0, 204, 0);
+  }
+
+  td.WARN,
+  td.CRIT,
+  td.OK {
+>>>>>>> upstream/master
     width: 60px;
     padding: 0 3px;
     margin: 0;
     font-weight: bold;
     text-align: center;
+<<<<<<< HEAD
     border: 1px solid #000;
   }
 
@@ -119,6 +182,23 @@ Boston, MA 02110-1301 USA.
   td.OK {
     color: #fff;
     background-color: #0b3;
+=======
+    border: 1px solid rgb(0, 0, 0);
+  }
+
+  td.WARN {
+    background-color: rgb(255, 255, 0);
+  }
+
+  td.CRIT {
+    color: rgb(255, 255, 255);
+    background-color: rgb(255, 0, 0);
+  }
+
+  td.OK {
+    color: rgb(255, 255, 255);
+    background-color: rgb(0, 187, 51);
+>>>>>>> upstream/master
   }
 
   table.section {
@@ -129,7 +209,11 @@ Boston, MA 02110-1301 USA.
   .date {
     padding-left: 6px;
     font-weight: normal;
+<<<<<<< HEAD
     color: #666;
+=======
+    color: rgb(102, 102, 102);
+>>>>>>> upstream/master
   }
 
   /* TODO: Reproduce these three td.button elements */
@@ -137,18 +221,31 @@ Boston, MA 02110-1301 USA.
     text-align: right;
 
     a {
+<<<<<<< HEAD
       padding: .7px 7px;
       font-weight: normal;
       color: #000;
       text-decoration: none;
       background-color: #cca;
       border-color: #ddd #888 #333 #ddd;
+=======
+      padding: 0.7px 7px;
+      font-weight: normal;
+      color: rgb(0, 0, 0);
+      text-decoration: none;
+      background-color: rgb(204, 204, 170);
+      border-color: rgb(221, 221, 221) rgb(136, 136, 136) rgb(51, 51, 51) rgb(221, 221, 221);
+>>>>>>> upstream/master
       border-style: solid;
       border-width: 1px;
       border-radius: 4px;
 
       &:active {
+<<<<<<< HEAD
         background-color: #aa8;
+=======
+        background-color: rgb(170, 170, 136);
+>>>>>>> upstream/master
       }
     }
   }
@@ -156,17 +253,30 @@ Boston, MA 02110-1301 USA.
   /* --- navigation tabs in logwatch ------------------ */
   /* TODO: Reproduce these .tab and .tabactive elements */
 
+<<<<<<< HEAD
   a.tab, a.tabactive {
+=======
+  a.tab,
+  a.tabactive {
+>>>>>>> upstream/master
     display: block;
     width: 140px;
     padding: 2.8px 12px;
     margin-right: 2.1px;
     margin-bottom: 0;
+<<<<<<< HEAD
     color: #000;
     text-decoration: none;
     vertical-align: top;
     background-color: #fc0;
     border-bottom: 1px solid #000;
+=======
+    color: rgb(0, 0, 0);
+    text-decoration: none;
+    vertical-align: top;
+    background-color: rgb(255, 204, 0);
+    border-bottom: 1px solid rgb(0, 0, 0);
+>>>>>>> upstream/master
     border-style: none;
     border-radius: 12px 12px 0 0;
   }

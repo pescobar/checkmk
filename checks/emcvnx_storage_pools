@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,6 +24,13 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 
 def parse_emcvnx_storage_pools(info):
@@ -41,6 +49,12 @@ def parse_emcvnx_storage_pools(info):
             pool_name = line[1]
             parsed.setdefault(pool_name, {})
 
+<<<<<<< HEAD
+=======
+        elif section == "auto_tiering" and line[0].startswith(u'Auto-tiering is not supported'):
+            pool_name = None
+
+>>>>>>> upstream/master
         elif pool_name is not None and len(line) == 2:
             if line[0] == "Tier Name":
                 tier_name = line[1]
@@ -176,6 +190,7 @@ def parse_emcvnx_time_to_complete(time_to_complete):
                 unit = unit[:-1]
             seconds += int(value) * map_units[unit]
         return seconds
+<<<<<<< HEAD
     except Exception:
         return
 
@@ -226,6 +241,53 @@ def check_emcvnx_storage_pools_tiering(item, params, parsed):
                 infotext += " (warn/crit at %s/%s)" % (get_age_human_readable(warn),
                                                        get_age_human_readable(crit))
             yield state, infotext, [("emcvnx_time_to_complete", age)]
+=======
+    except (ValueError, KeyError, AttributeError):
+        return None
+
+
+def inventory_emcvnx_storage_pools_tiering(parsed):
+    for pool_name in parsed:
+        yield pool_name, {}
+
+
+@get_parsed_item_data
+def check_emcvnx_storage_pools_tiering(item, params, data):
+
+    for key in ("FAST Cache", "Relocation Status", "Relocation Rate"):
+        if key in data:
+            yield 0, "%s: %s" % (key.capitalize(), data[key])
+
+    for direction in ("Up", "Down", "Within Tiers"):
+        value_raw = data.get("Data to Move %s (GBs)" % direction)
+        if value_raw is not None:
+            value = float(value_raw) * 1024**3
+            short_dir = direction.split()[0].lower()
+            yield check_levels(value,
+                               "emcvnx_move_%s" % short_dir,
+                               None,
+                               infoname="Move %s" % short_dir,
+                               human_readable_func=get_bytes_human_readable)
+
+    move_completed_raw = data.get("Data Movement Completed (GBs)")
+    if move_completed_raw is not None:
+        move_completed = float(move_completed_raw) * 1024**3
+        yield check_levels(move_completed,
+                           "emcvnx_move_completed",
+                           None,
+                           infoname="Movement completed",
+                           human_readable_func=get_bytes_human_readable)
+
+    time_to_complete = data.get("Estimated Time to Complete")
+    age = parse_emcvnx_time_to_complete(time_to_complete)
+    if age is not None:
+        yield 0, "Estimated time to complete: %s" % time_to_complete
+        yield check_levels(age,
+                           "emcvnx_time_to_complete",
+                           params["time_to_complete"],
+                           infoname="Age",
+                           human_readable_func=get_age_human_readable)
+>>>>>>> upstream/master
 
 
 check_info['emcvnx_storage_pools.tiering'] = {
@@ -244,6 +306,7 @@ def inventory_emcvnx_storage_pools_tieringtypes(parsed):
             yield "%s %s" % (pool_name, tier_name), {}
 
 
+<<<<<<< HEAD
 def check_emcvnx_storage_pools_tieringtypes(item, params, parsed):
     for pool_name, data in parsed.items():
         for tier_name in data.get("tier_names", []):
@@ -278,6 +341,67 @@ def check_emcvnx_storage_pools_tieringtypes(item, params, parsed):
                     ("emcvnx_targeted_lower", targeted_lower),
                     ("emcvnx_targeted_within", targeted_within),
                 ]
+=======
+def _get_item_data_and_tier(item, parsed):
+    for pool_name, data in parsed.items():
+        for tier_name in data.get("tier_names", []):
+            if item == "%s %s" % (pool_name, tier_name):
+                return data, tier_name
+    return None, None
+
+
+def check_emcvnx_storage_pools_tieringtypes(item, params, parsed):
+    data, tier_name = _get_item_data_and_tier(item, parsed)
+    if data is None:
+        return
+
+    user_capacity_raw = data.get("%s_User Capacity (GBs)" % tier_name)
+    if user_capacity_raw is not None:
+        user_capacity = float(user_capacity_raw) * 1024**3
+        yield check_levels(user_capacity,
+                           None,
+                           None,
+                           infoname="User capacity",
+                           human_readable_func=get_bytes_human_readable)
+
+    consumed_capacity_raw = data.get("%s_Consumed Capacity (GBs)" % tier_name)
+    if consumed_capacity_raw is not None:
+        consumed_capacity = float(consumed_capacity_raw) * 1024**3
+        yield check_levels(consumed_capacity,
+                           "emcvnx_consumed_capacity",
+                           None,
+                           infoname="Consumed capacity",
+                           human_readable_func=get_bytes_human_readable)
+
+    avail_capacity_raw = data.get("%s_Available Capacity (GBs)" % tier_name)
+    if avail_capacity_raw is not None:
+        avail_capacity = float(avail_capacity_raw) * 1024**3
+        yield check_levels(avail_capacity,
+                           "emcvnx_avail_capacity",
+                           None,
+                           infoname="Available capacity",
+                           human_readable_func=get_bytes_human_readable)
+
+    percent_subscribed_raw = data.get("%s_Percent Subscribed" % tier_name)
+    if percent_subscribed_raw is not None:
+        percent_subscribed = float(percent_subscribed_raw.replace("%", ""))
+        yield check_levels(percent_subscribed,
+                           "emcvnx_perc_subscribed",
+                           None,
+                           infoname="Percent subscribed",
+                           human_readable_func=get_percent_human_readable)
+
+    for direction in ("for Higher", "for Lower", "Within"):
+        value_raw = data.get("%s_Data Targeted %s Tier (GBs)" % (tier_name, direction))
+        if value_raw is not None:
+            value = float(value_raw) * 1024**3
+            short_dir = direction.split()[-1].lower()
+            yield check_levels(value,
+                               "emcvnx_targeted_%s" % short_dir,
+                               None,
+                               infoname="Move %s" % short_dir,
+                               human_readable_func=get_bytes_human_readable)
+>>>>>>> upstream/master
 
 
 check_info['emcvnx_storage_pools.tieringtypes'] = {
@@ -298,7 +422,14 @@ check_info['emcvnx_storage_pools.tieringtypes'] = {
 #   '----------------------------------------------------------------------'
 
 
+<<<<<<< HEAD
 def _emcvnx_get_text_perf(data, key, perfname, format_func=get_bytes_human_readable,
+=======
+def _emcvnx_get_text_perf(data,
+                          key,
+                          perfname,
+                          format_func=get_bytes_human_readable,
+>>>>>>> upstream/master
                           factor=1024**3):
     field = data.get(key, "unknown")
     try:

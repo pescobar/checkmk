@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,6 +24,13 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 from cmk.gui.i18n import _
 from cmk.gui.valuespec import (
@@ -58,6 +66,13 @@ class VisualInfoHost(VisualInfo):
     def multiple_site_filters(self):
         return ["hostgroup"]
 
+<<<<<<< HEAD
+=======
+    @property
+    def sort_index(self):
+        return 10
+
+>>>>>>> upstream/master
 
 @visual_info_registry.register
 class VisualInfoService(VisualInfo):
@@ -81,6 +96,13 @@ class VisualInfoService(VisualInfo):
     def multiple_site_filters(self):
         return ["servicegroup"]
 
+<<<<<<< HEAD
+=======
+    @property
+    def sort_index(self):
+        return 10
+
+>>>>>>> upstream/master
 
 @visual_info_registry.register
 class VisualInfoHostgroup(VisualInfo):
@@ -104,6 +126,13 @@ class VisualInfoHostgroup(VisualInfo):
     def single_site(self):
         return False
 
+<<<<<<< HEAD
+=======
+    @property
+    def sort_index(self):
+        return 10
+
+>>>>>>> upstream/master
 
 @visual_info_registry.register
 class VisualInfoServicegroup(VisualInfo):
@@ -129,6 +158,13 @@ class VisualInfoServicegroup(VisualInfo):
     def single_site(self):
         return False
 
+<<<<<<< HEAD
+=======
+    @property
+    def sort_index(self):
+        return 10
+
+>>>>>>> upstream/master
 
 @visual_info_registry.register
 class VisualInfoLog(VisualInfo):
@@ -253,6 +289,13 @@ class VisualInfoBIAggregation(VisualInfo):
             ('aggr_name', TextUnicode(title=_('Aggregation Name'),)),
         ]
 
+<<<<<<< HEAD
+=======
+    @property
+    def sort_index(self):
+        return 20
+
+>>>>>>> upstream/master
 
 @visual_info_registry.register
 class VisualInfoBIAggregationGroup(VisualInfo):
@@ -274,6 +317,13 @@ class VisualInfoBIAggregationGroup(VisualInfo):
             ('aggr_group', TextUnicode(title=_('Aggregation group'),)),
         ]
 
+<<<<<<< HEAD
+=======
+    @property
+    def sort_index(self):
+        return 20
+
+>>>>>>> upstream/master
 
 @visual_info_registry.register
 class VisualInfoDiscovery(VisualInfo):
@@ -335,3 +385,27 @@ class VisualInfoEventHistory(VisualInfo):
             ('event_id', Integer(title=_('Event ID'),)),
             ('history_line', Integer(title=_('History Line Number'),)),
         ]
+<<<<<<< HEAD
+=======
+
+
+@visual_info_registry.register
+class VisualInfoCrash(VisualInfo):
+    @property
+    def ident(self):
+        return "crash"
+
+    @property
+    def title(self):
+        return _('Crash report')
+
+    @property
+    def title_plural(self):
+        return _('Crash reports')
+
+    @property
+    def single_spec(self):
+        return [
+            ('crash_id', TextUnicode(title=_('Crash ID'),)),
+        ]
+>>>>>>> upstream/master

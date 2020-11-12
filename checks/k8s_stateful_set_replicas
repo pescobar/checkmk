@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -30,6 +31,21 @@ def inventory_k8s_stateful_set_replicas(parsed):
 
 
 def check_k8s_stateful_set_replicas(_no_item, params, parsed):
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+
+def inventory_k8s_stateful_set_replicas(parsed):
+    if parsed:
+        yield (None, {})
+
+
+def check_k8s_stateful_set_replicas(_no_item, _params, parsed):
+>>>>>>> upstream/master
     ready, total = parsed["ready_replicas"], parsed["replicas"]
     # If set, strategy may be one of RollingUpdate or OnDelete.
     strategy = parsed["strategy_type"]
@@ -49,10 +65,17 @@ def check_k8s_stateful_set_replicas(_no_item, params, parsed):
 
 
 check_info["k8s_stateful_set_replicas"] = {
+<<<<<<< HEAD
     "parse_function": parse_k8s,
     "inventory_function": inventory_k8s_stateful_set_replicas,
     "check_function": check_k8s_stateful_set_replicas,
     "service_description": "Replicas",
     "has_perfdata": True,
     "includes": ["k8s.include"],
+=======
+    # section is already migrated
+    "inventory_function": inventory_k8s_stateful_set_replicas,
+    "check_function": check_k8s_stateful_set_replicas,
+    "service_description": "Replicas",
+>>>>>>> upstream/master
 }

@@ -11,9 +11,12 @@ description:
  The check is OK if all licenses are active and
  goes CRIT if they are not.
 
+<<<<<<< HEAD
 item:
  No item.
 
+=======
+>>>>>>> upstream/master
 inventory:
  One service is created.
 

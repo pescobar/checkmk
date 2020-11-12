@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: Kubernetes persistent volume claims
+=======
+title: Kubernetes: Persistent Volume Claims
+>>>>>>> upstream/master
 agents: kubernetes
 catalog: containerization/kubernetes
 license: GPL
@@ -9,7 +13,11 @@ description:
  phase is given the check returns {UNKNOWN}.
 
 inventory:
+<<<<<<< HEAD
  One service per persistent volume claim is created.
+=======
+ One service is created for each persistent volume claim.
+>>>>>>> upstream/master
 
 item:
  The name of the persistent volume claim.

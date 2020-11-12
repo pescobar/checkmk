@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -24,12 +25,29 @@
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
 
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# NOTE: Careful when replacing the *-import below with a more specific import. This can cause
+# problems because it might remove variables from the check-context which are necessary for
+# resolving legacy discovery results such as [("SUMMARY", "diskstat_default_levels")]. Furthermore,
+# it might also remove variables needed for accessing discovery rulesets.
+from cmk.base.check_legacy_includes.azure import *  # pylint: disable=wildcard-import,unused-wildcard-import
+>>>>>>> upstream/master
 factory_settings['levels_azure_usagedetails'] = {}
 
 
 def parse_azure_usagedetails(info):
     parsed = {}
+<<<<<<< HEAD
     for detail in parse_azure(info).values():
+=======
+    for detail in list(parse_azure(info).values()):
+>>>>>>> upstream/master
         props = detail['properties']
         service_name = props['consumedService']
         data = parsed.setdefault(
@@ -41,20 +59,37 @@ def parse_azure_usagedetails(info):
         data['costs'].update({props['currency']: props['pretaxCost']})
         data['usage'] += props['usageQuantity']
 
+<<<<<<< HEAD
     parsed[u"Summary"] = {
         'costs': sum((d['costs'] for d in parsed.values()), collections.Counter()),
         'usage': sum(d['usage'] for d in parsed.values()),
         # use any subscription_name, they're all the same
         'subscription_name': parsed.values()[0]["subscription_name"],
     }
+=======
+    if parsed:
+        parsed[u"Summary"] = {
+            'costs': sum((d['costs'] for d in list(parsed.values())), collections.Counter()),
+            'usage': sum(d['usage'] for d in list(parsed.values())),
+            # use any subscription_name, they're all the same
+            'subscription_name': list(parsed.values())[0]["subscription_name"],
+        }
+>>>>>>> upstream/master
 
     return parsed
 
 
+<<<<<<< HEAD
 @get_parsed_item_data
 def check_azure_usagedetails(_no_item, params, data):
 
     for currency, amount in data.get('costs', {}).items():
+=======
+@get_data_or_go_stale
+def check_azure_usagedetails(_no_item, params, data):
+
+    for currency, amount in list(data.get('costs', {}).items()):
+>>>>>>> upstream/master
         levels = params.get('levels')
         yield check_levels(amount, 'service_costs_%s' % currency.lower(), levels, currency)
 
@@ -66,7 +101,10 @@ check_info['azure_usagedetails'] = {
     'inventory_function': discover(),
     'check_function': check_azure_usagedetails,
     'service_description': "Costs %s",
+<<<<<<< HEAD
     'includes': ['azure.include'],
+=======
+>>>>>>> upstream/master
     'default_levels_variable': 'levels_azure_usagedetails',
     'group': 'azure_usagedetails',
     'has_perfdata': True,

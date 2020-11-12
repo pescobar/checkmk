@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,6 +24,13 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 # TODO: Cleanup this whole module.
 
@@ -38,7 +46,11 @@
 #      import cmk.gui.default_permissions
 #      import ...
 #
+<<<<<<< HEAD
 #      if not cmk.is_raw_edition():
+=======
+#      if not cmk_version.is_raw_edition():
+>>>>>>> upstream/master
 #          import cmk.gui.cee.modules
 #          -> cee/modules.py
 #              import cmk.gui.cee.sla
@@ -49,8 +61,14 @@ import errno
 import os
 import sys
 from types import ModuleType
+<<<<<<< HEAD
 
 import cmk
+=======
+from typing import Optional, Iterator, Any, Dict, List
+
+import cmk.utils.version as cmk_version
+>>>>>>> upstream/master
 import cmk.utils.paths
 
 import cmk.gui.utils as utils
@@ -59,6 +77,7 @@ from cmk.gui.globals import g
 
 import cmk.gui.plugins.main_modules
 
+<<<<<<< HEAD
 if not cmk.is_raw_edition():
     import cmk.gui.cee.plugins.main_modules
 
@@ -67,10 +86,21 @@ if cmk.is_managed_edition():
 
 # TODO: Both kept for compatibility with old plugins. Drop this one day
 pagehandlers = {}
+=======
+if not cmk_version.is_raw_edition():
+    import cmk.gui.cee.plugins.main_modules  # pylint: disable=no-name-in-module
+
+if cmk_version.is_managed_edition():
+    import cmk.gui.cme.plugins.main_modules  # pylint: disable=no-name-in-module
+
+# TODO: Both kept for compatibility with old plugins. Drop this one day
+pagehandlers: Dict[Any, Any] = {}
+>>>>>>> upstream/master
 # Modules to be loaded within the application by default. These
 # modules are loaded on application initialization. The module
 # function load_plugins() is called for all these modules to
 # initialize them.
+<<<<<<< HEAD
 _legacy_modules = []
 
 
@@ -81,13 +111,31 @@ def register_handlers(handlers):
 # Returns a list of names of all currently imported python modules
 def _imports():
     for val in globals().itervalues():
+=======
+_legacy_modules: List[ModuleType] = []
+
+
+def register_handlers(handlers: Dict) -> None:
+    pagehandlers.update(handlers)
+
+
+def _imports() -> Iterator[str]:
+    """Returns a list of names of all currently imported python modules"""
+    for val in globals().values():
+>>>>>>> upstream/master
         if isinstance(val, ModuleType):
             yield val.__name__
 
 
+<<<<<<< HEAD
 # Loads all modules needed into memory and performs global initializations for
 # each module, when it needs some. These initializations should be fast ones.
 def init_modules():
+=======
+def init_modules() -> None:
+    """Loads all modules needed into memory and performs global initializations for
+    each module, when it needs some. These initializations should be fast ones."""
+>>>>>>> upstream/master
     global _legacy_modules
 
     _legacy_modules = []
@@ -104,8 +152,13 @@ def init_modules():
 g_all_modules_loaded = False
 
 
+<<<<<<< HEAD
 # Call the load_plugins() function in all modules
 def load_all_plugins(only_modules=None):
+=======
+def load_all_plugins(only_modules: Optional[List[str]] = None) -> None:
+    """Call the load_plugins() function in all modules"""
+>>>>>>> upstream/master
     global g_all_modules_loaded
     # Initially, we have to load all modules, regardless of any optimization.
     if not g_all_modules_loaded:
@@ -116,7 +169,12 @@ def load_all_plugins(only_modules=None):
     for module in _cmk_gui_top_level_modules() + _legacy_modules:
         if (only_modules is None or module.__name__ in only_modules) and \
            hasattr(module, "load_plugins"):
+<<<<<<< HEAD
             module.load_plugins(force=need_plugins_reload)
+=======
+            # hasattr above ensures the function is available. Mypy does not understand this.
+            module.load_plugins(force=need_plugins_reload)  # type: ignore[attr-defined]
+>>>>>>> upstream/master
 
     # TODO: Clean this up once we drop support for the legacy plugins
     for path, page_func in pagehandlers.items():
@@ -127,6 +185,7 @@ def load_all_plugins(only_modules=None):
     g_all_modules_loaded = True
 
 
+<<<<<<< HEAD
 def _cmk_gui_top_level_modules():
     return [module \
             for name, module in sys.modules.items()
@@ -141,6 +200,23 @@ def _cmk_gui_top_level_modules():
 
 
 def _find_local_web_plugins():
+=======
+def _cmk_gui_top_level_modules() -> List[ModuleType]:
+    return [
+        module  #
+        for name, module in sys.modules.items()
+        # None entries are only an import optimization of cPython and can be removed:
+        # https://www.python.org/dev/peps/pep-0328/#relative-imports-and-indirection-entries-in-sys-modules
+        if module is not None
+        # top level modules only, please...
+        if (name.startswith("cmk.gui.") and len(name.split(".")) == 3 or
+            name.startswith("cmk.gui.cee.") and len(name.split(".")) == 4 or
+            name.startswith("cmk.gui.cme.") and len(name.split(".")) == 4)
+    ]
+
+
+def _find_local_web_plugins() -> Iterator[str]:
+>>>>>>> upstream/master
     basedir = str(cmk.utils.paths.local_web_dir) + "/plugins/"
 
     try:
@@ -148,8 +224,12 @@ def _find_local_web_plugins():
     except OSError as e:
         if e.errno == errno.ENOENT:
             return
+<<<<<<< HEAD
         else:
             raise
+=======
+        raise
+>>>>>>> upstream/master
 
     for plugins_dir in plugin_dirs:
         dir_path = basedir + plugins_dir
@@ -160,10 +240,17 @@ def _find_local_web_plugins():
                     yield dir_path + "/" + file_name
 
 
+<<<<<<< HEAD
 _last_web_plugins_update = 0
 
 
 def _local_web_plugins_have_changed():
+=======
+_last_web_plugins_update = 0.0
+
+
+def _local_web_plugins_have_changed() -> bool:
+>>>>>>> upstream/master
     global _last_web_plugins_update
 
     if 'local_web_plugins_have_changed' in g:

@@ -1,4 +1,16 @@
+<<<<<<< HEAD
 # yapf: disable
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# yapf: disable
+# type: ignore
+
+>>>>>>> upstream/master
 checkname = 'msexch_isstore'
 
 info = [[
@@ -159,7 +171,11 @@ checks = {
             },
             [(
                 0,
+<<<<<<< HEAD
                 '0.16ms average latency',
+=======
+                'Average latency: 0.16 ms',
+>>>>>>> upstream/master
                 [('average_latency', 0.15550288783670518, 40.0, 50.0, None, None)],
             )],
         ),
@@ -178,7 +194,11 @@ checks = {
             },
             [(
                 0,
+<<<<<<< HEAD
                 '0.16ms average latency',
+=======
+                'Average latency: 0.16 ms',
+>>>>>>> upstream/master
                 [('average_latency', 0.15550288783670518, 40.0, 50.0, None, None)],
             )],
         ),

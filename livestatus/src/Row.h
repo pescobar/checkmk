@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // +------------------------------------------------------------------+
 // |             ____ _               _        __  __ _  __           |
 // |            / ___| |__   ___  ___| | __   |  \/  | |/ /           |
@@ -21,6 +22,12 @@
 // License along with GNU Make; see the file  COPYING.  If  not,  write
 // to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 // Boston, MA 02110-1301 USA.
+=======
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the
+// terms and conditions defined in the file COPYING, which is part of this
+// source code package.
+>>>>>>> upstream/master
 
 #ifndef Row_h
 #define Row_h
@@ -34,11 +41,19 @@ public:
 
     // ... and here we reconstruct it, hopefully in a correct way. :-/
     template <typename T>
+<<<<<<< HEAD
     const T *rawData() const {
         return static_cast<const T *>(_ptr);
     }
 
     bool isNull() const { return _ptr == nullptr; }
+=======
+    [[nodiscard]] const T *rawData() const {
+        return static_cast<const T *>(_ptr);
+    }
+
+    [[nodiscard]] bool isNull() const { return _ptr == nullptr; }
+>>>>>>> upstream/master
 
 private:
     const void *_ptr;

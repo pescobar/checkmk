@@ -11,7 +11,11 @@ description:
  the last recent growth can be compared to the average growth.
 
 inventory:
+<<<<<<< HEAD
  One check for each indice will be created
+=======
+ One service is created for each indice.
+>>>>>>> upstream/master
 
 item:
  The name of the index

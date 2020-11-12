@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/env python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -26,12 +27,29 @@
 """Stub for future i18n code on cmk main module level"""
 
 from typing import AnyStr, Text  # pylint:disable=unused-import
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+"""Stub for future i18n code on cmk main module level"""
+
+from typing import AnyStr
+
+from six import ensure_str
+>>>>>>> upstream/master
 
 
 # TODO: Clean this up one day by using the way recommended by gettext.
 # (See https://docs.python.org/2/library/gettext.html). For this we
 # need the path to the locale files here.
 # Fake i18n when not available
+<<<<<<< HEAD
 def _(string):
     # type: (AnyStr) -> Text
     return string
+=======
+def _(string: AnyStr) -> str:
+    return ensure_str(string)
+>>>>>>> upstream/master

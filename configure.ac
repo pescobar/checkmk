@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # +------------------------------------------------------------------+
 # |             ____ _               _        __  __ _  __           |
 # |            / ___| |__   ___  ___| | __   |  \/  | |/ /           |
@@ -21,12 +22,22 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.61)
+<<<<<<< HEAD
 AC_INIT([MK Livestatus], [1.7.0i1], [mk@mathias-kettner.de])
 AM_INIT_AUTOMAKE([-Wall -Wno-portability foreign])
+=======
+AC_INIT([MK Livestatus], [2.0.0i2], [mk@mathias-kettner.de])
+AM_INIT_AUTOMAKE([-Wall -Wno-portability foreign subdir-objects])
+>>>>>>> upstream/master
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_SRCDIR([config.h.in])
 AC_CONFIG_HEADER([config.h])
@@ -36,6 +47,7 @@ AC_REQUIRE_AUX_FILE([compile])
 AC_REQUIRE_AUX_FILE([config.guess])
 AC_REQUIRE_AUX_FILE([config.sub])
 
+<<<<<<< HEAD
 # Old (pre-1.6.0) versions of librrd were not thread-safe, so one has to use the
 # thread-safe variant librrd_th explicitly. This in itself is already tragic
 # enough, but to make things worse, you can't write a compile-time check to
@@ -50,13 +62,23 @@ AS_IF([test "x$enable_rrd_is_thread_safe" != "xno"], [RRDLIB_TO_CHECK=rrd],
 
 # Checks for programs.
 AC_PROG_CC([gcc-9 clang-8 gcc-8 clang-7 gcc-7 clang-6.0 clang-5.0 gcc clang])
+=======
+# Checks for programs.
+AC_PROG_CC([gcc-10 clang-10 gcc-9 clang-9 clang-8 gcc-8 clang-7 gcc-7 clang-6.0 clang-5.0 gcc clang])
+>>>>>>> upstream/master
 AC_PROG_CC_C99([], [])
 if test "x$ac_cv_prog_cc_c99" = xno; then
   AC_MSG_ERROR([Need a C99-compliant C compiler])
 fi
+<<<<<<< HEAD
 AC_PROG_CXX([g++-9 clang++-8 g++-8 clang++-7 g++-7 clang++-6.0 clang++-5.0 g++ clang++])
 AC_DEFINE_UNQUOTED([BUILD_CXX], ["`$CXX --version | head -n1`"], [C++ compiler])
 AX_CXX_COMPILE_STDCXX([17], [noext], [mandatory])
+=======
+AC_PROG_CXX([g++-10 clang++-10 g++-9 clang++-9 clang++-8 g++-8 clang++-7 g++-7 clang++-6.0 clang++-5.0 g++ clang++])
+AC_DEFINE_UNQUOTED([BUILD_CXX], ["`$CXX --version | head -n1`"], [C++ compiler])
+AX_CXX_COMPILE_STDCXX([20], [noext], [mandatory])
+>>>>>>> upstream/master
 AC_PROG_RANLIB
 # automake 1.12 seems to require this, but automake 1.11 doesn't recognize it. :-P
 m4_ifdef([AM_PROG_AR], [AM_PROG_AR])
@@ -66,6 +88,7 @@ AC_CHECK_LIB(socket, socket)
 AC_CHECK_LIB(socket, connect)
 AC_CHECK_LIB(socket, shutdown)
 
+<<<<<<< HEAD
 # Passing through the right RRD library is a bit tricky: We can't simply put
 # -lrrd_th or -lrrd globally into LIBS. The problem is that our SUID programs
 # icmpsender and icmpreceiver would be linked with that option, too, but because
@@ -79,10 +102,13 @@ AC_SEARCH_LIBS([rrd_xport], [$RRDLIB_TO_CHECK],
 LIBS=$old_LIBS
 AC_SUBST(RRDLIB)
 
+=======
+>>>>>>> upstream/master
 # Checks for header files.
 AC_HEADER_DIRENT
 AC_HEADER_STDC
 AC_HEADER_SYS_WAIT
+<<<<<<< HEAD
 AC_CHECK_HEADERS([arpa/inet.h fcntl.h limits.h netdb.h netinet/in.h stdint.h stdlib.h string.h strings.h sys/socket.h sys/time.h sys/timeb.h syslog.h unistd.h])
 
 # Checks for C++ features
@@ -92,6 +118,11 @@ if test "x$ax_cv_boost_asio" = xno; then
     AC_MSG_ERROR([Boost::ASIO library not found])
 fi
 
+=======
+AC_CHECK_HEADERS([arpa/inet.h fcntl.h limits.h netdb.h netinet/in.h stdint.h stdlib.h string.h strings.h sys/socket.h sys/time.h syslog.h unistd.h])
+
+# Checks for C++ features
+>>>>>>> upstream/master
 AC_LANG_PUSH([C++])
 
 AC_MSG_CHECKING([whether C++17 headers are supported by default])
@@ -168,7 +199,11 @@ AC_TYPE_UINT64_T
 AC_FUNC_SELECT_ARGTYPES
 AC_TYPE_SIGNAL
 AC_FUNC_STAT
+<<<<<<< HEAD
 AC_CHECK_FUNCS([accept4 memmove select socket strerror strtoul])
+=======
+AC_CHECK_FUNCS([memmove select socket strerror strtoul])
+>>>>>>> upstream/master
 
 AC_ARG_WITH(nagios4,AC_HELP_STRING([--with-nagios4],[enabled compilation for nagios 4]), [
     CPPFLAGS="${CFLAGS} -DNAGIOS4"
@@ -197,8 +232,11 @@ AC_SUBST(nagios_headers)
 AC_DEFINE([_GLIBCXX_REGEX_STATE_LIMIT], [2500],
           [the maximum number of states the regex NFA can have])
 
+<<<<<<< HEAD
 AC_DEFINE([BOOST_SYSTEM_NO_DEPRECATED], [1], [we do not want any old stuff])
 
+=======
+>>>>>>> upstream/master
 # GCC is a bit picky about redefinitions of built-in macros. Alas, "built-in"
 # simply means "starts with double underscore", so we have to hack around that
 # below. Note that clang is happy, even without the guard.

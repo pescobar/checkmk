@@ -1,9 +1,20 @@
+<<<<<<< HEAD
+=======
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+
+>>>>>>> upstream/master
 #
 # Default Check MK configuration file
 #
 
+<<<<<<< HEAD
 # Copyright Mathias Kettner GmbH
 
+=======
+>>>>>>> upstream/master
 # $CUSTOM_PLUGINS_PATH$  -> is ProgramData/checkmk/agent/plugins
 # $BUILTIN_PLUGINS_PATH$ -> is Program Files(x86)/checkmk/service/plugins
 # $CUSTOM_AGENT_PATH$    -> is ProgramData/checkmk/agent/
@@ -36,13 +47,25 @@ global:
     # password
     passphrase: secret
 
+<<<<<<< HEAD
     # Do only execute programs and scripts with
     # the following suffixes (in local and plugins).
     execute: [exe, bat, vbs, cmd, ps1]
+=======
+    # Allowed file extensions. The agent launches the program(script) only 
+    # when its extension is on the list of allowed ones. 
+    execute: [exe, bat, vbs, cmd, ps1] # Supported: vbs, ps1, py, pl, exe, cmd, bat
+>>>>>>> upstream/master
 
     # Run sync scripts in parallel (to each other). Default is "async"
     async: yes
 
+<<<<<<< HEAD
+=======
+    # Determines behavior of the Agent when plugin file is Access Denied on installation
+    try_kill_plugin_process: safe # allowed safe, all, no # safe is lmited to few exe from the build
+
+>>>>>>> upstream/master
     # Just output certain sections
     # Output order is random with exception check_mk, always first and systemtime, always last`
     sections: 
@@ -164,8 +187,19 @@ logwatch:
     
     sendall: no   # this value is MANDATORY, yes is useful only for debugging
     vista_api: no # this is RECOMMENDED
+<<<<<<< HEAD
 
     logfile: # entries in the windows eventlog
+=======
+    max_size: 500000 #
+    max_line_length: -1 # -1 to ignore, or any positive, max lingth of the line
+    max_entries: -1     # -1 to ignore, or any positive, max count to receive
+    timeout: -1         # -1 to ignore, or any positive, in seconds
+
+    logfile: # entries in the windows eventlog
+        - 'Parameters': ignore
+        - 'State': ignore
+>>>>>>> upstream/master
         - '*': warn nocontext # This is default params for not missing entries
 
 plugins:
@@ -234,6 +268,46 @@ mrpe:
     # entries and cfg have  the same format as in the Legacy agent
     config:
         # - check = Console 'c:\windows\system32\mode.com' CON CP /STATUS
+<<<<<<< HEAD
         # - include user_name = $CUSTOM_AGENT_PATH$\mrpe_checks.cfg
         # - include = $CUSTOM_AGENT_PATH$\mrpe_checks.cfg
 
+=======
+        # - check = Checker (100:yes) 'c:\windows\system32\mode.com' # Description (max_age:add_info) command line
+        # - include user_name = $CUSTOM_AGENT_PATH$\mrpe_checks.cfg
+        # - include = $CUSTOM_AGENT_PATH$\mrpe_checks.cfg
+
+
+modules:
+    enabled: yes
+
+    python: auto                          # allowed auto or system, system prevents module usage to execute *.py files
+
+    table:
+        - name: 'python-3.8'              # this is name of the zip file and folder where  zip is installed to
+          exts: ['.checkmk.py', '.py' ]   # list of extensions to be used automatically
+          exec: '.venv\Scripts\python.exe {}'   # command line, exe is relative to folder modules
+    
+
+system:
+    enabled: yes
+
+    firewall:
+        mode: configure # allowed none, remove, configure
+        port: auto      # allowed all or auto
+
+
+    cleanup_uninstall: smart # allowed none, smart and all
+
+    wait_network: 30
+
+    service:
+        restart_on_crash: yes  # service will restart if crashed, you may set no to disable restarting
+                               # no may be used if you have serious problems with crasghing and starting
+        error_mode: log        # ignore or log
+        start_mode: auto       # Possible values are: auto - service starts with boot, demand - requires manual starting
+                               # delayed - serice started automatically(delayed)
+                               # disabled - service cannot be started manually and should be enabled
+
+
+>>>>>>> upstream/master

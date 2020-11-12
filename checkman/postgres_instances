@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: PostgreSQL Instances
+=======
+title: PostgreSQL: Instances
+>>>>>>> upstream/master
 agents: linux
 catalog: app/postgresql
 license: GPL
@@ -8,6 +12,14 @@ description:
 
  If instance is running, service status is OK, otherwise CRIT.
 
+<<<<<<< HEAD
 inventory:
   One service per instance is created.
+=======
+item:
+ Name of the database in upper case letters
+
+inventory:
+ One service is created for each instance.
+>>>>>>> upstream/master
 

@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: Kubernetes pod container statistics
+=======
+title: Kubernetes: Pod Container Statistics
+>>>>>>> upstream/master
 agents: kubernetes
 catalog: containerization/kubernetes
 license: GPL
@@ -17,8 +21,11 @@ description:
  {Maximum number of check attempts for service} should be
  used.
 
+<<<<<<< HEAD
 item:
  No item.
 
+=======
+>>>>>>> upstream/master
 inventory:
  One service is created for each pod.

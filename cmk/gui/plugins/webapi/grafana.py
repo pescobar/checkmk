@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,6 +24,13 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 import livestatus
 
@@ -33,9 +41,13 @@ from cmk.gui.plugins.webapi import (
 
 import cmk.gui.sites as sites
 import cmk.gui.config as config
+<<<<<<< HEAD
 import cmk.gui.visuals as visuals
 import cmk.gui.availability as availability
 from cmk.gui.globals import html
+=======
+import cmk.gui.availability as availability
+>>>>>>> upstream/master
 from cmk.gui.i18n import _
 from cmk.gui.exceptions import MKGeneralException
 from cmk.gui.plugins.metrics.utils import (
@@ -91,11 +103,16 @@ class APICallGrafanaConnector(APICallCollection):
         return self._query_for_host_names(request.get("site_id"))
 
     def _query_for_host_names(self, site_id):
+<<<<<<< HEAD
         try:
             sites.live().set_only_sites([site_id] if site_id else None)
             return sites.live().query_column("GET hosts\nColumns: name\n")
         finally:
             sites.live().set_only_sites(None)
+=======
+        with sites.only_sites(site_id):
+            return sites.live().query_column("GET hosts\nColumns: name\n")
+>>>>>>> upstream/master
 
     def _get_metrics_of_host(self, request):
         return self._query_for_metrics_of_host(request["hostname"], request.get("site_id"))
@@ -110,11 +127,16 @@ class APICallGrafanaConnector(APICallCollection):
 
         response = {}
 
+<<<<<<< HEAD
         try:
             sites.live().set_only_sites([site_id] if site_id else None)
             rows = sites.live().query(query)
         finally:
             sites.live().set_only_sites(None)
+=======
+        with sites.only_sites(site_id):
+            rows = sites.live().query(query)
+>>>>>>> upstream/master
 
         for service_description, check_command, metrics in rows:
             response[service_description] = {
@@ -141,7 +163,11 @@ class APICallGrafanaConnector(APICallCollection):
         try:
             from cmk.gui.cee.plugins.metrics.graphs import graph_recipes_for_api_request
         except ImportError:
+<<<<<<< HEAD
             raise MKGeneralException(_("Currently not supported with this Check_MK Edition"))
+=======
+            raise MKGeneralException(_("Currently not supported with this Checkmk Edition"))
+>>>>>>> upstream/master
         _graph_data_range, graph_recipes = graph_recipes_for_api_request(request)
         return graph_recipes
 
@@ -152,6 +178,7 @@ class APICallGrafanaConnector(APICallCollection):
                 matching_combined_graphs,
             )
         except ImportError:
+<<<<<<< HEAD
             raise MKGeneralException(_("Currently not supported with this Check_MK Edition"))
 
         presentation = request.get("presentation", "sum")
@@ -162,12 +189,26 @@ class APICallGrafanaConnector(APICallCollection):
         datasource_name = request["datasource"]
         context = request["context"]
 
+=======
+            raise MKGeneralException(_("Currently not supported with this Checkmk Edition"))
+
+        if "presentation" not in request:
+            request['presentation'] = 'sum'
+        presentation = request["presentation"]
+        if presentation not in combined_graph_presentations:
+            raise MKGeneralException(_("The requested item %s does not exist") % presentation)
+
+>>>>>>> upstream/master
         # The grafana connector needs the template title for making them
         # selectable by the user. We extend the graph identification here.
         # Otherwise we would need more API calls
         response = []
+<<<<<<< HEAD
         for graph_identification in matching_combined_graphs(datasource_name, single_infos,
                                                              presentation, context):
+=======
+        for graph_identification in matching_combined_graphs(request):
+>>>>>>> upstream/master
             graph_template_id = graph_identification[1]["graph_template"]
             graph_title = dict(get_graph_template_choices()).get(graph_template_id,
                                                                  graph_template_id)
@@ -179,9 +220,20 @@ class APICallGrafanaConnector(APICallCollection):
         return response
 
     def _get_graph_annotations(self, request):
+<<<<<<< HEAD
         filter_headers, only_sites = self._get_filter_headers_of_context(datasource_name="services",
                                                                          context=request["context"],
                                                                          single_infos=[])
+=======
+        if "host" in request["context"]:
+            single_infos = ["host"]
+        else:
+            single_infos = []
+
+        filter_headers, only_sites = self._get_filter_headers_of_context(datasource_name="services",
+                                                                         context=request["context"],
+                                                                         single_infos=single_infos)
+>>>>>>> upstream/master
 
         return {
             "availability_timelines": self._get_availability_timelines(
@@ -194,6 +246,7 @@ class APICallGrafanaConnector(APICallCollection):
 
     def _get_filter_headers_of_context(self, datasource_name, context, single_infos):
         try:
+<<<<<<< HEAD
             from cmk.gui.cee.plugins.metrics.graphs import get_matching_filters
         except ImportError:
             raise MKGeneralException(_("Currently not supported with this Check_MK Edition"))
@@ -221,6 +274,14 @@ class APICallGrafanaConnector(APICallCollection):
                 only_sites = None
 
             return filter_headers, only_sites
+=======
+            from cmk.gui.cee.plugins.metrics.graphs import get_filter_headers_of_context
+        except ImportError:
+            raise MKGeneralException(_("Currently not supported with this Checkmk Edition"))
+
+        datasource = data_source_registry[datasource_name]()
+        return get_filter_headers_of_context(datasource, context, single_infos)
+>>>>>>> upstream/master
 
     def _get_availability_timelines(self, start_time, end_time, only_sites, filter_headers):
         avoptions = availability.get_default_avoptions()

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,13 +24,23 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 from cmk.gui.i18n import _
 from cmk.gui.valuespec import (
     Checkbox,
     Dictionary,
     Float,
+<<<<<<< HEAD
     TextAscii,
+=======
+>>>>>>> upstream/master
     Tuple,
 )
 
@@ -41,10 +52,19 @@ from cmk.gui.plugins.wato import (
     HostRulespec,
 )
 
+<<<<<<< HEAD
 
 def _valuespec_inventory_mssql_counters_rules():
     return Dictionary(
         title=_("Include MSSQL Counters services"),
+=======
+from cmk.gui.plugins.wato.check_parameters.utils import mssql_item_spec_instance_tablespace
+
+
+def _valuespec_inventory_mssql_counters_rules():
+    return Dictionary(
+        title=_("MSSQL counter discovery"),
+>>>>>>> upstream/master
         elements=[
             ("add_zero_based_services", Checkbox(title=_("Include service with zero base."))),
         ],
@@ -121,7 +141,11 @@ rulespec_registry.register(
     CheckParameterRulespecWithItem(
         check_group_name="mssql_counters_locks",
         group=RulespecGroupCheckParametersApplications,
+<<<<<<< HEAD
         item_spec=lambda: TextAscii(title=_("Service descriptions"), allow_empty=False),
+=======
+        item_spec=mssql_item_spec_instance_tablespace,
+>>>>>>> upstream/master
         match_type="dict",
         parameter_valuespec=_parameter_valuespec_mssql_counters_locks,
         title=lambda: _("MSSQL Locks"),

@@ -1,37 +1,30 @@
-// +------------------------------------------------------------------+
-// |             ____ _               _        __  __ _  __           |
-// |            / ___| |__   ___  ___| | __   |  \/  | |/ /           |
-// |           | |   | '_ \ / _ \/ __| |/ /   | |\/| | ' /            |
-// |           | |___| | | |  __/ (__|   <    | |  | | . \            |
-// |            \____|_| |_|\___|\___|_|\_\___|_|  |_|_|\_\           |
-// |                                                                  |
-// | Copyright Mathias Kettner 2014             mk@mathias-kettner.de |
-// +------------------------------------------------------------------+
-//
-// This file is part of Check_MK.
-// The official homepage is at http://mathias-kettner.de/check_mk.
-//
-// check_mk is free software;  you can redistribute it and/or modify it
-// under the  terms of the  GNU General Public License  as published by
-// the Free Software Foundation in version 2.  check_mk is  distributed
-// in the hope that it will be useful, but WITHOUT ANY WARRANTY;  with-
-// out even the implied warranty of  MERCHANTABILITY  or  FITNESS FOR A
-// PARTICULAR PURPOSE. See the  GNU General Public License for more de-
-// tails. You should have  received  a copy of the  GNU  General Public
-// License along with GNU Make; see the file  COPYING.  If  not,  write
-// to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
-// Boston, MA 02110-1301 USA.
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the
+// terms and conditions defined in the file COPYING, which is part of this
+// source code package.
 
 #include "TableEventConsole.h"
+
+#include <algorithm>  // IWYU pragma: keep
+#include <chrono>
+#include <cstdlib>
+#include <ctime>
+#include <filesystem>
+#include <functional>  // IWYU pragma: keep
 #include <iosfwd>
 #include <iostream>
+<<<<<<< HEAD
 #include <memory>
+=======
+>>>>>>> upstream/master
 #include <optional>
 #include <stdexcept>
 #include <unordered_set>
 #include <utility>
+
 #include "Column.h"
 #include "EventConsoleConnection.h"
+<<<<<<< HEAD
 #include "Logger.h"
 #include "Query.h"
 #include "auth.h"
@@ -39,6 +32,21 @@
 namespace {
 // NOTE: Keep this in sync with EC code. Ugly...
 std::vector<std::string> grepping_filters = {
+=======
+#include "ListColumn.h"
+#include "Logger.h"
+#include "Query.h"
+#include "Row.h"
+#include "StringColumn.h"
+#include "StringUtils.h"
+#include "auth.h"
+
+using namespace std::chrono_literals;
+
+namespace {
+// NOTE: Keep this in sync with EC code. Ugly...
+const std::vector<std::string> grepping_filters = {
+>>>>>>> upstream/master
     "event_id",         "event_text",      "event_comment",     "event_host",
     "event_host_regex", "event_contact",   "event_application", "event_rule_id",
     "event_owner",      "event_ipaddress", "event_core_host"
@@ -70,7 +78,11 @@ private:
         os << "GET " << table_.name().substr(12);
     }
 
+<<<<<<< HEAD
     void emitOutputFormat(std::ostream &os) const {
+=======
+    static void emitOutputFormat(std::ostream &os) {
+>>>>>>> upstream/master
         os << "\nOutputFormat: plain";
     }
 
@@ -142,6 +154,7 @@ private:
                 headers = std::move(columns);
                 is_header = false;
             } else {
+<<<<<<< HEAD
                 TableEventConsole::ECRow row;
                 int i = 0;
                 columns.resize(headers.size());  // just to be sure...
@@ -156,6 +169,12 @@ private:
                 if (!query_->processDataset(Row(&row))) {
                     return;
                 }
+=======
+                ECRow row{mc_, headers, columns};
+                if (!query_->processDataset(Row(&row))) {
+                    return;
+                }
+>>>>>>> upstream/master
             }
         } while (true);
     }
@@ -166,6 +185,92 @@ private:
 };
 }  // namespace
 
+<<<<<<< HEAD
+=======
+ECRow::ECRow(MonitoringCore *mc, const std::vector<std::string> &headers,
+             const std::vector<std::string> &columns) {
+    auto column_it = columns.cbegin();
+    for (const auto &header : headers) {
+        if (column_it != columns.end()) {
+            map_[header] = *column_it++;
+        }
+    }
+    auto it = map_.find("event_host");
+    host_ = it == map_.end() ? nullptr : mc->getHostByDesignation(it->second);
+}
+
+// static
+std::unique_ptr<StringLambdaColumn<ECRow>> ECRow::makeStringColumn(
+    const std::string &name, const std::string &description,
+    const ColumnOffsets &offsets) {
+    return std::make_unique<StringLambdaColumn<ECRow>>(
+        name, description, offsets,
+        [name](const ECRow &r) { return r.getString(name); });
+}
+
+// static
+std::unique_ptr<IntLambdaColumn<ECRow>> ECRow::makeIntColumn(
+    const std::string &name, const std::string &description,
+    const ColumnOffsets &offsets) {
+    return std::make_unique<IntLambdaColumn<ECRow>>(
+        name, description, offsets,
+        [name](const ECRow &r) { return r.getInt(name); });
+}
+
+// static
+std::unique_ptr<DoubleLambdaColumn<ECRow>> ECRow::makeDoubleColumn(
+    const std::string &name, const std::string &description,
+    const ColumnOffsets &offsets) {
+    return std::make_unique<DoubleLambdaColumn<ECRow>>(
+        name, description, offsets,
+        [name](const ECRow &r) { return r.getDouble(name); });
+}
+
+// static
+std::unique_ptr<TimeLambdaColumn<ECRow>> ECRow::makeTimeColumn(
+    const std::string &name, const std::string &description,
+    const ColumnOffsets &offsets) {
+    return std::make_unique<TimeLambdaColumn<ECRow>>(
+        name, description, offsets, [name](const ECRow &r) {
+            return std::chrono::system_clock::from_time_t(
+                static_cast<std::time_t>(r.getDouble(name)));
+        });
+}
+
+// static
+std::unique_ptr<ListLambdaColumn<ECRow>> ECRow::makeListColumn(
+    const std::string &name, const std::string &description,
+    const ColumnOffsets &offsets) {
+    return std::make_unique<ListLambdaColumn<ECRow>>(
+        name, description, offsets, [name](const ECRow &r) {
+            auto result = r.getString(name);
+            return result.empty() || result == "\002"
+                       ? std::vector<std::string>()
+                       : mk::split(result.substr(1), '\001');
+        });
+}
+
+std::string ECRow::getString(const std::string &column_name) const {
+    return get(column_name, "");
+}
+
+int32_t ECRow::getInt(const std::string &column_name) const {
+    return static_cast<int32_t>(atol(get(column_name, "0").c_str()));
+}
+
+double ECRow::getDouble(const std::string &column_name) const {
+    return atof(get(column_name, "0").c_str());
+}
+
+std::string ECRow::get(const std::string &column_name,
+                       const std::string &default_value) const {
+    auto it = map_.find(column_name);
+    return it == map_.end() ? default_value : it->second;
+}
+
+const MonitoringCore::Host *ECRow::host() const { return host_; }
+
+>>>>>>> upstream/master
 TableEventConsole::TableEventConsole(MonitoringCore *mc) : Table(mc) {}
 
 void TableEventConsole::answerQuery(Query *query) {
@@ -181,10 +286,17 @@ void TableEventConsole::answerQuery(Query *query) {
 bool TableEventConsole::isAuthorizedForEvent(Row row,
                                              const contact *ctc) const {
     // TODO(sp) Remove evil casts below.
+<<<<<<< HEAD
     auto c = reinterpret_cast<const MonitoringCore::Contact *>(ctc);
     // NOTE: Further filtering in the GUI for mkeventd.seeunrelated permission
     bool result = true;
     auto precedence = std::static_pointer_cast<StringEventConsoleColumn>(
+=======
+    const auto *c = reinterpret_cast<const MonitoringCore::Contact *>(ctc);
+    // NOTE: Further filtering in the GUI for mkeventd.seeunrelated permission
+    bool result = true;
+    auto precedence = std::static_pointer_cast<StringColumn>(
+>>>>>>> upstream/master
                           column("event_contact_groups_precedence"))
                           ->getValue(row);
     if (precedence == "rule") {
@@ -203,6 +315,7 @@ bool TableEventConsole::isAuthorizedForEvent(Row row,
 
 bool TableEventConsole::isAuthorizedForEventViaContactGroups(
     const MonitoringCore::Contact *ctc, Row row, bool &result) const {
+<<<<<<< HEAD
     auto col = std::static_pointer_cast<ListEventConsoleColumn>(
         column("event_contact_groups"));
     if (col->isNone(row)) {
@@ -210,6 +323,17 @@ bool TableEventConsole::isAuthorizedForEventViaContactGroups(
     }
     for (const auto &name :
          col->getValue(row, unknown_auth_user(), std::chrono::seconds(0))) {
+=======
+    auto col =
+        std::static_pointer_cast<ListColumn>(column("event_contact_groups"));
+    if (const auto *r = col->columnData<ECRow>(row)) {
+        // TODO(sp) This check for None is a hack...
+        if (r->getString(col->name()) == "\002") {
+            return false;
+        }
+    }
+    for (const auto &name : col->getValue(row, unknown_auth_user(), 0s)) {
+>>>>>>> upstream/master
         if (core()->is_contact_member_of_contactgroup(
                 core()->find_contactgroup(name), ctc)) {
             return (result = true, true);
@@ -220,7 +344,11 @@ bool TableEventConsole::isAuthorizedForEventViaContactGroups(
 
 bool TableEventConsole::isAuthorizedForEventViaHost(
     const MonitoringCore::Contact *ctc, Row row, bool &result) const {
+<<<<<<< HEAD
     if (MonitoringCore::Host *hst = rowData<ECRow>(row)->_host) {
+=======
+    if (const MonitoringCore::Host *hst = rowData<ECRow>(row)->host()) {
+>>>>>>> upstream/master
         return (result = core()->host_has_contact(hst, ctc), true);
     }
     return false;

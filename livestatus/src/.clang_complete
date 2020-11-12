@@ -1,8 +1,15 @@
 -I.
 -I../..
 -I..
+<<<<<<< HEAD
 -I../../omd/packages/re2/destdir/include
 -DHAVE_CONFIG_H
 -std=c++17
+=======
+-isystem includes/asio
+-I../../omd/packages/re2/destdir/include
+-DHAVE_CONFIG_H
+-std=c++20
+>>>>>>> upstream/master
 -Wall
 -Wextra

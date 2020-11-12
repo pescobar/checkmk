@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,6 +24,13 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 # Version 2
 # healthy if all nodes are reachable (at discovery)
@@ -76,6 +84,7 @@ def parse_pvecm_nodes(info):
             header = ["node_id", "status", "joined", "name"]
             parse_func = _parse_version_eq_2
             continue
+<<<<<<< HEAD
 
         elif line == ["Nodeid", "Votes", "Name"]:
             header = ["node_id", "votes", "name"]
@@ -98,6 +107,30 @@ def _parse_version_eq_2(line, header):
     return line[-1], data
 
 
+=======
+
+        elif line == ["Nodeid", "Votes", "Name"]:
+            header = ["node_id", "votes", "name"]
+            parse_func = _parse_version_gt_2
+            continue
+
+        if header is None:
+            continue
+
+        k, v = parse_func(line, header)
+        parsed.setdefault(k, v)
+    return parsed
+
+
+def _parse_version_eq_2(line, header):
+    if len(line) == 6:
+        data = dict(zip(header[:3], line[:2] + [" ".join(line[3:5])]))
+    else:
+        data = dict(zip(["node_id", "status"], line[:2]))
+    return line[-1], data
+
+
+>>>>>>> upstream/master
 def _parse_version_gt_2(line, header):
     return " ".join(line[2:]), dict(zip(header[:2], line[:2]))
 

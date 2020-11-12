@@ -17,5 +17,9 @@ item:
  The fan designation
 
 inventory:
+<<<<<<< HEAD
  One service per fan is created.
+=======
+ One service is created for each fan.
+>>>>>>> upstream/master
 

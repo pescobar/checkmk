@@ -10,7 +10,14 @@ description:
  reported health is binary and can be {OK} or {CRIT}.
 
 item:
+<<<<<<< HEAD
  The disk number is the item
 
 inventory:
  One service for each disk is created
+=======
+ The disk number
+
+inventory:
+ One service is created for each disk.
+>>>>>>> upstream/master

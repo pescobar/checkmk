@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -30,6 +31,21 @@ import subprocess
 import traceback
 from pathlib2 import Path
 
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+import os
+from pathlib import Path
+import subprocess
+import traceback
+from typing import Dict, Any
+
+import cmk.utils.version as cmk_version
+>>>>>>> upstream/master
 import cmk.utils.paths
 import cmk.utils.store as store
 
@@ -58,6 +74,10 @@ from cmk.gui.plugins.wato import (
     ConfigVariable,
     site_neutral_path,
     add_replication_paths,
+<<<<<<< HEAD
+=======
+    ReplicationPath,
+>>>>>>> upstream/master
     wato_fileheader,
 )
 
@@ -126,8 +146,13 @@ class ConfigVariableSiteCore(ConfigVariable):
 
     def _monitoring_core_choices(self):
         cores = []
+<<<<<<< HEAD
         if not cmk.is_raw_edition():
             cores.append(("cmc", _("Check_MK Micro Core")))
+=======
+        if not cmk_version.is_raw_edition():
+            cores.append(("cmc", _("Checkmk Micro Core")))
+>>>>>>> upstream/master
 
         cores += [
             ("nagios", _("Nagios 3")),
@@ -250,10 +275,15 @@ class ConfigDomainDiskspace(ABCConfigDomain):
     def config_dir(self):
         return ""  # unused, we override load and save below
 
+<<<<<<< HEAD
     def load(self, site_specific=False):
         cleanup_settings = {}
         exec (open(self.diskspace_config).read(), {}, cleanup_settings)
 
+=======
+    def load(self, site_specific=False, custom_site_path=None):
+        cleanup_settings = store.load_mk_file(self.diskspace_config, default={})
+>>>>>>> upstream/master
         if not cleanup_settings:
             return {}
 
@@ -273,7 +303,14 @@ class ConfigDomainDiskspace(ABCConfigDomain):
             "diskspace_cleanup": cleanup_settings,
         }
 
+<<<<<<< HEAD
     def save(self, settings, site_specific=False):
+=======
+    def save(self, settings, site_specific=False, custom_site_path=None):
+        if site_specific:
+            return  # not supported at the moment
+
+>>>>>>> upstream/master
         config = {}
 
         if "diskspace_cleanup" in settings:
@@ -291,6 +328,7 @@ class ConfigDomainDiskspace(ABCConfigDomain):
         for k, v in sorted(config.items()):
             output += '%s = %r\n' % (k, v)
 
+<<<<<<< HEAD
         cmk.utils.store.save_file(self.diskspace_config, output)
 
     def save_site_globals(self, settings):
@@ -302,6 +340,16 @@ class ConfigDomainDiskspace(ABCConfigDomain):
         with (open(str(filename))) as f:
             code = compile(f.read(), str(filename), 'exec')
             exec (code, {}, diskspace_context)
+=======
+        store.save_file(self.diskspace_config, output)
+
+    def default_globals(self):
+        diskspace_context: Dict[str, Any] = {}
+        filename = Path(cmk.utils.paths.omd_root, 'bin', 'diskspace')
+        with filename.open(encoding="utf-8") as f:
+            code = compile(f.read(), str(filename), 'exec')
+            exec(code, {}, diskspace_context)
+>>>>>>> upstream/master
         return {
             "diskspace_cleanup": diskspace_context["default_config"],
         }
@@ -393,7 +441,13 @@ class ConfigVariableSiteDiskspaceCleanup(ConfigVariable):
 
 
 add_replication_paths([
+<<<<<<< HEAD
     ("file", "diskspace", ConfigDomainDiskspace.diskspace_config),
+=======
+    ReplicationPath(
+        "file", "diskspace",
+        os.path.relpath(ConfigDomainDiskspace.diskspace_config, cmk.utils.paths.omd_root), []),
+>>>>>>> upstream/master
 ])
 
 #.
@@ -422,6 +476,7 @@ class ConfigDomainApache(ABCConfigDomain):
         try:
             self._write_config_file()
 
+<<<<<<< HEAD
             p = subprocess.Popen(["omd", "reload", "apache"],
                                  shell=False,
                                  stdin=open(os.devnull),
@@ -430,6 +485,18 @@ class ConfigDomainApache(ABCConfigDomain):
                                  close_fds=True)
 
             stdout = p.communicate()[0]
+=======
+            p = subprocess.Popen(
+                ["omd", "reload", "apache"],
+                stdin=open(os.devnull),
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                close_fds=True,
+                encoding="utf-8",
+            )
+
+            stdout, _stderr = p.communicate()
+>>>>>>> upstream/master
             if p.returncode != 0:
                 raise Exception(stdout)
 
@@ -464,17 +531,30 @@ class ConfigDomainApache(ABCConfigDomain):
         }
 
     def _get_value_from_config(self, varname, conv_func, default_value):
+<<<<<<< HEAD
         config_files = [os.path.join(cmk.utils.paths.omd_root, "etc/apache/apache.conf")]
         config_files += sorted(
             glob.glob(os.path.join(cmk.utils.paths.omd_root, "etc/apache/conf.d", "*.conf")))
+=======
+        config_files = [Path(cmk.utils.paths.omd_root).joinpath("etc/apache/apache.conf")]
+        config_files += sorted(
+            Path(cmk.utils.paths.omd_root).joinpath("etc/apache/conf.d").glob("*.conf"))
+>>>>>>> upstream/master
 
         value = default_value
 
         for config_file in config_files:
+<<<<<<< HEAD
             if config_file.endswith("zzz_check_mk.conf"):
                 continue  # Skip the file written by this config domain
 
             for line in open(config_file):
+=======
+            if config_file.name == "zzz_check_mk.conf":
+                continue  # Skip the file written by this config domain
+
+            for line in config_file.open(encoding="utf-8"):
+>>>>>>> upstream/master
                 if line.lstrip().startswith(varname):
                     raw_value = line.split()[1]
                     value = conv_func(raw_value)
@@ -539,6 +619,7 @@ class ConfigDomainRRDCached(ABCConfigDomain):
         try:
             self._write_config_file()
 
+<<<<<<< HEAD
             p = subprocess.Popen(["omd", "restart", "rrdcached"],
                                  shell=False,
                                  stdin=open(os.devnull),
@@ -547,6 +628,18 @@ class ConfigDomainRRDCached(ABCConfigDomain):
                                  close_fds=True)
 
             stdout = p.communicate()[0]
+=======
+            p = subprocess.Popen(
+                ["omd", "restart", "rrdcached"],
+                stdin=open(os.devnull),
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                close_fds=True,
+                encoding="utf-8",
+            )
+
+            stdout, _stderr = p.communicate()
+>>>>>>> upstream/master
             if p.returncode != 0:
                 raise Exception(stdout)
 
@@ -582,17 +675,30 @@ class ConfigDomainRRDCached(ABCConfigDomain):
         }
 
     def _get_value_from_config(self, varname, conv_func, default_value):
+<<<<<<< HEAD
         config_files = [os.path.join(cmk.utils.paths.omd_root, "etc/rrdcached.conf")]
         config_files += sorted(
             glob.glob(os.path.join(cmk.utils.paths.omd_root, "etc/rrdcached.d", "*.conf")))
+=======
+        config_files = [Path(cmk.utils.paths.omd_root).joinpath("etc/rrdcached.conf")]
+        config_files += sorted(
+            Path(cmk.utils.paths.omd_root).joinpath("etc/rrdcached.d").glob("*.conf"))
+>>>>>>> upstream/master
 
         value = default_value
 
         for config_file in config_files:
+<<<<<<< HEAD
             if config_file.endswith("zzz_check_mk.conf"):
                 continue  # Skip the file written by this config domain
 
             for line in open(config_file):
+=======
+            if config_file.name == "zzz_check_mk.conf":
+                continue  # Skip the file written by this config domain
+
+            for line in config_file.open(encoding="utf-8"):
+>>>>>>> upstream/master
                 if line.lstrip().startswith(varname):
                     raw_value = line.split("=")[1]
                     value = conv_func(raw_value)

@@ -1,14 +1,32 @@
+<<<<<<< HEAD
 title: Avaya Chassis Temperature
+=======
+title: Avaya Devices: Chassis Temperature
+>>>>>>> upstream/master
 agents: snmp
 catalog: hw/network/avaya
 license: GPL
 distribution: check_mk
 description:
+<<<<<<< HEAD
  This check monitors the chassis temperature of Avaya
  devices.
+=======
+ This check monitors the chassis temperature of Avaya devices.
+
+ You can configure upper levels for {WARN}/{CRIT} (default 55, 60).
+
+ The service goes {WARN}/{CRIT} if the temperature exceeds these levels.
+
+ The check uses the RAPID-CITY-MIB.
+>>>>>>> upstream/master
 
 item:
  Chassis
 
 inventory:
+<<<<<<< HEAD
  Creates one service per device.
+=======
+ One service is created per device.
+>>>>>>> upstream/master

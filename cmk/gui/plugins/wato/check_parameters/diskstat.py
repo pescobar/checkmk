@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,24 +24,42 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 from cmk.gui.i18n import _
 from cmk.gui.valuespec import (
     Age,
     Dictionary,
+<<<<<<< HEAD
     ListChoice,
     TextAscii,
+=======
+    FixedValue,
+    TextAscii,
+    Transform,
+>>>>>>> upstream/master
 )
 
 from cmk.gui.plugins.wato import (
     CheckParameterRulespecWithItem,
     rulespec_registry,
     Levels,
+<<<<<<< HEAD
+=======
+    RulespecGroupCheckParametersDiscovery,
+>>>>>>> upstream/master
     RulespecGroupCheckParametersStorage,
     HostRulespec,
 )
 
 
+<<<<<<< HEAD
 def _valuespec_diskstat_inventory():
     return ListChoice(
         title=_("Discovery mode for Disk IO check"),
@@ -60,12 +79,68 @@ def _valuespec_diskstat_inventory():
             ("diskless", _("Creata a separate check for each partition (XEN)")),
         ],
         default_value=['summary'],
+=======
+def transform_diskstat(params):
+    if isinstance(params, list):
+        return {mode: True for mode in params}
+    return params
+
+
+def _valuespec_diskstat_inventory():
+    return Transform(
+        Dictionary(
+            title=_("Disk IO discovery"),
+            help=_("This rule controls which and how many checks will be created "
+                   "for monitoring individual physical and logical disks. "
+                   "Note: the option <i>Create a summary for all read, one for "
+                   "write</i> has been removed. Some checks will still support "
+                   "this settings, but it will be removed there soon."),
+            elements=[
+                ('summary',
+                 FixedValue(
+                     True,
+                     title=_("Summary"),
+                     totext="Create a summary over all physical disks",
+                 )),
+                ('physical',
+                 FixedValue(
+                     True,
+                     title=_("Physical disks"),
+                     totext="Create a separate check for each physical disk",
+                 )),
+                ('lvm',
+                 FixedValue(
+                     True,
+                     title=_("LVM volumes (Linux)"),
+                     totext="Create a separate check for each LVM volume (Linux)",
+                 )),
+                ('vxvm',
+                 FixedValue(
+                     True,
+                     title=_("VxVM volumes (Linux)"),
+                     totext="Create a separate check for each VxVM volume (Linux)",
+                 )),
+                ('diskless',
+                 FixedValue(
+                     True,
+                     title=_("Partitions (XEN)"),
+                     totext="Create a separate check for each partition (XEN)",
+                 )),
+            ],
+            default_keys=['summary'],
+        ),
+        forth=transform_diskstat,
+>>>>>>> upstream/master
     )
 
 
 rulespec_registry.register(
     HostRulespec(
+<<<<<<< HEAD
         group=RulespecGroupCheckParametersStorage,
+=======
+        group=RulespecGroupCheckParametersDiscovery,
+>>>>>>> upstream/master
         name="diskstat_inventory",
         valuespec=_valuespec_diskstat_inventory,
     ))
@@ -150,5 +225,9 @@ rulespec_registry.register(
         item_spec=_item_spec_diskstat,
         match_type="dict",
         parameter_valuespec=_parameter_valuespec_diskstat,
+<<<<<<< HEAD
         title=lambda: _("Levels for disk IO"),
+=======
+        title=lambda: _("Disk IO levels"),
+>>>>>>> upstream/master
     ))

@@ -3,6 +3,10 @@
 
 #include "realtime.h"
 
+<<<<<<< HEAD
+=======
+#include <fmt/format.h>
+>>>>>>> upstream/master
 #include <time.h>
 
 #include <chrono>
@@ -12,7 +16,10 @@
 #include "asio.h"
 #include "cfg.h"
 #include "encryption.h"
+<<<<<<< HEAD
 #include "fmt/format.h"
+=======
+>>>>>>> upstream/master
 #include "logger.h"
 #include "providers/df.h"
 #include "providers/mem.h"
@@ -209,9 +216,16 @@ static void UpdateCounterByEc(size_t& counter, std::error_code& ec) {
 
 // #TODO overcomplicated function, to be re-factored
 void Device::mainThread() noexcept {
+<<<<<<< HEAD
     std::unique_lock lk(lock_);
     auto port = port_;
     auto ip_address = ip_address_;
+=======
+    using namespace std::literals;
+    std::unique_lock lk(lock_);
+    auto port = port_;
+    auto ip_address = ""s;  // set to invalid value, prevents race
+>>>>>>> upstream/master
     auto passphrase = passphrase_;
     lk.unlock();
 
@@ -278,10 +292,14 @@ void Device::mainThread() noexcept {
 
                     if (counter > 3)
                         mainThreadReporter("Can't Send", ec, ip_address, port);
+<<<<<<< HEAD
 
                 } else if (port == 0)
                     XLOG::l.i("Trace out '{}' Address='{}'", raw_data,
                               ip_address);
+=======
+                }
+>>>>>>> upstream/master
             }
 
             // wait for stop here TOO
@@ -296,6 +314,10 @@ void Device::mainThread() noexcept {
     } catch (std::exception& e) {
         XLOG::l("Exception in RT thread: '{}'", e.what());
     }
+<<<<<<< HEAD
 }  // namespace cma::rt
+=======
+}
+>>>>>>> upstream/master
 
 }  // namespace cma::rt

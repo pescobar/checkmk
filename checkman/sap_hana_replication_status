@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: SAP HANA Replication Status
+=======
+title: SAP HANA: Replication Status
+>>>>>>> upstream/master
 agents: linux
 catalog: app/sap_hana
 license: GPL
@@ -16,7 +20,14 @@ description:
  reports UNKNOWN.
 
 item:
+<<<<<<< HEAD
  The instance name
 
 inventory:
  One service is created per instance if and only if the mode is PRIMARY.
+=======
+ The sid instance name
+
+inventory:
+ One service is created for each instance if the mode is PRIMARY.
+>>>>>>> upstream/master

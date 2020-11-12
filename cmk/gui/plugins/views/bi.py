@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -35,6 +36,26 @@ from cmk.gui.globals import html
 from cmk.gui.plugins.views import (
     data_source_registry,
     DataSource,
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+from cmk.utils.defines import short_service_state_name
+
+import cmk.gui.escaping as escaping
+import cmk.gui.bi as bi
+from cmk.gui.valuespec import DropdownChoice
+from cmk.gui.htmllib import HTML
+from cmk.gui.i18n import _
+from cmk.gui.globals import html, request
+
+from cmk.gui.plugins.views import (
+    data_source_registry,
+    ABCDataSource,
+>>>>>>> upstream/master
     RowTable,
     PainterOptions,
     painter_option_registry,
@@ -43,6 +64,11 @@ from cmk.gui.plugins.views import (
     Painter,
 )
 
+<<<<<<< HEAD
+=======
+from cmk.gui.utils.urls import makeuri
+
+>>>>>>> upstream/master
 #     ____        _
 #    |  _ \  __ _| |_ __ _ ___  ___  _   _ _ __ ___ ___  ___
 #    | | | |/ _` | __/ _` / __|/ _ \| | | | '__/ __/ _ \/ __|
@@ -52,7 +78,11 @@ from cmk.gui.plugins.views import (
 
 
 @data_source_registry.register
+<<<<<<< HEAD
 class DataSourceBIAggregations(DataSource):
+=======
+class DataSourceBIAggregations(ABCDataSource):
+>>>>>>> upstream/master
     @property
     def ident(self):
         return "bi_aggregations"
@@ -84,7 +114,11 @@ class RowTableBIAggregations(RowTable):
 
 
 @data_source_registry.register
+<<<<<<< HEAD
 class DataSourceBIHostAggregations(DataSource):
+=======
+class DataSourceBIHostAggregations(ABCDataSource):
+>>>>>>> upstream/master
     @property
     def ident(self):
         return "bi_host_aggregations"
@@ -116,7 +150,11 @@ class RowTableBIHostAggregations(RowTable):
 
 
 @data_source_registry.register
+<<<<<<< HEAD
 class DataSourceBIHostnameAggregations(DataSource):
+=======
+class DataSourceBIHostnameAggregations(ABCDataSource):
+>>>>>>> upstream/master
     """Similar to host aggregations, but the name of the aggregation
     is used to join the host table rather then the affected host"""
     @property
@@ -150,7 +188,11 @@ class RowTableBIHostnameAggregations(RowTable):
 
 
 @data_source_registry.register
+<<<<<<< HEAD
 class DataSourceBIHostnameByGroupAggregations(DataSource):
+=======
+class DataSourceBIHostnameByGroupAggregations(ABCDataSource):
+>>>>>>> upstream/master
     """The same but with group information"""
     @property
     def ident(self):
@@ -197,8 +239,12 @@ class PainterAggrIcons(Painter):
     def ident(self):
         return "aggr_icons"
 
+<<<<<<< HEAD
     @property
     def title(self):
+=======
+    def title(self, cell):
+>>>>>>> upstream/master
         return _("Links")
 
     @property
@@ -224,6 +270,7 @@ class PainterAggrIcons(Painter):
             html.icon_button(avail_url, _("Analyse availability of this aggregation"),
                              "availability")
             if row["aggr_effective_state"]["in_downtime"] != 0:
+<<<<<<< HEAD
                 html.icon(_("A service or host in this aggregation is in downtime."),
                           "derived_downtime")
             if row["aggr_effective_state"]["acknowledged"]:
@@ -233,6 +280,18 @@ class PainterAggrIcons(Painter):
             if not row["aggr_effective_state"]["in_service_period"]:
                 html.icon(_("This aggregation is currently out of its service period."),
                           "outof_serviceperiod")
+=======
+                html.icon("derived_downtime",
+                          _("A service or host in this aggregation is in downtime."))
+            if row["aggr_effective_state"]["acknowledged"]:
+                html.icon(
+                    "ack",
+                    _("The critical problems that make this aggregation non-OK have been acknowledged."
+                     ))
+            if not row["aggr_effective_state"]["in_service_period"]:
+                html.icon("outof_serviceperiod",
+                          _("This aggregation is currently out of its service period."))
+>>>>>>> upstream/master
             code = html.drain()
         return "buttons", code
 
@@ -243,8 +302,12 @@ class PainterAggrInDowntime(Painter):
     def ident(self):
         return "aggr_in_downtime"
 
+<<<<<<< HEAD
     @property
     def title(self):
+=======
+    def title(self, cell):
+>>>>>>> upstream/master
         return _("In Downtime")
 
     @property
@@ -261,8 +324,12 @@ class PainterAggrAcknowledged(Painter):
     def ident(self):
         return "aggr_acknowledged"
 
+<<<<<<< HEAD
     @property
     def title(self):
+=======
+    def title(self, cell):
+>>>>>>> upstream/master
         return _("Acknowledged")
 
     @property
@@ -276,12 +343,20 @@ class PainterAggrAcknowledged(Painter):
 def paint_aggr_state_short(state, assumed=False):
     if state is None:
         return "", ""
+<<<<<<< HEAD
     else:
         name = short_service_state_name(state["state"], "")
         classes = "state svcstate state%s" % state["state"]
         if assumed:
             classes += " assumed"
         return classes, name
+=======
+    name = short_service_state_name(state["state"], "")
+    classes = "state svcstate state%s" % state["state"]
+    if assumed:
+        classes += " assumed"
+    return classes, name
+>>>>>>> upstream/master
 
 
 @painter_registry.register
@@ -290,12 +365,19 @@ class PainterAggrState(Painter):
     def ident(self):
         return "aggr_state"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Aggregated state")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Aggregated state")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("State")
 
     @property
@@ -313,12 +395,19 @@ class PainterAggrStateNum(Painter):
     def ident(self):
         return "aggr_state_num"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Aggregated state (number)")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Aggregated state (number)")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("State")
 
     @property
@@ -335,12 +424,19 @@ class PainterAggrRealState(Painter):
     def ident(self):
         return "aggr_real_state"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Aggregated real state (never assumed)")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Aggregated real state (never assumed)")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("R.State")
 
     @property
@@ -357,12 +453,19 @@ class PainterAggrAssumedState(Painter):
     def ident(self):
         return "aggr_assumed_state"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Aggregated assumed state")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Aggregated assumed state")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Assumed")
 
     @property
@@ -379,12 +482,19 @@ class PainterAggrGroup(Painter):
     def ident(self):
         return "aggr_group"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Aggregation group")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Aggregation group")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Group")
 
     @property
@@ -392,7 +502,11 @@ class PainterAggrGroup(Painter):
         return ['aggr_group']
 
     def render(self, row, cell):
+<<<<<<< HEAD
         return ("", html.attrencode(row["aggr_group"]))
+=======
+        return "", escaping.escape_attribute(row["aggr_group"])
+>>>>>>> upstream/master
 
 
 @painter_registry.register
@@ -401,12 +515,19 @@ class PainterAggrName(Painter):
     def ident(self):
         return "aggr_name"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Aggregation name")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Aggregation name")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Aggregation")
 
     @property
@@ -414,7 +535,11 @@ class PainterAggrName(Painter):
         return ['aggr_name']
 
     def render(self, row, cell):
+<<<<<<< HEAD
         return ("", html.attrencode(row["aggr_name"]))
+=======
+        return "", escaping.escape_attribute(row["aggr_name"])
+>>>>>>> upstream/master
 
 
 @painter_registry.register
@@ -423,12 +548,19 @@ class PainterAggrOutput(Painter):
     def ident(self):
         return "aggr_output"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Aggregation status output")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Aggregation status output")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Output")
 
     @property
@@ -442,7 +574,11 @@ class PainterAggrOutput(Painter):
 def paint_aggr_hosts(row, link_to_view):
     h = []
     for site, host in row["aggr_hosts"]:
+<<<<<<< HEAD
         url = html.makeuri([("view_name", link_to_view), ("site", site), ("host", host)])
+=======
+        url = makeuri(request, [("view_name", link_to_view), ("site", site), ("host", host)])
+>>>>>>> upstream/master
         h.append(html.render_a(host, url))
     return "", HTML(" ").join(h)
 
@@ -453,12 +589,19 @@ class PainterAggrHosts(Painter):
     def ident(self):
         return "aggr_hosts"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Aggregation: affected hosts")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Aggregation: affected hosts")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Hosts")
 
     @property
@@ -475,12 +618,19 @@ class PainterAggrHostsServices(Painter):
     def ident(self):
         return "aggr_hosts_services"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Aggregation: affected hosts (link to host page)")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Aggregation: affected hosts (link to host page)")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Hosts")
 
     @property
@@ -607,12 +757,19 @@ class PainterAggrTreestate(Painter):
     def ident(self):
         return "aggr_treestate"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Aggregation: complete tree")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Aggregation: complete tree")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Tree")
 
     @property
@@ -633,12 +790,19 @@ class PainterAggrTreestateBoxed(Painter):
     def ident(self):
         return "aggr_treestate_boxed"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Aggregation: simplistic boxed layout")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Aggregation: simplistic boxed layout")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Tree")
 
     @property

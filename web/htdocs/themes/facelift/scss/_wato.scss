@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /*
 +------------------------------------------------------------------+
 |             ____ _               _        __  __ _  __           |
@@ -25,6 +26,12 @@ Boston, MA 02110-1301 USA.
 
 */
 
+=======
+@charset "UTF-8";
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+// conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 /*-------------------------------------------------------------------------.
 |                     __        ___  _____ ___                             |
@@ -37,9 +44,14 @@ Boston, MA 02110-1301 USA.
 | Styles used in WATO.                                                     |
 '-------------------------------------------------------------------------*/
 
+<<<<<<< HEAD
 
 .wato {
   color: $theme-color-text;
+=======
+.wato {
+  color: $font-color;
+>>>>>>> upstream/master
 }
 
 /* Icon image place inline in some documentation text */
@@ -51,8 +63,13 @@ Boston, MA 02110-1301 USA.
 }
 
 .wato table.data {
+<<<<<<< HEAD
   border: $wato-data-table-border;
   box-shadow: $wato-data-table-box-shadow;
+=======
+  border-style: none;
+  box-shadow: none;
+>>>>>>> upstream/master
 
   &.job_table {
     border: none;
@@ -60,11 +77,20 @@ Boston, MA 02110-1301 USA.
   }
 
   &:not(.job_table) th {
+<<<<<<< HEAD
     background: $wato-data-th-bg-color;
     border-radius: 0;
 
     &.header_state {
       background: $wato-data-th-bg-color !important;
+=======
+    background: transparent;
+    border-radius: 0;
+
+    &.header_state {
+      color: rgb(119, 119, 119) !important;
+      background: transparent !important;
+>>>>>>> upstream/master
     }
   }
 
@@ -79,7 +105,13 @@ Boston, MA 02110-1301 USA.
       text-align: center;
     }
 
+<<<<<<< HEAD
     &.buttons, &.buttons a, &.buttons img {
+=======
+    &.buttons,
+    &.buttons a,
+    &.buttons img {
+>>>>>>> upstream/master
       white-space: nowrap;
     }
   }
@@ -88,10 +120,17 @@ Boston, MA 02110-1301 USA.
 /* Tables renderes in forms. */
 /* TODO: Reproduce these data tables within nform tables */
 .wato table.nform table.data {
+<<<<<<< HEAD
   box-shadow: 1px 1px 2px #444;
 
   th {
     background-color: #527280;
+=======
+  box-shadow: 1px 1px 2px rgb(68, 68, 68);
+
+  th {
+    background-color: rgb(82, 114, 128);
+>>>>>>> upstream/master
   }
 }
 
@@ -163,7 +202,11 @@ Boston, MA 02110-1301 USA.
   td {
     padding: 2px 8px;
     margin: 2px;
+<<<<<<< HEAD
     background-color: #ff0;
+=======
+    background-color: rgb(255, 255, 0);
+>>>>>>> upstream/master
   }
 }
 
@@ -174,6 +217,7 @@ Boston, MA 02110-1301 USA.
 
 /* TODO: Reproduce these .dns .dnserror and .error elements */
 .wato td.dns {
+<<<<<<< HEAD
   color: #666;
 }
 
@@ -183,6 +227,17 @@ Boston, MA 02110-1301 USA.
 
 .wato td.error {
   color: #f00;
+=======
+  color: rgb(102, 102, 102);
+}
+
+.wato td.dnserror {
+  color: rgb(255, 0, 0);
+}
+
+.wato td.error {
+  color: rgb(255, 0, 0);
+>>>>>>> upstream/master
 }
 
 .wato div.inherited {
@@ -199,11 +254,19 @@ Boston, MA 02110-1301 USA.
 }
 
 .wato td.inherited {
+<<<<<<< HEAD
   color: #666;
 }
 
 /* host validation error */
 table.validationerror  {
+=======
+  color: rgb(102, 102, 102);
+}
+
+/* host validation error */
+table.validationerror {
+>>>>>>> upstream/master
   width: 100%;
 
   td.img {
@@ -220,9 +283,22 @@ table.validationerror  {
 }
 
 /* bulk actions in host table */
+<<<<<<< HEAD
 .wato table.data tr.data td.bulksearch,
 .wato table.data tr.data td.bulkactions {
   padding-top: 25px;
+=======
+.wato table.data tr.data {
+  td.bulksearch,
+  td.bulkactions {
+    padding-top: 25px;
+  }
+
+  &:not(:last-child) td.bulksearch,
+  &:not(:last-child) td.bulkactions {
+    padding: 10px;
+  }
+>>>>>>> upstream/master
 }
 
 .wato td.bulkactions {
@@ -248,6 +324,7 @@ div#service_container {
   }
 
   table.data {
+<<<<<<< HEAD
     tr.groupheader {
       background-color: $service-container-groupheader-bg-color;
     }
@@ -258,13 +335,60 @@ div#service_container {
   }
 }
 
+=======
+    tr.data > td {
+      height: auto;
+      padding: 3px 7px;
+
+      &:not(.gap):not(.fillup):not(.bulksearch):not(.bulkactions) {
+        border-top: none;
+        border-bottom: none;
+      }
+
+      &.service {
+        width: 250px;
+        max-width: 250px;
+        min-width: 250px;
+      }
+    }
+
+    tr.groupheader {
+      background-color: transparent;
+    }
+
+    th {
+      color: #777;
+    }
+
+    td h3 {
+      margin-top: 13px;
+    }
+  }
+
+  h3 {
+    margin-top: 13px;
+    font-size: 13px;
+    color: #aaa;
+    text-transform: uppercase;
+
+    img {
+      position: relative;
+      top: -1px;
+      margin-left: 5px;
+    }
+  }
+}
+>>>>>>> upstream/master
 
 table.data tr.data > td.bulkactions {
   background: transparent;
   border: none;
 }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/master
 a.service_button.disabled {
   pointer-events: none;
   cursor: default;
@@ -299,7 +423,11 @@ table.data tr.data > td.bulksearch {
 }
 
 .wato td.bulksearch {
+<<<<<<< HEAD
   input[type=text] {
+=======
+  input[type="text"] {
+>>>>>>> upstream/master
     width: 150px;
     margin-right: 5px;
   }
@@ -324,6 +452,7 @@ body.main .popup_menu table.data tr.data > td.bulksearch div.togglebutton.checkb
   box-sizing: border-box;
 }
 
+<<<<<<< HEAD
 /* Path to current folder at top of screen */
 .wato div.folderpath {
   position: relative;
@@ -425,6 +554,8 @@ body.main .popup_menu table.data tr.data > td.bulksearch div.togglebutton.checkb
   }
 }
 
+=======
+>>>>>>> upstream/master
 .wato div.floatfolder {
   position: relative;
   left: -14px;
@@ -478,7 +609,11 @@ body.main .popup_menu table.data tr.data > td.bulksearch div.togglebutton.checkb
       right: 0;
       left: 0;
       overflow: hidden;
+<<<<<<< HEAD
       font-size: $theme-font-size-main;
+=======
+      font-size: $font-size-default;
+>>>>>>> upstream/master
       color: $host-folder-font-color;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -505,11 +640,19 @@ body.main .popup_menu table.data tr.data > td.bulksearch div.togglebutton.checkb
     left: 20px;
     padding: 0;
     overflow: hidden;
+<<<<<<< HEAD
     color: #fff;
     text-align: left;
     text-overflow: ellipsis;
     -o-text-overflow: ellipsis;
     white-space: nowrap;
+=======
+    color: rgb(255, 255, 255);
+    text-align: left;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    -o-text-overflow: ellipsis;
+>>>>>>> upstream/master
 
     a {
       position: relative;
@@ -525,6 +668,17 @@ body.main .popup_menu table.data tr.data > td.bulksearch div.togglebutton.checkb
       text-decoration: underline;
     }
   }
+<<<<<<< HEAD
+=======
+
+  &.newfolder {
+    font-size: 80px;
+    line-height: 145px;
+    color: rgb(220, 220, 220);
+    text-align: center;
+    opacity: 0.4;
+  }
+>>>>>>> upstream/master
 }
 
 .wato div.floatfolder div.title a,
@@ -533,7 +687,11 @@ body.main .popup_menu .wato div.floatfolder div.title span,
 .wato div.floatfolder.locked div.title {
   font-size: 13px;
   font-weight: 500;
+<<<<<<< HEAD
   color: $theme-color-text;
+=======
+  color: $font-color;
+>>>>>>> upstream/master
 }
 
 .wato img.authicon {
@@ -570,7 +728,11 @@ body.main .popup_menu .wato div.floatfolder div.title span,
   padding-left: 1px;
   margin-top: 10px;
   margin-bottom: 10px;
+<<<<<<< HEAD
   color: $theme-color-text;
+=======
+  color: $font-color;
+>>>>>>> upstream/master
 }
 
 /* Controls for the audit log paged mechanism */
@@ -590,7 +752,11 @@ body.main .popup_menu .wato div.floatfolder div.title span,
   height: 140px;
   margin-top: 10px;
   background-color: rgba(255, 255, 255, 0.3);
+<<<<<<< HEAD
   border: 1px solid #fff;
+=======
+  border: 1px solid rgb(255, 255, 255);
+>>>>>>> upstream/master
   border-radius: 4px;
 
   div.nr {
@@ -599,10 +765,17 @@ body.main .popup_menu .wato div.floatfolder div.title span,
     left: 9px;
     width: 20px;
     height: 20px;
+<<<<<<< HEAD
     color: #000;
     text-align: center;
     background-color: #fcd340;
     border: 1px solid #fff;
+=======
+    color: rgb(0, 0, 0);
+    text-align: center;
+    background-color: rgb(252, 211, 64);
+    border: 1px solid rgb(255, 255, 255);
+>>>>>>> upstream/master
     border-radius: 10px;
 
     b {
@@ -616,7 +789,11 @@ body.main .popup_menu .wato div.floatfolder div.title span,
     top: 12px;
     font-size: 13px;
     font-weight: bold;
+<<<<<<< HEAD
     color: #fff;
+=======
+    color: rgb(255, 255, 255);
+>>>>>>> upstream/master
 
     &.conditions {
       left: 40px;
@@ -632,8 +809,13 @@ body.main .popup_menu .wato div.floatfolder div.title span,
     top: 30px;
     height: 90px;
     padding: 5px;
+<<<<<<< HEAD
     background-color: #a7bec3;
     border: 1px solid #fff;
+=======
+    background-color: rgb(167, 190, 195);
+    border: 1px solid rgb(255, 255, 255);
+>>>>>>> upstream/master
     border-radius: 4px;
 
     &.conditions {
@@ -662,6 +844,7 @@ body.main .popup_menu .wato div.floatfolder div.title span,
   height: 20px;
 }
 
+<<<<<<< HEAD
 .wato table.ruleeditor img,
 .wato img.ruleyesno {
   position: relative;
@@ -670,6 +853,8 @@ body.main .popup_menu .wato div.floatfolder div.title span,
   height: 22px;
 }
 
+=======
+>>>>>>> upstream/master
 .wato ul.conditions {
   padding: 0;
   margin-top: 0;
@@ -704,7 +889,11 @@ body.main .popup_menu .wato div.floatfolder div.title span,
 .wato form.rule_editor {
   table.hosttags td.title {
     min-width: 200px;
+<<<<<<< HEAD
     }
+=======
+  }
+>>>>>>> upstream/master
 
   td.tag_sel {
     display: table-cell;
@@ -723,7 +912,11 @@ body.main .popup_menu .wato div.floatfolder div.title span,
 
 .wato table.data.ruleset tr.disabled td {
   * {
+<<<<<<< HEAD
     color: #999;
+=======
+    color: rgb(153, 153, 153);
+>>>>>>> upstream/master
   }
 
   .tagify__tag-text {
@@ -731,7 +924,11 @@ body.main .popup_menu .wato div.floatfolder div.title span,
   }
 
   tag > div::before {
+<<<<<<< HEAD
     opacity: .5;
+=======
+    opacity: 0.5;
+>>>>>>> upstream/master
   }
 }
 
@@ -767,7 +964,12 @@ form#form_timeperiod td.vlof_content {
 }
 
 /* main menu */
+<<<<<<< HEAD
 form.search, div.filter_buttons {
+=======
+form.search,
+div.filter_buttons {
+>>>>>>> upstream/master
   display: inline-block;
   padding-top: 10px;
   margin-bottom: 10px;
@@ -775,21 +977,41 @@ form.search, div.filter_buttons {
 }
 
 .wato form.search {
+<<<<<<< HEAD
   color: $theme-color-text;
 }
 
 .wato div.mainmenu {
   a, body.main .popup_menu span, body.main .popup_menu & span {
+=======
+  color: $font-color;
+}
+
+.wato div.mainmenu {
+  a,
+  body.main .popup_menu span,
+  body.main .popup_menu & span {
+>>>>>>> upstream/master
     display: block;
     width: 330px;
     height: 80px;
     margin: 0 8px 8px 0;
+<<<<<<< HEAD
     background: $secondary-bg-color;
     border: 1px solid $theme-color-table-border;
     box-shadow: none;
 
     &:hover {
       background: $wato-a-hover-bg-color;
+=======
+    background: $bg-color-secondary;
+    border: 1px solid $color-table-border;
+    border-radius: $theme-border-radius;
+    box-shadow: none;
+
+    &:hover {
+      background: $input-button-hover-bg-color;
+>>>>>>> upstream/master
     }
   }
 
@@ -797,12 +1019,17 @@ form.search, div.filter_buttons {
     position: relative;
     float: left;
     width: 317px;
+<<<<<<< HEAD
     padding: 0 0 14px;
     border: $wato-a-border;
 
     &:hover div.title {
       color: $secondary-font-color;
     }
+=======
+    padding: 0 0 $spacing;
+    border: $wato-a-border;
+>>>>>>> upstream/master
   }
 
   div {
@@ -814,7 +1041,10 @@ form.search, div.filter_buttons {
       left: 72px;
       padding: 0;
       font-weight: bold;
+<<<<<<< HEAD
       color: $secondary-link-color;
+=======
+>>>>>>> upstream/master
     }
 
     &.subtitle {
@@ -824,10 +1054,17 @@ form.search, div.filter_buttons {
       width: 234px;
       padding: 16px 0;
       overflow: hidden;
+<<<<<<< HEAD
       font-size: $theme-font-size-small;
       font-weight: 500;
       line-height: 1.5;
       letter-spacing: $theme-letter-spacing-table;
+=======
+      font-size: $font-size-small;
+      font-weight: 500;
+      line-height: 1.5;
+      letter-spacing: $letter-spacing-table;
+>>>>>>> upstream/master
       color: $wato-subtitle-color;
       text-rendering: optimizeLegibility;
     }
@@ -907,7 +1144,11 @@ form.search, div.filter_buttons {
  * with white color it wasn't visible anyways */
 div.varname {
   font-family: monospace, sans-serif;
+<<<<<<< HEAD
   color: #fff;
+=======
+  color: rgb(255, 255, 255);
+>>>>>>> upstream/master
 }
 
 /* page "global settings*/
@@ -998,8 +1239,17 @@ div.varname {
 .wato table.changes {
   width: 100%;
 
+<<<<<<< HEAD
   tr.foreign.not_permitted td {
     color: #f00;
+=======
+  td.affected_sites {
+    max-width: 400px;
+  }
+
+  tr.foreign.not_permitted td {
+    color: rgb(255, 0, 0);
+>>>>>>> upstream/master
   }
 }
 
@@ -1028,7 +1278,12 @@ div.varname {
     height: 16px;
     text-align: center;
 
+<<<<<<< HEAD
     &.state_success {
+=======
+    &.state_success,
+    &.state_warning {
+>>>>>>> upstream/master
       color: $dark-font-color;
     }
   }
@@ -1038,16 +1293,25 @@ div.varname {
     top: 4px;
     left: 0;
     z-index: 0;
+<<<<<<< HEAD
     height: 24px;
     padding-top: 10px;
     font-size: 11px;
     color: $theme-color-black;
     background: $repprogress-progress-bg-color;
     border: 1px solid $repprogress-progress-border-color;
+=======
+    width: 160px;
+    height: 24px;
+    padding-top: 10px;
+    font-size: 11px;
+    color: $black;
+>>>>>>> upstream/master
     border-radius: $theme-border-radius;
     box-shadow: none;
     box-sizing: border-box;
 
+<<<<<<< HEAD
     &.state_success {
       /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#bfd255+0,8eb92a+50,72aa00+51,9ecb2d+100;Green+Gloss */
       background: $theme-color-state-success-background;
@@ -1064,10 +1328,31 @@ div.varname {
       /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#fceabb+0,fccd4d+50,f8b500+51,fbdf93+100;Orange+3D+%235 */
       background: $theme-color-main;
       border-color: $theme-color-state-1-border;
+=======
+    &.in_progress {
+      background: $repprogress-progress-bg-color;
+      border-color: $repprogress-progress-border-color;
+    }
+
+    &.state_success {
+      background: $color-state-success-background;
+      border-color: $color-state-success-border;
+    }
+
+    &.state_error {
+      background: $color-state-2-background;
+      border-color: $color-state-2-border;
+    }
+
+    &.state_warning {
+      background: $yellow;
+      border-color: $color-state-1-border;
+>>>>>>> upstream/master
     }
   }
 }
 
+<<<<<<< HEAD
 /* TODO: Either remove this style or remove all repprogress styles from above */
 .wato td.details,
 .wato th.header_details,
@@ -1076,6 +1361,8 @@ div.varname {
   display: none;
 }
 
+=======
+>>>>>>> upstream/master
 .wato td.tag-ellipsis {
   max-width: 300px;
 }
@@ -1087,24 +1374,42 @@ div.varname {
 
 table.data tr.notification_context table {
   margin: 5px;
+<<<<<<< HEAD
   border: 1px solid $theme-color-table-border;
   box-shadow: none;
 
   th, td {
+=======
+  border: 1px solid $color-table-border;
+  box-shadow: none;
+
+  th,
+  td {
+>>>>>>> upstream/master
     font-family: monospace;
   }
 
   th {
     padding: 2px 4px;
+<<<<<<< HEAD
     color: $theme-color-text;
     background-color: $primary-th-bg-color;
     border: 1px solid $theme-color-table-border;
+=======
+    color: $font-color;
+    background-color: $primary-th-bg-color;
+    border: 1px solid $color-table-border;
+>>>>>>> upstream/master
   }
 
   td {
     padding: 2px 4px;
     background-color: $primary-td-bg-color;
+<<<<<<< HEAD
     border: 1px solid $theme-color-table-border;
+=======
+    border: 1px solid $color-table-border;
+>>>>>>> upstream/master
   }
 }
 
@@ -1112,8 +1417,13 @@ table.data tr.notification_context table {
 table.data tr.data.dcd_log_entries {
   > td {
     font-family: monospace, sans-serif;
+<<<<<<< HEAD
     color: #fff;
     background-color: #000;
+=======
+    color: rgb(255, 255, 255);
+    background-color: rgb(0, 0, 0);
+>>>>>>> upstream/master
   }
 
   pre {
@@ -1137,14 +1447,24 @@ table.data tr.data.dcd_log_entries {
 
 .wato table.progress {
   width: 50%;
+<<<<<<< HEAD
   color: #000;
   background: $theme-color-white;
   border: 1px solid $theme-color-table-border;
+=======
+  color: rgb(0, 0, 0);
+  background: $bg-color-secondary;
+  border: 1px solid $color-table-border;
+>>>>>>> upstream/master
   border-radius: $theme-border-radius;
 
   th {
     padding: 3px 0;
+<<<<<<< HEAD
     background-color: #fff;
+=======
+    background-color: rgb(255, 255, 255);
+>>>>>>> upstream/master
   }
 
   td {
@@ -1159,11 +1479,19 @@ table.data tr.data.dcd_log_entries {
         margin: 16px;
         overflow: auto;
         font-family: monospace;
+<<<<<<< HEAD
         font-weight: $theme-font-weight-global;
         color: $theme-color-lightgrey;
         text-align: left;
         background: $theme-color-sidebar-background;
         border: 1px solid $theme-color-table-border-dark;
+=======
+        font-weight: $font-weight-default;
+        color: $lightgrey;
+        text-align: left;
+        background: $navigation-bg-color;
+        border: 1px solid $color-table-border-dark;
+>>>>>>> upstream/master
         border-radius: $theme-border-radius;
         box-shadow: none;
       }
@@ -1171,7 +1499,11 @@ table.data tr.data.dcd_log_entries {
       div.exc {
         padding: 5px;
         margin: 10px;
+<<<<<<< HEAD
         border: 1px solid #f00;
+=======
+        border: 1px solid rgb(255, 0, 0);
+>>>>>>> upstream/master
       }
     }
 
@@ -1186,7 +1518,11 @@ table.data tr.data.dcd_log_entries {
         top: 12px;
         width: 100%;
         height: 22px;
+<<<<<<< HEAD
         background-color: #fff;
+=======
+        background-color: rgb(255, 255, 255);
+>>>>>>> upstream/master
         border-spacing: 1px 2px;
       }
 
@@ -1213,7 +1549,11 @@ table.data tr.data.dcd_log_entries {
 
       td.left {
         width: 0%;
+<<<<<<< HEAD
         background-color: #4080ff;
+=======
+        background-color: rgb(64, 128, 255);
+>>>>>>> upstream/master
       }
 
       td.right {
@@ -1227,15 +1567,27 @@ table.data tr.data.dcd_log_entries {
       padding: 24px 12px 18px;
 
       table {
+<<<<<<< HEAD
         border: 1px solid #fff;
+=======
+        border: 1px solid rgb(255, 255, 255);
+>>>>>>> upstream/master
         border-collapse: collapse;
         border-spacing: 0;
       }
 
+<<<<<<< HEAD
       th, td {
         padding: 6px 0;
         border-bottom: 1px solid #fff;
         border-color: $theme-color-table-border;
+=======
+      th,
+      td {
+        padding: 6px 0;
+        border-bottom: 1px solid rgb(255, 255, 255);
+        border-color: $color-table-border;
+>>>>>>> upstream/master
       }
 
       th {
@@ -1263,7 +1615,11 @@ table.data tr.data.dcd_log_entries {
 .wato #progress_bar.finished {
   td.left {
     padding: 0;
+<<<<<<< HEAD
     background-color: $theme-color-state-success-background;
+=======
+    background-color: $color-state-success-background;
+>>>>>>> upstream/master
     box-shadow: none;
   }
 
@@ -1281,8 +1637,13 @@ table.data tr.data.dcd_log_entries {
   padding: 2px 5px;
   margin: 2px;
   font-weight: bold;
+<<<<<<< HEAD
   color: #000;
   background-color: #ff0;
+=======
+  color: rgb(0, 0, 0);
+  background-color: rgb(255, 255, 0);
+>>>>>>> upstream/master
   border-radius: 3px;
   opacity: 0.9;
 }
@@ -1296,13 +1657,22 @@ table.data tr.data.dcd_log_entries {
 /* TODO: Reproduce these table.logwatch elements */
 table.logwatch {
   tr.noreason {
+<<<<<<< HEAD
     color: #898989;
+=======
+    color: rgb(137, 137, 137);
+>>>>>>> upstream/master
   }
 
   span.match {
     padding: 0 2px 2px;
+<<<<<<< HEAD
     background-color: #fff;
     border: 1px solid #49768b;
+=======
+    background-color: rgb(255, 255, 255);
+    border: 1px solid rgb(73, 118, 139);
+>>>>>>> upstream/master
     border-radius: 4px;
   }
 }
@@ -1322,7 +1692,11 @@ table.multisite_conn_method td {
 table.data td.bi_rule_tree {
   b.treeangle {
     font-weight: normal;
+<<<<<<< HEAD
     color: #000;
+=======
+    color: rgb(0, 0, 0);
+>>>>>>> upstream/master
   }
 
   ul.treeangle {
@@ -1344,7 +1718,10 @@ table.data td.bi_rule_tree {
   }
 }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/master
 /*-Host Diag-----------------------------------------------------------.
 |              _   _           _     ____  _                           |
 |             | | | | ___  ___| |_  |  _ \(_) __ _  __ _               |
@@ -1362,21 +1739,34 @@ table.data td.bi_rule_tree {
   overflow-y: scroll;
   font-family: monospace, sans-serif;
   vertical-align: top;
+<<<<<<< HEAD
   background-color: $primary-bg-color;
   box-shadow: 1px 1px 3px #888 inset;
+=======
+  background-color: $bg-color;
+  box-shadow: 1px 1px 3px rgb(136, 136, 136) inset;
+>>>>>>> upstream/master
   /* below resize option is css3 */
   resize: both;
 }
 
 .backup_job {
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/master
   .log pre {
     margin: 2px;
   }
 
   td.left {
+<<<<<<< HEAD
     min-width: 200px;
     width: 12%;
+=======
+    width: 12%;
+    min-width: 200px;
+>>>>>>> upstream/master
   }
 }
 
@@ -1400,7 +1790,11 @@ table.data td.bi_rule_tree {
   .log {
     padding: 8px;
     margin: 8px;
+<<<<<<< HEAD
     border: 1px solid $theme-color-table-border;
+=======
+    border: 1px solid $color-table-border;
+>>>>>>> upstream/master
     border-radius: $theme-border-radius;
     box-shadow: none;
 
@@ -1460,10 +1854,18 @@ table.setting td.reason {
   float: none;
   width: 180px;
   font-style: italic;
+<<<<<<< HEAD
   color: #fff;
 
   i { /* default value */
     color: #b6c8d1;
+=======
+  color: rgb(255, 255, 255);
+
+  i {
+    /* default value */
+    color: rgb(182, 200, 209);
+>>>>>>> upstream/master
   }
 
   a {
@@ -1475,7 +1877,12 @@ table.setting td.reason {
   }
 }
 
+<<<<<<< HEAD
 td.settingvalue.unused, td.settingvalue.unused td {
+=======
+td.settingvalue.unused,
+td.settingvalue.unused td {
+>>>>>>> upstream/master
   font-style: italic;
   color: $td-unused-color;
 }
@@ -1512,12 +1919,22 @@ table.nform.rulesettings td.legend {
     padding: 2px;
     margin: 0 5px 5px 0;
     text-overflow: ellipsis;
+<<<<<<< HEAD
     background: $theme-color-white;
     border: 1px solid $theme-color-table-border;
     border-radius: 6px;
     box-shadow: none;
 
     div, span {
+=======
+    background: $bg-color-secondary;
+    border: 1px solid $color-table-border;
+    border-radius: 6px;
+    box-shadow: none;
+
+    div,
+    span {
+>>>>>>> upstream/master
       display: inline-block;
       vertical-align: middle;
     }
@@ -1618,7 +2035,12 @@ table.data.analyze_config td.buttons {
   display: block;
 }
 
+<<<<<<< HEAD
 .wato h2, .wato h3 {
+=======
+.wato h2,
+.wato h3 {
+>>>>>>> upstream/master
   margin-bottom: $wato-h3-margin-bottom;
 
   + div.info {
@@ -1631,10 +2053,19 @@ table.data.analyze_config td.buttons {
 }
 
 .wato h3 {
+<<<<<<< HEAD
   font-size: $theme-font-table-header;
   font-weight: $theme-font-weight-global;
   letter-spacing: $theme-letter-spacing-table;
   color: $theme-color-text;
+=======
+  margin-bottom: 12px;
+  font-size: 14px;
+  font-weight: $font-weight-default;
+  letter-spacing: $letter-spacing-table;
+  color: $wato-h3-font-color;
+  text-transform: uppercase;
+>>>>>>> upstream/master
 }
 
 .wato table.data.job_table {

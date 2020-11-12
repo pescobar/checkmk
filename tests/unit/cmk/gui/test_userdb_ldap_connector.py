@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/env python
 # encoding: utf-8
 # pylint: disable=redefined-outer-name
@@ -9,6 +10,24 @@ import six
 
 # userdb is needed to make the module register the post-config-load-hooks
 import cmk.gui.userdb  # pylint: disable=unused-import
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# pylint: disable=redefined-outer-name
+
+from typing import Dict, List, Union
+from pathlib import Path
+
+import pytest  # type: ignore[import]
+from mockldap import MockLdap, LDAPObject  # type: ignore[import]
+
+# userdb is needed to make the module register the post-config-load-hooks
+import cmk.gui.userdb
+>>>>>>> upstream/master
 import cmk.gui.plugins.userdb.ldap_connector as ldap
 import cmk.gui.plugins.userdb.utils as userdb_utils
 
@@ -31,16 +50,29 @@ def test_sync_plugins(load_config):
         'groups_to_attributes',
         'groups_to_contactgroups',
         'groups_to_roles',
+<<<<<<< HEAD
+=======
+        'icons_per_item',
+>>>>>>> upstream/master
         'disable_notifications',
         'force_authuser',
         'pager',
         'start_url',
         'ui_theme',
+<<<<<<< HEAD
+=======
+        'ui_sidebar_position',
+        'show_mode',
+>>>>>>> upstream/master
     ])
 
 
 def _ldap_tree():
+<<<<<<< HEAD
     tree = {
+=======
+    tree: Dict[str, Dict[str, Union[str, List[str]]]] = {
+>>>>>>> upstream/master
         "dc=org": {
             "objectclass": ["domain"],
             "objectcategory": ["domain"],
@@ -67,7 +99,11 @@ def _ldap_tree():
         },
     }
 
+<<<<<<< HEAD
     users = {
+=======
+    users: Dict[str, Dict[str, Union[str, List[str]]]] = {
+>>>>>>> upstream/master
         "cn=admin,ou=users,dc=check-mk,dc=org": {
             "objectclass": ["user"],
             "objectcategory": ["person"],
@@ -96,7 +132,11 @@ def _ldap_tree():
         },
     }
 
+<<<<<<< HEAD
     groups = {
+=======
+    groups: Dict[str, Dict[str, Union[str, List[str]]]] = {
+>>>>>>> upstream/master
         "cn=admins,ou=groups,dc=check-mk,dc=org": {
             "objectclass": ["group"],
             "objectcategory": ["group"],
@@ -189,6 +229,19 @@ def _ldap_tree():
             "cn": ["out-of-scope"],
             "member": ["cn=admin,ou=users,dc=check-mk,dc=org",],
         },
+<<<<<<< HEAD
+=======
+        "cn=selfref,ou=groups,dc=check-mk,dc=org": {
+            "objectclass": ["group"],
+            "objectcategory": ["group"],
+            "dn": ["cn=selfref,ou=groups,dc=check-mk,dc=org"],
+            "cn": ["selfref"],
+            "member": [
+                "cn=selfref,ou=users,dc=check-mk,dc=org",
+                "cn=admin,ou=users,dc=check-mk,dc=org",
+            ],
+        },
+>>>>>>> upstream/master
     }
 
     tree.update(users)
@@ -199,7 +252,13 @@ def _ldap_tree():
     for group_dn, group in sorted(groups.items()):
         for member_dn in group["member"]:
             if member_dn in tree:
+<<<<<<< HEAD
                 tree[member_dn].setdefault("memberof", []).append(group_dn)
+=======
+                member_of = tree[member_dn].setdefault("memberof", [])
+                assert isinstance(member_of, list)
+                member_of.append(group_dn)
+>>>>>>> upstream/master
 
     return tree
 
@@ -208,6 +267,7 @@ def encode_to_byte_strings(inp):
     if isinstance(inp, dict):
         return {
             encode_to_byte_strings(key): encode_to_byte_strings(value)
+<<<<<<< HEAD
             for key, value in inp.iteritems()
         }
     elif isinstance(inp, list):
@@ -215,21 +275,42 @@ def encode_to_byte_strings(inp):
     elif isinstance(inp, tuple):
         return tuple([encode_to_byte_strings(element) for element in inp])
     elif isinstance(inp, six.text_type):
+=======
+            for key, value in inp.items()
+        }
+    if isinstance(inp, list):
+        return [encode_to_byte_strings(element) for element in inp]
+    if isinstance(inp, tuple):
+        return tuple([encode_to_byte_strings(element) for element in inp])
+    if isinstance(inp, str):
+>>>>>>> upstream/master
         return inp.encode("utf-8")
     return inp
 
 
+<<<<<<< HEAD
 @pytest.fixture(scope="module", autouse=True)
 def user_files():
     profile_dir = Path(cmk.utils.paths.var_dir, "web", "admin")
     profile_dir.mkdir(parents=True, exist_ok=True)
     with profile_dir.joinpath("cached_profile.mk").open("w", encoding="utf-8") as f:  # pylint: disable=no-member
+=======
+@pytest.fixture(scope="function", autouse=True)
+def user_files():
+    profile_dir = Path(cmk.utils.paths.var_dir, "web", "admin")
+    profile_dir.mkdir(parents=True, exist_ok=True)
+    with (profile_dir / "cached_profile.mk").open("w", encoding="utf-8") as f:
+>>>>>>> upstream/master
         f.write(u"%r" % {
             "alias": u"admin",
             "connector": "default",
         })
 
+<<<<<<< HEAD
     Path(cmk.utils.paths.htpasswd_file).parent.mkdir(parents=True, exist_ok=True)  # pylint: disable=no-member
+=======
+    Path(cmk.utils.paths.htpasswd_file).parent.mkdir(parents=True, exist_ok=True)
+>>>>>>> upstream/master
     with open(cmk.utils.paths.htpasswd_file, "w") as f:
         f.write(
             "automation:$5$rounds=535000$eDIHah5PgsY2widK$tiVBvDgq0Nwxy5zd/oNFRZ8faTlOPA2T.tx.lTeQoZ1\n"
@@ -286,10 +367,17 @@ def mocked_ldap(monkeypatch):
         # encoding. The latter want's to have byte encoded strings and MockLdap
         # wants unicode strings :-/. Prepare the data we normally send to
         # python-ldap for MockLdap here.
+<<<<<<< HEAD
         if not isinstance(base, six.text_type):
             base = base.decode("utf-8")
 
         if not isinstance(filterstr, six.text_type):
+=======
+        if not isinstance(base, str):
+            base = base.decode("utf-8")
+
+        if not isinstance(filterstr, str):
+>>>>>>> upstream/master
             filterstr = filterstr.decode("utf-8")
 
         return self.search(base, scope, filterstr, attrlist, attrsonly)
@@ -297,9 +385,14 @@ def mocked_ldap(monkeypatch):
     LDAPObject.search_ext = search_ext
 
     def result_3(self, *args, **kwargs):
+<<<<<<< HEAD
         unused_code, response, unused_msgid, serverctrls = \
             tuple(list(LDAPObject.result(self, *args, **kwargs)) + [None, []])
         return unused_code, encode_to_byte_strings(response), unused_msgid, serverctrls
+=======
+        unused_code, response = LDAPObject.result(self, *args, **kwargs)
+        return unused_code, encode_to_byte_strings(response), None, []
+>>>>>>> upstream/master
 
     LDAPObject.result3 = result_3
 
@@ -310,6 +403,7 @@ def _check_restored_bind_user(mocked_ldap):
     assert mocked_ldap._ldap_obj.whoami_s() == "dn:cn=sync-user,ou=users,dc=check-mk,dc=org"
 
 
+<<<<<<< HEAD
 def test_check_credentials_success(mocked_ldap):
     result = mocked_ldap.check_credentials("admin", "ldap-test")
     assert isinstance(result, six.text_type)
@@ -317,11 +411,24 @@ def test_check_credentials_success(mocked_ldap):
 
     result = mocked_ldap.check_credentials(u"admin", "ldap-test")
     assert isinstance(result, six.text_type)
+=======
+def test_check_credentials_success(register_builtin_html, mocked_ldap):
+    result = mocked_ldap.check_credentials("admin", "ldap-test")
+    assert isinstance(result, str)
+    assert result == "admin"
+
+    result = mocked_ldap.check_credentials(u"admin", "ldap-test")
+    assert isinstance(result, str)
+>>>>>>> upstream/master
     assert result == "admin"
     _check_restored_bind_user(mocked_ldap)
 
 
+<<<<<<< HEAD
 def test_check_credentials_invalid(mocked_ldap):
+=======
+def test_check_credentials_invalid(register_builtin_html, mocked_ldap):
+>>>>>>> upstream/master
     assert mocked_ldap.check_credentials("admin", "WRONG") is False
     _check_restored_bind_user(mocked_ldap)
 
@@ -331,9 +438,15 @@ def test_check_credentials_not_existing(mocked_ldap):
     _check_restored_bind_user(mocked_ldap)
 
 
+<<<<<<< HEAD
 def test_check_credentials_enforce_conn_success(mocked_ldap):
     result = mocked_ldap.check_credentials("admin@testldap", "ldap-test")
     assert isinstance(result, six.text_type)
+=======
+def test_check_credentials_enforce_conn_success(register_builtin_html, mocked_ldap):
+    result = mocked_ldap.check_credentials("admin@testldap", "ldap-test")
+    assert isinstance(result, str)
+>>>>>>> upstream/master
     assert result == "admin"
     _check_restored_bind_user(mocked_ldap)
 
@@ -458,10 +571,17 @@ def test_get_group_memberships_not_existing(mocked_ldap, nested):
 
 
 def test_get_group_memberships_nested(mocked_ldap):
+<<<<<<< HEAD
     memberships = mocked_ldap.get_group_memberships(["empty", "top-level", "level1", "level2"],
                                                     nested=True)
 
     assert len(memberships) == 4
+=======
+    memberships = mocked_ldap.get_group_memberships(
+        ["empty", "top-level", "level1", "level2", "selfref"], nested=True)
+
+    assert len(memberships) == 5
+>>>>>>> upstream/master
 
     needed_groups = [
         (u'cn=empty,ou=groups,dc=check-mk,dc=org', {
@@ -490,6 +610,13 @@ def test_get_group_memberships_nested(mocked_ldap):
                 u"cn=sync-user,ou=users,dc=check-mk,dc=org",
             ],
         }),
+<<<<<<< HEAD
+=======
+        (u'cn=selfref,ou=groups,dc=check-mk,dc=org', {
+            'cn': u'selfref',
+            'members': [u"cn=admin,ou=users,dc=check-mk,dc=org",],
+        }),
+>>>>>>> upstream/master
     ]
 
     for needed_group_dn, needed_group in needed_groups:

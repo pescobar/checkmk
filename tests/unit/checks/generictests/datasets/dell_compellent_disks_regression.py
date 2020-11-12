@@ -1,5 +1,17 @@
+<<<<<<< HEAD
 # -*- encoding: utf-8
 # yapf: disable
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# yapf: disable
+# type: ignore
+
+>>>>>>> upstream/master
 
 checkname = 'dell_compellent_disks'
 
@@ -23,34 +35,58 @@ checks = {
         (u'1', {}, [
             (0, 'Status: UP', []),
             (0, u'Location: Enclosure 1', []),
+<<<<<<< HEAD
             (0, "Serial number: [u'serial1']", []),
+=======
+            (0, "Serial number: serial1", []),
+>>>>>>> upstream/master
         ]),
         (u'2', {}, [
             (3, u'Status: unknown[999]', []),
             (0, u'Location: Enclosure 1', []),
+<<<<<<< HEAD
             (0, "Serial number: [u'serial2']", []),
+=======
+            (0, "Serial number: serial2", []),
+>>>>>>> upstream/master
         ]),
         (u'3', {}, [
             (0, 'Status: UP', []),
             (0, u'Location: Enclosure 1', []),
+<<<<<<< HEAD
             (0, "Serial number: [u'serial3']", []),
+=======
+            (0, "Serial number: serial3", []),
+>>>>>>> upstream/master
         ]),
         (u'4', {}, [
             (0, 'Status: UP', []),
             (0, u'Location: Enclosure 1', []),
+<<<<<<< HEAD
             (0, "Serial number: [u'serial4']", []),
+=======
+            (0, "Serial number: serial4", []),
+>>>>>>> upstream/master
             (2, u'Health: not healthy, Reason: ATTENTION', []),
         ]),
         (u'5', {}, [
             (0, 'Status: UP', []),
             (0, u'Location: Enclosure 1', []),
+<<<<<<< HEAD
             (0, "Serial number: [u'serial5']", []),
+=======
+            (0, "Serial number: serial5", []),
+>>>>>>> upstream/master
             (3, u'Health: unknown[999], Reason: ATTENTION', []),
         ]),
         (u'10', {}, [
             (2, 'Status: DOWN', []),
             (0, u'Location: Enclosure 1', []),
+<<<<<<< HEAD
             (0, "Serial number: [u'serial10']", []),
+=======
+            (0, "Serial number: serial10", []),
+>>>>>>> upstream/master
             (2, u'Health: not healthy, Reason: KAPUTT', []),
         ]),
     ]

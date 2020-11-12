@@ -47,15 +47,27 @@ TEST(LogInternalTest, Mods2DirectionsCheck) {
     lp.directions_ = mark;
 
     EXPECT_EQ(Mods2Directions(lp, Mods::kFile), mark | xlog::kFilePrint);
+<<<<<<< HEAD
     EXPECT_EQ(Mods2Directions(lp, Mods::kStdio), mark | xlog::kFilePrint);
     EXPECT_EQ(Mods2Directions(lp, Mods::kEvent), mark | xlog::kFilePrint);
+=======
+    EXPECT_EQ(Mods2Directions(lp, Mods::kStdio), mark | xlog::kStdioPrint);
+    EXPECT_EQ(Mods2Directions(lp, Mods::kEvent), mark | xlog::kEventPrint);
+>>>>>>> upstream/master
 
     constexpr int all_mark = 0xFFFF'FFFF;
     lp.directions_ = all_mark;
 
     EXPECT_EQ(Mods2Directions(lp, Mods::kNoFile), all_mark & ~xlog::kFilePrint);
+<<<<<<< HEAD
     EXPECT_EQ(Mods2Directions(lp, Mods::kStdio), all_mark & ~xlog::kFilePrint);
     EXPECT_EQ(Mods2Directions(lp, Mods::kEvent), all_mark & ~xlog::kFilePrint);
+=======
+    EXPECT_EQ(Mods2Directions(lp, Mods::kNoStdio),
+              all_mark & ~xlog::kStdioPrint);
+    EXPECT_EQ(Mods2Directions(lp, Mods::kNoEvent),
+              all_mark & ~xlog::kEventPrint);
+>>>>>>> upstream/master
 }
 }  // namespace internal
 
@@ -218,7 +230,11 @@ TEST(LogTest, All) {
 
     // DEFAULT
     auto prefix = GetDefaultPrefixName();
+<<<<<<< HEAD
     std::string prefix_ascii(prefix.begin(), prefix.end());
+=======
+    auto prefix_ascii = wtools::ConvertToUTF8(prefix);
+>>>>>>> upstream/master
     auto& lp = l.log_param_;
 
     EXPECT_TRUE(lp.directions_ & xlog::Directions::kDebuggerPrint);
@@ -460,6 +476,24 @@ TEST(LogTest, Yaml) {
     fs::remove(logf);
 }
 
+<<<<<<< HEAD
+=======
+namespace details {
+TEST(LogTest, Level2Type) {
+    EXPECT_EQ(LoggerEventLevelToWindowsEventType(EventLevel::critical),
+              EVENTLOG_ERROR_TYPE);
+    EXPECT_EQ(LoggerEventLevelToWindowsEventType(EventLevel::error),
+              EVENTLOG_ERROR_TYPE);
+    EXPECT_EQ(LoggerEventLevelToWindowsEventType(EventLevel::information),
+              EVENTLOG_INFORMATION_TYPE);
+    EXPECT_EQ(LoggerEventLevelToWindowsEventType(EventLevel::success),
+              EVENTLOG_SUCCESS);
+    EXPECT_EQ(LoggerEventLevelToWindowsEventType(EventLevel::warning),
+              EVENTLOG_WARNING_TYPE);
+}
+}  // namespace details
+
+>>>>>>> upstream/master
 }  // namespace XLOG
 
 // Do formatting:

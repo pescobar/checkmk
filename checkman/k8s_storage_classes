@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: Kubernetes storage classes
+=======
+title: Kubernetes: Storage Classes
+>>>>>>> upstream/master
 agents: kubernetes
 catalog: containerization/kubernetes
 license: GPL
@@ -8,7 +12,11 @@ description:
  The check returns always returns {OK}.
 
 inventory:
+<<<<<<< HEAD
  One service per storage class is created.
+=======
+ One service is created for each storage class.
+>>>>>>> upstream/master
 
 item:
  The name of the storage class.

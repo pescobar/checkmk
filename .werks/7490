@@ -5,7 +5,11 @@ Class: fix
 Compatible: incomp
 Edition: cre
 State: unknown
+<<<<<<< HEAD
 Version: 1.7.0i1
+=======
+Version: 2.0.0i1
+>>>>>>> upstream/master
 Date: 1561457353
 
 Previously it was merely assumed that the config files are utf-8 encoded.

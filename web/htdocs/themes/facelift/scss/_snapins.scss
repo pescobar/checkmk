@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /*
 +------------------------------------------------------------------+
 |             ____ _               _        __  __ _  __           |
@@ -23,6 +24,12 @@ License along with GNU Make; see the file  COPYING.  If  not,  write
 to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 Boston, MA 02110-1301 USA.
 */
+=======
+@charset "UTF-8";
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+// conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 /*
  * Bookmarks snapin
@@ -31,10 +38,17 @@ div.bookmark {
   width: 230px;
   max-width: 230px;
   overflow: hidden;
+<<<<<<< HEAD
   color: $primary-sidebar-font-color;
   text-overflow: ellipsis;
   -o-text-overflow: ellipsis;
   white-space: nowrap;
+=======
+  color: $font-color;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  -o-text-overflow: ellipsis;
+>>>>>>> upstream/master
 }
 
 /*
@@ -45,6 +59,7 @@ div.bookmark {
     padding-left: 10px;
   }
 
+<<<<<<< HEAD
   img {
     margin-right: 5px;
 
@@ -52,6 +67,11 @@ div.bookmark {
       width: 16px;
       height: 16px;
     }
+=======
+  img.icon {
+    width: 14px;
+    height: 14px;
+>>>>>>> upstream/master
   }
 }
 
@@ -75,7 +95,11 @@ table.hostmatrix {
 
   td {
     padding: 0;
+<<<<<<< HEAD
     border: 1px solid #123a4a;
+=======
+    border: 1px solid rgb(18, 58, 74);
+>>>>>>> upstream/master
     border-spacing: 0;
   }
 }
@@ -84,14 +108,22 @@ table.hostmatrix {
 /* TODO: Reproduce these two html elements */
 .hostmatrix td.state1 body.main .popup_menu span,
 body.main .popup_menu .hostmatrix td.state1 span {
+<<<<<<< HEAD
   background-color: $theme-color-main;
+=======
+  background-color: $yellow;
+>>>>>>> upstream/master
 }
 
 .hostmatrix td.state0 a,
 /* TODO: Reproduce these two html elements */
 .hostmatrix td.state0 body.main .popup_menu span,
 body.main .popup_menu .hostmatrix td.state0 span {
+<<<<<<< HEAD
   background-color: $theme-color-nuance-12;
+=======
+  background-color: $color-nuance-12;
+>>>>>>> upstream/master
 }
 
 /*
@@ -116,24 +148,42 @@ body.main .popup_menu .hostmatrix td.state0 span {
 div.snapin table.master_control {
   width: 100%;
   margin: 0;
+<<<<<<< HEAD
   border-spacing: 8px;
+=======
+  border-spacing: 0;
+>>>>>>> upstream/master
 
   td {
     div.toggle_switch {
       float: right;
+<<<<<<< HEAD
       background-color: $primary-bg-color;
 
       a {
 	font-weight: $theme-font-weight-bold;
+=======
+      background-color: $bg-color;
+
+      a {
+        font-weight: $font-weight-bold;
+>>>>>>> upstream/master
       }
     }
 
     &.left {
       display: inline-block;
+<<<<<<< HEAD
       font-size: $theme-font-size-main;
       font-weight: $theme-font-weight-global;
       letter-spacing: $theme-letter-spacing-table;
       color: $theme-color-nuance-9;
+=======
+      font-size: $font-size-default;
+      font-weight: $font-weight-default;
+      line-height: 22px;
+      letter-spacing: $letter-spacing-table;
+>>>>>>> upstream/master
       text-align: left;
 
       a {
@@ -153,6 +203,7 @@ div.snapin table.master_control {
 
 /* Styles shared/inherited by different performance tables */
 %performance-table-shared {
+<<<<<<< HEAD
   padding: $performance-table-shared-padding;
   background-color: $theme-color-table-background-dark;
   border: 1px solid $theme-color-table-border-dark;
@@ -162,6 +213,15 @@ div.snapin table.master_control {
   td {
     font-weight: $theme-font-weight-global;
     letter-spacing: $theme-letter-spacing-table;
+=======
+  width: 100%;
+  padding: $performance-table-shared-padding;
+  box-sizing: border-box;
+
+  td {
+    font-weight: $font-weight-default;
+    letter-spacing: $letter-spacing-table;
+>>>>>>> upstream/master
   }
 }
 
@@ -170,11 +230,18 @@ div.snapin table.master_control {
  */
 table.mkeventd_performance {
   @extend %performance-table-shared;
+<<<<<<< HEAD
   width: $theme-snapin-width - 2px;
   border-radius: 2px;
 
   td {
     padding: 0 2px;
+=======
+  border-radius: 2px;
+
+  td {
+    padding: 0;
+>>>>>>> upstream/master
     font-size: 11px;
 
     &:nth-of-type(2) {
@@ -196,12 +263,19 @@ table.mkeventd_performance {
  * NagVis maps snapin
  */
 div.state1 {
+<<<<<<< HEAD
   &.statea, &.stated {
     border-color: #ff0;
+=======
+  &.statea,
+  &.stated {
+    border-color: rgb(255, 255, 0);
+>>>>>>> upstream/master
   }
 }
 
 div.state2 {
+<<<<<<< HEAD
   &.statea, &.stated {
     border-color: #f00;
   }
@@ -209,6 +283,17 @@ div.state2 {
 
 div.statea, div.stated {
   background-color: #0b3;
+=======
+  &.statea,
+  &.stated {
+    border-color: rgb(255, 0, 0);
+  }
+}
+
+div.statea,
+div.stated {
+  background-color: rgb(0, 187, 51);
+>>>>>>> upstream/master
 }
 
 /*
@@ -216,11 +301,18 @@ div.statea, div.stated {
  */
 table.performance {
   @extend %performance-table-shared;
+<<<<<<< HEAD
   width: $theme-snapin-width - 2px;
   border-radius: 2px;
 
   td {
     padding: 0 2px;
+=======
+  border-radius: 2px;
+
+  td {
+    padding: 0;
+>>>>>>> upstream/master
     font-size: 11px;
 
     &.right {
@@ -246,8 +338,13 @@ table.performance {
   margin: 0 auto;
   font-size: 24px;
   font-weight: bold;
+<<<<<<< HEAD
   letter-spacing: $theme-letter-spacing-table;
   color: $primary-sidebar-font-color;
+=======
+  letter-spacing: $letter-spacing-table;
+  color: $font-color-sidebar;
+>>>>>>> upstream/master
   text-align: center;
   border-spacing: 4px;
 }
@@ -294,7 +391,12 @@ div.speedometer {
   height: 223px;
 }
 
+<<<<<<< HEAD
 img#speedometerbg, canvas#speedometer {
+=======
+img#speedometerbg,
+canvas#speedometer {
+>>>>>>> upstream/master
   position: absolute;
   top: 0;
   left: 0;
@@ -304,11 +406,17 @@ img#speedometerbg, canvas#speedometer {
  * Tactical overview snapin
  */
 div#snapin_tactical_overview {
+<<<<<<< HEAD
   padding-bottom: 6.5px;
+=======
+  /* remove the border-spacing of the first and last element */
+  width: calc(100% + 2 * #{$spacing});
+>>>>>>> upstream/master
 }
 
 table.tacticaloverview {
   width: 100%;
+<<<<<<< HEAD
   margin: 0;
   border-collapse: separate;
   border-spacing: 2px;
@@ -339,6 +447,33 @@ table.tacticaloverview {
 
       a.link {
         color: $tactical-overview-prob-link-color;
+=======
+  /* remove the border-spacing of the first and last element */
+  margin: 0 (-$spacing);
+  border-collapse: separate;
+  border-spacing: $spacing 0;
+
+  th {
+    font-size: $font-size-small;
+    font-weight: normal;
+    line-height: 1.6;
+    letter-spacing: 0;
+    color: $tactical-overview-th-font-color;
+    text-align: left;
+  }
+
+  td {
+    height: 24px;
+    text-align: right;
+    background: $tactical-overview-td-bg-color;
+    border-radius: $popup-filters-border-radius;
+
+    &.states {
+      box-shadow: none;
+
+      a.link {
+        color: $color-nuance-16;
+>>>>>>> upstream/master
       }
     }
 
@@ -351,7 +486,12 @@ table.tacticaloverview {
     }
   }
 
+<<<<<<< HEAD
   a, span {
+=======
+  a,
+  span {
+>>>>>>> upstream/master
     display: block;
     margin-right: 2px;
   }
@@ -365,6 +505,7 @@ table.tacticaloverview td span,
 table.tacticaloverview td body.main .popup_menu span,
 body.main .popup_menu table.tacticaloverview td span {
   padding: 4px;
+<<<<<<< HEAD
   font-size: $theme-font-size-main;
   font-weight: $theme-font-weight-bold;
   letter-spacing: 0;
@@ -373,6 +514,12 @@ body.main .popup_menu table.tacticaloverview td span {
 
 table.tacticaloverview td a.link, table.tacticaloverview td a:hover {
   color: $theme-color-text;
+=======
+  font-size: $font-size-default;
+  font-weight: $font-weight-bold;
+  letter-spacing: 0;
+  color: $font-color-sidebar;
+>>>>>>> upstream/master
 }
 
 div.tacticalalert {
@@ -381,7 +528,11 @@ div.tacticalalert {
   font-size: 12px;
   line-height: 25px;
   text-align: center;
+<<<<<<< HEAD
   background-color: $theme-color-state-2-background;
+=======
+  background-color: $color-state-2-background;
+>>>>>>> upstream/master
   border-radius: $theme-border-radius;
   box-shadow: none;
 }
@@ -423,7 +574,11 @@ div.spacertop {
 
   div.tag_tree {
     clear: both;
+<<<<<<< HEAD
     font-size: $theme-font-size-main;
+=======
+    font-size: $font-size-default;
+>>>>>>> upstream/master
   }
 
   div.statebullet {
@@ -436,7 +591,11 @@ div.spacertop {
     height: 8px;
     margin-right: 0;
     border-radius: 50%;
+<<<<<<< HEAD
     box-shadow: 0 0 0.7px #284850;
+=======
+    box-shadow: 0 0 0.7px rgb(40, 72, 80);
+>>>>>>> upstream/master
   }
 
   ul > div.statebullet.leaf {
@@ -463,10 +622,18 @@ div.spacertop {
 /*
  * Admin mini snapin (WATO)
  */
+<<<<<<< HEAD
+=======
+#snapin_container_admin_mini.more a.show_more_mode {
+  display: inline;
+}
+
+>>>>>>> upstream/master
 #snapin_admin_mini {
   padding-top: 6px;
   clear: right;
 
+<<<<<<< HEAD
   img {
     position: relative;
     left: 3px;
@@ -475,6 +642,18 @@ div.spacertop {
     padding: 0;
     margin-right: 3.9px;
     margin-bottom: 4px;
+=======
+  img.icon {
+    width: 14px;
+    height: 14px;
+    padding: 0;
+    margin-right: 5px;
+    margin-bottom: 10px;
+  }
+
+  img.emblem {
+    bottom: 3px;
+>>>>>>> upstream/master
   }
 
   div.footnotelink {
@@ -486,6 +665,7 @@ div.spacertop {
   }
 }
 
+<<<<<<< HEAD
 /*
  * WATO folder tree snapin
  */
@@ -512,6 +692,30 @@ div.spacertop {
     color: $foldertree-snapin-font-color;
     background-color: $foldertree-snapin-bg-color;
     border-radius: $theme-border-radius;
+=======
+#snapin_container_admin.less li.sidebar.show_more_mode {
+  display: none;
+}
+
+#snapin_admin {
+  li {
+    line-height: $menu-item-spacing;
+
+    img.icon {
+      width: 14px;
+      height: 14px;
+    }
+  }
+}
+
+/*
+ * WATO folder tree snapin
+ */
+#snapin_wato_foldertree {
+  select {
+    margin-bottom: 10px;
+    clear: both;
+>>>>>>> upstream/master
     box-sizing: border-box;
   }
 }
@@ -522,16 +726,31 @@ div.spacertop {
   padding: 0;
 
   img {
+<<<<<<< HEAD
     display: none; }
 
   input {
     float: left;
     margin:  0;
+=======
+    display: none;
+  }
+
+  input {
+    margin: 0;
+>>>>>>> upstream/master
     font-size: 11px;
     background-repeat: no-repeat;
   }
 
+<<<<<<< HEAD
   input, select, textarea, #mk_side_search_field {
+=======
+  input,
+  select,
+  textarea,
+  #mk_side_search_field {
+>>>>>>> upstream/master
     box-sizing: border-box;
   }
 }
@@ -541,7 +760,11 @@ div.spacertop {
  */
 #snapin_container_wiki div.content {
   font-weight: bold;
+<<<<<<< HEAD
   color: $primary-sidebar-font-color;
+=======
+  color: $font-color-sidebar;
+>>>>>>> upstream/master
 
   p {
     font-weight: normal;
@@ -574,17 +797,39 @@ div.spacertop {
 
   input {
     width: 100%;
+<<<<<<< HEAD
     height: 100%;
   }
 
   div.topic {
     margin-top: 3px;
     margin-left: 2px;
+=======
+    padding: 6px 0 6px $spacing;
+    font-size: 14px;
+    color: $font-color-sidebar;
+    background-color: $sidebar-input-field-bg-color;
+    background-image: url("images/icon_quicksearch.png");
+    background-position: right $spacing bottom 6px;
+    background-size: 15px;
+  }
+
+  input::placeholder {
+    font-size: $font-size-global;
+    line-height: 16px;
+    letter-spacing: 0;
+    color: $font-color;
+  }
+
+  div.topic {
+    margin: 3px 0 3px 2px;
+>>>>>>> upstream/master
     font-size: 125%;
   }
 }
 
 #mk_search_results {
+<<<<<<< HEAD
   position: relative;
   float: left;
   width: 223px;
@@ -592,11 +837,22 @@ div.spacertop {
   color: $primary-font-color;
   background-color: $mk-search-results-bg-color;
   border: $mk-search-results-border;
+=======
+  position: absolute;
+  z-index: 1;
+  width: 223px;
+  padding: 8px;
+  margin-top: 2px;
+  font-size: 80%;
+  color: $font-color-sidebar;
+  background-color: $sidebar-input-field-bg-color;
+>>>>>>> upstream/master
 
   a {
     display: block;
     width: 217px;
     padding-left: 5px;
+<<<<<<< HEAD
     color: $primary-font-color;
     text-align: left;
     text-decoration: none;
@@ -607,6 +863,21 @@ div.spacertop {
   }
 
   div.error, div.warning {
+=======
+    margin-bottom: 5px;
+    color: $font-color-sidebar;
+    text-align: left;
+    text-decoration: none;
+
+    &:hover,
+    &.active {
+      background-color: $snapin-bg-color;
+    }
+  }
+
+  div.error,
+  div.warning {
+>>>>>>> upstream/master
     padding: 2px;
     font-size: 12px;
   }
@@ -620,7 +891,11 @@ div.spacertop {
  * Micro Core Stats (CMC) snapin
  */
 #snapin_cmc_stats {
+<<<<<<< HEAD
     color: $primary-sidebar-font-color;
+=======
+  color: $font-color;
+>>>>>>> upstream/master
 
   select {
     margin-bottom: 2px;
@@ -629,11 +904,22 @@ div.spacertop {
 
 table.cmc_stats {
   width: $snapin-cmc-table-width;
+<<<<<<< HEAD
   border-radius: 2px;
 
   td {
     padding: 0 2px;
     font-size: 11px;
+=======
+  border-spacing: 0 4px;
+  box-sizing: border-box;
+
+  td {
+    padding: 0;
+    font-size: 11px;
+    font-weight: $font-weight-default;
+    letter-spacing: $letter-spacing-table;
+>>>>>>> upstream/master
 
     &.right {
       padding: 0;
@@ -649,7 +935,11 @@ table.cmc_stats {
  */
 #snapin_reports {
   i {
+<<<<<<< HEAD
     color: #000;
+=======
+    color: rgb(0, 0, 0);
+>>>>>>> upstream/master
   }
 
   input {
@@ -660,12 +950,17 @@ table.cmc_stats {
 
   div.timerange {
     margin-bottom: 10px;
+<<<<<<< HEAD
     color: $primary-sidebar-font-color;
+=======
+    color: $font-color;
+>>>>>>> upstream/master
 
     table {
       display: inline-block;
 
       td {
+<<<<<<< HEAD
 	font-size: 11px;
 
 	&.tuple_td:nth-of-type(2) {
@@ -675,6 +970,17 @@ table.cmc_stats {
 	&.tuple_left {
 	  padding-right: 4px;
 	}
+=======
+        font-size: 11px;
+
+        &.tuple_td:nth-of-type(2) {
+          padding-left: 8px;
+        }
+
+        &.tuple_left {
+          padding-right: 4px;
+        }
+>>>>>>> upstream/master
       }
 
       span.title {
@@ -716,7 +1022,11 @@ body.main {
 
     // TODO: Rm this if redundant
     div.snapin {
+<<<<<<< HEAD
       background-color: $theme-color-table-border-dark;
+=======
+      background-color: $color-table-border-dark;
+>>>>>>> upstream/master
     }
   }
 }

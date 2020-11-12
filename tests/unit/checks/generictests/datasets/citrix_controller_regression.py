@@ -1,5 +1,17 @@
+<<<<<<< HEAD
 # -*- encoding: utf-8
 # yapf: disable
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# yapf: disable
+# type: ignore
+
+>>>>>>> upstream/master
 
 
 checkname = u'citrix_controller'
@@ -39,4 +51,8 @@ checks = {'': [(None, {}, [(0, u'Active', [])])],
                           'total: 276, active: 262, inactive: 14',
                           [('total_sessions', 276, None, None, None, None),
                            ('active_sessions', 262, None, None, None, None),
+<<<<<<< HEAD
                            ('inactive_sessions', 14, None, None, None, None)])])]}
+=======
+                           ('inactive_sessions', 14, None, None, None, None)])])]}
+>>>>>>> upstream/master

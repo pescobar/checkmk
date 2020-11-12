@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 #!/usr/bin/env python
+=======
+#!/usr/bin/env python3
+>>>>>>> upstream/master
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 #
 #       U  ___ u  __  __   ____

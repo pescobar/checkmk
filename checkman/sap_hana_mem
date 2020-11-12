@@ -9,8 +9,13 @@ description:
  Note: This check is deprecated and replaced by newer checks.
  See werk 7100 for detailed information.
 
+<<<<<<< HEAD
 item:
  The instance name.
 
 inventory:
  One service per instance is created.
+=======
+inventory:
+ One service is created for each instance.
+>>>>>>> upstream/master

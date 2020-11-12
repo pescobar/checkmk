@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: EMC VNX Storage: Info about the IP, system time, serial number and errors
+=======
+title: EMC VNX Storage: Info about the IP, System Time, Serial Number and Errors
+>>>>>>> upstream/master
 agents: emcvnx
 catalog: hw/storagehw/emc
 license: GPL
@@ -13,8 +17,13 @@ description:
  The information is retrieved by the special agent agent_emcvnx which uses
  EMC's command line tool naviseccli.
 
+<<<<<<< HEAD
 item:
  No item.
 
 inventory:
  Finds exactly one item on every EMC VNX storage system called EMC VNX Info
+=======
+inventory:
+ One service is created for each EMC VNX storage system called EMC VNX Info.
+>>>>>>> upstream/master

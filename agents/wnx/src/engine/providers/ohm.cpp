@@ -4,6 +4,11 @@
 
 #include "providers/ohm.h"
 
+<<<<<<< HEAD
+=======
+#include <fmt/format.h>
+
+>>>>>>> upstream/master
 #include <filesystem>
 #include <regex>
 #include <string>
@@ -13,7 +18,10 @@
 #include "cfg.h"
 #include "cma_core.h"
 #include "common/wtools.h"
+<<<<<<< HEAD
 #include "fmt/format.h"
+=======
+>>>>>>> upstream/master
 #include "glob_match.h"
 #include "logger.h"
 #include "tools/_raii.h"

@@ -1,8 +1,20 @@
+<<<<<<< HEAD
+=======
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the
+// terms and conditions defined in the file COPYING, which is part of this
+// source code package.
+
+>>>>>>> upstream/master
 // core common functionaliaty
 // probably "file" is better name
 
 #pragma once
 
+<<<<<<< HEAD
+=======
+#include <fmt/format.h>
+>>>>>>> upstream/master
 #include <time.h>
 
 #include <chrono>
@@ -15,13 +27,79 @@
 #include "cfg.h"
 #include "common/stop_watch.h"
 #include "common/wtools.h"
+<<<<<<< HEAD
 #include "fmt/format.h"
+=======
+>>>>>>> upstream/master
 #include "logger.h"
 #include "tools/_misc.h"
 
 namespace cma {
+<<<<<<< HEAD
 namespace tools {
 
+=======
+wtools::InternalUser ObtainInternalUser(std::wstring_view group);
+void KillAllInternalUsers();
+}  // namespace cma
+
+namespace cma::srv {
+class ServiceProcessor;
+}
+
+namespace cma {
+
+namespace security {
+void ProtectFiles(const std::filesystem::path& root);
+void ProtectAll(const std::filesystem::path& root);
+}  // namespace security
+
+namespace tools {
+
+// add content of file to the Buf
+template <typename T>
+bool AppendFileContent(T& Buf, HANDLE h, size_t Count) noexcept {
+    // check what we have already inside
+    auto buf_size = Buf.size();
+    try {
+        Buf.resize(buf_size + Count);
+    } catch (const std::exception& e) {
+        XLOG::l(XLOG_FLINE + " exception: '{}'", e.what());
+        return false;
+    }
+
+    // add new data
+    auto read_buffer = Buf.data() + buf_size;
+    DWORD read_in_fact = 0;
+    auto count = static_cast<DWORD>(Count);
+    auto result = ::ReadFile(h, read_buffer, count, &read_in_fact, nullptr);
+    if (!result) false;
+
+    if (buf_size + read_in_fact != Buf.size()) {
+        Buf.resize(buf_size + read_in_fact);
+    }
+
+    return true;
+}
+
+template <typename T>
+T ReadFromHandle(HANDLE Handle) {
+    T buf;
+    for (;;) {
+        auto read_count = wtools::DataCountOnHandle(Handle);
+
+        // now reading to the end
+        if (read_count == 0) break;  // no data
+        if (!cma::tools::AppendFileContent<T>(buf, Handle, read_count))
+            break;  // io fail
+    }
+    return buf;
+}
+
+bool AreFilesSame(const std::filesystem::path& tgt,
+                  const std::filesystem::path& src);
+
+>>>>>>> upstream/master
 // primitive command line checker
 bool CheckArgvForValue(int argc, const wchar_t* argv[], int pos,
                        std::string_view value) noexcept;
@@ -54,8 +132,12 @@ inline bool IsValidFile(const std::filesystem::path& FileToExec) {
 }
 // check is extension is valid for OS
 inline bool IsExecutable(const std::filesystem::path& FileToExec) {
+<<<<<<< HEAD
     using namespace std::filesystem;
     static path executables[] = {L".exe", L".bat", L".cmd"};
+=======
+    static std::filesystem::path executables[] = {L".exe", L".bat", L".cmd"};
+>>>>>>> upstream/master
     auto actual_extension = FileToExec.extension();
     for (auto& ext : executables)
         if (ext == actual_extension) return true;
@@ -75,6 +157,7 @@ inline std::wstring FindPowershellExe() noexcept {
     // file not found on path
     auto powershell_path =
         cma::tools::win::GetSomeSystemFolder(FOLDERID_System);
+<<<<<<< HEAD
     fs::path ps(powershell_path);
     ps /= L"WindowsPowerShell";
     ps /= L"v1.0";
@@ -84,6 +167,19 @@ inline std::wstring FindPowershellExe() noexcept {
         XLOG::l("Not found powershell");
     } catch (const std::exception& e) {
         XLOG::l("malformed name {} e:{}", ps.u8string(), e.what());
+=======
+
+    try {
+        fs::path ps(powershell_path);
+        ps /= L"WindowsPowerShell";
+        ps /= L"v1.0";
+        ps /= powershell_name;
+        if (fs::exists(ps)) return ps;
+        XLOG::l("Not found powershell");
+    } catch (const std::exception& e) {
+        XLOG::l("malformed name {} e:{}",
+                wtools::ConvertToUTF8(powershell_path), e.what());
+>>>>>>> upstream/master
     }
     return {};
 }
@@ -193,6 +289,7 @@ public:
         return false;
     }
     enum class StartMode { job, updater };
+<<<<<<< HEAD
     bool start(std::wstring_view Id, std::filesystem::path ExeFile,
                StartMode start_mode) {
         int count = 0;
@@ -238,6 +335,17 @@ public:
 
     // strange?
     uint32_t getProcessId() {
+=======
+    bool startEx(std::wstring_view Id, std::wstring exec, StartMode start_mode,
+                 wtools::InternalUser internal_user);
+    bool startStd(std::wstring_view Id, std::wstring exec,
+                  StartMode start_mode) {
+        return startEx(Id, exec, start_mode, {});
+    }
+
+    // strange?
+    [[nodiscard]] uint32_t getProcessId() {
+>>>>>>> upstream/master
         uint32_t proc_id;
         std::unique_lock lk(lock_);
         proc_id = process_->processId();
@@ -246,7 +354,11 @@ public:
     }
 
     // really obtained proc id. Safe function
+<<<<<<< HEAD
     uint32_t startedProcId() const { return proc_id_; }
+=======
+    [[nodiscard]] uint32_t startedProcId() const { return proc_id_; }
+>>>>>>> upstream/master
 
     bool appendResult(HANDLE Handle, std::vector<char>& Buf) {
         if (Buf.size() == 0) return true;
@@ -268,6 +380,7 @@ public:
         return false;
     }
 
+<<<<<<< HEAD
     bool const failed() const noexcept { return failed_; }
 
     // add content of file to the Buf
@@ -295,6 +408,9 @@ public:
 
         return true;
     }
+=======
+    [[nodiscard]] bool const failed() const noexcept { return failed_; }
+>>>>>>> upstream/master
 
     // very special, only used for cmk-updater
     bool waitForUpdater(std::chrono::milliseconds Timeout);
@@ -358,6 +474,7 @@ private:
     void readWhatLeft() {
         using namespace std;
         auto read_handle = getReadHandle();
+<<<<<<< HEAD
         auto buf = readFromHandle<vector<char>>(read_handle);
         if (buf.size()) appendResult(read_handle, buf);
     }
@@ -376,6 +493,14 @@ private:
     }
 
     static std::string formatProcessInLog(uint32_t pid, std::wstring name) {
+=======
+        auto buf = cma::tools::ReadFromHandle<vector<char>>(read_handle);
+        if (buf.size()) appendResult(read_handle, buf);
+    }
+
+    static std::string formatProcessInLog(uint32_t pid,
+                                          const std::wstring_view name) {
+>>>>>>> upstream/master
         return fmt::format("Process '{}' pid [{}]", wtools::ConvertToUTF8(name),
                            pid);
     }
@@ -384,6 +509,7 @@ private:
     // updates object with exit code
     // returns true if process  exists or not accessible
     bool checkProcessExit(const uint32_t pid) {
+<<<<<<< HEAD
         auto proc_string = formatProcessInLog(pid, exec_);
 
         auto h = ::OpenProcess(
@@ -413,6 +539,30 @@ private:
     }
 
     bool isExecValid(const std::filesystem::path& FileExec) const {
+=======
+        auto [code, error] = wtools::GetProcessExitCode(pid);
+
+        auto proc_string = formatProcessInLog(pid, exec_);
+        // check for error
+        if (error == 0) {
+            if (code == STILL_ACTIVE) return false;
+
+            // success and valid exit code store exit code
+            XLOG::t("{} exits, code is [{}]", proc_string, code);
+            storeExitCode(pid, code);
+            return true;
+        }
+
+        if (code == 0) {
+            storeExitCode(pid, 0);  // process rather died
+            XLOG::d("{} is failed to open, error is [{}]", proc_string, error);
+        } else
+            XLOG::l("Error  [{}] accessing {}", error, proc_string);
+        return true;
+    }
+
+    static inline bool isExecValid(const std::filesystem::path& FileExec) {
+>>>>>>> upstream/master
         if (!IsValidFile(FileExec)) return false;  // sanity
 
         auto execute_string = ConstructCommandToExec(FileExec);
@@ -447,7 +597,10 @@ private:
 }  // namespace cma
 
 namespace cma {
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/master
 enum class HackDataMode { header, line };
 
 // build correct string for patching
@@ -551,6 +704,12 @@ public:
     // which plugin
     std::filesystem::path path() const { return path_; }
 
+<<<<<<< HEAD
+=======
+    // which plugin
+    void setCmdLine(std::wstring_view name);
+
+>>>>>>> upstream/master
     // stored data from plugin
     std::vector<char> data() const {
         std::lock_guard lk(data_lock_);
@@ -568,6 +727,11 @@ public:
         retry_ = Unit.retry();
         cache_age_ = Unit.cacheAge();
         timeout_ = Unit.timeout();
+<<<<<<< HEAD
+=======
+        group_ = Unit.group();
+        user_ = Unit.user();
+>>>>>>> upstream/master
         bool planned_async = Unit.async() || Unit.cacheAge() > 0;
 
         if (defined() && async() != planned_async) {
@@ -584,12 +748,25 @@ public:
             }
         }
         async_ = planned_async;
+<<<<<<< HEAD
         if (async()) {
             if (cacheAge() && cacheAge() < cma::cfg::kMinimumCacheAge)
                 cache_age_ = cma::cfg::kMinimumCacheAge;
         } else {
             cache_age_ = 0;
         }
+=======
+
+        if (async() &&
+            cacheAge()) {  // for async we have cache_age either 0 or > 120
+            cache_age_ = std::max(cacheAge(), cma::cfg::kMinimumCacheAge);
+        } else {  // for sync cache_age is 0 always
+            cache_age_ = 0;
+        }
+
+        fillInternalUser();
+
+>>>>>>> upstream/master
         local_ = Local;
         defined_ = true;
     }
@@ -619,7 +796,14 @@ public:
 
     static int threadCount() noexcept { return thread_count_.load(); }
 
+<<<<<<< HEAD
 protected:
+=======
+    std::wstring cmdLine() const noexcept { return cmd_line_; }
+
+protected:
+    void fillInternalUser();
+>>>>>>> upstream/master
     void resetData() {
         std::lock_guard lk(data_lock_);
         return data_.clear();
@@ -648,6 +832,11 @@ protected:
     // as a rule only after timeout
     void unregisterProcess();
 
+<<<<<<< HEAD
+=======
+private:
+    wtools::InternalUser iu_;
+>>>>>>> upstream/master
     cma::TheMiniBox minibox_;
 
     std::filesystem::path path_;  // actual path to execute
@@ -663,7 +852,11 @@ protected:
 
     std::vector<char> data_;                           // cache
     std::chrono::steady_clock::time_point data_time_;  // when
+<<<<<<< HEAD
     time_t legacy_time_;                               // I'm nice guy
+=======
+    time_t legacy_time_ = 0;                           // I'm nice guy
+>>>>>>> upstream/master
 
     mutable std::mutex lock_;  // thread control
     std::unique_ptr<std::thread> main_thread_;
@@ -672,6 +865,11 @@ protected:
 
     static std::atomic<int> thread_count_;
 
+<<<<<<< HEAD
+=======
+    std::wstring cmd_line_;
+
+>>>>>>> upstream/master
 #if defined(GTEST_INCLUDE_GTEST_GTEST_H_)
     friend class PluginTest;
     FRIEND_TEST(PluginTest, ApplyConfig);
@@ -680,8 +878,16 @@ protected:
     FRIEND_TEST(PluginTest, Async0DataPickup);
     FRIEND_TEST(PluginTest, AsyncLocal);
     FRIEND_TEST(PluginTest, SyncLocal);
+<<<<<<< HEAD
 #endif
 };
+=======
+
+    FRIEND_TEST(PluginTest, Entry);
+#endif
+};
+wtools::InternalUser PluginsExecutionUser2Iu(std::string_view user);
+>>>>>>> upstream/master
 
 TheMiniBox::StartMode GetStartMode(const std::filesystem::path& filepath);
 
@@ -720,6 +926,11 @@ void UpdatePluginMap(PluginMap& Out,  // output is here
                      const std::vector<cma::cfg::Plugins::ExeUnit>& Units,
                      bool CheckExists = true);
 
+<<<<<<< HEAD
+=======
+void UpdatePluginMapCmdLine(PluginMap& Out, cma::srv::ServiceProcessor* sp);
+
+>>>>>>> upstream/master
 // API call to exec all plugins and get back data and count
 std::vector<char> RunSyncPlugins(PluginMap& Plugins, int& Count, int Timeout);
 std::vector<char> RunAsyncPlugins(PluginMap& Plugins, int& Count,
@@ -730,6 +941,10 @@ constexpr std::chrono::seconds kRestartInterval{60};
 void RunDetachedPlugins(PluginMap& plugins_map, int& start_count);
 namespace provider::config {
 extern const bool G_AsyncPluginWithoutCacheAge_RunAsync;
+<<<<<<< HEAD
+=======
+extern const bool G_SetLogwatchPosToEnd;
+>>>>>>> upstream/master
 
 bool IsRunAsync(const PluginEntry& plugin) noexcept;
 }  // namespace provider::config
@@ -740,7 +955,12 @@ using StringSet = std::set<std::string>;
 bool AddUniqStringToSetIgnoreCase(StringSet& cache,
                                   const std::string& value) noexcept;
 // returns true if string added
+<<<<<<< HEAD
 bool AddUniqStringToSetAsIs(StringSet& cache, const std::string value) noexcept;
+=======
+bool AddUniqStringToSetAsIs(StringSet& cache,
+                            const std::string& value) noexcept;
+>>>>>>> upstream/master
 }  // namespace tools
 
 // finds piggyback template <<<<name>>>>, if found returns 'name'

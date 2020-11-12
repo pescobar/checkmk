@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -24,6 +25,19 @@
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
 
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# NOTE: Careful when replacing the *-import below with a more specific import. This can cause
+# problems because it might remove variables from the check-context which are necessary for
+# resolving legacy discovery results such as [("SUMMARY", "diskstat_default_levels")]. Furthermore,
+# it might also remove variables needed for accessing discovery rulesets.
+from cmk.base.check_legacy_includes.wmi import *  # pylint: disable=wildcard-import,unused-wildcard-import
+>>>>>>> upstream/master
 dotnet_clrmemory_defaultlevels = {
     "upper": (10.0, 15.0)  # 10.0 percent specified by customer,
     # various sources (including MS) give
@@ -35,18 +49,29 @@ def check_dotnet_clrmemory(item, params, parsed):
     yield wmi_yield_raw_fraction(parsed[""],
                                  item,
                                  "PercentTimeinGC",
+<<<<<<< HEAD
                                  label="% time in GC",
+=======
+                                 infoname="Time in GC",
+>>>>>>> upstream/master
                                  perfvar="percent",
                                  levels=params)
 
 
 check_info['dotnet_clrmemory'] = {
     'parse_function': parse_wmi_table,
+<<<<<<< HEAD
     'inventory_function': lambda parsed: inventory_wmi_table(
+=======
+    'inventory_function': lambda parsed: inventory_wmi_table_instances(
+>>>>>>> upstream/master
         parsed, filt=wmi_filter_global_only, levels="dotnet_clrmemory_defaultlevels"),
     'check_function': check_dotnet_clrmemory,
     'has_perfdata': True,
     'service_description': "DotNet Memory Management %s",
+<<<<<<< HEAD
     'includes': ['wmi.include'],
+=======
+>>>>>>> upstream/master
     'group': "clr_memory"
 }

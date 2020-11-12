@@ -10,7 +10,11 @@ description:
  {CRIT} will be returned.
 
 inventory:
+<<<<<<< HEAD
  One service per host and module will be created.
+=======
+ One service is created for each module on each host.
+>>>>>>> upstream/master
 
 item:
  The device ID of the module.

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,6 +24,13 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 from cmk.gui.i18n import _
 from cmk.gui.valuespec import (
@@ -43,7 +51,10 @@ from cmk.gui.plugins.wato import (
 def _vs_license():
     return Alternative(
         title=_("Levels for Number of Licenses"),
+<<<<<<< HEAD
         style="dropdown",
+=======
+>>>>>>> upstream/master
         default_value=None,
         elements=[
             Tuple(title=_("Absolute levels for unused licenses"),
@@ -101,7 +112,11 @@ rulespec_registry.register(
         group=RulespecGroupCheckParametersApplications,
         item_spec=_item_spec_esx_licenses,
         parameter_valuespec=_vs_license,
+<<<<<<< HEAD
         title=lambda: _("Number of used VMware licenses"),
+=======
+        title=lambda: _("VMware licenses"),
+>>>>>>> upstream/master
     ))
 
 
@@ -118,7 +133,11 @@ rulespec_registry.register(
         group=RulespecGroupCheckParametersApplications,
         item_spec=_item_spec_ibmsvc_licenses,
         parameter_valuespec=_vs_license,
+<<<<<<< HEAD
         title=lambda: _("Number of used IBM SVC licenses"),
+=======
+        title=lambda: _("IBM SVC licenses"),
+>>>>>>> upstream/master
     ))
 
 

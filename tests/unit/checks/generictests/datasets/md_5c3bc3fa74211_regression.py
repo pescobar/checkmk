@@ -1,5 +1,17 @@
+<<<<<<< HEAD
 # -*- encoding: utf-8
 # yapf: disable
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# yapf: disable
+# type: ignore
+
+>>>>>>> upstream/master
 
 
 checkname = u'md'
@@ -19,4 +31,8 @@ discovery = {'': [(u'md1', None)]}
 checks = {'': [(u'md1',
                 {},
                 [(0, u'Status: active', []),
+<<<<<<< HEAD
                  (0, 'Spare: 0, Failed: 0, Active: 2', [])])]}
+=======
+                 (0, 'Spare: 0, Failed: 0, Active: 2', [])])]}
+>>>>>>> upstream/master

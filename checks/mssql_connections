@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,6 +24,13 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 # Example output:
 # <<<mssql_connections>>>
@@ -30,7 +38,11 @@
 # MSSQLSERVER tempdb 1
 
 factory_settings["mssql_connections_default_levels"] = {
+<<<<<<< HEAD
     "levels": (20, 50),
+=======
+    "levels": (None, None),
+>>>>>>> upstream/master
 }
 
 
@@ -54,6 +66,7 @@ def inventory_mssql_connections(parsed):
 def check_mssql_connections(item, params, parsed):
     # If a database is missing in the agent output there are no
     # active connections for that database.
+<<<<<<< HEAD
     connection_count = parsed.get(item, 0)
 
     warn, crit = params['levels']
@@ -68,6 +81,15 @@ def check_mssql_connections(item, params, parsed):
     if state:
         infotext += " (warn/crit at %d/%d)" % (warn, crit)
     return state, infotext, [('connections', connection_count, warn, crit)]
+=======
+    return check_levels(
+        parsed.get(item, 0),
+        "connections",
+        params['levels'],
+        human_readable_func=int,
+        infoname="Connections",
+    )
+>>>>>>> upstream/master
 
 
 check_info['mssql_connections'] = {

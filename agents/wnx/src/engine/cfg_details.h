@@ -1,3 +1,11 @@
+<<<<<<< HEAD
+=======
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the
+// terms and conditions defined in the file COPYING, which is part of this
+// source code package.
+
+>>>>>>> upstream/master
 #pragma once
 // registry access
 #define WIN32_LEAN_AND_MEAN
@@ -26,6 +34,14 @@ std::wstring FindServiceImagePath(std::wstring_view service_name) noexcept;
 std::filesystem::path ExtractPathFromServiceName(
     std::wstring_view service_name) noexcept;
 
+<<<<<<< HEAD
+=======
+enum class CleanMode { none, smart, all };
+
+CleanMode GetCleanDataFolderMode();
+bool CleanDataFolder(CleanMode mode);
+
+>>>>>>> upstream/master
 class Folders {
 public:
     // if ServiceValidName set, then we MUST find path
@@ -37,8 +53,14 @@ public:
     bool setRootEx(const std::wstring& service_name,  // look in registry
                    const std::wstring& preset_root);  // look in disk
     enum class CreateMode { with_path, direct };
+<<<<<<< HEAD
     void createDataFolderStructure(const std::wstring& AgentDataFolder,
                                    CreateMode mode);
+=======
+    enum class Protection { no, yes };
+    void createDataFolderStructure(const std::wstring& AgentDataFolder,
+                                   CreateMode mode, Protection protection);
+>>>>>>> upstream/master
 
     // for testing and reloading
     void cleanAll();
@@ -108,8 +130,14 @@ public:
 private:
     // make [recursive] folder in windows
     // returns path if folder was created successfully
+<<<<<<< HEAD
     std::filesystem::path makeDefaultDataFolder(
         std::wstring_view AgentDataFolder, CreateMode mode);
+=======
+    static std::filesystem::path makeDefaultDataFolder(
+        std::wstring_view AgentDataFolder, CreateMode mode,
+        Protection protection);
+>>>>>>> upstream/master
     std::filesystem::path root_;          // where is root
     std::filesystem::path data_;          // ProgramData
     std::filesystem::path public_logs_;   //
@@ -125,6 +153,14 @@ private:
 #endif
 };
 
+<<<<<<< HEAD
+=======
+std::vector<std::wstring_view> AllDirTable();
+std::vector<std::wstring_view> RemovableDirTable();
+
+int CreateTree(const std::filesystem::path& base_path) noexcept;
+
+>>>>>>> upstream/master
 }  // namespace cma::cfg::details
 
 namespace cma::cfg {
@@ -142,7 +178,11 @@ class ConfigInfo {
     struct YamlData {
         YamlData(const std::filesystem::path& Path,
                  std::filesystem::file_time_type Timestamp)
+<<<<<<< HEAD
             : path_(Path), bad_(false) {}
+=======
+            : path_(Path) {}
+>>>>>>> upstream/master
 
         void loadFile() {
             checkStatus();
@@ -201,8 +241,13 @@ class ConfigInfo {
         }
 
         std::filesystem::file_time_type last_loaded_time_;
+<<<<<<< HEAD
         bool exists_;
         bool bad_;
+=======
+        bool exists_ = false;
+        bool bad_ = true;
+>>>>>>> upstream/master
         std::filesystem::file_time_type timestamp_;
     };
 
@@ -218,9 +263,19 @@ public:
     void cleanFolders();
     void cleanConfig();
 
+<<<<<<< HEAD
     bool pushFolders(const std::filesystem::path& root,
                      const std::filesystem::path& data);
 
+=======
+    // TODO (sk): move to tests
+    /// \brief Used in tests only( to prevent the tree from changing )
+    bool pushFolders(const std::filesystem::path& root,
+                     const std::filesystem::path& data);
+
+    // TODO (sk): move to tests only( to prevent the tree from changing )
+    /// \brief Used in tests only to prevent context
+>>>>>>> upstream/master
     bool popFolders();
 
     // not so heavy operation, use free
@@ -369,7 +424,11 @@ public:
     static bool smartMerge(YAML::Node Target, YAML::Node Src, Combine combine);
 
     // THIS IS ONLY FOR TESTING
+<<<<<<< HEAD
     bool loadDirect(const std::filesystem::path& FullPath);
+=======
+    bool loadDirect(const std::filesystem::path& file);
+>>>>>>> upstream/master
 
     uint64_t uniqId() const noexcept { return uniq_id_; }
 

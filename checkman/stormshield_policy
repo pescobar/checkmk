@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: Stormshield Policy
+=======
+title: Stormshield: Policies Sync
+>>>>>>> upstream/master
 agents: snmp
 catalog: app/stormshield
 license: GPL
@@ -11,8 +15,15 @@ description:
  be {OK}, {CRIT} or {UNKNOWN}.
 
 item:
+<<<<<<< HEAD
  The description of the service as provided by
  the device (Policy Name).
 
 inventory:
  One check for each service is created by the inventory.
+=======
+ The name of the policy
+
+inventory:
+ One service is created for each policy.
+>>>>>>> upstream/master

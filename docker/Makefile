@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # +------------------------------------------------------------------+
 # |             ____ _               _        __  __ _  __           |
 # |            / ___| |__   ___  ___| | __   |  \/  | |/ /           |
@@ -21,6 +22,12 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+>>>>>>> upstream/master
 #
 
 include ../defines.make
@@ -45,6 +52,10 @@ setup:
 	    "deb [arch=amd64] https://download.docker.com/linux/ubuntu $$(lsb_release -cs) stable"
 	sudo apt-get update
 	    sudo apt-get install docker-ce
+<<<<<<< HEAD
+=======
+	sudo bash -c 'usermod -a -G docker $$SUDO_USER'
+>>>>>>> upstream/master
 
 setversion:
 	sed -i 's/^ARG CMK_VERSION=.*$$/ARG CMK_VERSION="$(NEW_VERSION)"/g' Dockerfile
@@ -56,6 +67,7 @@ needed-packages: ../omd/distros/DEBIAN_9.mk
 check-mk-$(EDITION)-docker-$(VERSION).tar.gz: image
 	docker save $(DOCKER_REPO_NAME)/check-mk-$(EDITION):$(VERSION) | gzip > check-mk-$(EDITION)-docker-$(VERSION).tar.gz
 
+<<<<<<< HEAD
 image: needed-packages
 	docker build \
 	    --build-arg CMK_VERSION="$(VERSION)" \
@@ -65,12 +77,43 @@ image: needed-packages
 	    .
 
 image-daily: needed-packages
+=======
+check-mk-$(EDITION)-docker-$(VERSION).demo.tar.gz: image-demo
+	docker save $(DOCKER_REPO_NAME)/check-mk-$(EDITION):$(VERSION).demo | gzip > check-mk-$(EDITION)-docker-$(VERSION).demo.tar.gz
+
+image: needed-packages
+	SECRET_CONTAINER_ID=$$(docker run -d --rm --volume $(CREDENTIALS_FILE):/files/secret \
+	    busybox timeout 180 httpd -f -p 8000 -h /files) ; \
+	docker build \
+	    --network=container:$$SECRET_CONTAINER_ID \
+	    --build-arg CMK_VERSION="$(VERSION)" \
+	    --build-arg CMK_EDITION="$(EDITION)" \
+	    -t $(DOCKER_REPO_NAME)/check-mk-$(EDITION):$(VERSION) \
+	    . ; \
+	docker stop $$SECRET_CONTAINER_ID
+
+image-demo: needed-packages
+	SECRET_CONTAINER_ID=$$(docker run -d --rm --volume $(CREDENTIALS_FILE):/files/secret \
+	    busybox timeout 180 httpd -f -p 8000 -h /files) ; \
+	docker build \
+	    --network=container:$$SECRET_CONTAINER_ID \
+	    --build-arg CMK_VERSION="$(VERSION).demo" \
+	    --build-arg CMK_EDITION="$(EDITION)" \
+	    -t $(DOCKER_REPO_NAME)/check-mk-$(EDITION):$(VERSION).demo \
+	    . ; \
+	docker stop $$SECRET_CONTAINER_ID
+
+image-daily: needed-packages
+	SECRET_CONTAINER_ID=$$(docker run -d --rm --volume $(CREDENTIALS_FILE):/files/secret \
+	    busybox timeout 180 httpd -f -p 8000 -h /files) ; \
+>>>>>>> upstream/master
 	BRANCH_PREFIX="$$(git rev-parse --abbrev-ref HEAD)" ; \
 	if [[ "$$BRANCH_PREFIX" == "master" || "$$BRANCH_PREFIX" =~ "/" ]]; then \
 	    BRANCH_PREFIX="" ; \
 	else \
 	    BRANCH_PREFIX="$${BRANCH_PREFIX}-" ; \
 	fi ; \
+<<<<<<< HEAD
 	VERSION="$$(date +%F)" ; \
 	VERSION="$${BRANCH_PREFIX}$${VERSION//-/.}" ; \
 	CREDENTIALS="$$(cat "$(CREDENTIALS_FILE)")" ; \
@@ -81,6 +124,18 @@ image-daily: needed-packages
 	    -t $(DOCKER_REPO_NAME)/check-mk-$(EDITION):$${VERSION} \
 	    -t $(DOCKER_REPO_NAME)/check-mk-$(EDITION):$${BRANCH_PREFIX}daily \
 	    .
+=======
+	VERSION="$${VERSION:-$$(date +%F)}" ; \
+	VERSION="$${BRANCH_PREFIX}$${VERSION//-/.}" ; \
+	docker build \
+	    --network=container:$$SECRET_CONTAINER_ID \
+	    --build-arg CMK_VERSION="$${VERSION}" \
+	    --build-arg CMK_EDITION=$(EDITION) \
+	    -t $(DOCKER_REPO_NAME)/check-mk-$(EDITION):$${VERSION} \
+	    -t $(DOCKER_REPO_NAME)/check-mk-$(EDITION):$${BRANCH_PREFIX}daily \
+	    . ; \
+	docker stop $$SECRET_CONTAINER_ID
+>>>>>>> upstream/master
 
 test-lint-dockerfile:
 	sudo docker run --rm -i hadolint/hadolint < Dockerfile

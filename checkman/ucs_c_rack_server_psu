@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: UCS C-Series Rack Server: Power supply unit (PSU)
+=======
+title: UCS C-Series Rack Server: Power Supply Unit (PSU)
+>>>>>>> upstream/master
 agents: agent_ucs_bladecenter
 catalog: hw/server/cisco
 license: GPL
@@ -43,7 +47,14 @@ description:
    unknown
 
 inventory:
+<<<<<<< HEAD
   All PSUs of the rack server are found automatically.
 
 item:
   One service for every power supply unit e.g. PSU 1.
+=======
+ One service is created for each PSU of the rack server.
+
+item:
+ {{Rack unit}} followed by the index of the rack followed by {{PSU}} and the index of the PSU
+>>>>>>> upstream/master

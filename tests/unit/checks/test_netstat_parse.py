@@ -1,4 +1,15 @@
+<<<<<<< HEAD
 import pytest
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+import pytest  # type: ignore[import]
+from testlib import Check  # type: ignore[import]
+>>>>>>> upstream/master
 
 pytestmark = pytest.mark.checks
 
@@ -16,6 +27,12 @@ pytestmark = pytest.mark.checks
         ([['udp', '-', '-', '*.*', '0.0.0.0:*']], [('UDP', ['*', '*'], ['0.0.0.0', '*'
                                                                        ], 'LISTENING')]),
     ])
+<<<<<<< HEAD
 def test_parse_netstat(check_manager, info, expected_parsed):
     parsed = check_manager.get_check('netstat').run_parse(info)
+=======
+@pytest.mark.usefixtures("config_load_all_checks")
+def test_parse_netstat(info, expected_parsed):
+    parsed = Check('netstat').run_parse(info)
+>>>>>>> upstream/master
     assert parsed == expected_parsed

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // +------------------------------------------------------------------+
 // |             ____ _               _        __  __ _  __           |
 // |            / ___| |__   ___  ___| | __   |  \/  | |/ /           |
@@ -21,11 +22,21 @@
 // License along with GNU Make; see the file  COPYING.  If  not,  write
 // to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 // Boston, MA 02110-1301 USA.
+=======
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the
+// terms and conditions defined in the file COPYING, which is part of this
+// source code package.
+>>>>>>> upstream/master
 
 #ifndef Triggers_h
 #define Triggers_h
 
 #include "config.h"  // IWYU pragma: keep
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/master
 #include <chrono>
 #include <condition_variable>
 #include <mutex>
@@ -44,7 +55,11 @@ public:
         program
     };
 
+<<<<<<< HEAD
     Kind find(const std::string &name);
+=======
+    static Kind find(const std::string &name);
+>>>>>>> upstream/master
 
     void notify_all(Kind trigger);
 

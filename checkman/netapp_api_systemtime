@@ -11,4 +11,8 @@ item:
  The node name.
 
 inventory:
+<<<<<<< HEAD
  One check is created for node.
+=======
+ One service is created for each node.
+>>>>>>> upstream/master

@@ -1,8 +1,19 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
 # This script can be used to modify the contacts.mk file
 # The core mus be reloaded after changes
+<<<<<<< HEAD
 from __future__ import print_function
 import sys, os
+=======
+
+import os
+import sys
+>>>>>>> upstream/master
 
 if len(sys.argv) != 4:
     print("Usage: ./mod_contacts_mk.py USERID FIELD NEW CONTENT")
@@ -12,7 +23,11 @@ try:
     pathlokal = "~/etc/check_mk/conf.d/wato/"
     pathlokal = os.path.expanduser(pathlokal)
     contacts_mk = pathlokal + "contacts.mk"
+<<<<<<< HEAD
 except:
+=======
+except Exception:
+>>>>>>> upstream/master
     print("Run this script inside a OMD site")
     sys.exit()
 
@@ -26,7 +41,11 @@ eval(open(contacts_mk).read())
 
 contacts[user_id][field] = content
 
+<<<<<<< HEAD
 file(contacts_mk, "w").write("""
+=======
+open(contacts_mk, "w").write("""
+>>>>>>> upstream/master
 # Written by Multisite UserDB
 # encoding: utf-8
 

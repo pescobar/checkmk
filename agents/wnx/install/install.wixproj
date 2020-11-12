@@ -46,7 +46,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="resources\checkmk.dat" />
+<<<<<<< HEAD
     <Content Include="resources\check_mk.ini" />
+=======
+>>>>>>> upstream/master
     <Content Include="resources\check_mk.install.yml" />
     <Content Include="resources\check_mk.marker" />
     <Content Include="resources\check_mk.user.yml" />

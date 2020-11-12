@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: CPS UPS Device: Remaining battery capacity
+=======
+title: CPS UPS Device: Remaining Battery Capacity
+>>>>>>> upstream/master
 agents: snmp
 catalog: hw/power/cps
 license: GPL
@@ -8,4 +12,8 @@ description:
  remaining runtime.
 
 inventory:
+<<<<<<< HEAD
  One check per device is created.
+=======
+ One service is created for each device.
+>>>>>>> upstream/master

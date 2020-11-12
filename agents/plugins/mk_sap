@@ -1,37 +1,19 @@
-#!/usr/bin/python
-# -*- encoding: utf-8; py-indent-offset: 4 -*-
-# +------------------------------------------------------------------+
-# |             ____ _               _        __  __ _  __           |
-# |            / ___| |__   ___  ___| | __   |  \/  | |/ /           |
-# |           | |   | '_ \ / _ \/ __| |/ /   | |\/| | ' /            |
-# |           | |___| | | |  __/ (__|   <    | |  | | . \            |
-# |            \____|_| |_|\___|\___|_|\_\___|_|  |_|_|\_\           |
-# |                                                                  |
-# | Copyright Mathias Kettner 2014             mk@mathias-kettner.de |
-# +------------------------------------------------------------------+
-#
-# This file is part of Check_MK.
-# The official homepage is at http://mathias-kettner.de/check_mk.
-#
-# check_mk is free software;  you can redistribute it and/or modify it
-# under the  terms of the  GNU General Public License  as published by
-# the Free Software Foundation in version 2.  check_mk is  distributed
-# in the hope that it will be useful, but WITHOUT ANY WARRANTY;  with-
-# out even the implied warranty of  MERCHANTABILITY  or  FITNESS FOR A
-# PARTICULAR PURPOSE. See the  GNU General Public License for more de-
-# tails. You should have  received  a copy of the  GNU  General Public
-# License along with GNU Make; see the file  COPYING.  If  not,  write
-# to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
-# Boston, MA 02110-1301 USA.
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+__version__ = "2.0.0i2"
 
 # This agent plugin has been built to collect information from SAP R/3 systems
-# using RFC calls. It needs the python module sapnwrfc (available in Check_MK
+# using RFC calls. It needs the python module sapnwrfc (available in Checkmk
 # git at agents/sap/sapnwrfc) and the nwrfcsdk (can be downloaded from SAP
 # download portal) installed to be working. You can configure the agent plugin
 # using the configuration file /etc/check_mk/sap.cfg (a sample file can be
-# found in Check_MK git at agents/sap/sap.cfg) to tell it how to connect to
+# found in Checkmk git at agents/sap/sap.cfg) to tell it how to connect to
 # your SAP instance and which values you want to fetch from your system to be
-# forwarded to and checked by Check_MK.
+# forwarded to and checked by Checkmk.
 #
 # This current agent has been developed and tested with:
 #   python-sapnwrfc-0.19
@@ -151,7 +133,11 @@ config_file = MK_CONFDIR + '/sap.cfg'
 
 cfg = {}
 if os.path.exists(config_file):
+<<<<<<< HEAD
     exec (open(config_file).read())
+=======
+    exec(open(config_file).read())
+>>>>>>> upstream/master
     if isinstance(cfg, dict):
         cfg = [cfg]
 else:

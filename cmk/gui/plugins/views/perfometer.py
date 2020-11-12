@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -25,6 +26,16 @@
 # Boston, MA 02110-1301 USA.
 
 import cmk.gui.config as config
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+import cmk.gui.config as config
+import cmk.gui.escaping as escaping
+>>>>>>> upstream/master
 import cmk.gui.metrics as metrics
 from cmk.gui.i18n import _
 
@@ -45,11 +56,20 @@ from cmk.gui.plugins.views import (
     Sorter,
     is_stale,
     display_options,
+<<<<<<< HEAD
     pnp_url,
 )
 
 
 class Perfometer(object):
+=======
+)
+
+from cmk.gui.plugins.views.graphs import cmk_graph_url
+
+
+class Perfometer:
+>>>>>>> upstream/master
     def __init__(self, row):
         super(Perfometer, self).__init__()
 
@@ -62,7 +82,11 @@ class Perfometer(object):
         self._parse_perf_data()
 
     def _parse_perf_data(self):
+<<<<<<< HEAD
         perf_data_string = self._row["service_perf_data"].decode("utf-8").strip()
+=======
+        perf_data_string = self._row["service_perf_data"].strip()
+>>>>>>> upstream/master
         if not perf_data_string:
             return
 
@@ -217,12 +241,19 @@ class PainterPerfometer(Painter):
     def ident(self):
         return "perfometer"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Service Perf-O-Meter")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Service Perf-O-Meter")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Perf-O-Meter")
 
     @property
@@ -262,18 +293,26 @@ class PainterPerfometer(Painter):
         # pnpgraph_present: -1 means unknown (path not configured), 0: no, 1: yes
         if display_options.enabled(display_options.X) \
            and row["service_pnpgraph_present"] != 0:
+<<<<<<< HEAD
             if metrics.cmk_graphs_possible():
                 import cmk.gui.cee.plugins.views.graphs
                 url = cmk.gui.cee.plugins.views.graphs.cmk_graph_url(row, "service")
             else:
                 url = pnp_url(row, "service")
+=======
+            url = cmk_graph_url(row, "service")
+>>>>>>> upstream/master
             disabled = False
         else:
             url = "javascript:void(0)"
             disabled = True
 
         return " ".join(classes), \
+<<<<<<< HEAD
             html.render_a(content=content, href=url, title=html.strip_tags(title),
+=======
+            html.render_a(content=content, href=url, title=escaping.strip_tags(title),
+>>>>>>> upstream/master
                           class_=["disabled" if disabled else None])
 
 

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -24,6 +25,19 @@
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
 
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# NOTE: Careful when replacing the *-import below with a more specific import. This can cause
+# problems because it might remove variables from the check-context which are necessary for
+# resolving legacy discovery results such as [("SUMMARY", "diskstat_default_levels")]. Furthermore,
+# it might also remove variables needed for accessing discovery rulesets.
+from cmk.base.check_legacy_includes.ddn_s2a import *  # pylint: disable=wildcard-import,unused-wildcard-import
+>>>>>>> upstream/master
 factory_settings["ddn_s2a_statsdelay_default_levels"] = {
     "read_avg": (0.1, 0.2),
     "write_avg": (0.1, 0.2),
@@ -34,7 +48,11 @@ def parse_ddn_s2a_statsdelay(info):
     parsed = parse_ddn_s2a_api_response(info)
 
     for key in [u"host_reads", u"host_writes", u"disk_reads", u"disk_writes"]:
+<<<<<<< HEAD
         parsed[key] = map(int, parsed[key])
+=======
+        parsed[key] = list(map(int, parsed[key]))
+>>>>>>> upstream/master
 
     # Regarding the special treatment of the >10.0 value here: This API does not provide
     # more detailed information than this. We assume a value of 30, but we really have no way
@@ -72,7 +90,11 @@ def check_ddn_s2a_statsdelay(item, params, parsed):
                 return interval
 
     def histogram_max(time_intervals, values):
+<<<<<<< HEAD
         for interval, value in zip(time_intervals, values)[::-1]:
+=======
+        for interval, value in list(zip(time_intervals, values))[::-1]:
+>>>>>>> upstream/master
             if value != 0:
                 return interval
 
@@ -121,7 +143,11 @@ def check_ddn_s2a_statsdelay(item, params, parsed):
 
     if old_intervals is None:
         raise MKCounterWrapped("Initializing")
+<<<<<<< HEAD
     elif old_intervals != time_intervals:
+=======
+    if old_intervals != time_intervals:
+>>>>>>> upstream/master
         raise MKCounterWrapped(
             "Histograms not comparable - Time intervals have changed. Reinitializing.")
 
@@ -165,7 +191,10 @@ check_info['ddn_s2a_statsdelay'] = {
     'inventory_function': inventory_ddn_s2a_statsdelay,
     'check_function': check_ddn_s2a_statsdelay,
     'service_description': 'DDN S2A Delay %s',
+<<<<<<< HEAD
     'includes': ["ddn_s2a.include"],
+=======
+>>>>>>> upstream/master
     'group': 'ddn_s2a_wait',
     'has_perfdata': True,
 }

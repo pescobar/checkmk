@@ -10,4 +10,8 @@ item:
  The fan board slot ID.
 
 inventory:
+<<<<<<< HEAD
  One service for each fan is created
+=======
+ One service is created for each fan.
+>>>>>>> upstream/master

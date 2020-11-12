@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,6 +24,13 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 
 def _get_tag_options(tag_values, prefix):
@@ -42,7 +50,11 @@ def _get_services_config(services):
     #   'ebs': {'selection': ('names', ['ebs1', 'ebs2'])},
     # }
     service_args = []
+<<<<<<< HEAD
     for service_name, service_config in services.iteritems():
+=======
+    for service_name, service_config in services.items():
+>>>>>>> upstream/master
         if service_config is None:
             continue
 
@@ -51,7 +63,14 @@ def _get_services_config(services):
 
         selection = service_config.get('selection')
         if not isinstance(selection, tuple):
+<<<<<<< HEAD
             # 'all' is handled by services.keys()
+=======
+            # Here: value of selection is 'all' which means there's no
+            # restriction (names or tags) to the instances of a specific
+            # AWS service. The commandline option already includes this
+            # service '--services SERVICE1 SERVICE2 ...' (see below).
+>>>>>>> upstream/master
             continue
 
         selection_type, selection_values = selection
@@ -67,6 +86,18 @@ def _get_services_config(services):
     return service_args
 
 
+<<<<<<< HEAD
+=======
+def _get_proxy_args(details):
+    proxy_args = ["--proxy-host", details["proxy_host"]]
+
+    for entry in ("proxy_port", "proxy_user", "proxy_password"):
+        if entry in details:
+            proxy_args += [f"--{entry.replace('_', '-')}", str(details[entry])]
+    return proxy_args
+
+
+>>>>>>> upstream/master
 def agent_aws_arguments(params, hostname, ipaddress):
     args = [
         "--access-key-id",
@@ -74,6 +105,22 @@ def agent_aws_arguments(params, hostname, ipaddress):
         "--secret-access-key",
         passwordstore_get_cmdline("%s", params["secret_access_key"]),
     ]
+<<<<<<< HEAD
+=======
+
+    if "proxy_details" in params:
+        args += _get_proxy_args(params["proxy_details"])
+
+    if params.get("assume_role"):
+        args += ["--assume-role"]
+        role_arn_id = params.get("assume_role").get("role_arn_id")
+        if role_arn_id:
+            if role_arn_id[0]:
+                args += ["--role-arn", role_arn_id[0]]
+            if role_arn_id[1]:
+                args += ["--external-id", role_arn_id[1]]
+
+>>>>>>> upstream/master
     regions = params.get("regions")
     if regions:
         args.append("--regions")
@@ -84,26 +131,52 @@ def agent_aws_arguments(params, hostname, ipaddress):
         args.append("--global-services")
         # We need to sort the inner services-as-a-dict-params
         # in order to create reliable tests
+<<<<<<< HEAD
         args += sorted(global_services.keys())
 
     services = params.get("services", {})
+=======
+        args += sorted(global_services)
+
+    services = params.get("services", {})
+
+    # for backwards compatibility
+    if 'cloudwatch' in services:
+        services['cloudwatch_alarms'] = services['cloudwatch']
+        del services['cloudwatch']
+
+>>>>>>> upstream/master
     if services:
         args.append("--services")
         # We need to sort the inner services-as-a-dict-params
         # in order to create reliable tests
+<<<<<<< HEAD
         args += sorted(services.keys())
+=======
+        args += sorted(services)
+>>>>>>> upstream/master
         args += _get_services_config(services)
 
     if 'requests' in services.get('s3', {}):
         args += ["--s3-requests"]
 
+<<<<<<< HEAD
     alarms = services.get('cloudwatch', {}).get('alarms')
+=======
+    alarms = services.get('cloudwatch_alarms', {}).get('alarms')
+>>>>>>> upstream/master
     if alarms:
         # {'alarms': 'all'} is handled by no additionally specified names
         args += ["--cloudwatch-alarms"]
         if isinstance(alarms, tuple):
             args += alarms[1]
 
+<<<<<<< HEAD
+=======
+    if 'cloudfront' in services.get('wafv2', {}):
+        args += ["--wafv2-cloudfront"]
+
+>>>>>>> upstream/master
     # '--overall-tags': [('KEY_1', ['VAL_1', 'VAL_2']), ...)],
     args += _get_tag_options(params.get('overall_tags', []), 'overall')
     args += [

@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: Number of JVM threads
+=======
+title: Java Virtual Machine: Number of Threads
+>>>>>>> upstream/master
 agents: linux
 catalog: app/java
 license: GPL
@@ -17,6 +21,10 @@ item:
  The name of the application server instance as configured by the agent.
 
 inventory:
+<<<<<<< HEAD
  One check is created per JVM sent by the Jolokia agent.
+=======
+ One service is created for each JVM sent by the Jolokia agent.
+>>>>>>> upstream/master
 
 

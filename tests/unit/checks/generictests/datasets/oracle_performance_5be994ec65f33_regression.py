@@ -1,5 +1,17 @@
+<<<<<<< HEAD
 # -*- encoding: utf-8
 # yapf: disable
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# yapf: disable
+# type: ignore
+
+>>>>>>> upstream/master
 
 
 checkname = 'oracle_performance'
@@ -38,12 +50,28 @@ info = [['TWH', 'sys_time_model', 'DB CPU', '14826'],
 ]
 
 
+<<<<<<< HEAD
 discovery = {'': [('TWH', None)]}
+=======
+discovery = {'': [('TWH', {})]}
+>>>>>>> upstream/master
 
 
 checks = {'': [('TWH',
                 {},
                 [(0,
+<<<<<<< HEAD
+=======
+                  'DB Time: 0.00 1/s',
+                  [('oracle_db_time', 0.0, None, None, None, None)]),
+                 (0,
+                  'DB CPU: 0.00 1/s',
+                  [('oracle_db_cpu', 0.0, None, None, None, None)]),
+                 (0,
+                  'DB Non-Idle Wait: 0.00 1/s',
+                  [('oracle_db_wait_time', 0.0, None, None, None, None)]),
+                 (0,
+>>>>>>> upstream/master
                   'Buffer hit ratio: 98.1%',
                   [('oracle_buffer_hit_ratio',
                     98.096392315184,
@@ -60,9 +88,14 @@ checks = {'': [('TWH',
                     None,
                     None)]),
                  (0,
+<<<<<<< HEAD
                   'DB CPU: 0.0/s, DB time: 0.0/s',
                   sorted([('oracle_db_time', 0.0, None, None, None, None),
                    ('oracle_db_cpu', 0.0, None, None, None, None),
+=======
+                  '',
+                  sorted([
+>>>>>>> upstream/master
                    ('oracle_db_block_gets', 0.0, None, None, None, None),
                    ('oracle_db_block_change', 0.0, None, None, None, None),
                    ('oracle_consistent_gets', 0.0, None, None, None, None),

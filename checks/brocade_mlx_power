@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,6 +24,13 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 
 def parse_brocade_mlx_power(info):
@@ -39,17 +47,27 @@ def parse_brocade_mlx_power(info):
             if power_state != "1":
                 parsed[power_id] = {'desc': power_desc, 'state': power_state}
     return parsed
+<<<<<<< HEAD
 
 
 def inventory_brocade_mlx_power(parsed):
     inventory = []
 
     for powersupply_id in parsed.keys():
+=======
+
+
+def inventory_brocade_mlx_power(parsed):
+    inventory = []
+
+    for powersupply_id in parsed:
+>>>>>>> upstream/master
         inventory.append((powersupply_id, None))
     return inventory
 
 
 def check_brocade_mlx_power(item, _no_params, parsed):
+<<<<<<< HEAD
     if item not in parsed.keys():
         yield 3, "Power supply not found"
 
@@ -64,6 +82,21 @@ def check_brocade_mlx_power(item, _no_params, parsed):
             else:
                 yield 3, "Power supply reports an unhandled state (%s)" % parsed[powersupply_id][
                     'state']
+=======
+    if item not in parsed:
+        yield 3, "Power supply not found"
+
+    for powersupply_id, powersupply_data in parsed.items():
+        if powersupply_id == item:
+            if powersupply_data['state'] == "2":
+                yield 0, "Power supply reports state: normal"
+            elif powersupply_data['state'] == "3":
+                yield 2, "Power supply reports state: failure"
+            elif powersupply_data['state'] == "1":
+                yield 3, "Power supply reports state: other"
+            else:
+                yield 3, "Power supply reports an unhandled state (%s)" % powersupply_data['state']
+>>>>>>> upstream/master
 
 
 check_info["brocade_mlx_power"] = {

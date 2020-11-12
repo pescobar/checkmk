@@ -11,5 +11,9 @@ description:
  and data nodes (count).
 
 inventory:
+<<<<<<< HEAD
  One check will be created
+=======
+ One service is created.
+>>>>>>> upstream/master
 

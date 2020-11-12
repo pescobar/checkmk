@@ -1,9 +1,14 @@
+<<<<<<< HEAD
 title: AWS/EC2 Instance Status
+=======
+title: AWS EC2: Instance Status
+>>>>>>> upstream/master
 agents: aws
 catalog: cloud/aws
 license: GPL
 distribution: check_mk
 description:
+<<<<<<< HEAD
  This check monitors the instance and system status. 
  To make this check work you have to configure the related
  special agent {Amazon Web Services (AWS)}.
@@ -11,3 +16,14 @@ description:
 
 inventory:
  One service will be created.
+=======
+ This check monitors the instance and system status.
+
+ To make this check work you have to configure the related
+ special agent {Amazon Web Services (AWS)}.
+
+ If both tests (system and instance) have passed the check is {OK} otherwise {CRIT}.
+
+inventory:
+ One service is created if all required metrics (StatusCheckFailed_System, StatusCheckFailed_Instance) are given.
+>>>>>>> upstream/master

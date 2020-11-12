@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,6 +24,13 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 from cmk.gui.i18n import _
 from cmk.gui.valuespec import (
@@ -39,12 +47,21 @@ from cmk.gui.plugins.wato import (
 )
 
 
+<<<<<<< HEAD
 def _parameter_valuespec_safenet_hsm_eventstats():
     return Dictionary(elements=[
         ("critical_events",
          Tuple(
              title=_(u"Critical events"),
              help=_(u"Sets levels on total critical events since last counter reset."),
+=======
+def _parameter_valuespec_safenet_hsm_eventstats() -> Dictionary:
+    return Dictionary(elements=[
+        ("critical_events",
+         Tuple(
+             title=_("Critical events"),
+             help=_("Sets levels on total critical events since last counter reset."),
+>>>>>>> upstream/master
              elements=[
                  Integer(title=_("Warning at"), default_value=0),
                  Integer(title=_("Critical at"), default_value=1),
@@ -52,8 +69,13 @@ def _parameter_valuespec_safenet_hsm_eventstats():
          )),
         ("noncritical_events",
          Tuple(
+<<<<<<< HEAD
              title=_(u"Noncritical events"),
              help=_(u"Sets levels on total noncritical events since last counter reset."),
+=======
+             title=_("Noncritical events"),
+             help=_("Sets levels on total noncritical events since last counter reset."),
+>>>>>>> upstream/master
              elements=[
                  Integer(title=_("Warning at"), default_value=0),
                  Integer(title=_("Critical at"), default_value=1),
@@ -61,7 +83,11 @@ def _parameter_valuespec_safenet_hsm_eventstats():
          )),
         ("critical_event_rate",
          Tuple(
+<<<<<<< HEAD
              title=_(u"Critical event rate"),
+=======
+             title=_("Critical event rate"),
+>>>>>>> upstream/master
              elements=[
                  Float(title=_("Warning at"), default_value=0.0001, unit=_("1/s")),
                  Float(title=_("Critical at"), default_value=0.0005, unit=_("1/s")),
@@ -69,7 +95,11 @@ def _parameter_valuespec_safenet_hsm_eventstats():
          )),
         ("noncritical_event_rate",
          Tuple(
+<<<<<<< HEAD
              title=_(u"Noncritical event rate"),
+=======
+             title=_("Noncritical event rate"),
+>>>>>>> upstream/master
              elements=[
                  Float(title=_("Warning at"), default_value=0.0001, unit=_("1/s")),
                  Float(title=_("Critical at"), default_value=0.0005, unit=_("1/s")),

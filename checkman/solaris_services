@@ -14,5 +14,10 @@ description:
 item:
  The service name.
 
+<<<<<<< HEAD
 Inventory:
  One service per service name is created.
+=======
+inventory:
+ One service is created for each service name.
+>>>>>>> upstream/master

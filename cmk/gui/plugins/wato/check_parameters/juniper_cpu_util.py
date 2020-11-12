@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,6 +24,13 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 from cmk.gui.i18n import _
 from cmk.gui.valuespec import (
@@ -43,13 +51,20 @@ from cmk.gui.plugins.wato import (
 def _parameter_valuespec_juniper_cpu_util():
     return Transform(
         Dictionary(
+<<<<<<< HEAD
             help=_("CPU utilization of routing engine."),
+=======
+>>>>>>> upstream/master
             optional_keys=[],
             elements=[
                 (
                     "levels",
                     Tuple(
+<<<<<<< HEAD
                         title=_("Specify levels in percentage of processor routing engine usage"),
+=======
+                        title=_("Upper levels"),
+>>>>>>> upstream/master
                         elements=[
                             Percentage(title=_("Warning at"), default_value=80.0),
                             Percentage(title=_("Critical at"), default_value=90.0),
@@ -66,8 +81,15 @@ rulespec_registry.register(
     CheckParameterRulespecWithItem(
         check_group_name="juniper_cpu_util",
         group=RulespecGroupCheckParametersOperatingSystem,
+<<<<<<< HEAD
         item_spec=lambda: TextAscii(title=_("Routing Engine"),),
         match_type="dict",
         parameter_valuespec=_parameter_valuespec_juniper_cpu_util,
         title=lambda: _("Juniper Processor Utilization of Routing Engine"),
+=======
+        item_spec=lambda: TextAscii(title=_("Operating CPU"),),
+        match_type="dict",
+        parameter_valuespec=_parameter_valuespec_juniper_cpu_util,
+        title=lambda: _("Juniper Processor Utilization of Operating CPU"),
+>>>>>>> upstream/master
     ))

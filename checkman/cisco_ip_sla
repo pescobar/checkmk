@@ -1,8 +1,19 @@
+<<<<<<< HEAD
 title: Cisco IP SLA
+=======
+title: Cisco Devices: IP SLA
+>>>>>>> upstream/master
 agents: snmp
 catalog: hw/network/cisco
 license: GPL
 distribution: check_mk
+<<<<<<< HEAD
+=======
+
+item:
+ RTT row index
+
+>>>>>>> upstream/master
 description:
  This check detects the configured IP SLA operations on Cisco IOS devices
  and checks their current status.

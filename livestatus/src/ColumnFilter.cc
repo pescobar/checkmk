@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // +------------------------------------------------------------------+
 // |             ____ _               _        __  __ _  __           |
 // |            / ___| |__   ___  ___| | __   |  \/  | |/ /           |
@@ -23,6 +24,15 @@
 // Boston, MA 02110-1301 USA.
 
 #include "ColumnFilter.h"
+=======
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the
+// terms and conditions defined in the file COPYING, which is part of this
+// source code package.
+
+#include "ColumnFilter.h"
+
+>>>>>>> upstream/master
 #include "AndingFilter.h"
 
 std::unique_ptr<Filter> ColumnFilter::partialFilter(

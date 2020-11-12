@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,12 +24,26 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 from cmk.gui.i18n import _
 from cmk.gui.valuespec import (
     Dictionary,
+<<<<<<< HEAD
     MonitoringState,
     TextAscii,
+=======
+    Integer,
+    MonitoringState,
+    TextAscii,
+    Tuple,
+>>>>>>> upstream/master
 )
 
 from cmk.gui.plugins.wato import (
@@ -74,6 +89,25 @@ def _parameter_valuespec_graylog_nodes():
                                      default_value=2)),
         ("input_state",
          MonitoringState(title=_("State when input is not in state running"), default_value=1)),
+<<<<<<< HEAD
+=======
+        ("input_count_lower",
+         Tuple(
+             title=_("Total number of inputs lower level"),
+             elements=[
+                 Integer(title=_("Warning if less then"), unit="inputs"),
+                 Integer(title=_("Critical if less then"), unit="inputs")
+             ],
+         )),
+        ("input_count_upper",
+         Tuple(
+             title=_("Total number of inputs upper level"),
+             elements=[
+                 Integer(title=_("Warning at"), unit="inputs"),
+                 Integer(title=_("Critical at"), unit="inputs")
+             ],
+         )),
+>>>>>>> upstream/master
     ],)
 
 

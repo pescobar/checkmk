@@ -32,7 +32,15 @@ void SafeCleanTempDir() {
     if (!really_temp_dir) return;
 
     // clean
+<<<<<<< HEAD
     fs::remove_all(cma::cfg::GetTempDir());
+=======
+    std::error_code ec;
+    fs::remove_all(temp_dir, ec);
+    if (ec)
+        XLOG::l("error removing '{}' with {} ", wtools::ConvertToUTF8(temp_dir),
+                ec.message());
+>>>>>>> upstream/master
     fs::create_directory(temp_dir);
 }
 
@@ -46,7 +54,15 @@ void SafeCleanTmpxDir() {
     }
 
     // clean
+<<<<<<< HEAD
     fs::remove_all(very_temp);
+=======
+    std::error_code ec;
+    fs::remove_all(very_temp, ec);
+    if (ec)
+        XLOG::l("error removing '{}' with {} ",
+                wtools::ConvertToUTF8(very_temp), ec.message());
+>>>>>>> upstream/master
 }
 
 void SafeCleanTempDir(std::string_view sub_dir) {
@@ -61,7 +77,15 @@ void SafeCleanTempDir(std::string_view sub_dir) {
 
     // clean
     fs::path t_d = temp_dir;
+<<<<<<< HEAD
     fs::remove_all(t_d / sub_dir);
+=======
+    std::error_code ec;
+    fs::remove_all(t_d / sub_dir, ec);
+    if (ec)
+        XLOG::l("error removing '{}' with {} ", (t_d / sub_dir).u8string(),
+                ec.message());
+>>>>>>> upstream/master
     fs::create_directory(t_d / sub_dir);
 }
 

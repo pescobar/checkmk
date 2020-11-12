@@ -1,39 +1,26 @@
-// +------------------------------------------------------------------+
-// |             ____ _               _        __  __ _  __           |
-// |            / ___| |__   ___  ___| | __   |  \/  | |/ /           |
-// |           | |   | '_ \ / _ \/ __| |/ /   | |\/| | ' /            |
-// |           | |___| | | |  __/ (__|   <    | |  | | . \            |
-// |            \____|_| |_|\___|\___|_|\_\___|_|  |_|_|\_\           |
-// |                                                                  |
-// | Copyright Mathias Kettner 2014             mk@mathias-kettner.de |
-// +------------------------------------------------------------------+
-//
-// This file is part of Check_MK.
-// The official homepage is at http://mathias-kettner.de/check_mk.
-//
-// check_mk is free software;  you can redistribute it and/or modify it
-// under the  terms of the  GNU General Public License  as published by
-// the Free Software Foundation in version 2.  check_mk is  distributed
-// in the hope that it will be useful, but WITHOUT ANY WARRANTY;  with-
-// out even the implied warranty of  MERCHANTABILITY  or  FITNESS FOR A
-// PARTICULAR PURPOSE. See the  GNU General Public License for more de-
-// tails. You should have  received  a copy of the  GNU  General Public
-// License along with GNU Make; see the file  COPYING.  If  not,  write
-// to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
-// Boston, MA 02110-1301 USA.
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the
+// terms and conditions defined in the file COPYING, which is part of this
+// source code package.
 
 #ifndef TableEventConsole_h
 #define TableEventConsole_h
 
 #include "config.h"  // IWYU pragma: keep
+<<<<<<< HEAD
 #include <chrono>
 #include <cstdint>
 #include <cstdlib>
 #include <ctime>
+=======
+
+#include <cstdint>
+>>>>>>> upstream/master
 #include <map>
 #include <string>
 #include <utility>
 #include <vector>
+<<<<<<< HEAD
 #include "Column.h"
 #include "DoubleColumn.h"
 #include "IntColumn.h"
@@ -45,8 +32,22 @@
 #include "Table.h"
 #include "TimeColumn.h"
 #include "nagios.h"
-class Query;
+=======
 
+#include "DoubleLambdaColumn.h"  // IWYU pragma: keep
+#include "IntLambdaColumn.h"     // IWYU pragma: keep
+#include "ListLambdaColumn.h"    // IWYU pragma: keep
+#include "MonitoringCore.h"
+#include "StringLambdaColumn.h"  // IWYU pragma: keep
+#include "Table.h"
+#include "TimeLambdaColumn.h"  // IWYU pragma: keep
+#include "nagios.h"
+class ColumnOffsets;
+>>>>>>> upstream/master
+class Query;
+class Row;
+
+<<<<<<< HEAD
 class TableEventConsole : public Table {
 public:
     explicit TableEventConsole(MonitoringCore *mc);
@@ -134,6 +135,56 @@ protected:
 
     bool isAuthorizedForEvent(Row row, const contact *ctc) const;
 
+=======
+// NOTE: We have a few "keep" pragmas above to avoid the insane handling of
+// template foward declarations, when the templates have parameters with
+// defaults. Yet another example "simple things gone wrong"... :-/
+
+class ECRow {
+public:
+    ECRow(MonitoringCore *mc, const std::vector<std::string> &headers,
+          const std::vector<std::string> &columns);
+
+    static std::unique_ptr<StringLambdaColumn<ECRow>> makeStringColumn(
+        const std::string &name, const std::string &description,
+        const ColumnOffsets &offsets);
+    static std::unique_ptr<IntLambdaColumn<ECRow>> makeIntColumn(
+        const std::string &name, const std::string &description,
+        const ColumnOffsets &offsets);
+    static std::unique_ptr<DoubleLambdaColumn<ECRow>> makeDoubleColumn(
+        const std::string &name, const std::string &description,
+        const ColumnOffsets &offsets);
+    static std::unique_ptr<TimeLambdaColumn<ECRow>> makeTimeColumn(
+        const std::string &name, const std::string &description,
+        const ColumnOffsets &offsets);
+    static std::unique_ptr<ListLambdaColumn<ECRow>> makeListColumn(
+        const std::string &name, const std::string &description,
+        const ColumnOffsets &offsets);
+
+    [[nodiscard]] std::string getString(const std::string &column_name) const;
+    [[nodiscard]] int32_t getInt(const std::string &column_name) const;
+    [[nodiscard]] double getDouble(const std::string &column_name) const;
+
+    [[nodiscard]] const MonitoringCore::Host *host() const;
+
+private:
+    std::map<std::string, std::string> map_;
+    MonitoringCore::Host *host_;
+
+    [[nodiscard]] std::string get(const std::string &column_name,
+                                  const std::string &default_value) const;
+};
+
+class TableEventConsole : public Table {
+public:
+    explicit TableEventConsole(MonitoringCore *mc);
+
+    void answerQuery(Query *query) override;
+
+protected:
+    bool isAuthorizedForEvent(Row row, const contact *ctc) const;
+
+>>>>>>> upstream/master
 private:
     bool isAuthorizedForEventViaContactGroups(
         const MonitoringCore::Contact *ctc, Row row, bool &result) const;

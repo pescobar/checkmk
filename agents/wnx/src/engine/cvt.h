@@ -1,3 +1,10 @@
+<<<<<<< HEAD
+=======
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+// conditions defined in the file COPYING, which is part of this source code package.
+
+>>>>>>> upstream/master
 #ifndef cvt_h__
 #define cvt_h__
 
@@ -10,6 +17,7 @@
 #include "cfg.h"
 #include "common/cfg_info.h"
 #include "common/wtools.h"
+<<<<<<< HEAD
 #include "logger.h"
 #include "yaml-cpp/yaml.h"
 
@@ -18,6 +26,10 @@ namespace cma::cfg::cvt {
 [[deprecated]] YAML::Node LoadIni(const std::filesystem::path& IniFile);
 
 }  // namespace cma::cfg::cvt
+=======
+#include "common/yaml.h"
+#include "logger.h"
+>>>>>>> upstream/master
 
 namespace cma::cfg::cvt {
 class ParserImplementation;

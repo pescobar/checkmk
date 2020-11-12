@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: F5 Big-IP: number of current SSL/VPN connections
+=======
+title: F5 Big-IP: Number of Current SSL/VPN Connections
+>>>>>>> upstream/master
 agents: snmp
 catalog: hw/network/f5
 license: GPL

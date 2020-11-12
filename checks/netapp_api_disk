@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -27,6 +28,24 @@
 # Agent output:
 # <<<netapp_api_disk:sep(9)>>>
 
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# NOTE: Careful when replacing the *-import below with a more specific import. This can cause
+# problems because it might remove variables from the check-context which are necessary for
+# resolving legacy discovery results such as [("SUMMARY", "diskstat_default_levels")]. Furthermore,
+# it might also remove variables needed for accessing discovery rulesets.
+from cmk.base.check_legacy_includes.filerdisks import *  # pylint: disable=wildcard-import,unused-wildcard-import
+# Agent output:
+# <<<netapp_api_disk:sep(9)>>>
+
+factory_settings['filer_disks_default_levels'] = FILER_DISKS_CHECK_DEFAULT_PARAMETERS
+
+>>>>>>> upstream/master
 
 def inventory_netapp_api_disk_summary(info):
     return [(None, {})]
@@ -54,7 +73,11 @@ def check_netapp_api_disk_summary(_no_item, params, info):
         [disk for disk in disks.items() if not disk[1].get("raid-state") in ["remote", "partner"]])
 
     disks_converted = []
+<<<<<<< HEAD
     for disk in my_disks.itervalues():
+=======
+    for disk in my_disks.values():
+>>>>>>> upstream/master
         # Collection the disk identity
         disk_info = "Serial: %s" % disk.get("serial-number")
         if "physical-space" in disk:
@@ -91,5 +114,8 @@ check_info["netapp_api_disk.summary"] = {
     'group': 'netapp_disks',
     'has_perfdata': True,
     'default_levels_variable': 'filer_disks_default_levels',
+<<<<<<< HEAD
     'includes': ['filerdisks.include'],
+=======
+>>>>>>> upstream/master
 }

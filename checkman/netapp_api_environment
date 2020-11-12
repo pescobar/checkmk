@@ -8,6 +8,17 @@ description:
 
  The checks reports {CRIT} when the discrete-sensor-state differs from {normal}
 
+<<<<<<< HEAD
 inventory:
  One check is created for each PSU found
+=======
+ Please note: You need the Special Agent "NetApp via WebAPI" to retrieve the monitoring
+ data from the device. The Special Agent itself can be configured by WATO.
+
+item:
+ Name of the powersupply
+
+inventory:
+ One service is created for each PSU.
+>>>>>>> upstream/master
 

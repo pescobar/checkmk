@@ -1,5 +1,17 @@
+<<<<<<< HEAD
 # -*- encoding: utf-8
 # yapf: disable
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# yapf: disable
+# type: ignore
+
+>>>>>>> upstream/master
 
 
 checkname = 'ceph_status'
@@ -210,13 +222,25 @@ discovery = {'': [(None, {})], 'mgrs': [], 'osds': [(None, {})], 'pgs': [(None, 
 
 checks = {'': [(None,
                 {'epoch': (1, 3, 30)},
+<<<<<<< HEAD
                 [(1, 'Health: warning', []), (0, 'Epoch: 0/30 m', [])])],
+=======
+                [(1, 'Health: warning', []), (0, 'Epoch rate (30 m average): 0.00', [])])],
+>>>>>>> upstream/master
           'osds': [(None,
                     {'epoch': (50, 100, 15),
                      'num_down_osds': (7.0, 5.0),
                      'num_out_osds': (7.0, 5.0)},
+<<<<<<< HEAD
                     [(0, 'Epoch: 0/15 m', []),
                      (0, 'OSDs: 90, Remapped PGs: 0', []),
                      (0, 'OSDs out: 0, 0%', []),
                      (0, 'OSDs down: 0, 0%', [])])],
           'pgs': [(None, {}, [(0, "PGs: 6400, Status 'active+clean': 6400", [])])]}
+=======
+                    [(0, 'Epoch rate (15 m average): 0.00', []),
+                     (0, 'OSDs: 90, Remapped PGs: 0', []),
+                     (0, 'OSDs out: 0, 0%', []),
+                     (0, 'OSDs down: 0, 0%', [])])],
+          'pgs': [(None, {}, [(0, "PGs: 6400, Status 'active+clean': 6400", [])])]}
+>>>>>>> upstream/master

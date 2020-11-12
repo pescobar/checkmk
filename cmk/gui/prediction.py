@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -28,6 +29,18 @@ from __future__ import division
 import os
 import time
 import json
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+import os
+import time
+import json
+from typing import Any, Dict, List
+>>>>>>> upstream/master
 
 import livestatus
 import cmk.utils.paths
@@ -38,6 +51,10 @@ import cmk.gui.pages
 import cmk.gui.sites as sites
 from cmk.gui.i18n import _
 from cmk.gui.globals import html
+<<<<<<< HEAD
+=======
+from cmk.gui.plugins.views.utils import make_service_breadcrumb
+>>>>>>> upstream/master
 from cmk.gui.exceptions import MKGeneralException
 
 graph_size = 2000, 700
@@ -45,17 +62,31 @@ graph_size = 2000, 700
 
 @cmk.gui.pages.register("prediction_graph")
 def page_graph():
+<<<<<<< HEAD
     host = html.request.var("host")
     service = html.request.var("service")
     dsname = html.request.var("dsname")
 
     html.header(_("Prediction for %s - %s - %s") % (host, service, dsname))
+=======
+    host = html.request.get_str_input_mandatory("host")
+    service = html.request.get_str_input_mandatory("service")
+    dsname = html.request.get_str_input_mandatory("dsname")
+
+    breadcrumb = make_service_breadcrumb(host, service)
+    html.header(_("Prediction for %s - %s - %s") % (host, service, dsname), breadcrumb)
+>>>>>>> upstream/master
 
     # Get current value from perf_data via Livestatus
     current_value = get_current_perfdata(host, service, dsname)
 
+<<<<<<< HEAD
     pred_dir = prediction.predictions_dir(host, service, dsname, create=False)
     if pred_dir is None:
+=======
+    pred_dir = prediction.predictions_dir(host, service, dsname)
+    if not os.path.exists(pred_dir):
+>>>>>>> upstream/master
         raise MKGeneralException(
             _("There is currently no prediction information "
               "available for this service."))
@@ -63,25 +94,40 @@ def page_graph():
     # Load all prediction information, sort by time of generation
     tg_name = html.request.var("timegroup")
     timegroup = None
+<<<<<<< HEAD
     timegroups = []
+=======
+    timegroups: List[prediction.PredictionInfo] = []
+>>>>>>> upstream/master
     now = time.time()
     for f in os.listdir(pred_dir):
         if not f.endswith(".info"):
             continue
+<<<<<<< HEAD
 
         tg_info = prediction.retrieve_data_for_prediction(pred_dir + "/" + f, timegroup)
+=======
+        tg_info = prediction.retrieve_data_for_prediction(
+            pred_dir + "/" + f, "<unknown>" if timegroup is None else timegroup)
+>>>>>>> upstream/master
         if tg_info is None:
             continue
 
         tg_info["name"] = f[:-5]
         timegroups.append(tg_info)
+<<<<<<< HEAD
         if tg_info["name"] == tg_name or \
             (tg_name is None and now >= tg_info["range"][0] and now <= tg_info["range"][1]):
+=======
+        if tg_info["name"] == tg_name or (tg_name is None and
+                                          (tg_info["range"][0] <= now <= tg_info["range"][1])):
+>>>>>>> upstream/master
             timegroup = tg_info
             tg_name = tg_info["name"]
 
     timegroups.sort(key=lambda x: x["range"][0])
 
+<<<<<<< HEAD
     choices = [(tg_info["name"], tg_info["name"].title()) for tg_info in timegroups]
 
     if not timegroup:
@@ -90,6 +136,17 @@ def page_graph():
             tg_name = choices[0][0]
         else:
             raise MKGeneralException(_("Missing prediction information."))
+=======
+    choices = [(tg_info_["name"], tg_info_["name"].title()) for tg_info_ in timegroups]
+
+    if not timegroup:
+        if not timegroups:
+            raise MKGeneralException(_("Missing prediction information."))
+        timegroup = timegroups[0]
+        tg_name = choices[0][0]
+    if tg_name is None:
+        raise Exception("should not happen")
+>>>>>>> upstream/master
 
     html.begin_form("prediction")
     html.write(_("Show prediction for "))
@@ -145,7 +202,11 @@ def page_graph():
     # Try to get current RRD data and render it also
     from_time, until_time = timegroup["range"]
     now = time.time()
+<<<<<<< HEAD
     if now >= from_time and now <= until_time:
+=======
+    if from_time <= now <= until_time:
+>>>>>>> upstream/master
         timeseries = prediction.get_rrd_data(host, service, dsname, "MAX", from_time, until_time)
         rrd_data = timeseries.values
 
@@ -178,8 +239,13 @@ def compute_vertical_scala(low, high):
         letter = 'P'
         factor = 1024.0**5
 
+<<<<<<< HEAD
     v = 0
     vert_scala = []
+=======
+    v = 0.0
+    vert_scala: List[List[Any]] = []
+>>>>>>> upstream/master
     steps = (max(0, high) - min(0, low)) / factor  # fixed: true-division
     if steps < 3:
         step = 0.2 * factor
@@ -225,7 +291,11 @@ def get_current_perfdata(host, service, dsname):
 # Compute check levels from prediction data and check parameters
 def swap_and_compute_levels(tg_data, tg_info):
     columns = tg_data["columns"]
+<<<<<<< HEAD
     swapped = dict([(c, []) for c in columns])
+=======
+    swapped: Dict[Any, List[Any]] = {c: [] for c in columns}
+>>>>>>> upstream/master
     for step in tg_data["points"]:
         row = dict(zip(columns, step))
         for k, v in row.items():
@@ -251,7 +321,11 @@ def stack(apoints, bpoints, scale):
 
 def compute_vertical_range(swapped):
     mmin, mmax = 0.0, 0.0
+<<<<<<< HEAD
     for points in swapped.itervalues():
+=======
+    for points in swapped.values():
+>>>>>>> upstream/master
         mmax = max(mmax, max(points)) or 0.0  # convert None into 0.0
         mmin = min(mmin, min(points)) or 0.0
     return mmin, mmax

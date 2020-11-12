@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: MSSQL Connections
+=======
+title: MS SQL Database: Connections
+>>>>>>> upstream/master
 agents: windows
 catalog: app/mssql
 license: GPL
@@ -9,7 +13,11 @@ description:
  If the number of active connections exceeds the defined upper
  levels the check result will be {WARN} or {CRIT}.
 
+<<<<<<< HEAD
  This check needs the Check_MK mssql.vbs plugin installed in
+=======
+ This check needs the Checkmk mssql.vbs plugin installed in
+>>>>>>> upstream/master
  the agent. Please refer to the online documentation
  for how to install that plugin.
 
@@ -17,5 +25,9 @@ item:
  The MSSQL database identifier.
 
 inventory:
+<<<<<<< HEAD
  One check is created for each database.
+=======
+ One service is created for each database.
+>>>>>>> upstream/master
 

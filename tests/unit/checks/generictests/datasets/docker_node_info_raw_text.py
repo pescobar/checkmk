@@ -1,9 +1,34 @@
+<<<<<<< HEAD
 # yapf: disable
 from cmk_base.discovered_labels import HostLabel
 
 checkname = 'docker_node_info'
 
 info = [['|Containers', ' 0'], ['| Running', ' 0'], ['| Paused', ' 0'], ['| Stopped', ' 0'],
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# yapf: disable
+# type: ignore
+
+from cmk.base.plugins.agent_based.docker_node_info import parse_docker_node_info
+
+
+DEPRECATION_WARNING = (1, (
+    "Deprecated plugin/agent (see long output)(!)\nYou are using legacy code, which may lead to "
+    "crashes and/or incomplete information. Please upgrade the monitored host to use the plugin "
+    "'mk_docker.py'."
+), [])
+
+
+checkname = 'docker_node_info'
+
+parsed = parse_docker_node_info([['|Containers', ' 0'], ['| Running', ' 0'], ['| Paused', ' 0'], ['| Stopped', ' 0'],
+>>>>>>> upstream/master
         ['|Images', ' 0'], ['|Server Version', ' 18.06.1-ce'], ['|Storage Driver', ' overlay2'],
         ['| Backing Filesystem', ' extfs'], ['| Supports d_type', ' true'],
         ['| Native Overlay Diff', ' true'], ['|Logging Driver', ' json-file'],
@@ -25,6 +50,7 @@ info = [['|Containers', ' 0'], ['| Running', ' 0'], ['| Paused', ' 0'], ['| Stop
         ], ['|Docker Root Dir', ' /var/lib/docker'], ['|Debug Mode (client)', ' false'],
         ['|Debug Mode (server)', ' false'], ['|Registry', ' https', '//index.docker.io/v1/'],
         ['|Labels', ''], ['|Experimental', ' false'], ['|Insecure Registries', ''],
+<<<<<<< HEAD
         ['| 127.0.0.0/8', ''], ['|Live Restore Enabled', ' false']]
 
 discovery = {'': [(None, {}),
@@ -38,4 +64,29 @@ checks = {
                                (0, 'Running: 0', [('running', 0, None, None, None, None)]),
                                (0, 'Paused: 0', [('paused', 0, None, None, None, None)]),
                                (0, 'Stopped: 0', [('stopped', 0, None, None, None, None)])])]
+=======
+        ['| 127.0.0.0/8', ''], ['|Live Restore Enabled', ' false']])
+
+discovery = {
+    '': [(None, {})],
+    'containers': [(None, {})],
+}
+
+checks = {
+    '': [
+        (None, {}, [
+            (0, u'Daemon running on host klappson', []),
+            DEPRECATION_WARNING,
+        ]),
+    ],
+    'containers': [
+        (None, {}, [
+            (0, 'Containers: 0', [('containers', 0, None, None, None, None)]),
+            (0, 'Running: 0', [('running', 0, None, None, None, None)]),
+            (0, 'Paused: 0', [('paused', 0, None, None, None, None)]),
+            (0, 'Stopped: 0', [('stopped', 0, None, None, None, None)]),
+            DEPRECATION_WARNING,
+        ]),
+    ],
+>>>>>>> upstream/master
 }

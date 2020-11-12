@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,6 +24,13 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 # No faults:
 # Agent section is empty
@@ -155,6 +163,7 @@
 #    Resource
 #      Location         : "iou#0-pci#1"
 # ...
+<<<<<<< HEAD
 
 
 def parse_solaris_fmadm(info):
@@ -200,6 +209,53 @@ def check_solaris_fmadm(_no_item, params, parsed):
         "critical": (2, "critical"),
     }
 
+=======
+
+
+def parse_solaris_fmadm(info):
+    if len(info) < 4:
+        return {}
+
+    event = []
+    for entry in ":".join(info[3]).split():
+        if entry:
+            event.append(entry)
+
+    parsed = {
+        "event": {
+            "time": " ".join(event[:-3]),
+            "id": event[-3],
+            "msg": event[-2],
+            "severity": event[-1].lower(),
+        },
+        "problems": [],
+    }
+
+    # Skip header
+    for line in info[4:]:
+        stripped = [x.strip() for x in line]
+        if stripped[0] in ["Problem class", "Fault class"]:
+            parsed["problems"].append(":".join(stripped[1:]))
+
+    return parsed
+
+
+def inventory_solaris_fmadm(parsed):
+    return [(None, None)]
+
+
+def check_solaris_fmadm(_no_item, params, parsed):
+    if not parsed:
+        yield 0, "No faults detected"
+        return
+
+    map_state = {
+        "minor": (1, "minor"),
+        "major": (2, "major"),
+        "critical": (2, "critical"),
+    }
+
+>>>>>>> upstream/master
     event = parsed["event"]
     state, state_readable = map_state.get(event["severity"], (3, "unknown"))
     yield state, "Severity: %s (%s)" % (state_readable, event["time"])

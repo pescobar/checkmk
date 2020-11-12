@@ -1,6 +1,19 @@
+<<<<<<< HEAD
 // Assorted routines
 #pragma once
 
+=======
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the
+// terms and conditions defined in the file COPYING, which is part of this
+// source code package.
+
+// Assorted routines
+#pragma once
+
+#include <fmt/format.h>
+
+>>>>>>> upstream/master
 #include <cctype>
 #include <chrono>
 #include <cstring>
@@ -13,7 +26,10 @@
 #include <type_traits>
 #include <vector>
 
+<<<<<<< HEAD
 #include "fmt/format.h"
+=======
+>>>>>>> upstream/master
 #include "tools/_raii.h"
 #include "tools/_tgt.h"
 #include "tools/_xlog.h"
@@ -39,7 +55,12 @@ inline void sleep(std::chrono::duration<T, B> dur) noexcept {
 }
 
 // gtest [+]
+<<<<<<< HEAD
 inline bool IsEqual(std::string_view Left, std::string_view Right) {
+=======
+[[nodiscard]] inline bool IsEqual(std::string_view Left,
+                                  std::string_view Right) {
+>>>>>>> upstream/master
     return std::equal(Left.cbegin(), Left.cend(), Right.cbegin(), Right.cend(),
                       [](char LeftChar, char RightChar) {
                           return std::tolower(LeftChar) ==
@@ -47,7 +68,12 @@ inline bool IsEqual(std::string_view Left, std::string_view Right) {
                       });
 }
 
+<<<<<<< HEAD
 inline bool IsEqual(std::wstring_view Left, std::wstring_view Right) {
+=======
+[[nodiscard]] inline bool IsEqual(std::wstring_view Left,
+                                  std::wstring_view Right) {
+>>>>>>> upstream/master
     return std::equal(Left.cbegin(), Left.cend(), Right.cbegin(), Right.cend(),
                       [](wchar_t LeftChar, wchar_t RightChar) {
                           return std::tolower(LeftChar) ==
@@ -55,7 +81,12 @@ inline bool IsEqual(std::wstring_view Left, std::wstring_view Right) {
                       });
 }
 
+<<<<<<< HEAD
 inline bool IsEqual(const std::wstring& Left, const std::wstring& Right) {
+=======
+[[nodiscard]] inline bool IsEqual(const std::wstring& Left,
+                                  const std::wstring& Right) {
+>>>>>>> upstream/master
     return std::equal(Left.cbegin(), Left.cend(), Right.cbegin(), Right.cend(),
                       [](wchar_t LeftChar, wchar_t RightChar) {
                           return std::tolower(LeftChar) ==
@@ -64,7 +95,12 @@ inline bool IsEqual(const std::wstring& Left, const std::wstring& Right) {
 }
 
 // returns true if left is Less than right
+<<<<<<< HEAD
 inline bool IsLess(const std::string& Left, const std::string& Right) {
+=======
+[[nodiscard]] inline bool IsLess(const std::string& Left,
+                                 const std::string& Right) {
+>>>>>>> upstream/master
     auto li = Left.cbegin();
     auto ri = Right.cbegin();
     for (; li != Left.cend() && ri != Right.cend(); ++ri, ++li) {
@@ -159,6 +195,7 @@ inline bool IsValidRegularFile(const std::filesystem::path& filepath) {
     return true;
 }
 
+<<<<<<< HEAD
 inline void AddDirSymbol(std::string& Dir) {
     std::filesystem::path p = Dir;
     p /= "";
@@ -171,6 +208,8 @@ inline void AddDirSymbol(std::wstring& Dir) {
     Dir = p.wstring();
 }
 
+=======
+>>>>>>> upstream/master
 // to combine to buffers
 // #TODO test!
 template <typename T>
@@ -232,6 +271,7 @@ auto ParseKeyValue(const T* Arg, T Splitter) {
     return ParseKeyValue(std::basic_string<T>(Arg), Splitter);
 }
 
+<<<<<<< HEAD
 inline const std::string ConvertToString(const std::string& In) { return In; }
 
 inline const std::string ConvertToString(const std::wstring& In) {
@@ -239,6 +279,8 @@ inline const std::string ConvertToString(const std::wstring& In) {
     return out;
 }
 
+=======
+>>>>>>> upstream/master
 // calculates byte offset in arbitrary data
 // returns void*
 template <typename T>
@@ -412,16 +454,28 @@ inline std::vector<std::string_view> ToView(
 
 // string splitter
 // gtest [+]
+<<<<<<< HEAD
 inline std::vector<std::string> SplitString(const std::string& In,
                                             const std::string& Delim,
                                             int MaxCount = 0) noexcept {
     // sanity
     if (In.empty()) return {};
     if (Delim.empty()) return {In};
+=======
+// max_count == 0 means inifinite parsing
+
+inline std::vector<std::string> SplitString(const std::string& In,
+                                            const std::string& delimiter,
+                                            size_t max_count = 0) noexcept {
+    // sanity
+    if (In.empty()) return {};
+    if (delimiter.empty()) return {In};
+>>>>>>> upstream/master
 
     size_t start = 0U;
     std::vector<std::string> result;
 
+<<<<<<< HEAD
     auto end = In.find(Delim);
     while (end != std::string::npos) {
         result.push_back(In.substr(start, end - start));
@@ -431,6 +485,17 @@ inline std::vector<std::string> SplitString(const std::string& In,
 
         // check for a skipping rest
         if (result.size() == MaxCount) {
+=======
+    auto end = In.find(delimiter);
+    while (end != std::string::npos) {
+        result.push_back(In.substr(start, end - start));
+
+        start = end + delimiter.length();
+        end = In.find(delimiter, start);
+
+        // check for a skipping rest
+        if (result.size() == max_count) {
+>>>>>>> upstream/master
             end = std::string::npos;
             break;
         }
@@ -445,16 +510,27 @@ inline std::vector<std::string> SplitString(const std::string& In,
 // "a.b.", "." => {"a", "b"}
 // "a.b", "." => {"a", "b"}
 // ".b", "." => { "b"}
+<<<<<<< HEAD
 inline std::vector<std::wstring> SplitString(const std::wstring& In,
                                              const std::wstring& Delim,
                                              int MaxCount = 0) noexcept {
     // sanity
     if (In.empty()) return {};
     if (Delim.empty()) return {In};
+=======
+// max_count == 0 means inifinite parsing
+inline std::vector<std::wstring> SplitString(const std::wstring& In,
+                                             const std::wstring& delimiter,
+                                             size_t max_count = 0) noexcept {
+    // sanity
+    if (In.empty()) return {};
+    if (delimiter.empty()) return {In};
+>>>>>>> upstream/master
 
     size_t start = 0U;
     std::vector<std::wstring> result;
 
+<<<<<<< HEAD
     auto end = In.find(Delim);
     while (end != std::string::npos) {
         result.push_back(In.substr(start, end - start));
@@ -464,6 +540,17 @@ inline std::vector<std::wstring> SplitString(const std::wstring& In,
 
         // check for a skipping rest
         if (result.size() == MaxCount) {
+=======
+    auto end = In.find(delimiter);
+    while (end != std::string::npos) {
+        result.push_back(In.substr(start, end - start));
+
+        start = end + delimiter.length();
+        end = In.find(delimiter, start);
+
+        // check for a skipping rest
+        if (result.size() == max_count) {
+>>>>>>> upstream/master
             end = std::string::npos;
             break;
         }
@@ -475,6 +562,7 @@ inline std::vector<std::wstring> SplitString(const std::wstring& In,
     return result;
 }
 
+<<<<<<< HEAD
 // not used now!
 inline std::vector<std::wstring> SplitStringExact(const std::wstring& In,
                                                   const std::wstring Delim,
@@ -482,10 +570,21 @@ inline std::vector<std::wstring> SplitStringExact(const std::wstring& In,
     // sanity
     if (In.empty()) return {};
     if (Delim.empty()) return {In};
+=======
+// special case when we are parsing to the end
+// indirectly tested in the test-cma_tools
+inline std::vector<std::wstring> SplitStringExact(const std::wstring& In,
+                                                  const std::wstring& delimiter,
+                                                  size_t max_count) noexcept {
+    // sanity
+    if (In.empty()) return {};
+    if (delimiter.empty()) return {In};
+>>>>>>> upstream/master
 
     size_t start = 0U;
     std::vector<std::wstring> result;
 
+<<<<<<< HEAD
     auto end = In.find(Delim);
     while (end != std::string::npos) {
         result.push_back(In.substr(start, end - start));
@@ -498,6 +597,17 @@ inline std::vector<std::wstring> SplitStringExact(const std::wstring& In,
             end = std::string::npos;
             break;
         }
+=======
+    auto end = In.find(delimiter);
+    while (end != std::string::npos) {
+        result.push_back(In.substr(start, end - start));
+
+        start = end + delimiter.length();
+        end = In.find(delimiter, start);
+
+        // check for a skipping rest
+        if (result.size() == max_count - 1) break;
+>>>>>>> upstream/master
     }
 
     auto last_string = In.substr(start, end);

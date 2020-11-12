@@ -1,6 +1,18 @@
+<<<<<<< HEAD
 # pylint: disable=redefined-outer-name
 
 import pytest
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# pylint: disable=redefined-outer-name
+
+import pytest  # type: ignore[import]
+>>>>>>> upstream/master
 from agent_aws_fake_clients import (
     FakeCloudwatchClient,)
 
@@ -16,7 +28,11 @@ from cmk.special_agents.agent_aws import (
 def get_cloudwatch_alarms_sections():
     def _create_cloudwatch_alarms_sections(alarm_names):
         region = 'region'
+<<<<<<< HEAD
         config = AWSConfig('hostname', (None, None))
+=======
+        config = AWSConfig('hostname', [], (None, None))
+>>>>>>> upstream/master
         config.add_single_service_config('cloudwatch_alarms', alarm_names)
 
         fake_cloudwatch_client = FakeCloudwatchClient()
@@ -33,7 +49,11 @@ def get_cloudwatch_alarms_sections():
     return _create_cloudwatch_alarms_sections
 
 
+<<<<<<< HEAD
 cloudwatch_params = [
+=======
+cloudwatch_params = [  # type: ignore[var-annotated]
+>>>>>>> upstream/master
     (None, 2),
     ([], 2),
     (['AlarmName-0'], 1),
@@ -51,6 +71,10 @@ def test_agent_aws_cloudwatch_alarms_limits(get_cloudwatch_alarms_sections, alar
     cloudwatch_alarms_limits_results = cloudwatch_alarms_limits.run().results
 
     assert cloudwatch_alarms_limits.cache_interval == 300
+<<<<<<< HEAD
+=======
+    assert cloudwatch_alarms_limits.period == 600
+>>>>>>> upstream/master
     assert cloudwatch_alarms_limits.name == "cloudwatch_alarms_limits"
 
     assert len(cloudwatch_alarms_limits_results) == 1
@@ -60,7 +84,11 @@ def test_agent_aws_cloudwatch_alarms_limits(get_cloudwatch_alarms_sections, alar
     assert len(cloudwatch_alarms_limits_result.content) == 1
     cloudwatch_alarms_limits_content = cloudwatch_alarms_limits_result.content[0]
     assert cloudwatch_alarms_limits_content.key == 'cloudwatch_alarms'
+<<<<<<< HEAD
     assert cloudwatch_alarms_limits_content.title == 'Cloudwatch Alarms'
+=======
+    assert cloudwatch_alarms_limits_content.title == 'CloudWatch Alarms'
+>>>>>>> upstream/master
     assert cloudwatch_alarms_limits_content.limit == 5000
     assert cloudwatch_alarms_limits_content.amount == 2
 
@@ -72,6 +100,10 @@ def test_agent_aws_cloudwatch_alarms(get_cloudwatch_alarms_sections, alarm_names
     cloudwatch_alarms_results = cloudwatch_alarms.run().results
 
     assert cloudwatch_alarms.cache_interval == 300
+<<<<<<< HEAD
+=======
+    assert cloudwatch_alarms.period == 600
+>>>>>>> upstream/master
     assert cloudwatch_alarms.name == "cloudwatch_alarms"
 
     assert len(cloudwatch_alarms_results) == 1
@@ -87,6 +119,10 @@ def test_agent_aws_cloudwatch_alarms_without_limits(get_cloudwatch_alarms_sectio
     cloudwatch_alarms_results = cloudwatch_alarms.run().results
 
     assert cloudwatch_alarms.cache_interval == 300
+<<<<<<< HEAD
+=======
+    assert cloudwatch_alarms.period == 600
+>>>>>>> upstream/master
     assert cloudwatch_alarms.name == "cloudwatch_alarms"
 
     assert len(cloudwatch_alarms_results) == 1

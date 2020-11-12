@@ -442,6 +442,11 @@ uint64_t EventLogVista::getLastRecordId() {
 
 bool EventLogVista::fillBuffer() {
     // don't wait, just query the signal <-- this is damned polling, my friends
+<<<<<<< HEAD
+=======
+    if (subscription_handle_ == nullptr) return false;
+
+>>>>>>> upstream/master
     DWORD res = WaitForSingleObject(event_signal_, 0);
     if (res == WAIT_OBJECT_0) {
         EVT_HANDLE events[EVENT_BLOCK_SIZE];
@@ -453,7 +458,11 @@ bool EventLogVista::fillBuffer() {
         if (!success) {
             auto error = GetLastError();
             if (error != ERROR_NO_MORE_ITEMS) {
+<<<<<<< HEAD
                 XLOG::l("failed to enumerate events '{}' error = {}",
+=======
+                XLOG::d("failed to enumerate events '{}' error = {}",
+>>>>>>> upstream/master
                         wtools::ConvertToUTF8(log_name_), error);
             }
             return false;

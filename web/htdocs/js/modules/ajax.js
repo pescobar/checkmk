@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // +------------------------------------------------------------------+
 // |             ____ _               _        __  __ _  __           |
 // |            / ___| |__   ___  ___| | __   |  \/  | |/ /           |
@@ -38,30 +39,64 @@ export function get_url(url, handler, data, errorHandler, addAjaxId)
 
     if (typeof addAjaxId !== "undefined")
         args.add_ajax_id = addAjaxId;
+=======
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+// conditions defined in the file COPYING, which is part of this source code package.
+
+import {merge_args} from "utils";
+
+// NOTE: This function is deprecated; use call_ajax instead.
+export function get_url(url, handler, data, errorHandler, addAjaxId) {
+    var args = {
+        response_handler: handler,
+    };
+
+    if (typeof data !== "undefined") args.handler_data = data;
+
+    if (typeof errorHandler !== "undefined") args.error_handler = errorHandler;
+
+    if (typeof addAjaxId !== "undefined") args.add_ajax_id = addAjaxId;
+>>>>>>> upstream/master
 
     call_ajax(url, args);
 }
 
+<<<<<<< HEAD
 export function post_url(url, post_params, responseHandler, handler_data, errorHandler)
 {
     var args = {
         method: "POST",
         post_data: post_params
+=======
+// NOTE: This function is deprecated; use call_ajax instead.
+export function post_url(url, post_params, responseHandler, handler_data, errorHandler) {
+    var args = {
+        method: "POST",
+        post_data: post_params,
+>>>>>>> upstream/master
     };
 
     if (typeof responseHandler !== "undefined") {
         args.response_handler = responseHandler;
     }
 
+<<<<<<< HEAD
     if (typeof handler_data !== "undefined")
         args.handler_data = handler_data;
 
     if (typeof errorHandler !== "undefined")
         args.error_handler = errorHandler;
+=======
+    if (typeof handler_data !== "undefined") args.handler_data = handler_data;
+
+    if (typeof errorHandler !== "undefined") args.error_handler = errorHandler;
+>>>>>>> upstream/master
 
     call_ajax(url, args);
 }
 
+<<<<<<< HEAD
 export function call_ajax(url, optional_args)
 {
     var args = merge_args({
@@ -78,11 +113,36 @@ export function call_ajax(url, optional_args)
     var AJAX = window.XMLHttpRequest ? new window.XMLHttpRequest() : new window.ActiveXObject("Microsoft.XMLHTTP");
     if (!AJAX)
         return null;
+=======
+export function call_ajax(url, optional_args) {
+    var args = merge_args(
+        {
+            add_ajax_id: true,
+            plain_error: false,
+            response_handler: null,
+            error_handler: null,
+            handler_data: null,
+            method: "GET",
+            post_data: null,
+            sync: false,
+        },
+        optional_args
+    );
+
+    var AJAX = window.XMLHttpRequest
+        ? new window.XMLHttpRequest()
+        : new window.ActiveXObject("Microsoft.XMLHTTP");
+    if (!AJAX) return null;
+>>>>>>> upstream/master
 
     // Dynamic part to prevent caching
     if (args.add_ajax_id) {
         url += url.indexOf("?") !== -1 ? "&" : "?";
+<<<<<<< HEAD
         url += "_ajaxid="+Math.floor(Date.parse(new Date()) / 1000);
+=======
+        url += "_ajaxid=" + Math.floor(Date.parse(new Date()) / 1000);
+>>>>>>> upstream/master
     }
 
     if (args.plain_error) {
@@ -106,11 +166,16 @@ export function call_ajax(url, optional_args)
     }
 
     if (!args.sync) {
+<<<<<<< HEAD
         AJAX.onreadystatechange = function() {
+=======
+        AJAX.onreadystatechange = function () {
+>>>>>>> upstream/master
             if (AJAX && AJAX.readyState == 4) {
                 if (AJAX.status == 200) {
                     if (args.response_handler)
                         args.response_handler(args.handler_data, AJAX.responseText);
+<<<<<<< HEAD
                 }
                 else if (AJAX.status == 401) {
                     // This is reached when someone is not authenticated anymore
@@ -123,6 +188,18 @@ export function call_ajax(url, optional_args)
                         document.location.reload();
                 }
                 else {
+=======
+                } else if (AJAX.status == 401) {
+                    // This is reached when someone is not authenticated anymore
+                    // but has some webservices running which are still fetching
+                    // infos via AJAX. Reload the whole page in that case.
+                    if (top) {
+                        top.location.reload();
+                    } else {
+                        document.location.reload();
+                    }
+                } else {
+>>>>>>> upstream/master
                     if (args.error_handler)
                         args.error_handler(args.handler_data, AJAX.status, AJAX.statusText);
                 }

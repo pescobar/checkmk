@@ -1,6 +1,16 @@
+<<<<<<< HEAD
 LANGUAGES = de ro
 SHELL=/bin/bash -e -o pipefail
 PIPENV=pipenv
+=======
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+LANGUAGES := de ro
+SHELL 	  := /bin/bash -e -o pipefail
+PIPENV    := ../scripts/run-pipenv
+>>>>>>> upstream/master
 
 .PHONY: $(LANGUAGES)
 
@@ -12,7 +22,11 @@ help:
 	@echo "update-[de|ro] - Aktualisiert die PO-Datei mit neuen Texten"
 
 setup:
+<<<<<<< HEAD
 	sudo apt-get install gettext poedit python-polib
+=======
+	sudo apt-get install gettext poedit python3-polib
+>>>>>>> upstream/master
 
 all:
 	for lang in $(LANGUAGES) ; do \
@@ -43,7 +57,11 @@ cleanup-%:
 	sed -i '/"PO-Revision-Date:/d' $$L/LC_MESSAGES/multisite.po ; \
 	sed -i '/"Last-Translator:/d' $$L/LC_MESSAGES/multisite.po ; \
 
+<<<<<<< HEAD
 de: ../virtual-envs/3.7/.venv
+=======
+de:
+>>>>>>> upstream/master
 	$(MAKE) update-$@
 	$(PIPENV) run ./add-authors $@
 	POEDITOR=$$(which poedit 2>/dev/null || which virtaal 2>/dev/null) ; \
@@ -61,5 +79,9 @@ ro:
 	sed -i '/^#:/d' $@/LC_MESSAGES/multisite.po
 
 
+<<<<<<< HEAD
 test-%: ../virtual-envs/3.7/.venv
+=======
+test-%:
+>>>>>>> upstream/master
 	@L=$@ ; L=$${L#*-} ; $(PIPENV) run ./blame $$L

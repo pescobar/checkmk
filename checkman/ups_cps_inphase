@@ -8,7 +8,14 @@ description:
  input phase.
 
 inventory:
+<<<<<<< HEAD
  One check per device is created.
 
 item:
  "1"
+=======
+ One service is created for each device.
+
+item:
+ The fixed statement {{1}}
+>>>>>>> upstream/master

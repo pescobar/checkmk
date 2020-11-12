@@ -11,9 +11,14 @@ description:
  The check goes WARN or CRIT if the number of mails in
  'deferred', 'hold' or 'drop' queues exceeds configurable values.
 
+<<<<<<< HEAD
 item:
  No item
 
 inventory:
  One service per host is created.
+=======
+inventory:
+ One service is created for each host.
+>>>>>>> upstream/master
 

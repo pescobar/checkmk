@@ -5,7 +5,11 @@ Class: fix
 Compatible: incomp
 Edition: cre
 State: unknown
+<<<<<<< HEAD
 Version: 1.7.0i1
+=======
+Version: 2.0.0i1
+>>>>>>> upstream/master
 Date: 1560505452
 
 Version 1.5.0p17 and 1.5.0p18 of the mk_postgres plugin gave a

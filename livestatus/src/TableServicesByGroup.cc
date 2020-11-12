@@ -1,28 +1,11 @@
-// +------------------------------------------------------------------+
-// |             ____ _               _        __  __ _  __           |
-// |            / ___| |__   ___  ___| | __   |  \/  | |/ /           |
-// |           | |   | '_ \ / _ \/ __| |/ /   | |\/| | ' /            |
-// |           | |___| | | |  __/ (__|   <    | |  | | . \            |
-// |            \____|_| |_|\___|\___|_|\_\___|_|  |_|_|\_\           |
-// |                                                                  |
-// | Copyright Mathias Kettner 2014             mk@mathias-kettner.de |
-// +------------------------------------------------------------------+
-//
-// This file is part of Check_MK.
-// The official homepage is at http://mathias-kettner.de/check_mk.
-//
-// check_mk is free software;  you can redistribute it and/or modify it
-// under the  terms of the  GNU General Public License  as published by
-// the Free Software Foundation in version 2.  check_mk is  distributed
-// in the hope that it will be useful, but WITHOUT ANY WARRANTY;  with-
-// out even the implied warranty of  MERCHANTABILITY  or  FITNESS FOR A
-// PARTICULAR PURPOSE. See the  GNU General Public License for more de-
-// tails. You should have  received  a copy of the  GNU  General Public
-// License along with GNU Make; see the file  COPYING.  If  not,  write
-// to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
-// Boston, MA 02110-1301 USA.
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the
+// terms and conditions defined in the file COPYING, which is part of this
+// source code package.
 
 #include "TableServicesByGroup.h"
+
+#include "Column.h"
 #include "MonitoringCore.h"
 #include "Query.h"
 #include "Row.h"
@@ -35,18 +18,35 @@ extern servicegroup *servicegroup_list;
 
 namespace {
 struct servicebygroup {
+<<<<<<< HEAD
     service svc;
     // cppcheck is too dumb to see usage in the DANGEROUS_OFFSETOF macro
     // cppcheck-suppress unusedStructMember
     servicegroup *service_group;
+=======
+    const service *svc;
+    const servicegroup *service_group;
+>>>>>>> upstream/master
 };
 }  // namespace
 
 TableServicesByGroup::TableServicesByGroup(MonitoringCore *mc) : Table(mc) {
+<<<<<<< HEAD
     TableServices::addColumns(this, "", -1, true);
     TableServiceGroups::addColumns(
         this, "servicegroup_",
         DANGEROUS_OFFSETOF(servicebygroup, service_group));
+=======
+    ColumnOffsets offsets{};
+    TableServices::addColumns(this, "", offsets.add([](Row r) {
+        return r.rawData<servicebygroup>()->svc;
+    }),
+                              true);
+    TableServiceGroups::addColumns(
+        this, "servicegroup_", offsets.add([](Row r) {
+            return r.rawData<servicebygroup>()->service_group;
+        }));
+>>>>>>> upstream/master
 }
 
 std::string TableServicesByGroup::name() const { return "servicesbygroup"; }
@@ -58,14 +58,24 @@ void TableServicesByGroup::answerQuery(Query *query) {
         query->authUser() != nullptr &&
         core()->groupAuthorization() == AuthorizationKind::strict;
 
+<<<<<<< HEAD
     for (servicegroup *sg = servicegroup_list; sg != nullptr; sg = sg->next) {
+=======
+    for (const servicegroup *sg = servicegroup_list; sg != nullptr;
+         sg = sg->next) {
+>>>>>>> upstream/master
         if (requires_authcheck &&
             !is_authorized_for_service_group(core(), sg, query->authUser())) {
             continue;
         }
 
+<<<<<<< HEAD
         for (servicesmember *m = sg->members; m != nullptr; m = m->next) {
             servicebygroup sbg = {*m->service_ptr, sg};
+=======
+        for (const servicesmember *m = sg->members; m != nullptr; m = m->next) {
+            servicebygroup sbg{m->service_ptr, sg};
+>>>>>>> upstream/master
             if (!query->processDataset(Row(&sbg))) {
                 return;
             }
@@ -74,6 +84,10 @@ void TableServicesByGroup::answerQuery(Query *query) {
 }
 
 bool TableServicesByGroup::isAuthorized(Row row, const contact *ctc) const {
+<<<<<<< HEAD
     auto svc = &rowData<servicebygroup>(row)->svc;
+=======
+    const auto *svc = rowData<servicebygroup>(row)->svc;
+>>>>>>> upstream/master
     return is_authorized_for(core(), ctc, svc->host_ptr, svc);
 }

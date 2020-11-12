@@ -3,6 +3,11 @@
 //
 #include "pch.h"
 
+<<<<<<< HEAD
+=======
+#include <string_view>
+
+>>>>>>> upstream/master
 #include "carrier.h"
 #include "cfg.h"
 #include "cfg_details.h"
@@ -15,10 +20,27 @@
 #include "tools/_misc.h"
 #include "tools/_process.h"
 
+<<<<<<< HEAD
+=======
+namespace wtools {
+extern std::vector<int> TsValues;
+}
+
+>>>>>>> upstream/master
 namespace cma::cfg::details {
 extern uint64_t RegisteredPerformanceFreq;
 }
 
+<<<<<<< HEAD
+=======
+static bool ValidIndexOfTs(int index) {
+    for (auto a : wtools::TsValues)
+        if (a == index) return true;
+
+    return false;
+}
+
+>>>>>>> upstream/master
 namespace cma::provider {  // to become friendly for wtools classes
 
 auto GetIndexOfTS() {
@@ -70,7 +92,11 @@ TEST(WinPerfTest, RootCalls) {
     //  testing first line stamping
     // 1548673688.07 510 2156253
     auto index_iofts = GetIndexOfTS();
+<<<<<<< HEAD
     ASSERT_TRUE(index_iofts == 2066 || index_iofts == 8154)
+=======
+    ASSERT_TRUE(ValidIndexOfTs(index_iofts))  // latest Windows
+>>>>>>> upstream/master
         << "not supported index " << index_iofts << std::endl;
     {
         auto x = details::MakeWinPerfStamp(0);
@@ -123,10 +149,24 @@ TEST(WinPerfTest, RootCalls) {
 }
 
 TEST(WinPerfTest, Calls) {
+<<<<<<< HEAD
     auto index_iofts = GetIndexOfTS();
     ASSERT_TRUE(index_iofts == 2066 || index_iofts == 8154)
         << "not supported index " << index_iofts << std::endl;
     {
+=======
+    using namespace std::string_view_literals;
+    auto index_iofts = GetIndexOfTS();
+    ASSERT_TRUE(ValidIndexOfTs(index_iofts))  // windows 10 latest
+        << "not supported index " << index_iofts << std::endl;
+    {
+        auto name = L"ifxz"sv;
+        auto index = L"12345510"sv;
+        auto x = BuildWinPerfSection(L"winp", name, index);
+        ASSERT_TRUE(x.empty());
+    }
+    {
+>>>>>>> upstream/master
         constexpr const char* name = "if";
         constexpr const char* index = "510";
         auto x = BuildWinPerfSection(L"winp", wtools::ConvertToUTF16("if"),

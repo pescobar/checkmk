@@ -1,6 +1,12 @@
+<<<<<<< HEAD
 title: DDN S2A: Data rate
 agents: ddn_s2a
 catalog: storage/other
+=======
+title: DDN S2A: Data Rate
+agents: ddn_s2a
+catalog: hw/storagehw/ddn_s2a
+>>>>>>> upstream/master
 license: GPL
 distribution: check_mk
 description:
@@ -10,4 +16,9 @@ item:
  The port number or "Total"
 
 inventory:
+<<<<<<< HEAD
  One service per FC port is created, plus one for the total throughput.
+=======
+ One service is created for each FC port and
+ one service is created for the total throughput.
+>>>>>>> upstream/master

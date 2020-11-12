@@ -1,4 +1,11 @@
 #!/bin/bash
+<<<<<<< HEAD
+=======
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+>>>>>>> upstream/master
 # The script creates a chroot based on a current ubuntu version
 # and installs all dependencies needed to build the windows agent.
 
@@ -178,12 +185,15 @@ if [ ! -h $CHROOT_PATH/usr/bin/python ] ; then
     ln -sf python2.7 $CHROOT_PATH/usr/bin/python
 fi
 
+<<<<<<< HEAD
 # Build Google Test and Google Mock
 $SCRIPT_DIR/do-chroot "$CHROOT_BUILD_DIR/agents/windows/test/build-googletest"
 
 # Extract necessary boost headers
 $SCRIPT_DIR/do-chroot "$CHROOT_BUILD_DIR/agents/windows/extract-simpleini"
 
+=======
+>>>>>>> upstream/master
 cp "$BASE/agents/windows/$VERSIONFILE" "$CHROOT_PATH/"
 
 echo "+ CLEANING UP"

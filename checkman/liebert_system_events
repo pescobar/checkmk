@@ -1,14 +1,25 @@
+<<<<<<< HEAD
 title: Liebert: System events
+=======
+title: Liebert: System Events
+>>>>>>> upstream/master
 agents: snmp
 catalog: hw/environment/emerson
 license: GPL
 distribution: check_mk
 description:
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/master
  This check monitors the status of certain system events. If the status of
  one event is not "inactive event", the state will change to {CRIT} and the
  event will displayed in the service output.
 
 inventory:
+<<<<<<< HEAD
 
  One service will be created
+=======
+ One service is created.
+>>>>>>> upstream/master

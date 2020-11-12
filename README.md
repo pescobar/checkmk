@@ -18,9 +18,19 @@ details.
 ## Getting started
 
 Please have a look at the [official
+<<<<<<< HEAD
 handbook](https://checkmk.com/cms_introduction.html) on how to get
 started with Checkmk.
 
+=======
+handbook](https://checkmk.com/cms_intro.html) on how to get
+started with Checkmk.
+
+## Want to contribute?
+
+Nice! Have a look at our [contribution guidelines](CONTRIBUTING.md).
+
+>>>>>>> upstream/master
 ## Building on your own packages
 
 It is highly recommended to use the prebuilt Checkmk packages we
@@ -35,7 +45,11 @@ To prepare your system for building, you need to execute this command:
 
 This will install the missing build dependencies, at least if you are working on
 a supported Linux distribution. Then you can either create RPM or DEB packages,
+<<<<<<< HEAD
 depending on your distro.
+=======
+depending on your Linux-distribution.
+>>>>>>> upstream/master
 
 To build an RPM:
 

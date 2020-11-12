@@ -15,5 +15,9 @@ item:
  The memory designation
 
 inventory:
+<<<<<<< HEAD
  One service per memory module is created.
+=======
+ One service is created for each memory module.
+>>>>>>> upstream/master
 

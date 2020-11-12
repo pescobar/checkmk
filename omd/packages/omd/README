@@ -37,7 +37,10 @@ packages round about Nagios:
   * Thruk
   * check_oracle_health
   * check_mysql_health
+<<<<<<< HEAD
   * check_multi
+=======
+>>>>>>> upstream/master
   * check_webinject
   * Shinken (still experimental)
   * MOD Gearman

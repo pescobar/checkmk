@@ -1,6 +1,19 @@
+<<<<<<< HEAD
 # pylint: disable=redefined-outer-name
 
 import pytest
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# pylint: disable=redefined-outer-name
+
+import pytest  # type: ignore[import]
+
+>>>>>>> upstream/master
 from agent_aws_fake_clients import (
     FakeCloudwatchClient,
     EC2DescribeInstancesIB,
@@ -19,7 +32,11 @@ from cmk.special_agents.agent_aws import (
 )
 
 
+<<<<<<< HEAD
 class FakeEC2Client(object):
+=======
+class FakeEC2Client:
+>>>>>>> upstream/master
     def describe_instances(self, Filters=None, InstanceIds=None):
         return {
             'Reservations': [{
@@ -58,7 +75,11 @@ class FakeEC2Client(object):
 def get_ebs_sections():
     def _create_ebs_sections(names, tags):
         region = 'region'
+<<<<<<< HEAD
         config = AWSConfig('hostname', (None, None))
+=======
+        config = AWSConfig('hostname', [], (None, None))
+>>>>>>> upstream/master
         config.add_single_service_config('ebs_names', names)
         config.add_service_tags('ebs_tags', tags)
         config.add_single_service_config('ec2_names', None)
@@ -105,6 +126,10 @@ def test_agent_aws_ebs_limits(get_ebs_sections, names, tags, found_ebs):
     ebs_limits_results = ebs_limits.run().results
 
     assert ebs_limits.cache_interval == 300
+<<<<<<< HEAD
+=======
+    assert ebs_limits.period == 600
+>>>>>>> upstream/master
     assert ebs_limits.name == "ebs_limits"
 
     assert len(ebs_limits_results) == 1
@@ -133,6 +158,10 @@ def test_agent_aws_ebs_summary(get_ebs_sections, names, tags, found_ebs):
     ebs_summary_results = ebs_summary.run().results
 
     assert ebs_summary.cache_interval == 300
+<<<<<<< HEAD
+=======
+    assert ebs_summary.period == 600
+>>>>>>> upstream/master
     assert ebs_summary.name == "ebs_summary"
 
     assert len(ebs_summary_results) == found_ebs
@@ -147,6 +176,10 @@ def test_agent_aws_ebs(get_ebs_sections, names, tags, found_ebs):
     ebs_results = ebs.run().results
 
     assert ebs.cache_interval == 300
+<<<<<<< HEAD
+=======
+    assert ebs.period == 600
+>>>>>>> upstream/master
     assert ebs.name == "ebs"
 
     assert len(ebs_results) == found_ebs
@@ -163,6 +196,10 @@ def test_agent_aws_ebs_summary_without_limits(get_ebs_sections):
     ebs_summary_results = ebs_summary.run().results
 
     assert ebs_summary.cache_interval == 300
+<<<<<<< HEAD
+=======
+    assert ebs_summary.period == 600
+>>>>>>> upstream/master
     assert ebs_summary.name == "ebs_summary"
 
     assert len(ebs_summary_results) == 3
@@ -175,6 +212,10 @@ def test_agent_aws_ebs_without_limits(get_ebs_sections):
     ebs_results = ebs.run().results
 
     assert ebs.cache_interval == 300
+<<<<<<< HEAD
+=======
+    assert ebs.period == 600
+>>>>>>> upstream/master
     assert ebs.name == "ebs"
 
     assert len(ebs_results) == 3

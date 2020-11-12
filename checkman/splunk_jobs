@@ -11,5 +11,9 @@ description:
  You can find details about each job in the long output of the check.
 
 inventory:
+<<<<<<< HEAD
  One service will be created
+=======
+ One service is created.
+>>>>>>> upstream/master
 

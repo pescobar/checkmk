@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # yapf: disable
 checkname = 'esx_vsphere_vm'
 
@@ -5,6 +6,25 @@ info = [[
     'snapshot.rootSnapshotList', '1', '1363596734', 'poweredOff',
     '20130318_105600_snapshot_LinuxI|2', '1413977827', 'poweredOn', 'LinuxI', 'Testsnapshot'
 ]]
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# yapf: disable
+# type: ignore
+
+from cmk.base.plugins.agent_based.esx_vsphere_vm import parse_esx_vsphere_vm
+
+checkname = 'esx_vsphere_vm'
+
+parsed = parse_esx_vsphere_vm([[
+    'snapshot.rootSnapshotList', '1', '1363596734', 'poweredOff',
+    '20130318_105600_snapshot_LinuxI|2', '1413977827', 'poweredOn', 'LinuxI', 'Testsnapshot'
+]])
+>>>>>>> upstream/master
 
 discovery = {
     'cpu': [],
@@ -15,14 +35,26 @@ discovery = {
     'mounted_devices': [],
     'name': [],
     'running_on': [],
+<<<<<<< HEAD
     'snapshots': [(None, {})]
+=======
+    'snapshots': [(None, {})],
+    'snapshots_summary': [(None, {})],
+>>>>>>> upstream/master
 }
 
 checks = {
     'snapshots': [(None, {}, [
+<<<<<<< HEAD
         (0, 'Number of Snapshots 2', []),
         (0, 'Powered On: LinuxI Testsnapshot', []),
         (0, 'Latest Snapshot: LinuxI Testsnapshot 2014-10-22 13:37:07', []),
         (0, 'Oldest Snapshot: 20130318_105600_snapshot_LinuxI 2013-03-18 09:52:14', []),
+=======
+        (0, 'Count: 2', []),
+        (0, 'Powered on: LinuxI Testsnapshot', []),
+        (0, 'Latest: LinuxI Testsnapshot 2014-10-22 13:37:07', []),
+        (0, 'Oldest: 20130318_105600_snapshot_LinuxI 2013-03-18 09:52:14', []),
+>>>>>>> upstream/master
     ]),]
 }

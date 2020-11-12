@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -24,6 +25,24 @@
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
 
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# NOTE: Careful when replacing the *-import below with a more specific import. This can cause
+# problems because it might remove variables from the check-context which are necessary for
+# resolving legacy discovery results such as [("SUMMARY", "diskstat_default_levels")]. Furthermore,
+# it might also remove variables needed for accessing discovery rulesets.
+from cmk.base.check_legacy_includes.df import *  # pylint: disable=wildcard-import,unused-wildcard-import
+# NOTE: Careful when replacing the *-import below with a more specific import. This can cause
+# problems because it might remove variables from the check-context which are necessary for
+# resolving legacy discovery results such as [("SUMMARY", "diskstat_default_levels")]. Furthermore,
+# it might also remove variables needed for accessing discovery rulesets.
+from cmk.base.check_legacy_includes.size_trend import *  # pylint: disable=wildcard-import,unused-wildcard-import
+>>>>>>> upstream/master
 # Example output from agent (sizes are in bytes). Note: the part
 # [df] in this check is duplicated. We need this information because
 # zfsget does not show pass-through filesystems like '/'. :-(
@@ -98,6 +117,7 @@ def _parse_zfs(lines):
                 continue
             else:
                 data.setdefault(name, {})[prop.strip()] = _prep_value(raw_value)
+<<<<<<< HEAD
 
     # parsed has the device name as key, because there may exist
     # several device names per mount point, and we know only
@@ -120,6 +140,30 @@ def _parse_df(lines, parsed_zfs):
         if match:
             _first, kbytes, used, avail, _percent, mountpoint = match.groups()
 
+=======
+
+    # parsed has the device name as key, because there may exist
+    # several device names per mount point, and we know only
+    # later which one to take
+    parsed = {}
+    for entry in data.values():
+        if entry["mountpoint"].startswith("/"):
+            entry["is_pool"] = "/" not in entry["name"]
+            if entry["available"] != 0 and entry["type"] == "filesystem":
+                parsed[entry["name"]] = entry
+    return parsed
+
+
+def _parse_df(lines, parsed_zfs):
+    parsed = {}
+    for line in lines:
+        line_str = " ".join(line)
+        reg = r"(.+?)\s+(\d+)\s+(\d+)\s+(\d+)\W+(\d+[%])\s+(.*)"
+        match = re.match(reg, line_str)
+        if match:
+            _first, kbytes, used, avail, _percent, mountpoint = match.groups()
+
+>>>>>>> upstream/master
             if mountpoint.startswith("/"):
                 # here we get the actual device name
                 # the output from 'df' does not give us a useful seperator(whitespace) but it is possible that:
@@ -129,10 +173,17 @@ def _parse_df(lines, parsed_zfs):
                 # 'first' contians all elements from the beginning until the first kbytes item
                 # we compare 'first' to zfs mountpoint names and take the device name with the highest similarity
                 matches = []
+<<<<<<< HEAD
                 for name in parsed_zfs.keys():
                     matches.append(_get_similarity_of_strings(name, _first))
                 if matches and max(matches) > 0.5:
                     device = parsed_zfs.keys()[matches.index(max(matches))]
+=======
+                for name in parsed_zfs:
+                    matches.append(_get_similarity_of_strings(name, _first))
+                if matches and max(matches) > 0.5:
+                    device = list(parsed_zfs)[matches.index(max(matches))]
+>>>>>>> upstream/master
                 else:
                     # TODO: fix special case that will fail here if not zfs item exists
                     # white space in name and fs_type ("/foo", "bar", "zfs")
@@ -193,7 +244,11 @@ def parse_zfsget(info):
     parsed_df = _parse_df(info_df, parsed_zfs)
 
     # parsed_df and parsed_final have the mount point as key
+<<<<<<< HEAD
     for mountpoint, entry_df in parsed_df.iteritems():
+=======
+    for mountpoint, entry_df in parsed_df.items():
+>>>>>>> upstream/master
         # for every mount point in the df section, if the device name
         # is also present in the "parsed" variable, we take those data
         for name, entry_zfs in parsed_zfs.items():
@@ -210,7 +265,11 @@ def parse_zfsget(info):
 
 def inventory_zfsget(parsed):
     mplist = []
+<<<<<<< HEAD
     for mountpoint in parsed.iterkeys():
+=======
+    for mountpoint in parsed:
+>>>>>>> upstream/master
         if mountpoint not in inventory_df_exclude_mountpoints:
             mplist.append(mountpoint)
     return df_inventory(mplist)
@@ -244,5 +303,8 @@ check_info["zfsget"] = {
     "has_perfdata": True,
     "group": "filesystem",
     "default_levels_variable": "filesystem_default_levels",
+<<<<<<< HEAD
     "includes": ["size_trend.include", "df.include"],
+=======
+>>>>>>> upstream/master
 }

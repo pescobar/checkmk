@@ -10,8 +10,13 @@ description:
  alarm relay logic in case of alarm, and the temperature unit
  are shown.
 
+<<<<<<< HEAD
 item:
  None
 
 inventory:
  One check per host is created.
+=======
+inventory:
+ One service is created for each host.
+>>>>>>> upstream/master

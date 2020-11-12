@@ -1,33 +1,22 @@
-// +------------------------------------------------------------------+
-// |             ____ _               _        __  __ _  __           |
-// |            / ___| |__   ___  ___| | __   |  \/  | |/ /           |
-// |           | |   | '_ \ / _ \/ __| |/ /   | |\/| | ' /            |
-// |           | |___| | | |  __/ (__|   <    | |  | | . \            |
-// |            \____|_| |_|\___|\___|_|\_\___|_|  |_|_|\_\           |
-// |                                                                  |
-// | Copyright Mathias Kettner 2014             mk@mathias-kettner.de |
-// +------------------------------------------------------------------+
-//
-// This file is part of Check_MK.
-// The official homepage is at http://mathias-kettner.de/check_mk.
-//
-// check_mk is free software;  you can redistribute it and/or modify it
-// under the  terms of the  GNU General Public License  as published by
-// the Free Software Foundation in version 2.  check_mk is  distributed
-// in the hope that it will be useful, but WITHOUT ANY WARRANTY;  with-
-// out even the implied warranty of  MERCHANTABILITY  or  FITNESS FOR A
-// PARTICULAR PURPOSE. See the  GNU General Public License for more de-
-// tails. You should have  received  a copy of the  GNU  General Public
-// License along with GNU Make; see the file  COPYING.  If  not,  write
-// to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
-// Boston, MA 02110-1301 USA.
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the
+// terms and conditions defined in the file COPYING, which is part of this
+// source code package.
 
 #include "ServiceListStateColumn.h"
+<<<<<<< HEAD
 #include "LogEntry.h"
+=======
+
+>>>>>>> upstream/master
 #include "Row.h"
 
 #ifdef CMC
 #include <memory>
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/master
 #include "Service.h"
 #include "State.h"
 #else
@@ -37,13 +26,21 @@
 int32_t ServiceListStateColumn::getValue(Row row,
                                          const contact *auth_user) const {
 #ifdef CMC
+<<<<<<< HEAD
     if (auto p = columnData<Host::services_t>(row)) {
+=======
+    if (const auto *p = columnData<Host::services_t>(row)) {
+>>>>>>> upstream/master
         return getValueFromServices(_mc, _logictype, p, auth_user);
     }
     return 0;
 #else
     servicesmember *mem = nullptr;
+<<<<<<< HEAD
     if (auto p = columnData<servicesmember *>(row)) {
+=======
+    if (const auto *p = columnData<servicesmember *>(row)) {
+>>>>>>> upstream/master
         mem = *p;
     }
     return getValueFromServices(_mc, _logictype, mem, auth_user);
@@ -61,7 +58,18 @@ int32_t ServiceListStateColumn::getValueFromServices(MonitoringCore *mc,
     if (mem != nullptr) {
         for (const auto &svc : *mem) {
             if (auth_user == nullptr || svc->hasContact(auth_user)) {
+<<<<<<< HEAD
                 update(logictype, svc.get(), result);
+=======
+                const auto *state = svc->state();
+                update(logictype,
+                       static_cast<ServiceState>(state->_current_state),
+                       static_cast<ServiceState>(state->_last_hard_state),
+                       state->_has_been_checked,
+                       state->_acknowledged ||
+                           state->_scheduled_downtime_depth > 0,
+                       result);
+>>>>>>> upstream/master
             }
         }
     }
@@ -70,7 +78,16 @@ int32_t ServiceListStateColumn::getValueFromServices(MonitoringCore *mc,
         service *svc = mem->service_ptr;
         if (auth_user == nullptr ||
             is_authorized_for(mc, auth_user, svc->host_ptr, svc)) {
+<<<<<<< HEAD
             update(logictype, svc, result);
+=======
+            update(logictype, static_cast<ServiceState>(svc->current_state),
+                   static_cast<ServiceState>(svc->last_hard_state),
+                   svc->has_been_checked != 0,
+                   svc->problem_has_been_acknowledged != 0 ||
+                       svc->scheduled_downtime_depth > 0,
+                   result);
+>>>>>>> upstream/master
         }
     }
 #endif
@@ -78,6 +95,7 @@ int32_t ServiceListStateColumn::getValueFromServices(MonitoringCore *mc,
 }
 
 // static
+<<<<<<< HEAD
 void ServiceListStateColumn::update(Type logictype, service *svc,
                                     int32_t &result) {
 #ifdef CMC
@@ -105,6 +123,13 @@ void ServiceListStateColumn::update(Type logictype, service *svc,
                 result = service_state;
             }
             break;
+=======
+void ServiceListStateColumn::update(Type logictype, ServiceState current_state,
+                                    ServiceState last_hard_state,
+                                    bool has_been_checked, bool handled,
+                                    int32_t &result) {
+    switch (logictype) {
+>>>>>>> upstream/master
         case Type::num:
             result++;
             break;
@@ -113,10 +138,75 @@ void ServiceListStateColumn::update(Type logictype, service *svc,
                 result++;
             }
             break;
+<<<<<<< HEAD
         default:
             if (has_been_checked && service_state == static_cast<int>(lt)) {
                 result++;
             }
             break;
+=======
+        case Type::num_handled_problems:
+            if (has_been_checked && current_state != ServiceState::ok &&
+                handled) {
+                result++;
+            }
+            break;
+        case Type::num_unhandled_problems:
+            if (has_been_checked && current_state != ServiceState::ok &&
+                !handled) {
+                result++;
+            }
+            break;
+        case Type::num_ok:
+            if (has_been_checked && current_state == ServiceState::ok) {
+                result++;
+            }
+            break;
+        case Type::num_warn:
+            if (has_been_checked && current_state == ServiceState::warning) {
+                result++;
+            }
+            break;
+        case Type::num_crit:
+            if (has_been_checked && current_state == ServiceState::critical) {
+                result++;
+            }
+            break;
+        case Type::num_unknown:
+            if (has_been_checked && current_state == ServiceState::unknown) {
+                result++;
+            }
+            break;
+        case Type::worst_state:
+            if (worse(current_state, static_cast<ServiceState>(result))) {
+                result = static_cast<int32_t>(current_state);
+            }
+            break;
+        case Type::num_hard_ok:
+            if (has_been_checked && last_hard_state == ServiceState::ok) {
+                result++;
+            }
+            break;
+        case Type::num_hard_warn:
+            if (has_been_checked && last_hard_state == ServiceState::warning) {
+                result++;
+            }
+            break;
+        case Type::num_hard_crit:
+            if (has_been_checked && last_hard_state == ServiceState::critical) {
+                result++;
+            }
+            break;
+        case Type::num_hard_unknown:
+            if (has_been_checked && last_hard_state == ServiceState::unknown) {
+                result++;
+            }
+            break;
+        case Type::worst_hard_state:
+            if (worse(last_hard_state, static_cast<ServiceState>(result))) {
+                result = static_cast<int32_t>(last_hard_state);
+            }
+            break;
+>>>>>>> upstream/master
     }
 }

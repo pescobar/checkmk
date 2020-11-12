@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: Sophos Device: Disk usage
+=======
+title: Sophos Device: Disk Usage
+>>>>>>> upstream/master
 agents: snmp
 catalog: hw/network/sophos
 license: GPL

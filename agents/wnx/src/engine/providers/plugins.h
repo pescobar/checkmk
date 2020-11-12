@@ -1,3 +1,10 @@
+<<<<<<< HEAD
+=======
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the
+// terms and conditions defined in the file COPYING, which is part of this
+// source code package.
+>>>>>>> upstream/master
 
 // provides basic api to start and stop service
 
@@ -52,9 +59,20 @@ public:
 
     void detachedStart() noexcept;
 
+<<<<<<< HEAD
     void updateTimeout() noexcept;
 
 protected:
+=======
+    void updateCommandLine() noexcept;
+
+    void updateTimeout() noexcept;
+
+protected:
+    std::vector<std::string> gatherAllowedExtensions() const;
+    static void UpdatePluginMapCmdLine(PluginMap& pm,
+                                       cma::srv::ServiceProcessor* sp);
+>>>>>>> upstream/master
     void gatherAllData(std::string& Out);
     std::string cfg_name_;
     bool local_;
@@ -66,6 +84,13 @@ protected:
 #if defined(GTEST_INCLUDE_GTEST_GTEST_H_)
     friend class FileInfoTest;
     FRIEND_TEST(FileInfoTest, Base);
+<<<<<<< HEAD
+=======
+
+    friend class PluginTest;
+    FRIEND_TEST(PluginTest, ModulesCmdLine);
+    FRIEND_TEST(PluginTest, AllowedExtensions);
+>>>>>>> upstream/master
 #endif
 };
 

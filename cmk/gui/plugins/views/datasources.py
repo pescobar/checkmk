@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,12 +24,23 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 from cmk.gui.i18n import _
 
 from cmk.gui.plugins.views import (
     data_source_registry,
+<<<<<<< HEAD
     DataSource,
+=======
+    ABCDataSource,
+>>>>>>> upstream/master
     DataSourceLivestatus,
     RowTable,
     RowTableLivestatus,
@@ -217,6 +229,13 @@ class DataSourceMergedHostGroups(DataSourceLivestatus):
         return _("Hostgroups, merged")
 
     @property
+<<<<<<< HEAD
+=======
+    def table(self):
+        return RowTableLivestatus("hostgroups")
+
+    @property
+>>>>>>> upstream/master
     def infos(self):
         return ["hostgroup"]
 
@@ -257,7 +276,11 @@ class DataSourceServiceGroups(DataSourceLivestatus):
 
 
 @data_source_registry.register
+<<<<<<< HEAD
 class DataSourceMergedServiceGroups(DataSource):
+=======
+class DataSourceMergedServiceGroups(ABCDataSource):
+>>>>>>> upstream/master
     """Merged groups across sites"""
     @property
     def ident(self):
@@ -443,7 +466,11 @@ class DataSourceLogAlertStatistics(LogDataSource):
 
 
 @data_source_registry.register
+<<<<<<< HEAD
 class DataSourceServiceDiscovery(DataSource):
+=======
+class DataSourceServiceDiscovery(ABCDataSource):
+>>>>>>> upstream/master
     @property
     def ident(self):
         return "service_discovery"

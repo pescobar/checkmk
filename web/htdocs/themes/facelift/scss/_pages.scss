@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /*
 +------------------------------------------------------------------+
 |             ____ _               _        __  __ _  __           |
@@ -24,12 +25,21 @@ to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 Boston, MA 02110-1301 USA.
 
 */
+=======
+@charset "UTF-8";
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+// conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 /* Styles used in all Multisite pages, for example in the
    status GUI, in WATO pages and in "Add snapin". These
    styles are not used in the sidebar and in Mobile. */
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/master
 /*-------------------------------------------------------------------------.
 |                   ____                           _                       |
 |                  / ___| ___ _ __   ___ _ __ __ _| |                      |
@@ -41,8 +51,16 @@ Boston, MA 02110-1301 USA.
 | General styles used in the pages                                         |
 '-------------------------------------------------------------------------*/
 
+<<<<<<< HEAD
 h1, h2, h3, h4 {
   color: $theme-color-text;
+=======
+h1,
+h2,
+h3,
+h4 {
+  color: $font-color;
+>>>>>>> upstream/master
 }
 
 h3 {
@@ -62,12 +80,22 @@ h3 {
 | Styles for the main frame (its body, header, footer, etc.)               |
 '-------------------------------------------------------------------------*/
 
+<<<<<<< HEAD
 
 body {
   color: #fff;
 
   a, a:link, a:visited {
     color: #fff;
+=======
+body {
+  color: $font-color;
+
+  a,
+  a:link,
+  a:visited {
+    color: $font-color;
+>>>>>>> upstream/master
   }
 
   &.hidden:after {
@@ -77,11 +105,16 @@ body {
     display: block;
     width: 100%;
     height: 100%;
+<<<<<<< HEAD
     background-color: rgba(0, 0, 0, .5);
+=======
+    background-color: rgba(0, 0, 0, 0.5);
+>>>>>>> upstream/master
     content: "";
   }
 
   &.main {
+<<<<<<< HEAD
     padding: $main-body-padding;
     margin: 0;
     font-family: $theme-font;
@@ -89,6 +122,19 @@ body {
     font-weight: $theme-font-weight-global;
     color: $theme-color-text;
     background: $theme-color-background;
+=======
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    height: 100%;
+    padding: $main-body-padding;
+    margin: 0;
+    font-family: $font-family-default;
+    font-size: $font-size-default;
+    font-weight: $font-weight-default;
+    color: $font-color;
+    background: $color-background;
+>>>>>>> upstream/master
 
     /* Can be toggled with N/n display option */
     &.inline {
@@ -100,18 +146,27 @@ body {
        This can be selected in multisite.mk with screenshotmode = True or screenshotmode=1
        on the URL */
     &.screenshotmode {
+<<<<<<< HEAD
       background-color: #fff;
+=======
+      background-color: rgb(255, 255, 255);
+>>>>>>> upstream/master
       background-image: url("");
     }
 
     /* TODO: Reproduce this div.main element */
     div.main {
       padding-left: 10px;
+<<<<<<< HEAD
       border-left: 1px solid #f00;
+=======
+      border-left: 1px solid rgb(255, 0, 0);
+>>>>>>> upstream/master
     }
 
     /* The content page header containing the title, user, date */
     table.header {
+<<<<<<< HEAD
       position: fixed;
       top: 0;
       left: 0;
@@ -199,6 +254,103 @@ body {
       border: none;
     }
 
+=======
+      width: 100%;
+      height: 64px;
+      max-width: 100%;
+      padding: 8px 20px;
+      margin: 0 0 5px;
+      color: rgb(255, 255, 255);
+      background: $bg-color;
+      border-spacing: 0;
+
+      td {
+        overflow: hidden;
+        color: rgb(255, 255, 255);
+        text-overflow: ellipsis;
+        -o-text-overflow: ellipsis;
+        vertical-align: middle;
+        white-space: nowrap;
+
+        &.heading {
+          height: 31px;
+          max-width: 100px;
+          padding-left: 0;
+          font-size: 21px;
+
+          img {
+            width: 24px;
+            height: 24px;
+            margin-right: 3px;
+            vertical-align: middle;
+          }
+
+          a,
+          a:hover {
+            text-decoration: none;
+          }
+
+          a,
+          .popup_menu span,
+          .popup_menu & span {
+            color: $font-color;
+          }
+
+          div.breadcrumb {
+            font-size: 11px;
+            white-space: nowrap;
+
+            span,
+            a {
+              &:last-child:after {
+                content: "";
+              }
+              color: #ccc;
+              text-decoration: none;
+            }
+
+            a:hover {
+              color: #fff;
+            }
+
+            :after {
+              text-decoration: none;
+              content: " > ";
+            }
+          }
+        }
+
+        &.right {
+          width: 1%;
+          font-size: 13px;
+          color: $font-color;
+          text-align: right;
+
+          img {
+            width: 19px;
+            height: 19px;
+            vertical-align: middle;
+          }
+
+          a.head_logo img {
+            width: 20px;
+            height: 23px;
+            margin: 0 0 1px 5px;
+
+            &:hover {
+              opacity: 0.5;
+              filter: alpha(opacity=50);
+            }
+          }
+
+          * {
+            color: $primary-link-color;
+          }
+        }
+      }
+    }
+
+>>>>>>> upstream/master
     /* TODO: Reproduce this html element */
     div.urldebug {
       position: relative;
@@ -206,6 +358,7 @@ body {
       width: 100%;
       font-family: monospace;
       font-size: 11px;
+<<<<<<< HEAD
       color: #fff;
     }
 
@@ -238,6 +391,29 @@ div#foot_refresh, div#foot_refresh_time {
   display: inline-block;
 }
 
+=======
+      color: rgb(255, 255, 255);
+    }
+
+    div#main_page_content {
+      flex: 1 1 auto;
+      height: 100%;
+      padding-right: 11px;
+      padding-bottom: 20px;
+      overflow: auto;
+
+      div.simplebar-track {
+        background-color: $bg-color;
+      }
+
+      body.dashboard & {
+        padding-bottom: 0;
+      }
+    }
+  }
+}
+
+>>>>>>> upstream/master
 /* TODO: Reproduce all these pause styles */
 #reload_pause {
   position: fixed;
@@ -250,7 +426,11 @@ div#foot_refresh, div#foot_refresh_time {
   padding: 10px;
   text-align: center;
   text-decoration: none;
+<<<<<<< HEAD
   background-color: #111;
+=======
+  background-color: rgb(17, 17, 17);
+>>>>>>> upstream/master
   border-radius: 5px;
   opacity: 0.8;
   filter: alpha(opacity=80); /* For IE8 and earlier */
@@ -262,7 +442,11 @@ div#foot_refresh, div#foot_refresh_time {
   height: 60px;
   margin-top: 5px;
   margin-bottom: 5px;
+<<<<<<< HEAD
   background-color: #fff;
+=======
+  background-color: rgb(255, 255, 255);
+>>>>>>> upstream/master
   border-radius: 5px;
   opacity: 0.9;
   filter: alpha(opacity=90); /* For IE8 and earlier */
@@ -281,7 +465,11 @@ div#foot_refresh, div#foot_refresh_time {
 #reload_pause_counter {
   font-size: 120%;
   font-weight: bold;
+<<<<<<< HEAD
   color: $theme-color-lightgrey;
+=======
+  color: $lightgrey;
+>>>>>>> upstream/master
   text-align: center;
   text-decoration: none;
 
@@ -290,6 +478,7 @@ div#foot_refresh, div#foot_refresh_time {
   }
 }
 
+<<<<<<< HEAD
 
 /*-------------------------------------------------------------------------.
 |         ____            _            _   _ _       _                     |
@@ -467,6 +656,8 @@ div.togglebutton {
   }
 }
 
+=======
+>>>>>>> upstream/master
 /*-------------------------------------------------------------------------.
 |            ____        _          _____     _     _                      |
 |           |  _ \  __ _| |_ __ _  |_   _|_ _| |__ | | ___                 |
@@ -491,7 +682,11 @@ table.data {
   width: 100%;
   padding: 0;
   margin: 0;
+<<<<<<< HEAD
   color: $theme-color-text;
+=======
+  color: $font-color;
+>>>>>>> upstream/master
   border-collapse: $data-table-border-collapse;
   border-spacing: $data-table-border-spacing;
   empty-cells: show;
@@ -503,9 +698,15 @@ table.data {
 
   th {
     padding: 0 8px 2px;
+<<<<<<< HEAD
     font-size: $theme-font-size-main;
     font-weight: $theme-font-weight-bold;
     letter-spacing: $theme-letter-spacing-table;
+=======
+    font-size: $font-size-default;
+    font-weight: $font-weight-bold;
+    letter-spacing: $letter-spacing-table;
+>>>>>>> upstream/master
     color: $primary-link-color;
     text-align: left;
     text-transform: uppercase;
@@ -537,11 +738,19 @@ table.data {
 
   td {
     padding: 4px 8px;
+<<<<<<< HEAD
     font-size: $theme-font-size-main;
     font-weight: 500;
     line-height: 1.3;
     letter-spacing: $theme-letter-spacing;
     color: $theme-color-text;
+=======
+    font-size: $font-size-default;
+    font-weight: 500;
+    line-height: 1.3;
+    letter-spacing: $letter-spacing-default;
+    color: $font-color;
+>>>>>>> upstream/master
     border: none;
 
     &.buttons {
@@ -549,7 +758,11 @@ table.data {
       white-space: nowrap;
 
       &.visuals {
+<<<<<<< HEAD
 	width: 75px;
+=======
+        width: 75px;
+>>>>>>> upstream/master
       }
     }
 
@@ -578,7 +791,11 @@ table.data {
     }
 
     &.unused {
+<<<<<<< HEAD
       color: #888;
+=======
+      color: rgb(136, 136, 136);
+>>>>>>> upstream/master
     }
 
     &:not(.state) {
@@ -599,13 +816,21 @@ table.data {
   /* Two-lined header, for example in WATO: ChangeLog->Site Status */
   /* TODO: Reproduce this html element */
   tr.dualheader th {
+<<<<<<< HEAD
     border-bottom: 1px solid #ccc;
+=======
+    border-bottom: 1px solid rgb(204, 204, 204);
+>>>>>>> upstream/master
   }
 
   tr.data {
     overflow: hidden;
     box-sizing: border-box;
+<<<<<<< HEAD
     transition: all .15s ease-in;
+=======
+    transition: all 0.15s ease-in;
+>>>>>>> upstream/master
 
     /* TODO: Refactor these messy and complicated styles */
     > td {
@@ -616,13 +841,19 @@ table.data {
       border-right: none;
 
       &:not(.gap):not(.fillup):not(.bulksearch):not(.bulkactions) {
+<<<<<<< HEAD
 	border-top: $data-table-border-top;
 	border-bottom: $data-table-border-bottom;
+=======
+        border-top: $data-table-border-top;
+        border-bottom: $data-table-border-bottom;
+>>>>>>> upstream/master
       }
 
       &:first-child {
         border-radius: $first-child-border-radius;
 
+<<<<<<< HEAD
 	&:not(.state):not(.gap):not(.bulksearch):not(.bulkactions) {
 	  border-left: 1px solid $theme-color-table-border;
 	}
@@ -630,15 +861,30 @@ table.data {
 
       &:last-child:not(.fillup):not(.bulkactions), &.last_col {
         border-right: 1px solid $theme-color-table-border;
+=======
+        &:not(.state):not(.gap):not(.bulksearch):not(.bulkactions) {
+          border-left: 1px solid $color-table-border;
+        }
+      }
+
+      &:last-child:not(.fillup):not(.bulkactions),
+      &.last_col {
+        border-right: 1px solid $color-table-border;
+>>>>>>> upstream/master
         border-radius: $table-cell-last-child-border-radius;
       }
 
       &:only-child {
+<<<<<<< HEAD
         border: 1px solid $theme-color-table-border;
+=======
+        border: 1px solid $color-table-border;
+>>>>>>> upstream/master
         border-radius: $theme-border-radius;
       }
 
       a {
+<<<<<<< HEAD
 	color: $secondary-font-color;
 
 	&:hover {
@@ -658,6 +904,27 @@ table.data {
 
       &:not(.state) {
 	text-overflow: $td-text-overflow;
+=======
+        color: $secondary-font-color;
+
+        &:hover {
+          color: $primary-hover-font-color;
+        }
+      }
+
+      &:not(.gap):not(.last_col) {
+        border-left: $td-border-left-right;
+        border-right: $td-border-left-right;
+      }
+
+      &.state {
+        border-top: $data-table-state-border-top;
+        border-bottom: $data-table-state-border-bottom;
+      }
+
+      &:not(.state) {
+        text-overflow: $td-text-overflow;
+>>>>>>> upstream/master
       }
     }
 
@@ -671,13 +938,22 @@ table.data {
     }
   }
 
+<<<<<<< HEAD
   tr td.gap, tr td.fillup {
+=======
+  tr td.gap,
+  tr td.fillup {
+>>>>>>> upstream/master
     background: $td-gap-bg-color;
     border: 1px solid $td-gap-bg-color;
   }
 
   a {
+<<<<<<< HEAD
     color: $theme-color-text;
+=======
+    color: $font-color;
+>>>>>>> upstream/master
     text-decoration: none;
 
     &:hover {
@@ -767,7 +1043,11 @@ table.data {
   tr th a.toggle_actions img,
   tr th body.main .popup_menu span.toggle_actions img,
   body.main .popup_menu & tr th span.toggle_actions img {
+<<<<<<< HEAD
     filter: invert($filter-inversion-percentage);
+=======
+    filter: $treeangle-img-filter;
+>>>>>>> upstream/master
   }
 
   tr.groupheader,
@@ -776,6 +1056,7 @@ table.data {
   }
 }
 
+<<<<<<< HEAD
 table.data .popup_menu, body.main table.data .popup_menu {
   color: $theme-color-text;
 }
@@ -787,6 +1068,18 @@ table.data tr:not(.data) + tr.data
 }
 
 
+=======
+table.data .popup_menu,
+body.main table.data .popup_menu {
+  color: $font-color;
+}
+
+/* Give each table's topmost row a top border */
+table.data tr:not(.data) + tr.data > td:not(.gap):not(.fillup):not(.bulksearch):not(.bulkactions) {
+  border-top: $data-table-border-topmost;
+}
+
+>>>>>>> upstream/master
 /* TODO: Check whether these narrow and wide styles are deprecated */
 td.narrow {
   width: 10px;
@@ -801,6 +1094,15 @@ table.groupheader {
   padding: 6px 0 3px;
   margin: 0;
   border: none;
+<<<<<<< HEAD
+=======
+
+  tr.groupheader td,
+  tr.groupheader td a {
+    font-size: $theme-font-table-header;
+    font-weight: $font-weight-default;
+  }
+>>>>>>> upstream/master
 }
 
 tr.groupheader a:hover {
@@ -819,16 +1121,26 @@ tr.data.grouped_row_header {
 }
 
 tr.data.group_end {
+<<<<<<< HEAD
   border-bottom: 2px solid #ccc;
+=======
+  border-bottom: 2px solid rgb(204, 204, 204);
+>>>>>>> upstream/master
 }
 
 /* state in group header must have fixed width */
 .groupheader td.state {
   width: 50px;
   padding: 2px 5px;
+<<<<<<< HEAD
   border: 1px solid #000;
   border-radius: 5px;
   box-shadow: 1px 1px 2px #444;
+=======
+  border: 1px solid rgb(0, 0, 0);
+  border-radius: 5px;
+  box-shadow: 1px 1px 2px rgb(68, 68, 68);
+>>>>>>> upstream/master
 }
 
 tr.groupheader {
@@ -836,7 +1148,11 @@ tr.groupheader {
     padding: 0;
     margin: 0;
     font-weight: bold;
+<<<<<<< HEAD
     color: $theme-color-text;
+=======
+    color: $font-color;
+>>>>>>> upstream/master
     background: transparent;
     border-style: none;
 
@@ -844,15 +1160,25 @@ tr.groupheader {
       display: inline-block;
       padding: 12px 0 4px;
       font-size: $theme-font-table-header;
+<<<<<<< HEAD
       font-weight: $theme-font-weight-global;
       letter-spacing: $theme-letter-spacing-table;
       color: $theme-color-text;
+=======
+      font-weight: $font-weight-default;
+      letter-spacing: $letter-spacing-table;
+      color: $font-color;
+>>>>>>> upstream/master
       vertical-align: baseline;
 
       &.state {
         width: auto;
         padding: 0 8px;
+<<<<<<< HEAD
 	margin-top: 12px;
+=======
+        margin-top: 12px;
+>>>>>>> upstream/master
         font-size: 14px;
         text-transform: uppercase;
         box-shadow: none;
@@ -863,9 +1189,15 @@ tr.groupheader {
       body.main .popup_menu & span {
         display: inline-block;
         font-size: $theme-font-table-header;
+<<<<<<< HEAD
         font-weight: $theme-font-weight-global;
         letter-spacing: $theme-letter-spacing-table;
         color: $theme-color-text;
+=======
+        font-weight: $font-weight-default;
+        letter-spacing: $letter-spacing-table;
+        color: $font-color;
+>>>>>>> upstream/master
       }
 
       &.state a,
@@ -878,7 +1210,11 @@ tr.groupheader {
       &.state.hstate1 a,
       &.state.hstate1 body.main .popup_menu span,
       body.main .popup_menu &.state.hstate1 span {
+<<<<<<< HEAD
         color: $theme-color-lightgrey;
+=======
+        color: $lightgrey;
+>>>>>>> upstream/master
       }
     }
   }
@@ -886,22 +1222,40 @@ tr.groupheader {
   a,
   body.main .popup_menu span,
   body.main .popup_menu & span {
+<<<<<<< HEAD
     color: $theme-color-text;
+=======
+    color: $font-color;
+>>>>>>> upstream/master
     text-decoration: none;
   }
 
   &:first-of-type td.groupheader table.groupheader {
+<<<<<<< HEAD
     &, tbody tr td {
       padding-top: 0;
 
       .state {
 	margin-top: 0;
+=======
+    &,
+    tbody tr td {
+      padding-top: 0;
+
+      .state {
+        margin-top: 0;
+>>>>>>> upstream/master
       }
     }
   }
 }
 
+<<<<<<< HEAD
 img.iconbutton {
+=======
+img.iconbutton,
+img.icon {
+>>>>>>> upstream/master
   width: 20px;
   height: 20px;
   padding: 0 2px;
@@ -924,7 +1278,10 @@ img.iconbutton {
 }
 
 /* reschedule check icon */
+<<<<<<< HEAD
 /* TODO: Reproduce these reloading/reload html elements */
+=======
+>>>>>>> upstream/master
 img.iconbutton.reloading,
 img.icon.reloading {
   animation: spin 1s linear infinite;
@@ -932,6 +1289,7 @@ img.icon.reloading {
   -moz-animation: spin 1s linear infinite;
 }
 
+<<<<<<< HEAD
 @-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
 @-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
 @keyframes spin { 100% { -webkit-transform: rotate(360deg); transform: rotate(360deg); } }
@@ -939,6 +1297,28 @@ img.icon.reloading {
 /* Table with captions on the left side. Used e.g. for man pages and werks */
 table.data.headerleft {
     border-spacing: 0;
+=======
+@-moz-keyframes spin {
+  100% {
+    -moz-transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes spin {
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+@keyframes spin {
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+/* Table with captions on the left side. Used e.g. for man pages and werks */
+table.data.headerleft {
+  border-spacing: 0;
+>>>>>>> upstream/master
 
   th {
     text-align: left;
@@ -950,10 +1330,17 @@ table.data.headerleft {
     &:nth-child(even) {
       padding: 5px 16px;
       vertical-align: top;
+<<<<<<< HEAD
       background: $theme-color-white;
       border-top: 1px solid $theme-color-table-border;
       border-bottom: $table-headerleft-border-bottom;
       border-left: 1px solid $theme-color-table-border;
+=======
+      background: $bg-color-secondary;
+      border-top: 1px solid $color-table-border;
+      border-bottom: $table-headerleft-border-bottom;
+      border-left: 1px solid $color-table-border;
+>>>>>>> upstream/master
       border-radius: 0;
     }
   }
@@ -964,7 +1351,11 @@ table.data.headerleft {
   }
 
   tbody tr td {
+<<<<<<< HEAD
     border-right: 1px solid $theme-color-table-border;
+=======
+    border-right: 1px solid $color-table-border;
+>>>>>>> upstream/master
 
     &.nowiki p {
       margin: 0;
@@ -973,7 +1364,11 @@ table.data.headerleft {
 
   tbody tr:last-of-type td,
   tbody tr:last-of-type th {
+<<<<<<< HEAD
     border-bottom: 1px solid $theme-color-table-border;
+=======
+    border-bottom: 1px solid $color-table-border;
+>>>>>>> upstream/master
   }
 }
 
@@ -988,6 +1383,7 @@ table.data.headerleft {
 | Input forms (e.g. Filters, Commands, WATO)                               |
 '-------------------------------------------------------------------------*/
 
+<<<<<<< HEAD
 input:not(.button), input[type=text], input[type=password],
 select, textarea, div.snapin textarea, #mk_side_search_field, .tagify__input {
   height: auto;
@@ -1019,12 +1415,48 @@ input[type=text], input[type=password] {
 
 input[type=password] {
   box-shadow: 0.1px 1.2px 1.8px 0 #800 inset;
+=======
+input:not(.button),
+input[type="text"],
+input[type="password"],
+select,
+textarea,
+div.snapin textarea,
+#mk_side_search_field,
+.tagify__input {
+  height: auto;
+  padding: 3px 6px;
+  color: $font-color;
+  background-color: $bg-color;
+  background-image: none;
+  border-radius: $theme-border-radius;
+  box-shadow: none;
+}
+
+span.select2 .select2-selection {
+  background-color: $select2-bg-color;
+}
+
+input[type="text"],
+textarea {
+  position: relative;
+}
+
+input[type="text"],
+input[type="password"] {
+  vertical-align: middle;
+}
+
+input[type="password"] {
+  box-shadow: 0.1px 1.2px 1.8px 0 rgb(136, 0, 0) inset;
+>>>>>>> upstream/master
 }
 
 select {
   vertical-align: middle;
 }
 
+<<<<<<< HEAD
 input[type=radio],
 input[type=checkbox] {
   margin-left: 0;
@@ -1032,6 +1464,15 @@ input[type=checkbox] {
 
 input, select, textarea, div.snapin select, div.snapin textarea,
 #mk_side_search_field {
+=======
+input[type="radio"],
+input[type="checkbox"] {
+  margin-left: 0;
+}
+
+input,
+select {
+>>>>>>> upstream/master
   &.number {
     text-align: left;
   }
@@ -1043,6 +1484,7 @@ input, select, textarea, div.snapin select, div.snapin textarea,
     margin-right: 8px;
     margin-bottom: 8px;
     margin-left: 0;
+<<<<<<< HEAD
     font-size: $theme-font-size-main;
     letter-spacing: $theme-letter-spacing-table;
     color: $input-button-color;
@@ -1057,12 +1499,29 @@ input, select, textarea, div.snapin select, div.snapin textarea,
   }
 
   &[type=radio] {
+=======
+    font-size: $font-size-default;
+    font-weight: $font-weight-bold;
+    letter-spacing: $letter-spacing-table;
+    color: $input-button-color;
+    background-color: $input-button-bg-color;
+    box-shadow: none;
+
+    &:hover,
+    &:active {
+      background-color: $input-button-hover-bg-color;
+    }
+  }
+
+  &[type="radio"] {
+>>>>>>> upstream/master
     width: auto;
     margin-bottom: 0;
   }
 }
 
 input.button {
+<<<<<<< HEAD
   &:not([type=text]), &:not([type=password]) {
     padding: 4px 8px;
     border: 1px solid $input-button-bg-color;
@@ -1074,6 +1533,18 @@ input.button {
 }
 
 select, textarea, div.snapin select, div.snapin textarea,
+=======
+  &:not([type="text"]),
+  &:not([type="password"]) {
+    padding: 5px 8px;
+  }
+}
+
+select,
+textarea,
+div.snapin select,
+div.snapin textarea,
+>>>>>>> upstream/master
 #mk_side_search_field {
   &.toggle_timespecific_parameter {
     display: block;
@@ -1094,6 +1565,7 @@ td.content hr {
 /* TODO: Reproduce these html elements (also have a look at .tab and .tabactive
  *       elemenets in _logwatch.scss)
  */
+<<<<<<< HEAD
 input.tab#results, input.tabactive#results { background-color: #fe6; }
 input.date, input.time {
   font-family: monospace;
@@ -1105,6 +1577,31 @@ input.date, input.time {
   div.snapin textarea, div.snapin & textarea, #mk_side_search_field,
   span.checkbox, > select {
     background-color: $theme-color-nuance-15;
+=======
+input.tab#results,
+input.tabactive#results {
+  background-color: rgb(255, 238, 102);
+}
+
+input.date,
+input.time {
+  font-family: monospace;
+}
+
+.inputerror {
+  input,
+  select,
+  textarea,
+  div.snapin select,
+  div.snapin & select,
+  div.snapin textarea,
+  div.snapin & textarea,
+  #mk_side_search_field,
+  span.checkbox,
+  span.select2 .select2-selection,
+  > select {
+    background-color: $color-nuance-15;
+>>>>>>> upstream/master
   }
 
   span.checkbox {
@@ -1125,7 +1622,11 @@ span.checkbox {
 }
 
 .checkbox label::before {
+<<<<<<< HEAD
   border: 1px solid $theme-color-table-border-dark;
+=======
+  border: 1px solid $color-table-border-dark;
+>>>>>>> upstream/master
   border-radius: 2px;
   box-shadow: none;
 }
@@ -1135,15 +1636,31 @@ table.nform {
   width: 100%;
   padding: 0;
   margin: 5px 0;
+<<<<<<< HEAD
   background: $secondary-bg-color;
   border: 1px solid $theme-color-table-border;
   border-spacing: 7px 5px;
+=======
+  background: $bg-color-secondary;
+  border-spacing: 0 0;
+>>>>>>> upstream/master
   border-radius: $primary-border-radius;
   box-shadow: 0 0 0 rgba(0, 0, 0, 0.1);
   empty-cells: show;
 
+<<<<<<< HEAD
   body.main.screenshotmode & {
     background-color: #fff;
+=======
+  &.closed {
+    tr.heading a.more {
+      display: none;
+    }
+  }
+
+  body.main.screenshotmode & {
+    background-color: rgb(255, 255, 255);
+>>>>>>> upstream/master
     background-image: none;
   }
 
@@ -1153,7 +1670,11 @@ table.nform {
 
   tr.heading {
     height: auto;
+<<<<<<< HEAD
     background: $secondary-bg-color;
+=======
+    background: $headline-color;
+>>>>>>> upstream/master
 
     > td {
       vertical-align: middle;
@@ -1163,17 +1684,37 @@ table.nform {
     }
 
     td {
+<<<<<<< HEAD
       height: auto;
       padding: 3px 4px 0 ;
       font-size: $theme-font-size-global;
       letter-spacing: $theme-letter-spacing-table;
+=======
+      position: relative;
+      height: auto;
+      padding: 4px 10px 3px 9px;
+      font-size: $font-size-global;
+      letter-spacing: $letter-spacing-table;
+>>>>>>> upstream/master
       color: $secondary-font-color;
       text-transform: uppercase;
     }
 
     img.treeangle.nform {
       margin: 0 8px 0 0;
+<<<<<<< HEAD
       filter: invert($filter-inversion-percentage);
+=======
+    }
+
+    a.more {
+      float: right;
+
+      div::after {
+        position: relative;
+        top: 2px;
+      }
+>>>>>>> upstream/master
     }
   }
 
@@ -1205,11 +1746,19 @@ table.nform {
       max-width: 390px;
       padding: 0 8px 0 0;
       overflow: hidden;
+<<<<<<< HEAD
       font-weight: $theme-font-weight-bold;
       white-space: nowrap;
 
       .dots {
         opacity: .2;
+=======
+      font-weight: $font-weight-bold;
+      white-space: nowrap;
+
+      .dots {
+        opacity: 0.2;
+>>>>>>> upstream/master
       }
 
       &.withcheckbox {
@@ -1219,9 +1768,14 @@ table.nform {
     }
 
     div.checkbox {
+<<<<<<< HEAD
       float: left;
       margin-top: 3px;
       margin-left: 6px;
+=======
+      float: right;
+      margin-top: 3px;
+>>>>>>> upstream/master
     }
   }
 
@@ -1250,7 +1804,11 @@ table.nform {
       display: inline-block;
 
       &:not(first-of-type) {
+<<<<<<< HEAD
 	margin-top: 4px;
+=======
+        margin-top: 4px;
+>>>>>>> upstream/master
       }
     }
   }
@@ -1276,13 +1834,24 @@ table.nform {
     padding: 8px 4px;
   }
 
+<<<<<<< HEAD
   input, select, textarea, #mk_side_search_field {
+=======
+  input,
+  select,
+  textarea,
+  #mk_side_search_field {
+>>>>>>> upstream/master
     & {
       margin: 0;
     }
 
     &.button {
+<<<<<<< HEAD
       margin: 1px 5px 0 0;
+=======
+      margin-right: 5px;
+>>>>>>> upstream/master
     }
   }
 
@@ -1307,12 +1876,41 @@ table.nform {
   }
 
   .title {
+<<<<<<< HEAD
     color: $theme-color-text;
+=======
+    color: $font-color;
+>>>>>>> upstream/master
   }
 
   #view_p_options_tbl {
     border-spacing: 4px;
   }
+<<<<<<< HEAD
+=======
+
+  tbody tr:nth-child(1) td {
+    padding-top: 4px;
+  }
+
+  tr td.legend {
+    width: 280px;
+    min-width: 280px;
+    line-height: 22px;
+
+    div.title {
+      max-width: 270px;
+
+      &.withcheckbox {
+        max-width: 241px;
+      }
+    }
+  }
+}
+
+form.visual {
+  margin-right: $spacing;
+>>>>>>> upstream/master
 }
 
 /*-------------------------------------------------------------------------.
@@ -1325,7 +1923,15 @@ table.nform {
 +--------------------------------------------------------------------------+
 | Confirmation dialogs, success and error messages when performing actions |
 '-------------------------------------------------------------------------*/
+<<<<<<< HEAD
 div.really, div.success, div.error, div.message, div.warning {
+=======
+div.really,
+div.success,
+div.error,
+div.message,
+div.warning {
+>>>>>>> upstream/master
   padding: 1em 2em;
   margin: 2em 0;
   border-radius: $theme-border-radius;
@@ -1336,13 +1942,21 @@ div.really, div.success, div.error, div.message, div.warning {
     margin-left: 0;
     font-size: 16px;
     font-weight: bold;
+<<<<<<< HEAD
     color: #fff;
+=======
+    color: rgb(255, 255, 255);
+>>>>>>> upstream/master
   }
 }
 
 // TODO: Check whether this must be $primary-font-color as is for .success
 div.message {
+<<<<<<< HEAD
   color: #000;
+=======
+  color: rgb(0, 0, 0);
+>>>>>>> upstream/master
 }
 
 div.really {
@@ -1371,6 +1985,7 @@ form.confirm {
 |                                                                          |
 '-------------------------------------------------------------------------*/
 
+<<<<<<< HEAD
 body.main table.header td.right a#helpbutton img {
   margin: 1px 5px;
 }
@@ -1380,6 +1995,8 @@ a#helpbutton.passive {
   -webkit-filter: grayscale(1);
 }
 
+=======
+>>>>>>> upstream/master
 div.help {
   display: inline-block;
   width: auto;
@@ -1387,8 +2004,14 @@ div.help {
   margin: 8px 0;
   font-size: 12px;
   font-weight: normal;
+<<<<<<< HEAD
   color: #000;
   text-align: left;
+=======
+  color: rgb(0, 0, 0);
+  text-align: left;
+  text-transform: none; /* Neccessary due to help in H3 */
+>>>>>>> upstream/master
   background-color: $help-bg-color;
   background-image: none;
   border-radius: 5px;
@@ -1401,11 +2024,21 @@ div.help {
     font-family: serif;
     font-size: 16px;
     font-style: italic;
+<<<<<<< HEAD
     font-weight: $theme-font-weight-bold;
     content: "i";
   }
 
   a, a:link {
+=======
+    font-weight: $font-weight-bold;
+    content: "i";
+  }
+
+  a,
+  a:link,
+  a:visited {
+>>>>>>> upstream/master
     color: $help-link-color;
 
     &:hover {
@@ -1420,7 +2053,11 @@ div.help {
 
   table.help td {
     vertical-align: top;
+<<<<<<< HEAD
     border: 1px solid #000;
+=======
+    border: 1px solid rgb(0, 0, 0);
+>>>>>>> upstream/master
   }
 
   table.help td.tt {
@@ -1429,12 +2066,20 @@ div.help {
 
   tt {
     font-family: courier, monospace;
+<<<<<<< HEAD
     color: #009;
+=======
+    color: rgb(0, 0, 153);
+>>>>>>> upstream/master
   }
 }
 
 table.data div.help {
+<<<<<<< HEAD
   box-shadow: 0 0 3px #000;
+=======
+  box-shadow: 0 0 3px rgb(0, 0, 0);
+>>>>>>> upstream/master
 }
 
 /*--Popupmenu--------------------------------------------------------------.
@@ -1450,10 +2095,17 @@ body.main .popup_menu {
   position: absolute;
   z-index: 50;
   min-width: 300px;
+<<<<<<< HEAD
   color: #fff;
   white-space: normal;
   background-color: $theme-color-white;
   border: 1px solid $theme-color-table-border;
+=======
+  color: rgb(255, 255, 255);
+  white-space: normal;
+  background-color: $bg-color-secondary;
+  border: 1px solid $color-table-border;
+>>>>>>> upstream/master
   border-radius: 5px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
 
@@ -1475,7 +2127,11 @@ body.main .popup_menu {
       height: 15px;
       pointer-events: none;
       cursor: se-resize;
+<<<<<<< HEAD
       background-color: #508aa1;
+=======
+      background-color: rgb(80, 138, 161);
+>>>>>>> upstream/master
     }
 
     div.content {
@@ -1510,6 +2166,7 @@ body.main .popup_menu {
   }
 }
 
+<<<<<<< HEAD
 body.main .popup_menu a,
 body.main table.footer .popup_menu a,
 body.main .popup_menu span {
@@ -1522,6 +2179,23 @@ body.main .popup_menu span {
 
   &:hover {
     text-decoration: underline;
+=======
+body.main .popup_menu,
+body.main .popup_menu {
+  a,
+  span {
+    display: block;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    color: $font-color;
+    text-align: left;
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+    cursor: pointer;
+>>>>>>> upstream/master
   }
 }
 
@@ -1550,15 +2224,25 @@ body.main .popup_menu span {
       line-height: 21px;
 
       &:hover {
+<<<<<<< HEAD
         color: #fff;
         text-decoration: none;
         background-color: #629bb1;
+=======
+        color: rgb(255, 255, 255);
+        text-decoration: none;
+        background-color: rgb(98, 155, 177);
+>>>>>>> upstream/master
       }
     }
 
     &.active a {
       color: $primary-font-color;
+<<<<<<< HEAD
       border-bottom: 1px solid #508aa1;
+=======
+      border-bottom: 1px solid rgb(80, 138, 161);
+>>>>>>> upstream/master
     }
   }
 
@@ -1622,6 +2306,7 @@ body.main .popup_menu span {
 |                                                                          |
 '-------------------------------------------------------------------------*/
 
+<<<<<<< HEAD
 /* TODO: Reproduce div.keysym */
 div.keysym {
   display: inline-block;
@@ -1661,6 +2346,17 @@ div.log_output, .crash_report pre {
   color: $theme-color-lightgrey;
   background: $theme-color-sidebar-background;
   border: 1px solid $theme-color-table-border-dark;
+=======
+div.log_output,
+.crash_report pre {
+  padding: 8px 16px;
+  margin: 16px;
+  font-family: monospace;
+  font-weight: $font-weight-default;
+  color: $lightgrey;
+  background: $log-output-color;
+  border: 1px solid $color-table-border;
+>>>>>>> upstream/master
   border-radius: $theme-border-radius;
   box-shadow: none;
 }
@@ -1671,8 +2367,13 @@ div.log_output {
 
   pre {
     font-family: monospace;
+<<<<<<< HEAD
     font-size: $theme-font-size-global;
     color: $theme-color-lightgrey;
+=======
+    font-size: $font-size-global;
+    color: $font-color;
+>>>>>>> upstream/master
   }
 }
 
@@ -1696,7 +2397,10 @@ a.element_dragger {
   -o-transform: scale(1.005);
 }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/master
 /*-------------------------------------------------------------------------.
 |         ____       _                                                     |
 |        |  _ \  ___| |__  _   _  __ _  __   ____ _ _ __ ___               |
@@ -1714,25 +2418,44 @@ table.debug_vars {
 
   th {
     font-weight: bold;
+<<<<<<< HEAD
     background-color: #8c8;
     border: 1px solid #080;
+=======
+    background-color: rgb(136, 204, 136);
+    border: 1px solid rgb(0, 136, 0);
+>>>>>>> upstream/master
   }
 
   td {
     padding: 2px 6px;
     font-family: courier, monospace;
+<<<<<<< HEAD
     border: 1px solid #050;
 
     &.left {
       font-weight: bold;
       color: #fff;
       background-color: #395;
+=======
+    border: 1px solid rgb(0, 85, 0);
+
+    &.left {
+      font-weight: bold;
+      color: rgb(255, 255, 255);
+      background-color: rgb(51, 153, 85);
+>>>>>>> upstream/master
     }
 
     &.right {
       font-weight: bold;
+<<<<<<< HEAD
       color: #000;
       background-color: #8fc;
+=======
+      color: rgb(0, 0, 0);
+      background-color: rgb(136, 255, 204);
+>>>>>>> upstream/master
     }
   }
 }
@@ -1792,15 +2515,26 @@ table.data tr.data td.pnpgraph {
 
 td.job_state {
   font-weight: bold;
+<<<<<<< HEAD
   color: #fff;
   text-align: center;
   box-shadow: 0.5px 0.5px 2px #000 inset;
+=======
+  color: rgb(255, 255, 255);
+  text-align: center;
+  box-shadow: 0.5px 0.5px 2px rgb(0, 0, 0) inset;
+>>>>>>> upstream/master
 }
 
 table.data > tbody > tr > td.job_state {
   &.job_finished {
+<<<<<<< HEAD
     color: $theme-color-table-text;
     background-color: $theme-color-state-success-background;
+=======
+    color: $grey-6;
+    background-color: $color-state-success-background;
+>>>>>>> upstream/master
     box-shadow: none;
   }
 
@@ -1810,13 +2544,22 @@ table.data > tbody > tr > td.job_state {
   }
 
   &.job_running {
+<<<<<<< HEAD
     background-color: $theme-color-state-9-background;
+=======
+    background-color: $color-state-9-background;
+>>>>>>> upstream/master
     box-shadow: none;
   }
 
   &.job_initialized {
+<<<<<<< HEAD
     color: $theme-color-black;
     background-color: #ccc;
+=======
+    color: $black;
+    background-color: rgb(204, 204, 204);
+>>>>>>> upstream/master
   }
 }
 
@@ -1843,7 +2586,10 @@ table.data.job_table {
       width: 50px;
     }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/master
     &.job_started {
       width: 160px;
     }
@@ -1901,6 +2647,7 @@ table.data.job_table {
       line-height: 14px;
     }
 
+<<<<<<< HEAD
     &, &.discovered {
       &:hover:not([readonly]) div::before {
 	top: 0;
@@ -1909,19 +2656,39 @@ table.data.job_table {
 	left: 0;
 	opacity: $tag-hover-opacity;
 	box-shadow: none;
+=======
+    &,
+    &.discovered {
+      &:hover:not([readonly]) div::before {
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        opacity: $tag-hover-opacity;
+        box-shadow: none;
+>>>>>>> upstream/master
       }
     }
   }
 
   // Display input always non-colored
   &:not([readonly]) tag {
+<<<<<<< HEAD
     > div::before, &:hover > div::before {
+=======
+    > div::before,
+    &:hover > div::before {
+>>>>>>> upstream/master
       background: $tag-input-bg-color;
       opacity: 1;
     }
 
     > div {
+<<<<<<< HEAD
       color: #000;
+=======
+      color: rgb(0, 0, 0);
+>>>>>>> upstream/master
     }
   }
 
@@ -1929,29 +2696,50 @@ table.data.job_table {
     color: $tag-dropdown-active-color;
   }
 
+<<<<<<< HEAD
   tag, &[readonly] tag {
+=======
+  tag,
+  &[readonly] tag {
+>>>>>>> upstream/master
     > div::before {
       top: 0;
       right: 0;
       bottom: 0;
       left: 0;
+<<<<<<< HEAD
       background: #00a8b5;
+=======
+      background: rgb(0, 168, 181);
+>>>>>>> upstream/master
       opacity: $tag-opacity;
       box-shadow: none;
       animation: none;
     }
 
     &.explicit > div::before {
+<<<<<<< HEAD
       background: #774898;
     }
 
     &.discovered > div::before {
       background: #f3ae4b;
+=======
+      background: rgb(119, 72, 152);
+    }
+
+    &.discovered > div::before {
+      background: rgb(243, 174, 75);
+>>>>>>> upstream/master
       opacity: $tag-discovered-opacity;
     }
 
     &.ruleset > div::before {
+<<<<<<< HEAD
       background: #de4383;
+=======
+      background: rgb(222, 67, 131);
+>>>>>>> upstream/master
     }
   }
 
@@ -1972,9 +2760,15 @@ table.data.job_table {
       margin: 1px;
 
       &--active {
+<<<<<<< HEAD
 	color: $tag-dropdown-active-color;
 	background-color: $tag-dropdown-active-bg-color;
 	border: $primary-table-border;
+=======
+        color: $tag-dropdown-active-color;
+        background-color: $tag-dropdown-active-bg-color;
+        border: $primary-table-border;
+>>>>>>> upstream/master
       }
     }
   }

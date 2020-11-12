@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -27,6 +28,28 @@
 
 def parse_aws_ebs(info):
     return _extract_aws_metrics_by_labels(
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# NOTE: Careful when replacing the *-import below with a more specific import. This can cause
+# problems because it might remove variables from the check-context which are necessary for
+# resolving legacy discovery results such as [("SUMMARY", "diskstat_default_levels")]. Furthermore,
+# it might also remove variables needed for accessing discovery rulesets.
+from cmk.base.check_legacy_includes.aws import *  # pylint: disable=wildcard-import,unused-wildcard-import
+# NOTE: Careful when replacing the *-import below with a more specific import. This can cause
+# problems because it might remove variables from the check-context which are necessary for
+# resolving legacy discovery results such as [("SUMMARY", "diskstat_default_levels")]. Furthermore,
+# it might also remove variables needed for accessing discovery rulesets.
+from cmk.base.check_legacy_includes.diskstat import *  # pylint: disable=wildcard-import,unused-wildcard-import
+
+
+def parse_aws_ebs(info):
+    return extract_aws_metrics_by_labels(
+>>>>>>> upstream/master
         [
             "VolumeReadOps",
             "VolumeWriteOps",
@@ -58,7 +81,11 @@ def parse_aws_ebs(info):
 def check_aws_ebs(item, params, parsed):
     now = time.time()
     disks = {}
+<<<<<<< HEAD
     for disk_name, metrics in parsed.iteritems():
+=======
+    for disk_name, metrics in parsed.items():
+>>>>>>> upstream/master
         disks.setdefault(
             disk_name, {
                 "read_ios": get_rate("aws_ebs_disk_io_read_ios.%s" % item, now,
@@ -81,7 +108,10 @@ check_info['aws_ebs'] = {
         inventory_aws_generic(p, ['VolumeReadOps', 'VolumeWriteOps', 'VolumeReadBytes', 'VolumeWriteBytes', 'VolumeQueueLength']),
     'check_function': check_aws_ebs,
     'service_description': 'AWS/EBS Disk IO %s',
+<<<<<<< HEAD
     'includes': ['diskstat.include', 'aws.include'],
+=======
+>>>>>>> upstream/master
     'group': 'diskstat',
     'has_perfdata': True,
 }
@@ -111,7 +141,10 @@ check_info['aws_ebs.burst_balance'] = {
         inventory_aws_generic(p, ['BurstBalance']),
     'check_function': check_aws_ebs_burst_balance,
     'service_description': 'AWS/EBS Burst Balance %s',
+<<<<<<< HEAD
     'includes': ['aws.include'],
+=======
+>>>>>>> upstream/master
     'group': 'aws_ebs_burst_balance',
     'has_perfdata': True
 }

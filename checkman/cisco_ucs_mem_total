@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: Cisco UCS: Total memory
+=======
+title: Cisco UCS: Total Memory
+>>>>>>> upstream/master
 agents: snmp
 catalog: hw/network/cisco
 license: GPL

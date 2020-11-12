@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: EMC ScaleIO: Volume size and throughput
+=======
+title: EMC ScaleIO: Volume Size and Throughput
+>>>>>>> upstream/master
 agents: linux
 catalog: os/storage
 license: GPL
@@ -8,7 +12,14 @@ description:
  "Levels for disk IO" can be used to set thresholds for read/write throughput.
 
 item:
+<<<<<<< HEAD
  The volume id is used as item
 
 inventory:
  One service for each volume is created
+=======
+ The volume id
+
+inventory:
+ One service is created for each volume.
+>>>>>>> upstream/master

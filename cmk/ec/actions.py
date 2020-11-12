@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/env python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -31,11 +32,30 @@ import time
 import six
 
 import cmk
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+from logging import Logger
+import os
+import subprocess
+import time
+from typing import Any, Dict, Optional, Set
+
+>>>>>>> upstream/master
 import cmk.utils.debug
 import cmk.utils.defines
 from cmk.utils.log import VERBOSE
 import livestatus
 
+<<<<<<< HEAD
+=======
+from .settings import Settings
+
+>>>>>>> upstream/master
 #.
 #   .--Actions-------------------------------------------------------------.
 #   |                     _        _   _                                   |
@@ -50,7 +70,12 @@ import livestatus
 #   '----------------------------------------------------------------------'
 
 
+<<<<<<< HEAD
 def event_has_opened(history, settings, config, logger, event_server, event_columns, rule, event):
+=======
+def event_has_opened(history: Any, settings: Settings, config: Dict[str, Any], logger: Logger,
+                     event_server: Any, event_columns: Any, rule: Any, event: Any) -> None:
+>>>>>>> upstream/master
     # Prepare for events with a limited livetime. This time starts
     # when the event enters the open state or acked state
     if "livetime" in rule:
@@ -75,8 +100,14 @@ def event_has_opened(history, settings, config, logger, event_server, event_colu
 
 # Execute a list of actions on an event that has just been
 # opened or cancelled.
+<<<<<<< HEAD
 def do_event_actions(history, settings, config, logger, event_server, event_columns, actions, event,
                      is_cancelling):
+=======
+def do_event_actions(history: Any, settings: Settings, config: Dict[str, Any], logger: Logger,
+                     event_server: Any, event_columns: Any, actions: Any, event: Any,
+                     is_cancelling: bool) -> None:
+>>>>>>> upstream/master
     for aname in actions:
         if aname == "@NOTIFY":
             do_notify(event_server, logger, event, is_cancelling=is_cancelling)
@@ -95,7 +126,12 @@ def do_event_actions(history, settings, config, logger, event_server, event_colu
 # not hang for more than a couple of ms.
 
 
+<<<<<<< HEAD
 def do_event_action(history, settings, config, logger, event_columns, action, event, user):
+=======
+def do_event_action(history: Any, settings: Settings, config: Dict[str, Any], logger: Logger,
+                    event_columns: Any, action: Any, event: Any, user: Any) -> None:
+>>>>>>> upstream/master
     if action["disabled"]:
         logger.info("Skipping disabled action %s." % action["id"])
         return
@@ -128,6 +164,7 @@ def do_event_action(history, settings, config, logger, event_columns, action, ev
         logger.exception("Error during execution of action %s" % action["id"])
 
 
+<<<<<<< HEAD
 def _escape_null_bytes(s):
     return s.replace("\000", "\\000")
 
@@ -136,12 +173,28 @@ def _get_quoted_event(event, logger):
     new_event = {}
     fields_to_quote = ["application", "match_groups", "text", "comment", "contact"]
     for key, value in event.iteritems():
+=======
+def _escape_null_bytes(s: Any) -> Any:
+    return s.replace("\000", "\\000")
+
+
+def _get_quoted_event(event: Any, logger: Logger) -> Any:
+    new_event: Dict[str, Any] = {}
+    fields_to_quote = ["application", "match_groups", "text", "comment", "contact"]
+    for key, value in event.items():
+>>>>>>> upstream/master
         if key not in fields_to_quote:
             new_event[key] = value
         else:
             try:
+<<<<<<< HEAD
                 if isinstance(value, list):
                     new_value = map(quote_shell_string, value)
+=======
+                new_value: Any = None
+                if isinstance(value, list):
+                    new_value = list(map(quote_shell_string, value))
+>>>>>>> upstream/master
                 elif isinstance(value, tuple):
                     new_value = value
                 else:
@@ -155,17 +208,30 @@ def _get_quoted_event(event, logger):
     return new_event
 
 
+<<<<<<< HEAD
 def _substitute_event_tags(event_columns, text, event):
     for key, value in _get_event_tags(event_columns, event).iteritems():
+=======
+def _substitute_event_tags(event_columns: Any, text: Any, event: Any) -> Any:
+    for key, value in _get_event_tags(event_columns, event).items():
+>>>>>>> upstream/master
         text = text.replace('$%s$' % key.upper(), value)
     return text
 
 
+<<<<<<< HEAD
 def quote_shell_string(s):
     return "'" + s.replace("'", "'\"'\"'") + "'"
 
 
 def _send_email(config, to, subject, body, logger):
+=======
+def quote_shell_string(s: Any) -> Any:
+    return "'" + s.replace("'", "'\"'\"'") + "'"
+
+
+def _send_email(config: Dict[str, Any], to: Any, subject: Any, body: Any, logger: Logger) -> bool:
+>>>>>>> upstream/master
     command_utf8 = [
         "mail", "-S", "sendcharsets=utf-8", "-s",
         subject.encode("utf-8"),
@@ -175,6 +241,7 @@ def _send_email(config, to, subject, body, logger):
     if config["debug_rules"]:
         logger.info("  Executing: %s" % " ".join(command_utf8))
 
+<<<<<<< HEAD
     p = subprocess.Popen(command_utf8,
                          close_fds=True,
                          stdout=subprocess.PIPE,
@@ -184,18 +251,37 @@ def _send_email(config, to, subject, body, logger):
     # to a general place and fix this for all our components (notification plugins,
     # notify.py, this one, ...)
     stdout_txt, stderr_txt = p.communicate(body.encode("utf-8"))
+=======
+    p = subprocess.Popen(
+        command_utf8,
+        close_fds=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        stdin=subprocess.PIPE,
+        encoding="utf-8",
+    )
+    # FIXME: This may lock on too large buffer. We should move all "mail sending" code
+    # to a general place and fix this for all our components (notification plugins,
+    # notify.py, this one, ...)
+    stdout, stderr = p.communicate(input=body)
+>>>>>>> upstream/master
     exitcode = p.returncode
 
     logger.info('  Exitcode: %d' % exitcode)
     if exitcode != 0:
         logger.info("  Error: Failed to send the mail.")
+<<<<<<< HEAD
         for line in (stdout_txt + stderr_txt).splitlines():
+=======
+        for line in (stdout + stderr).splitlines():
+>>>>>>> upstream/master
             logger.info("  Output: %s" % line.rstrip())
         return False
 
     return True
 
 
+<<<<<<< HEAD
 def _execute_script(event_columns, body, event, logger):
     script_env = os.environ.copy()
 
@@ -203,6 +289,15 @@ def _execute_script(event_columns, body, event, logger):
         if isinstance(key, six.text_type):
             key = key.encode("utf-8")
         if isinstance(value, six.text_type):
+=======
+def _execute_script(event_columns: Any, body: Any, event: Any, logger: Any) -> None:
+    script_env = os.environ.copy()
+
+    for key, value in _get_event_tags(event_columns, event).items():
+        if isinstance(key, str):
+            key = key.encode("utf-8")
+        if isinstance(value, str):
+>>>>>>> upstream/master
             value = value.encode("utf-8")
         script_env["CMK_" + key.upper()] = value
 
@@ -215,6 +310,7 @@ def _execute_script(event_columns, body, event, logger):
         stderr=subprocess.STDOUT,
         close_fds=True,
         env=script_env,
+<<<<<<< HEAD
     )
     output = p.communicate(body.encode('utf-8'))[0]
     logger.info('  Exit code: %d' % p.returncode)
@@ -223,6 +319,17 @@ def _execute_script(event_columns, body, event, logger):
 
 
 def _get_event_tags(event_columns, event):
+=======
+        encoding="utf-8",
+    )
+    stdout, _stderr = p.communicate(input=body)
+    logger.info('  Exit code: %d' % p.returncode)
+    if stdout:
+        logger.info('  Output: \'%s\'' % stdout)
+
+
+def _get_event_tags(event_columns: Any, event: Any) -> Dict[Any, Any]:
+>>>>>>> upstream/master
     substs = [
         ("match_group_%d" % (nr + 1), g) for (nr, g) in enumerate(event.get("match_groups", ()))
     ]
@@ -231,8 +338,13 @@ def _get_event_tags(event_columns, event):
         varname = key[6:]
         substs.append((varname, event.get(varname, defaultvalue)))
 
+<<<<<<< HEAD
     def to_string(v):
         if isinstance(v, six.string_types):
+=======
+    def to_string(v: Any) -> str:
+        if isinstance(v, str):
+>>>>>>> upstream/master
             return v
         return "%s" % v
 
@@ -257,7 +369,11 @@ def _get_event_tags(event_columns, event):
 #   |        |_| \_|\___/ \__|_|_| |_|\___\__,_|\__|_|\___/|_| |_|         |
 #   |                                                                      |
 #   +----------------------------------------------------------------------+
+<<<<<<< HEAD
 #   |  EC create Check_MK native notifications via cmk --notify.           |
+=======
+#   |  EC create Checkmk native notifications via cmk --notify.           |
+>>>>>>> upstream/master
 #   '----------------------------------------------------------------------'
 
 # Es fehlt:
@@ -268,9 +384,19 @@ def _get_event_tags(event_columns, event):
 # - Das muss sich in den Hilfetexten wiederspiegeln
 
 
+<<<<<<< HEAD
 # This function creates a Check_MK Notification for a locally running Check_MK.
 # We simulate a *service* notification.
 def do_notify(event_server, logger, event, username=None, is_cancelling=False):
+=======
+# This function creates a Checkmk Notification for a locally running Checkmk.
+# We simulate a *service* notification.
+def do_notify(event_server: Any,
+              logger: Logger,
+              event: Any,
+              username: Optional[bool] = None,
+              is_cancelling: bool = False) -> None:
+>>>>>>> upstream/master
     if _core_has_notifications_disabled(event, logger):
         return
 
@@ -278,7 +404,11 @@ def do_notify(event_server, logger, event, username=None, is_cancelling=False):
 
     if logger.isEnabledFor(VERBOSE):
         logger.log(VERBOSE, "Sending notification via Check_MK with the following context:")
+<<<<<<< HEAD
         for varname, value in sorted(context.iteritems()):
+=======
+        for varname, value in sorted(context.items()):
+>>>>>>> upstream/master
             logger.log(VERBOSE, "  %-25s: %s", varname, value)
 
     if context["HOSTDOWNTIME"] != "0":
@@ -287,6 +417,7 @@ def do_notify(event_server, logger, event, username=None, is_cancelling=False):
         return
 
     # Send notification context via stdin.
+<<<<<<< HEAD
     context_string = to_utf8("".join([
         "%s=%s\n" % (varname, value.replace("\n", "\\n"))
         for (varname, value) in context.iteritems()
@@ -301,18 +432,44 @@ def do_notify(event_server, logger, event, username=None, is_cancelling=False):
     status = p.returncode
     if status:
         logger.error("Error notifying via Check_MK: %s" % response.strip())
+=======
+    context_string = "".join(
+        ["%s=%s\n" % (varname, value.replace("\n", "\\n")) for (varname, value) in context.items()])
+
+    p = subprocess.Popen(
+        ["cmk", "--notify", "stdin"],
+        stdin=subprocess.PIPE,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        close_fds=True,
+        encoding="utf-8",
+    )
+    stdout, _stderr = p.communicate(input=context_string)
+    status = p.returncode
+    if status:
+        logger.error("Error notifying via Check_MK: %s" % stdout.strip())
+>>>>>>> upstream/master
     else:
         logger.info("Successfully forwarded notification for event %d to Check_MK" % event["id"])
 
 
+<<<<<<< HEAD
 def _create_notification_context(event_server, event, username, is_cancelling, logger):
+=======
+def _create_notification_context(event_server: Any, event: Any, username: Any, is_cancelling: bool,
+                                 logger: Logger) -> Any:
+>>>>>>> upstream/master
     context = _base_notification_context(event, username, is_cancelling)
     _add_infos_from_monitoring_host(event_server, context, event)  # involves Livestatus query
     _add_contacts_from_rule(context, event, logger)
     return context
 
 
+<<<<<<< HEAD
 def _base_notification_context(event, username, is_cancelling):
+=======
+def _base_notification_context(event: Any, username: Any, is_cancelling: bool) -> Dict[str, Any]:
+>>>>>>> upstream/master
     return {
         "WHAT": "SERVICE",
         "CONTACTNAME": "check-mk-notify",
@@ -363,8 +520,13 @@ def _base_notification_context(event, username, is_cancelling):
 
 # "CONTACTS" is allowed to be missing in the context, cmk --notify will
 # add the fallback contacts then.
+<<<<<<< HEAD
 def _add_infos_from_monitoring_host(event_server, context, event):
     def _add_artificial_context_info():
+=======
+def _add_infos_from_monitoring_host(event_server: Any, context: Any, event: Any) -> None:
+    def _add_artificial_context_info() -> None:
+>>>>>>> upstream/master
         context.update({
             "HOSTNAME": event["host"],
             "HOSTALIAS": event["host"],
@@ -381,7 +543,11 @@ def _add_infos_from_monitoring_host(event_server, context, event):
         _add_artificial_context_info()
         return
 
+<<<<<<< HEAD
     host_config = event_server.host_config.get(event["core_host"])
+=======
+    host_config = event_server.host_config.get_config_for_host(event["core_host"], None)
+>>>>>>> upstream/master
     if not host_config:
         _add_artificial_context_info()  # No config found - Host has vanished?
         return
@@ -396,13 +562,21 @@ def _add_infos_from_monitoring_host(event_server, context, event):
     })
 
     # Add custom variables to the notification context
+<<<<<<< HEAD
     for key, val in host_config["custom_variables"].iteritems():
+=======
+    for key, val in host_config["custom_variables"].items():
+>>>>>>> upstream/master
         context["HOST_%s" % key] = val
 
     context["HOSTDOWNTIME"] = "1" if event["host_in_downtime"] else "0"
 
 
+<<<<<<< HEAD
 def _add_contacts_from_rule(context, event, logger):
+=======
+def _add_contacts_from_rule(context: Any, event: Any, logger: Logger) -> None:
+>>>>>>> upstream/master
     # Add contact information from the rule, but only if the
     # host is unknown or if contact groups in rule have precedence
 
@@ -414,7 +588,11 @@ def _add_contacts_from_rule(context, event, logger):
         _add_contact_information_to_context(context, event["contact_groups"], logger)
 
 
+<<<<<<< HEAD
 def _add_contact_information_to_context(context, contact_groups, logger):
+=======
+def _add_contact_information_to_context(context: Any, contact_groups: Any, logger: Any) -> None:
+>>>>>>> upstream/master
     contact_names = _rbn_groups_contacts(contact_groups)
     context["CONTACTS"] = ",".join(contact_names)
     context["SERVICECONTACTGROUPNAMES"] = ",".join(contact_groups)
@@ -423,9 +601,16 @@ def _add_contact_information_to_context(context, contact_groups, logger):
 
 
 # NOTE: This function is an exact copy from modules/notify.py. We need
+<<<<<<< HEAD
 # to move all this Check_MK-specific livestatus query stuff to a helper
 # module in lib some day.
 def _rbn_groups_contacts(groups):
+=======
+# to move all this Checkmk-specific livestatus query stuff to a helper
+# module in lib some day.
+# NOTE: Typing chaos ahead!
+def _rbn_groups_contacts(groups: Any) -> Any:
+>>>>>>> upstream/master
     if not groups:
         return {}
     query = "GET contactgroups\nColumns: members\n"
@@ -434,7 +619,11 @@ def _rbn_groups_contacts(groups):
     query += "Or: %d\n" % len(groups)
 
     try:
+<<<<<<< HEAD
         contacts = set([])
+=======
+        contacts: Set[str] = set()
+>>>>>>> upstream/master
         for contact_list in livestatus.LocalConnection().query_column(query):
             contacts.update(contact_list)
         return contacts
@@ -448,7 +637,11 @@ def _rbn_groups_contacts(groups):
         return []
 
 
+<<<<<<< HEAD
 def _core_has_notifications_disabled(event, logger):
+=======
+def _core_has_notifications_disabled(event: Any, logger: Logger) -> bool:
+>>>>>>> upstream/master
     try:
         notifications_enabled = livestatus.LocalConnection().query_value(
             "GET status\nColumns: enable_notifications")
@@ -459,6 +652,7 @@ def _core_has_notifications_disabled(event, logger):
     except Exception as e:
         logger.info("Cannot determine whether notifcations are enabled in core: %s. Assuming YES." %
                     e)
+<<<<<<< HEAD
 
     return False
 
@@ -467,3 +661,6 @@ def to_utf8(x):
     if isinstance(x, six.text_type):
         return x.encode("utf-8")
     return x
+=======
+    return False
+>>>>>>> upstream/master

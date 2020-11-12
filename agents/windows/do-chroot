@@ -1,7 +1,15 @@
 #!/bin/bash
+<<<<<<< HEAD
 
 set -x
 
+=======
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+set -x
+>>>>>>> upstream/master
 # $1: cmd(s) to be executed within chroot jail
 # if non-existent, enter chroot jail with 'bash -l'
 
@@ -23,6 +31,7 @@ if [ -z $CHROOT_BUILD_DIR ]; then
     exit 1
 fi
 
+<<<<<<< HEAD
 if [ ! -e $CHROOT_PATH/proc/self ] ; then
     mount -t proc proc $CHROOT_PATH/proc
 fi
@@ -40,6 +49,21 @@ if [ ! -e $CHROOT_PATH/$CHROOT_BUILD_DIR ]; then
 fi
 
 if [ ! -e $CHROOT_PATH/$CHROOT_BUILD_DIR/Makefile ] ; then
+=======
+if ! mountpoint -q -- $CHROOT_PATH/proc ; then
+    mount -o bind /proc $CHROOT_PATH/proc
+fi
+
+if ! mountpoint -q -- $CHROOT_PATH/dev ; then
+    mount --rbind /dev $CHROOT_PATH/dev
+fi
+
+if ! mountpoint -q -- $CHROOT_PATH/$CHROOT_BUILD_DIR ; then
+    mkdir $CHROOT_PATH/$CHROOT_BUILD_DIR
+fi
+
+if ! mountpoint -q -- $CHROOT_PATH/$CHROOT_BUILD_DIR/Makefile ; then
+>>>>>>> upstream/master
     mount -o bind $BASE $CHROOT_PATH/$CHROOT_BUILD_DIR
 fi
 
@@ -63,7 +87,10 @@ function unmount()
     fi
 }
 
+<<<<<<< HEAD
 unmount $CHROOT_PATH/dev/pts
+=======
+>>>>>>> upstream/master
 unmount $CHROOT_PATH/dev
 unmount $CHROOT_PATH/proc
 unmount $CHROOT_PATH/$CHROOT_BUILD_DIR

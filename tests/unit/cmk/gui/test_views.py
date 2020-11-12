@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # yapf: disable
 # pylint: disable=redefined-outer-name
 import copy
@@ -8,16 +9,48 @@ import cmk.gui.config as config
 # Make it load all plugins (CEE + CME)
 import cmk.gui.views  # pylint: disable=unused-import
 import cmk.gui.default_permissions
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# yapf: disable
+
+import copy
+from typing import Any, Dict
+
+import pytest  # type: ignore[import]
+
+import cmk.gui.config as config
+import cmk.utils.version as cmk_version
+
+pytestmark = pytest.mark.usefixtures("load_plugins")
+>>>>>>> upstream/master
 
 from cmk.gui.globals import html
 from cmk.gui.valuespec import ValueSpec
 import cmk.gui.plugins.views
+<<<<<<< HEAD
 
 @pytest.fixture()
 def view(register_builtin_html, load_plugins):
     view_name = "allhosts"
     view_spec = cmk.gui.views.multisite_builtin_views[view_name]
     return cmk.gui.views.View(view_name, view_spec)
+=======
+from cmk.gui.plugins.views.utils import transform_painter_spec
+from cmk.gui.type_defs import PainterSpec
+import cmk.gui.views
+
+
+@pytest.fixture(name="view")
+def view_fixture(register_builtin_html):
+    view_name = "allhosts"
+    view_spec = transform_painter_spec(cmk.gui.views.multisite_builtin_views[view_name])
+    return cmk.gui.views.View(view_name, view_spec, view_spec.get("context", {}))
+>>>>>>> upstream/master
 
 
 def test_registered_painter_options():
@@ -26,12 +59,21 @@ def test_registered_painter_options():
         'aggr_onlyproblems',
         'aggr_treetype',
         'aggr_wrap',
+<<<<<<< HEAD
         'graph_render_options',
+=======
+>>>>>>> upstream/master
         'matrix_omit_uniform',
         'pnp_timerange',
         'show_internal_tree_paths',
         'ts_date',
         'ts_format',
+<<<<<<< HEAD
+=======
+        'graph_render_options',
+        "refresh",
+        "num_columns",
+>>>>>>> upstream/master
     ]
 
     names = cmk.gui.plugins.views.painter_option_registry.keys()
@@ -46,18 +88,25 @@ def test_registered_layouts():
     expected = [
         'boxed',
         'boxed_graph',
+<<<<<<< HEAD
         'csv',
         'csv_export',
         'dataset',
         'json',
         'json_export',
         'jsonp',
+=======
+        'dataset',
+>>>>>>> upstream/master
         'matrix',
         'mobiledataset',
         'mobilelist',
         'mobiletable',
+<<<<<<< HEAD
         'python',
         'python-raw',
+=======
+>>>>>>> upstream/master
         'table',
         'tiled',
     ]
@@ -70,11 +119,15 @@ def test_layout_properties():
     expected = {
         'boxed': {
             'checkboxes': True,
+<<<<<<< HEAD
             'hide': False,
+=======
+>>>>>>> upstream/master
             'title': u'Balanced boxes'
         },
         'boxed_graph': {
             'checkboxes': True,
+<<<<<<< HEAD
             'hide': False,
             'title': u'Balanced graph boxes'
         },
@@ -108,25 +161,43 @@ def test_layout_properties():
             'hide': True,
             'title': u'JSONP data output'
         },
+=======
+            'title': u'Balanced graph boxes'
+        },
+        'dataset': {
+            'checkboxes': False,
+            'title': u'Single dataset'
+        },
+>>>>>>> upstream/master
         'matrix': {
             'checkboxes': False,
             'has_csv_export': True,
             'options': ['matrix_omit_uniform'],
+<<<<<<< HEAD
             'hide': False,
+=======
+>>>>>>> upstream/master
             'title': u'Matrix'
         },
         'mobiledataset': {
             'checkboxes': False,
+<<<<<<< HEAD
             'hide': False,
+=======
+>>>>>>> upstream/master
             'title': u'Mobile: Dataset'
         },
         'mobilelist': {
             'checkboxes': False,
+<<<<<<< HEAD
             'hide': False,
+=======
+>>>>>>> upstream/master
             'title': u'Mobile: List'
         },
         'mobiletable': {
             'checkboxes': False,
+<<<<<<< HEAD
             'hide': False,
             'title': u'Mobile: Table'
         },
@@ -143,21 +214,36 @@ def test_layout_properties():
         'table': {
             'checkboxes': True,
             'hide': False,
+=======
+            'title': u'Mobile: Table'
+        },
+        'table': {
+            'checkboxes': True,
+>>>>>>> upstream/master
             'title': u'Table'
         },
         'tiled': {
             'checkboxes': True,
+<<<<<<< HEAD
             'hide': False,
+=======
+>>>>>>> upstream/master
             'title': u'Tiles'
         },
     }
 
     for ident, spec in expected.items():
         plugin = cmk.gui.plugins.views.layout_registry[ident]()
+<<<<<<< HEAD
         assert isinstance(plugin.title, six.text_type)
         assert spec["title"] == plugin.title
         assert spec["checkboxes"] == plugin.can_display_checkboxes
         assert spec["hide"] == plugin.is_hidden
+=======
+        assert isinstance(plugin.title, str)
+        assert spec["title"] == plugin.title
+        assert spec["checkboxes"] == plugin.can_display_checkboxes
+>>>>>>> upstream/master
         assert spec.get("has_csv_export", False) == plugin.has_individual_csv_export
 
 
@@ -176,6 +262,23 @@ def test_get_layout_choices():
     ])
 
 
+<<<<<<< HEAD
+=======
+def test_registered_exporters():
+    expected = [
+        'csv',
+        'csv_export',
+        'json',
+        'json_export',
+        'jsonp',
+        'python',
+        'python-raw',
+    ]
+    names = cmk.gui.plugins.views.exporter_registry.keys()
+    assert sorted(expected) == sorted(names)
+
+
+>>>>>>> upstream/master
 def test_registered_command_groups():
     expected = [
         'acknowledge',
@@ -201,12 +304,20 @@ def test_legacy_register_command_group(monkeypatch):
 
 
 def test_registered_commands():
+<<<<<<< HEAD
     expected = {
+=======
+    expected: Dict[str, Dict[str, Any]] = {
+>>>>>>> upstream/master
         'acknowledge': {
             'group': 'acknowledge',
             'permission': 'action.acknowledge',
             'tables': ['host', 'service', 'aggr'],
+<<<<<<< HEAD
             'title': u'Acknowledge Problems'
+=======
+            'title': u'Acknowledge problems'
+>>>>>>> upstream/master
         },
         'ec_custom_actions': {
             'permission': 'mkeventd.actions',
@@ -253,11 +364,14 @@ def test_registered_commands():
             'tables': ['event'],
             'title': u'Archive Event'
         },
+<<<<<<< HEAD
         'edit_downtimes': {
             'permission': 'action.downtimes',
             'tables': ['downtime'],
             'title': u'Edit Downtimes'
         },
+=======
+>>>>>>> upstream/master
         'add_comment': {
             'permission': 'action.addcomment',
             'tables': ['host', 'service'],
@@ -300,8 +414,26 @@ def test_registered_commands():
             'tables': ['event'],
             'title': u'Update & Acknowledge'
         },
+<<<<<<< HEAD
     }
 
+=======
+        'delete_crash_reports': {
+            'permission': 'action.delete_crash_report',
+            'tables': ['crash'],
+            'title': u'Delete crash reports',
+        },
+    }
+
+    if not cmk_version.is_raw_edition():
+        expected.update({'edit_downtimes': {
+            'permission': 'action.downtimes',
+            'tables': ['downtime'],
+            'title': u'Edit Downtimes'
+        },
+        })
+
+>>>>>>> upstream/master
     names = cmk.gui.plugins.views.command_registry.keys()
     assert sorted(expected.keys()) == sorted(names)
 
@@ -310,7 +442,11 @@ def test_registered_commands():
         cmd_spec = expected[cmd.ident]
         assert cmd.title == cmd_spec["title"]
         assert cmd.tables == cmd_spec["tables"], cmd.ident
+<<<<<<< HEAD
         assert cmd.permission().name == cmd_spec["permission"]
+=======
+        assert cmd.permission.name == cmd_spec["permission"]
+>>>>>>> upstream/master
 
 
 def test_legacy_register_command(monkeypatch):
@@ -342,7 +478,11 @@ def test_legacy_register_command(monkeypatch):
 # Skip pending discussion with development team.
 @pytest.mark.skip
 def test_registered_datasources():
+<<<<<<< HEAD
     expected = {
+=======
+    expected: Dict[str, Dict[str, Any]] = {
+>>>>>>> upstream/master
         'alert_stats': {
             'add_columns': [
                 'log_alerts_ok', 'log_alerts_warn', 'log_alerts_crit', 'log_alerts_unknown',
@@ -678,7 +818,13 @@ def test_registered_datasources():
         spec = expected[ds.ident]
         assert ds.title == spec["title"]
         if hasattr(ds.table, '__call__'):
+<<<<<<< HEAD
             assert ("func", ds.table.__name__) == spec["table"]
+=======
+            # FIXME: ugly getattr so that mypy doesn't complain about missing attribute __name__
+            name = getattr(ds.table, '__name__')
+            assert ("func", name) == spec["table"]
+>>>>>>> upstream/master
         elif isinstance(ds.table, tuple):
             assert spec["table"][0] == "tuple"
             assert spec["table"][1][0] == ds.table[0].__name__
@@ -692,9 +838,14 @@ def test_registered_datasources():
 # These tests make adding new elements needlessly painful.
 # Skip pending discussion with development team.
 @pytest.mark.skip
+<<<<<<< HEAD
 @pytest.mark.usefixtures("load_plugins")
 def test_registered_painters():
     expected = {
+=======
+def test_registered_painters():
+    expected: Dict[str, Dict[str, Any]] = {
+>>>>>>> upstream/master
         'aggr_acknowledged': {
             'columns': ['aggr_effective_state'],
             'title': u'Acknowledged'
@@ -1411,8 +1562,13 @@ def test_registered_painters():
         },
         'host_plugin_output': {
             'columns': ['host_plugin_output', 'host_custom_variables'],
+<<<<<<< HEAD
             'short': u'Status detail',
             'title': u'Output of host check plugin'
+=======
+            'short': u'Summary',
+            'title': u'Summary'
+>>>>>>> upstream/master
         },
         'host_pnpgraph': {
             'columns': ['host_name', 'host_perf_data', 'host_metrics', 'host_check_command'],
@@ -2899,8 +3055,13 @@ def test_registered_painters():
         },
         'svc_long_plugin_output': {
             'columns': ['service_long_plugin_output', 'service_custom_variables'],
+<<<<<<< HEAD
             'short': u'Status detail',
             'title': u'Long output of check plugin (multiline)'
+=======
+            'short': u'Details',
+            'title': u'Details',
+>>>>>>> upstream/master
         },
         'svc_metrics': {
             'columns': ['service_check_command', 'service_perf_data'],
@@ -3000,9 +3161,15 @@ def test_registered_painters():
         },
         'svc_plugin_output': {
             'columns': ['service_plugin_output', 'service_custom_variables'],
+<<<<<<< HEAD
             'short': u'Status detail',
             'sorter': 'svcoutput',
             'title': u'Output of check plugin'
+=======
+            'short': u'Summary',
+            'sorter': 'svcoutput',
+            'title': u'Summary'
+>>>>>>> upstream/master
         },
         'svc_pnpgraph': {
             'columns': [
@@ -4022,20 +4189,28 @@ def test_registered_painters():
         painter = painter_class()
         spec = expected[painter.ident]
 
+<<<<<<< HEAD
         if isinstance(spec["title"], tuple) and spec["title"][0] == "func":
             assert hasattr(painter.title, '__call__')
         else:
             assert painter.title == spec["title"]
+=======
+        assert painter.title == spec["title"]
+>>>>>>> upstream/master
 
         if isinstance(spec["columns"], tuple) and spec["columns"][0] == "func":
             assert hasattr(painter.columns, '__call__')
         else:
             assert painter.columns == spec["columns"]
 
+<<<<<<< HEAD
         if isinstance(spec.get("short"), tuple) and spec["short"][0] == "func":
             assert hasattr(painter.short_title, '__call__')
         else:
             assert painter.short_title == spec.get("short", spec["title"])
+=======
+        assert painter.short_title == spec.get("short", spec["title"])
+>>>>>>> upstream/master
 
         assert painter.sorter == spec.get("sorter")
         assert painter.painter_options == spec.get("options", [])
@@ -4048,7 +4223,11 @@ def test_legacy_register_painter(monkeypatch):
                         cmk.gui.plugins.views.utils.PainterRegistry())
 
     def rendr(row):
+<<<<<<< HEAD
         return "xyz"
+=======
+        return ("abc", "xyz")
+>>>>>>> upstream/master
 
     cmk.gui.plugins.views.utils.register_painter(
         "abc", {
@@ -4063,24 +4242,41 @@ def test_legacy_register_painter(monkeypatch):
         })
 
     painter = cmk.gui.plugins.views.utils.painter_registry["abc"]()
+<<<<<<< HEAD
     assert isinstance(painter, cmk.gui.plugins.views.utils.Painter)
     assert painter.ident == "abc"
     assert painter.title == "A B C"
     assert painter.short_title == "ABC"
+=======
+    dummy_cell = cmk.gui.plugins.views.utils.Cell(cmk.gui.views.View("", {}, {}), PainterSpec(painter.ident))
+    assert isinstance(painter, cmk.gui.plugins.views.utils.Painter)
+    assert painter.ident == "abc"
+    assert painter.title(dummy_cell) == "A B C"
+    assert painter.short_title(dummy_cell) == "ABC"
+>>>>>>> upstream/master
     assert painter.columns == ["x"]
     assert painter.sorter == "aaaa"
     assert painter.painter_options == ["opt1"]
     assert painter.printable is False
+<<<<<<< HEAD
     assert painter.render(row={}, cell=None) == "xyz"
+=======
+    assert painter.render(row={}, cell=dummy_cell) == ("abc", "xyz")
+>>>>>>> upstream/master
     assert painter.group_by(row={}) == "xyz"
 
 
 # These tests make adding new elements needlessly painful.
 # Skip pending discussion with development team.
 @pytest.mark.skip
+<<<<<<< HEAD
 @pytest.mark.usefixtures("load_plugins")
 def test_registered_sorters():
     expected = {
+=======
+def test_registered_sorters():
+    expected: Dict[str, Dict[str, Any]] = {
+>>>>>>> upstream/master
         'aggr_group': {
             'columns': ['aggr_group'],
             'title': u'Aggregation group'
@@ -5722,10 +5918,13 @@ def test_register_sorter(monkeypatch):
 
 
 def test_get_needed_regular_columns(view):
+<<<<<<< HEAD
     view_name = "allhosts"
     view_spec = cmk.gui.views.multisite_builtin_views[view_name]
 
     view = cmk.gui.views.View(view_name, view_spec)
+=======
+>>>>>>> upstream/master
 
     columns = cmk.gui.views._get_needed_regular_columns(view.group_cells + view.row_cells, view.sorters, view.datasource)
     assert sorted(columns) == sorted([
@@ -5767,6 +5966,7 @@ def test_get_needed_regular_columns(view):
 
 def test_get_needed_join_columns(view):
     view_spec = copy.deepcopy(view.spec)
+<<<<<<< HEAD
     view_spec["painters"].append(('service_description', None, None, u'CPU load'))
     view = cmk.gui.views.View(view.name, view_spec)
 
@@ -5790,11 +5990,48 @@ def test_create_view_basics():
     assert view.user_sorters is None
     assert view.only_sites is None
 
+=======
+    view_spec["painters"].append(PainterSpec('service_description', None, None, u'CPU load'))
+    view = cmk.gui.views.View(view.name, view_spec, view_spec.get("context", {}))
+
+    columns = cmk.gui.views._get_needed_join_columns(view.join_cells, view.sorters)
+
+    expected_columns = [
+        'host_name',
+        'service_description',
+    ]
+
+    if cmk_version.is_managed_edition():
+        expected_columns += [
+            "host_custom_variable_names",
+            "host_custom_variable_values",
+        ]
+
+    assert sorted(columns) == sorted(expected_columns)
+
+
+def test_create_view_basics():
+    view_name = "allhosts"
+    view_spec = cmk.gui.views.multisite_builtin_views[view_name]
+    view = cmk.gui.views.View(view_name, view_spec, view_spec.get("context", {}))
+
+    assert view.name == view_name
+    assert view.spec == view_spec
+    assert isinstance(view.datasource, cmk.gui.plugins.views.utils.ABCDataSource)
+    assert isinstance(view.datasource.table, cmk.gui.plugins.views.utils.RowTable)
+    assert view.row_limit is None
+    assert view.user_sorters is None
+    assert view.want_checkboxes is False
+    assert view.only_sites is None
+
+
+>>>>>>> upstream/master
 def test_view_row_limit(view):
     assert view.row_limit is None
     view.row_limit = 101
     assert view.row_limit == 101
 
+<<<<<<< HEAD
 @pytest.mark.parametrize("limit,permissions,result", [
     (None, [], 1000),
 
@@ -5819,18 +6056,60 @@ def test_gui_view_row_limit(register_builtin_html, monkeypatch, limit, permissio
         monkeypatch.setitem(config.user.permissions, perm, True)
     assert cmk.gui.views.get_limit() == result
 
+=======
+
+@pytest.mark.parametrize("limit,permissions,result", [
+    (None, [], 1000),
+
+    ("soft", {}, 1000),
+    ("hard", {}, 1000),
+    ("none", {}, 1000),
+
+    ("soft", {"general.ignore_soft_limit": True}, 1000),
+    ("hard", {"general.ignore_soft_limit": True}, 5000),
+    # Strange. Shouldn't this stick to the hard limit?
+    ("none", {"general.ignore_soft_limit": True}, 1000),
+
+    ("soft", {"general.ignore_soft_limit": True, "general.ignore_hard_limit": True}, 1000),
+    ("hard", {"general.ignore_soft_limit": True, "general.ignore_hard_limit": True}, 5000),
+    ("none", {"general.ignore_soft_limit": True, "general.ignore_hard_limit": True}, None),
+])
+def test_gui_view_row_limit(register_builtin_html, monkeypatch, mocker, limit, permissions, result):
+    if limit is not None:
+        monkeypatch.setitem(html.request._vars, "limit", limit)
+
+    mocker.patch.object(config, "roles", {"nobody": {"permissions": permissions}})
+    mocker.patch.object(config.user, "role_ids", ["nobody"])
+    assert cmk.gui.views.get_limit() == result
+
+
+>>>>>>> upstream/master
 def test_view_only_sites(view):
     assert view.only_sites is None
     view.only_sites = ["unit"]
     assert view.only_sites == ["unit"]
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/master
 def test_view_user_sorters(view):
     assert view.user_sorters is None
     view.user_sorters = [("abc", True)]
     assert view.user_sorters == [("abc", True)]
 
 
+<<<<<<< HEAD
 def test_registered_display_hints(load_plugins):
+=======
+def test_view_want_checkboxes(view):
+    assert view.want_checkboxes is False
+    view.want_checkboxes = True
+    assert view.want_checkboxes is True
+
+
+def test_registered_display_hints():
+>>>>>>> upstream/master
     expected = ['.',
     '.hardware.',
     '.hardware.chassis.',
@@ -5934,8 +6213,15 @@ def test_registered_display_hints(load_plugins):
     '.hardware.cpu.cache_size',
     '.hardware.cpu.cores',
     '.hardware.cpu.cores_per_cpu',
+<<<<<<< HEAD
     '.hardware.cpu.cpus',
     '.hardware.cpu.entitlement',
+=======
+    '.hardware.cpu.cpu_max_capa',
+    '.hardware.cpu.cpus',
+    '.hardware.cpu.entitlement',
+    '.hardware.cpu.implementation_mode',
+>>>>>>> upstream/master
     '.hardware.cpu.logical_cpus',
     '.hardware.cpu.max_speed',
     '.hardware.cpu.model',
@@ -5996,6 +6282,15 @@ def test_registered_display_hints(load_plugins):
     '.hardware.video:*.graphic_memory',
     '.hardware.video:*.name',
     '.hardware.video:*.subsystem',
+<<<<<<< HEAD
+=======
+    '.hardware.volumes.physical_volumes.*:',
+    '.hardware.volumes.physical_volumes:*.volume_group_name',
+    '.hardware.volumes.physical_volumes:*.physical_volume_name',
+    '.hardware.volumes.physical_volumes:*.physical_volume_status',
+    '.hardware.volumes.physical_volumes:*.physical_volume_total_partitions',
+    '.hardware.volumes.physical_volumes:*.physical_volume_free_partitions',
+>>>>>>> upstream/master
     '.networking.',
     '.networking.addresses:',
     '.networking.addresses:*.address',
@@ -6044,9 +6339,41 @@ def test_registered_display_hints(load_plugins):
     '.software.applications.check_mk.agent_version',
     '.software.applications.check_mk.cluster.is_cluster',
     '.software.applications.check_mk.cluster.nodes:',
+<<<<<<< HEAD
     '.software.applications.check_mk.host_labels:',
     '.software.applications.check_mk.host_labels:*.plugin_name',
     '.software.applications.check_mk.host_labels:*.label',
+=======
+    '.software.applications.check_mk.num_hosts',
+    '.software.applications.check_mk.num_services',
+    '.software.applications.check_mk.host_labels:',
+    '.software.applications.check_mk.host_labels:*.plugin_name',
+    '.software.applications.check_mk.host_labels:*.label',
+    '.software.applications.check_mk.versions:',
+    '.software.applications.check_mk.versions:*.demo',
+    '.software.applications.check_mk.sites:',
+    '.software.applications.check_mk.sites:*.autostart',
+    '.software.applications.check_mk.sites:*.apache',
+    '.software.applications.check_mk.sites:*.cmc',
+    '.software.applications.check_mk.sites:*.crontab',
+    '.software.applications.check_mk.sites:*.dcd',
+    '.software.applications.check_mk.sites:*.liveproxyd',
+    '.software.applications.check_mk.sites:*.mkeventd',
+    '.software.applications.check_mk.sites:*.mknotifyd',
+    '.software.applications.check_mk.sites:*.rrdcached',
+    '.software.applications.check_mk.sites:*.stunnel',
+    '.software.applications.check_mk.sites:*.xinetd',
+    '.software.applications.check_mk.sites:*.nagios',
+    '.software.applications.check_mk.sites:*.npcd',
+    '.software.applications.check_mk.sites:*.check_helper_usage',
+    '.software.applications.check_mk.sites:*.check_mk_helper_usage',
+    '.software.applications.check_mk.sites:*.fetcher_helper_usage',
+    '.software.applications.check_mk.sites:*.checker_helper_usage',
+    '.software.applications.check_mk.sites:*.livestatus_usage',
+    '.software.applications.check_mk.sites:*.num_hosts',
+    '.software.applications.check_mk.sites:*.num_services',
+    '.software.applications.check_mk.sites:*.used_version',
+>>>>>>> upstream/master
     '.software.applications.citrix.',
     '.software.applications.citrix.controller.',
     '.software.applications.citrix.controller.controller_version',
@@ -6086,6 +6413,26 @@ def test_registered_display_hints(load_plugins):
     '.software.applications.docker.num_containers_total',
     '.software.applications.docker.num_images',
     '.software.applications.docker.version',
+<<<<<<< HEAD
+=======
+    '.software.applications.ibm_mq.',
+    '.software.applications.ibm_mq.channels:',
+    '.software.applications.ibm_mq.channels:*.name',
+    '.software.applications.ibm_mq.channels:*.qmgr',
+    '.software.applications.ibm_mq.channels:*.status',
+    '.software.applications.ibm_mq.channels:*.type',
+    '.software.applications.ibm_mq.managers:',
+    '.software.applications.ibm_mq.managers:*.instname',
+    '.software.applications.ibm_mq.managers:*.instver',
+    '.software.applications.ibm_mq.managers:*.name',
+    '.software.applications.ibm_mq.managers:*.standby',
+    '.software.applications.ibm_mq.managers:*.status',
+    '.software.applications.ibm_mq.queues:',
+    '.software.applications.ibm_mq.queues:*.maxdepth',
+    '.software.applications.ibm_mq.queues:*.maxmsgl',
+    '.software.applications.ibm_mq.queues:*.name',
+    '.software.applications.ibm_mq.queues:*.qmgr',
+>>>>>>> upstream/master
     '.software.applications.kubernetes.assigned_pods:',
     '.software.applications.kubernetes.assigned_pods:*.name',
     '.software.applications.kubernetes.nodes:',
@@ -6130,17 +6477,47 @@ def test_registered_display_hints(load_plugins):
     '.software.applications.oracle.dataguard_stats:*.role',
     '.software.applications.oracle.dataguard_stats:*.sid',
     '.software.applications.oracle.dataguard_stats:*.switchover',
+<<<<<<< HEAD
+=======
+    '.software.applications.oracle.systemparameter:',
+    '.software.applications.oracle.systemparameter:*.sid',
+    '.software.applications.oracle.systemparameter:*.name',
+    '.software.applications.oracle.systemparameter:*.value',
+    '.software.applications.oracle.systemparameter:*.isdefault',
+>>>>>>> upstream/master
     '.software.applications.oracle.instance:',
     '.software.applications.oracle.instance:*.db_creation_time',
     '.software.applications.oracle.instance:*.db_uptime',
     '.software.applications.oracle.instance:*.logins',
     '.software.applications.oracle.instance:*.logmode',
     '.software.applications.oracle.instance:*.openmode',
+<<<<<<< HEAD
+=======
+    '.software.applications.oracle.instance:*.pname',
+>>>>>>> upstream/master
     '.software.applications.oracle.instance:*.sid',
     '.software.applications.oracle.instance:*.version',
     '.software.applications.oracle.recovery_area:',
     '.software.applications.oracle.recovery_area:*.flashback',
     '.software.applications.oracle.recovery_area:*.sid',
+<<<<<<< HEAD
+=======
+    ".software.applications.oracle.pga:",
+    ".software.applications.oracle.pga:*.aggregate_pga_auto_target",
+    ".software.applications.oracle.pga:*.aggregate_pga_target_parameter",
+    ".software.applications.oracle.pga:*.bytes_processed",
+    ".software.applications.oracle.pga:*.extra_bytes_read_written",
+    ".software.applications.oracle.pga:*.global_memory_bound",
+    ".software.applications.oracle.pga:*.maximum_pga_allocated",
+    ".software.applications.oracle.pga:*.maximum_pga_used_for_auto_workareas",
+    ".software.applications.oracle.pga:*.maximum_pga_used_for_manual_workareas",
+    ".software.applications.oracle.pga:*.sid",
+    ".software.applications.oracle.pga:*.total_freeable_pga_memory",
+    ".software.applications.oracle.pga:*.total_pga_allocated",
+    ".software.applications.oracle.pga:*.total_pga_inuse",
+    ".software.applications.oracle.pga:*.total_pga_used_for_auto_workareas",
+    ".software.applications.oracle.pga:*.total_pga_used_for_manual_workareas",
+>>>>>>> upstream/master
     '.software.applications.oracle.sga:',
     '.software.applications.oracle.sga:*.buf_cache_size',
     '.software.applications.oracle.sga:*.data_trans_cache_size',
@@ -6180,9 +6557,19 @@ def test_registered_display_hints(load_plugins):
     '.software.configuration.snmp_info.contact',
     '.software.configuration.snmp_info.location',
     '.software.configuration.snmp_info.name',
+<<<<<<< HEAD
     '.software.firmware.platform_level',
     '.software.firmware.vendor',
     '.software.firmware.version',
+=======
+    '.software.firmware',
+    '.software.firmware.platform_level',
+    '.software.firmware.vendor',
+    '.software.firmware.version',
+    '.software.kernel_config:',
+    '.software.kernel_config:*.parameter',
+    '.software.kernel_config:*.value',
+>>>>>>> upstream/master
     '.software.os.',
     '.software.os.arch',
     '.software.os.install_date',
@@ -6205,9 +6592,16 @@ def test_registered_display_hints(load_plugins):
     '.software.packages:*.vendor',
     '.software.packages:*.version',]
 
+<<<<<<< HEAD
     found = cmk.gui.plugins.views.inventory_displayhints.keys()
     assert sorted(expected) == sorted(found)
 
 def test_get_inventory_display_hint(load_plugins):
+=======
+    assert sorted(expected) == sorted(cmk.gui.plugins.views.inventory_displayhints.keys())
+
+
+def test_get_inventory_display_hint():
+>>>>>>> upstream/master
     hint = cmk.gui.plugins.views.inventory_displayhints.get(".software.packages:*.summary")
     assert isinstance(hint, dict)

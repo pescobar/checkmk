@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,12 +24,23 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 # FIXME: Can be removed once all dashboards have been converted
 # to have the view definitions right inside the dashboards
 
+<<<<<<< HEAD
 from . import (
     multisite_builtin_views,)
+=======
+from . import multisite_builtin_views
+>>>>>>> upstream/master
 
 multisite_builtin_views.update({
 
@@ -144,7 +156,10 @@ multisite_builtin_views.update({
         'hidden': True,
         'hide_filters': [],
         'layout': 'table',
+<<<<<<< HEAD
         'linktitle': 'Events',
+=======
+>>>>>>> upstream/master
         'mustsearch': False,
         'name': 'events_dash',
         'num_columns': 1,

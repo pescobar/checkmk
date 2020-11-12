@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,6 +24,21 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# NOTE: Careful when replacing the *-import below with a more specific import. This can cause
+# problems because it might remove variables from the check-context which are necessary for
+# resolving legacy discovery results such as [("SUMMARY", "diskstat_default_levels")]. Furthermore,
+# it might also remove variables needed for accessing discovery rulesets.
+from cmk.base.check_legacy_includes.time import *  # pylint: disable=wildcard-import,unused-wildcard-import
+import cmk.base.plugins.agent_based.ntp as ntp
+import cmk.base.plugins.agent_based.agent_based_api.v1.render as render
+>>>>>>> upstream/master
 
 ntp_default_levels = (10, 200.0, 500.0)  # stratum, ms offset
 
@@ -59,6 +75,7 @@ ntp_inventory_mode = "summary"
 
 
 # We monitor all servers we have reached at least once
+<<<<<<< HEAD
 def inventory_ntp(info):
     if ntp_inventory_mode not in ["detailed", "both"]:
         return []
@@ -157,9 +174,65 @@ def check_ntp_summary(_no_item, params, info):
     # No information at all? NTP daemon not running or timeout in ntpq -p
     if len(info) == 0:
         yield 3, "no information from NTP: timeout in ntpq -p or NTP daemon not running"
+=======
+def inventory_ntp(parsed):
+    if ntp_inventory_mode not in ["detailed", "both"]:
         return
 
+    for peer in parsed.values():
+        if peer.reach != "0" and peer.refid != '.LOCL.':
+            yield peer.name, "ntp_default_levels"
+
+
+def inventory_ntp_summary(parsed):
+    if ntp_inventory_mode in ["summary", "both"] and parsed:
+        yield None, {}
+
+
+def check_ntp(item, params, parsed: ntp.Section):
+    peer = parsed.get(item)
+    if peer is None:
+        return
+    if peer.reach == "0":
+        yield 3, f"Peer {peer.name} is unreachable"
+>>>>>>> upstream/master
+        return
+
+    crit_stratum, warn, crit = params
+    yield check_levels(
+        peer.offset,
+        "offset",
+        (warn, crit, -warn, -crit),
+        human_readable_func=lambda f: "%.4f ms" % f,
+        infoname="Offset",
+    )
+
+    if peer.when > 0:
+        yield 0, "Time since last sync: %s" % render.timespan(peer.when)
+
+    state = ntp_state_codes.get(peer.statecode, "unknown")
+    yield 2 if state == "falsetick" else 0, f"\nState: {state}"
+
+    yield check_levels(
+        peer.jitter,
+        "jitter",
+        None,
+        human_readable_func=lambda f: "%.4f ms" % f,
+        infoname="\nJitter",
+    )
+
+    yield check_levels(
+        peer.stratum,
+        None,
+        (crit_stratum, crit_stratum),
+        human_readable_func=int,
+        infoname="\nStratum",
+    )
+
+
+def check_ntp_summary(_no_item, params, parsed):
     # We only are interested in our system peer or pulse per second source (pps)
+<<<<<<< HEAD
     for line in info:
         if line[0] in ["*", "o"]:
             state, text, perfdata = check_ntp(line[1], params["ntp_levels"], [line])
@@ -195,6 +268,36 @@ def check_ntp_summary(_no_item, params, info):
 
 
 check_info["ntp"] = {
+=======
+    peer = parsed.get(None)
+    if peer is None:
+        if parsed:
+            yield 0, "Found %d peers, but none is suitable" % len(parsed)
+        yield from tolerance_check(
+            set_sync_time=None,
+            levels=params.get("alert_delay"),
+            notice_only=False,
+        )
+        return
+
+    if isinstance(params, tuple):
+        params = {
+            "ntp_levels": params,
+            "alert_delay": (300, 3600),
+        }
+
+    yield from check_ntp(peer.name, params["ntp_levels"], parsed)
+    yield from tolerance_check(
+        set_sync_time=time.time(),
+        levels=params.get("alert_delay"),
+        notice_only=True,
+    )
+    yield 0, f"\nSynchronized on {peer.name}"
+
+
+check_info["ntp"] = {
+    # there's a section against the new API defined!
+>>>>>>> upstream/master
     'check_function': check_ntp,
     'inventory_function': inventory_ntp,
     'service_description': 'NTP Peer %s',
@@ -203,6 +306,10 @@ check_info["ntp"] = {
 }
 
 check_info["ntp.time"] = {
+<<<<<<< HEAD
+=======
+    # there's a section against the new API defined!
+>>>>>>> upstream/master
     'check_function': check_ntp_summary,
     'inventory_function': inventory_ntp_summary,
     'service_description': 'NTP Time',

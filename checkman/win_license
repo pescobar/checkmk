@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: Windows license information
+=======
+title: Windows: License Information
+>>>>>>> upstream/master
 agents: windows
 catalog: os/services
 license: GPL
@@ -14,7 +18,12 @@ description:
  The check can be configured via the corresponding WATO rule {Windows License}
 
 inventory:
+<<<<<<< HEAD
  The service {Windows License} is created.
 
 item:
  No item
+=======
+ One service named {Windows License} is created.
+
+>>>>>>> upstream/master

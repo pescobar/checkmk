@@ -1,4 +1,4 @@
-title: Retrieve informational SNMP data about host
+title: SNMP: Informational Data about Host
 agents: snmp
 catalog: os/misc
 license: GPL
@@ -8,4 +8,8 @@ description:
  {sysLocation} and displays them. It is alwas OK.
 
 inventory:
+<<<<<<< HEAD
  One check per SNMP host will be created.
+=======
+ One service is created for each SNMP host.
+>>>>>>> upstream/master

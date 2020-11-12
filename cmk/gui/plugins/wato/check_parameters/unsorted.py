@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,6 +24,13 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 from cmk.gui.plugins.wato.active_checks import check_icmp_params
 
@@ -95,7 +103,11 @@ rulespec_registry.register(
 
 def _valuespec_inventory_sap_values():
     return Dictionary(
+<<<<<<< HEAD
         title=_('SAP R/3 Single Value Inventory'),
+=======
+        title=_('SAP R/3 single value discovery'),
+>>>>>>> upstream/master
         elements=[
             (
                 'match',
@@ -176,10 +188,17 @@ def _valuespec_sap_value_groups():
             ],
         ),
         add_label=_("Add pattern group"),
+<<<<<<< HEAD
         title=_('SAP Value Grouping Patterns'),
         help=_(
             'The check <tt>sap.value</tt> normally creates one service for each SAP value. '
             'By defining grouping patterns, you can switch to the check <tt>sap.value-groups</tt>. '
+=======
+        title=_('SAP value discovery'),
+        help=_(
+            'The check <tt>sap.value</tt> normally creates one service for each SAP value. '
+            'By defining grouping patterns, you can switch to the check <tt>sap.value_groups</tt>. '
+>>>>>>> upstream/master
             'That check monitors a list of SAP values at once.'),
     )
 
@@ -195,7 +214,11 @@ rulespec_registry.register(
 
 def _valuespec_inventory_fujitsu_ca_ports():
     return Dictionary(
+<<<<<<< HEAD
         title=_("Discovery of Fujtsu storage CA ports"),
+=======
+        title=_("Fujtsu storage CA port discovery"),
+>>>>>>> upstream/master
         elements=[
             ("indices", ListOfStrings(title=_("CA port indices"))),
             ("modes",

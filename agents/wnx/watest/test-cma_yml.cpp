@@ -4,7 +4,11 @@
 #include "pch.h"
 
 #include "common/cma_yml.h"
+<<<<<<< HEAD
 #include "yaml-cpp/yaml.h"
+=======
+#include "common/yaml.h"
+>>>>>>> upstream/master
 
 namespace cma::yml {
 

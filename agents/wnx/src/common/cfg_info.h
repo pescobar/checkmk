@@ -1,3 +1,10 @@
+<<<<<<< HEAD
+=======
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+// conditions defined in the file COPYING, which is part of this source code package.
+
+>>>>>>> upstream/master
 // Configuration Parameters for whole Agent
 // Engine independent parameters
 // No C++ file
@@ -10,7 +17,11 @@
 #include <string>
 
 #include "common/cfg_yaml.h"
+<<<<<<< HEAD
 #include "yaml-cpp/yaml.h"
+=======
+#include "common/yaml.h"
+>>>>>>> upstream/master
 
 namespace cma {
 // set only when executable works as a service
@@ -158,6 +169,7 @@ constexpr const wchar_t* kFileInstallDir = L"install";    // from here!
 // ProgramData/checkmk/agent
 constexpr const wchar_t* kUserBin = L"bin";  // owned by agent legacy for OHM
 
+<<<<<<< HEAD
 constexpr const wchar_t* kBackup = L"backup";           // owned by agent
 constexpr const wchar_t* kUserPlugins = L"plugins";     // owned by user
 constexpr const wchar_t* kLocal = L"local";             // owned by user
@@ -167,6 +179,19 @@ constexpr const wchar_t* kUserInstallDir = L"install";  // owned by agent
 constexpr const wchar_t* kBakery = L"bakery";           // owned by site
 constexpr const wchar_t* kState = L"state";             // owned by plugins
 constexpr const wchar_t* kPluginConfig = L"config";     // owned by plugins
+=======
+constexpr const wchar_t* kBackup = L"backup";             // owned by agent
+constexpr const wchar_t* kUserPlugins = L"plugins";       // owned by user
+constexpr const wchar_t* kLocal = L"local";               // owned by user
+constexpr const wchar_t* kAgentMrpe = L"mrpe";            // owned by user
+constexpr const wchar_t* kInstall = L"install";           // owned by agent
+constexpr const wchar_t* kUserInstallDir = L"install";    // owned by agent
+constexpr const wchar_t* kBakery = L"bakery";             // owned by site
+constexpr const wchar_t* kState = L"state";               // owned by plugins
+constexpr const wchar_t* kPluginConfig = L"config";       // owned by plugins
+constexpr const wchar_t* kUserModules = L"modules";       // owned by agent
+constexpr const wchar_t* kInstalledModules = L"modules";  // owned by agent
+>>>>>>> upstream/master
 
 constexpr const wchar_t* kAuStateLocation = kPluginConfig;  // owned by plugins
 
@@ -191,12 +216,20 @@ constexpr const char* const kRemoteHost = "REMOTE_HOST";
 constexpr const char* const kRemote = "REMOTE";
 
 constexpr std::string_view kMkInstallDirName = "MK_INSTALLDIR";
+<<<<<<< HEAD
+=======
+constexpr std::string_view kMkModulesDirName = "MK_MODULESDIR";
+>>>>>>> upstream/master
 constexpr std::string_view kMkMsiPathName = "MK_MSI_PATH";
 
 };  // namespace envs
 
 // internal and stable representation of the [logwatch] event levels
+<<<<<<< HEAD
 enum class EventLevels { kOff = -1, kAll = 0, kWarn, kCrit };
+=======
+enum class EventLevels { kIgnore = -2, kOff = -1, kAll = 0, kWarn, kCrit };
+>>>>>>> upstream/master
 
 // #TODO gtest
 // converts from internal and stable representation
@@ -204,12 +237,23 @@ enum class EventLevels { kOff = -1, kAll = 0, kWarn, kCrit };
 constexpr const char* const ConvertLogWatchLevelToString(EventLevels Lvl) {
     switch (Lvl) {
         case EventLevels::kAll:
+<<<<<<< HEAD
             return vars::kLogWatchEvent_ParamWords[1];
         case EventLevels::kWarn:
             return vars::kLogWatchEvent_ParamWords[2];
         case EventLevels::kCrit:
             return vars::kLogWatchEvent_ParamWords[3];
         case EventLevels::kOff:
+=======
+            return vars::kLogWatchEvent_ParamWords[2];
+        case EventLevels::kWarn:
+            return vars::kLogWatchEvent_ParamWords[3];
+        case EventLevels::kCrit:
+            return vars::kLogWatchEvent_ParamWords[4];
+        case EventLevels::kOff:
+            return vars::kLogWatchEvent_ParamWords[1];
+        case EventLevels::kIgnore:
+>>>>>>> upstream/master
             return vars::kLogWatchEvent_ParamWords[0];
     }
 
@@ -217,7 +261,11 @@ constexpr const char* const ConvertLogWatchLevelToString(EventLevels Lvl) {
     return vars::kLogWatchEvent_ParamWords[0];
 }
 
+<<<<<<< HEAD
 constexpr auto kInitialPos = std::numeric_limits<uint64_t>::max();
+=======
+constexpr auto kFromBegin = std::numeric_limits<uint64_t>::max();
+>>>>>>> upstream/master
 inline const std::chrono::seconds G_DefaultDelayOnFail(3600);
 
 // Prefixes of mailslots' names

@@ -1,3 +1,10 @@
+<<<<<<< HEAD
+=======
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+// conditions defined in the file COPYING, which is part of this source code package.
+
+>>>>>>> upstream/master
 // //////////////////////////////////////////////////////////////////////////
 // xlog by Sergey Kipnis
 // simplified dump file
@@ -413,6 +420,13 @@ namespace xlog {
 
         return (int)strlen(Output);
     }
+<<<<<<< HEAD
+=======
+    void internal_Print2Buffer(const wchar_t *Prefix, wchar_t *Buf, int Len,
+                               const wchar_t *Format, ...);
+    void internal_Print2Buffer(const wchar_t *Prefix, char *Buf, int Len,
+                               const char *Format, ...);
+>>>>>>> upstream/master
 
     // Windows Event Log VERY BASIC support
     enum LogEvents {
@@ -554,7 +568,11 @@ using WorkString = std::basic_string<T>;
 
     auto file_ptr = std::fopen(FileName, "a");
     if (!file_ptr) {
+<<<<<<< HEAD
 #if defined(_WIN32)
+=======
+#if defined(_WIN32) && _MSC_VER < 1920
+>>>>>>> upstream/master
         auto error = GetLastError();
         xlog::l("You have error %d opening file %s", error, FileName);
 #else
@@ -688,12 +706,20 @@ inline void internal_PrintStringStdio(const char *Txt) { printf("%s", Txt); };
         }
 
         // MOVE CREATE
+<<<<<<< HEAD
         TextInfo(TextInfo &&Rhs) {
+=======
+        TextInfo(TextInfo &&Rhs) noexcept {
+>>>>>>> upstream/master
             text_ = Rhs.text_;
             Rhs.text_ = nullptr;
         }
 
+<<<<<<< HEAD
         TextInfo &operator=(TextInfo &&Rhs) {
+=======
+        TextInfo &operator=(TextInfo &&Rhs) noexcept {
+>>>>>>> upstream/master
             delete[] text_;
             text_ = Rhs.text_;
             Rhs.text_ = nullptr;
@@ -814,8 +840,13 @@ inline void internal_PrintStringStdio(const char *Txt) { printf("%s", Txt); };
 
         xlog::Type type_;
         xlog::Marker mark_;  // # TODO this is not a good place
+<<<<<<< HEAD
         int directions_;
         int flags_;
+=======
+        uint32_t directions_;
+        uint32_t flags_;
+>>>>>>> upstream/master
 
     private:
         wchar_t prefix_[kInternalMaxPrefix];
@@ -877,9 +908,12 @@ inline void internal_PrintStringStdio(const char *Txt) { printf("%s", Txt); };
         }
     };
 
+<<<<<<< HEAD
     void internal_Print2Buffer(const wchar_t *Prefix, wchar_t *Buf, int Len,
                                const wchar_t *Format, ...);
 
+=======
+>>>>>>> upstream/master
     inline void internal_Print2Buffer(const wchar_t *Prefix, char *Buf, int Len,
                                       const char *Format, ...) {
         va_list args;
@@ -951,9 +985,17 @@ inline void internal_PrintStringStdio(const char *Txt) { printf("%s", Txt); };
         Buf[len + 1] = 0;
     }
 
+<<<<<<< HEAD
     template <typename T, typename... Args>
     inline TextInfo<T> internal_dout(const LogParam &Param, const T *Format,
                                      Args &&... args) {
+=======
+#pragma warning(push)
+#pragma warning(disable : 26444)
+    template <typename T, typename... Args>
+    [[maybe_unused]] inline TextInfo<T> internal_dout(
+        const LogParam &Param, const T *Format, Args &&... args) {
+>>>>>>> upstream/master
         T buf[kInternalMaxOut];
 
         internal_Print2Buffer(
@@ -981,6 +1023,10 @@ inline void internal_PrintStringStdio(const char *Txt) { printf("%s", Txt); };
 
         return TextInfo<T>(buf + offset);
     }
+<<<<<<< HEAD
+=======
+#pragma warning(pop)
+>>>>>>> upstream/master
 
     // Common API
     template <typename T, typename... Args>
@@ -991,7 +1037,11 @@ inline void internal_PrintStringStdio(const char *Txt) { printf("%s", Txt); };
 #endif
 #if defined(XLOG_DEBUG)
         LogParam log_param;
+<<<<<<< HEAD
         internal_dout(log_param, Format, std::forward<Args>(args)...);
+=======
+        auto _ = internal_dout(log_param, Format, std::forward<Args>(args)...);
+>>>>>>> upstream/master
 #else
     // return TextInfo<T>((const T*)nullptr);
 #endif
@@ -1026,9 +1076,16 @@ inline void internal_PrintStringStdio(const char *Txt) { printf("%s", Txt); };
     // TextInfo<T>((const T*)nullptr);
 #endif
     }
+<<<<<<< HEAD
 
     template <typename T, typename... Args>
     inline TextInfo<T> l(const T *Format, Args &&... args) {
+=======
+#pragma warning(push)
+#pragma warning(disable : 26444)
+    template <typename T, typename... Args>
+    [[maybe_unused]] inline TextInfo<T> l(const T *Format, Args &&... args) {
+>>>>>>> upstream/master
 #if defined(XLOG_LIMITED_BUILD)
         static_assert(sizeof(T) == 1,
                       "Wide Char output for the target is not possible");
@@ -1044,7 +1101,12 @@ inline void internal_PrintStringStdio(const char *Txt) { printf("%s", Txt); };
     }
 
     template <typename T, typename... Args>
+<<<<<<< HEAD
     inline TextInfo<T> l(bool Enable, const T *Format, Args &&... args) {
+=======
+    [[maybe_unused]] inline TextInfo<T> l(bool Enable, const T *Format,
+                                          Args &&... args) {
+>>>>>>> upstream/master
 #if defined(XLOG_LIMITED_BUILD)
         static_assert(sizeof(T) == 1,
                       "Wide Char output for the target is not possible");
@@ -1061,6 +1123,11 @@ inline void internal_PrintStringStdio(const char *Txt) { printf("%s", Txt); };
 #endif
     }
 
+<<<<<<< HEAD
+=======
+#pragma warning(pop)
+
+>>>>>>> upstream/master
     // rare API
     inline void dumpBinData(const char *Marker, const void *Data,
                             int SizeofData) {

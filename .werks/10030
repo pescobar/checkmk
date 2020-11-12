@@ -5,7 +5,11 @@ Class: fix
 Compatible: compat
 Edition: cre
 State: unknown
+<<<<<<< HEAD
 Version: 1.7.0i1
+=======
+Version: 2.0.0i1
+>>>>>>> upstream/master
 Date: 1567789831
 
 With 1.4 some sample config tag groups have been changed to be "builtin"

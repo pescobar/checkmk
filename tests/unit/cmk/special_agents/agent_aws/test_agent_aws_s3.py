@@ -1,6 +1,20 @@
+<<<<<<< HEAD
 # pylint: disable=redefined-outer-name
 
 import pytest, json
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# pylint: disable=redefined-outer-name
+
+import pytest  # type: ignore[import]
+
+from datetime import datetime as dt
+>>>>>>> upstream/master
 from agent_aws_fake_clients import (
     FakeCloudwatchClient,
     S3ListBucketsIB,
@@ -16,8 +30,16 @@ from cmk.special_agents.agent_aws import (
     S3Requests,
 )
 
+<<<<<<< HEAD
 
 class FakeS3Client(object):
+=======
+# Needed to monkeypatch agent_aws.NOW
+from cmk.special_agents import agent_aws
+
+
+class FakeS3Client:
+>>>>>>> upstream/master
     def list_buckets(self):
         return {
             'Buckets': S3ListBucketsIB.create_instances(amount=4),
@@ -39,7 +61,11 @@ class FakeS3Client(object):
             return {
                 'TagSet': S3BucketTaggingIB.create_instances(amount=1),
             }
+<<<<<<< HEAD
         elif Bucket == 'Name-1':
+=======
+        if Bucket == 'Name-1':
+>>>>>>> upstream/master
             return {
                 'TagSet': S3BucketTaggingIB.create_instances(amount=2),
             }
@@ -47,10 +73,21 @@ class FakeS3Client(object):
 
 
 @pytest.fixture()
+<<<<<<< HEAD
 def get_s3_sections():
     def _create_s3_sections(names, tags):
         region = 'region'
         config = AWSConfig('hostname', (None, None))
+=======
+def get_s3_sections(monkeypatch):
+    def _create_s3_sections(names, tags):
+        # on_time is somehow not feeded from here to S3Limits, so use monkey patch...
+        monkeypatch.setattr(agent_aws, "NOW",
+                            dt.strptime('2020-09-28 15:30 UTC', '%Y-%m-%d %H:%M %Z'))
+
+        region = 'region'
+        config = AWSConfig('hostname', [], (None, None))
+>>>>>>> upstream/master
         config.add_single_service_config('s3_names', names)
         config.add_service_tags('s3_tags', tags)
 
@@ -74,12 +111,29 @@ def get_s3_sections():
 
 
 s3_params = [
+<<<<<<< HEAD
     (None, (None, None), 4),
+=======
+    (None, (None, None), 3),
+>>>>>>> upstream/master
     (['Name-0'], (None, None), 1),
     (['Name-0', 'Name-1'], (None, None), 2),
     (['Name-0', 'Name-1', 'Name-2'], (None, None), 3),
     (['Name-0', 'Name-1', 'Name-2', 'string4'], (None, None), 3),
     (['Name-0', 'Name-1', 'Name-2', 'FOOBAR'], (None, None), 3),
+<<<<<<< HEAD
+=======
+    (['Name-0'], ([['Key-0', 'unknown-tag']], [['Value-0', 'Value-1'], ['unknown-val']]), 1),
+    (['Name-0', 'Name-1'], ([['Key-0', 'unknown-tag']], [['Value-0', 'Value-1'],
+                                                         ['unknown-val']]), 2),
+    (['Name-0', 'Name-1', 'Name-2'], ([['Key-0', 'unknown-tag']], [['Value-0', 'Value-1'],
+                                                                   ['unknown-val']]), 3),
+    (['Name-0', 'Name-1', 'Name-2', 'string4'], ([['Key-0',
+                                                   'unknown-tag']], [['Value-0', 'Value-1'],
+                                                                     ['unknown-val']]), 3),
+    (['Name-0', 'Name-1', 'Name-2', 'FOOBAR'], ([['Key-0', 'unknown-tag']], [['Value-0', 'Value-1'],
+                                                                             ['unknown-val']]), 3),
+>>>>>>> upstream/master
     (None, ([
         ['Key-1'],
     ], [
@@ -128,7 +182,10 @@ def test_agent_aws_s3_limits(get_s3_sections, names, tags, amount_buckets):
     s3_limits, _s3_summary, _s3, _s3_requests = get_s3_sections(names, tags)
     s3_limits_results = s3_limits.run().results
 
+<<<<<<< HEAD
     assert s3_limits.cache_interval == 86400
+=======
+>>>>>>> upstream/master
     assert s3_limits.name == "s3_limits"
 
     assert len(s3_limits_results) == 1
@@ -150,7 +207,10 @@ def test_agent_aws_s3_summary(get_s3_sections, names, tags, amount_buckets):
     _s3_summary_results = s3_limits.run().results
     s3_summary_results = s3_summary.run().results
 
+<<<<<<< HEAD
     assert s3_summary.cache_interval == 86400
+=======
+>>>>>>> upstream/master
     assert s3_summary.name == "s3_summary"
 
     assert s3_summary_results == []
@@ -162,7 +222,10 @@ def test_agent_aws_s3(get_s3_sections, names, tags, amount_buckets):
     _s3_limits_results = s3_limits.run().results
     _s3_summary_results = s3_summary.run().results
     s3_results = s3.run().results
+<<<<<<< HEAD
     assert s3.cache_interval == 86400
+=======
+>>>>>>> upstream/master
     assert s3.name == "s3"
 
     if amount_buckets:
@@ -187,6 +250,10 @@ def test_agent_aws_s3_requests(get_s3_sections, names, tags, amount_buckets):
     s3_requests_results = s3_requests.run().results
 
     assert s3_requests.cache_interval == 300
+<<<<<<< HEAD
+=======
+    assert s3_requests.period == 600
+>>>>>>> upstream/master
     assert s3_requests.name == "s3_requests"
 
     if amount_buckets:
@@ -208,7 +275,10 @@ def test_agent_aws_s3_summary_without_limits(get_s3_sections, names, tags, amoun
     _s3_limits, s3_summary, _s3, _s3_requests = get_s3_sections(names, tags)
     s3_summary_results = s3_summary.run().results
 
+<<<<<<< HEAD
     assert s3_summary.cache_interval == 86400
+=======
+>>>>>>> upstream/master
     assert s3_summary.name == "s3_summary"
     assert s3_summary_results == []
 
@@ -219,7 +289,10 @@ def test_agent_aws_s3_without_limits(get_s3_sections, names, tags, amount_bucket
     _s3_summary_results = s3_summary.run().results
     s3_results = s3.run().results
 
+<<<<<<< HEAD
     assert s3.cache_interval == 86400
+=======
+>>>>>>> upstream/master
     assert s3.name == "s3"
 
     if amount_buckets:
@@ -237,13 +310,26 @@ def test_agent_aws_s3_without_limits(get_s3_sections, names, tags, amount_bucket
 
 @pytest.mark.parametrize("names,tags,amount_buckets", s3_params)
 def test_agent_aws_s3_requests_without_limits(get_s3_sections, names, tags, amount_buckets):
+<<<<<<< HEAD
     _s3_limits, s3_summary, _s3, s3_requests = get_s3_sections(names, tags)
+=======
+    s3_limits, s3_summary, _s3, s3_requests = get_s3_sections(names, tags)
+>>>>>>> upstream/master
     _s3_summary_results = s3_summary.run().results
     s3_requests_results = s3_requests.run().results
 
     assert s3_requests.cache_interval == 300
+<<<<<<< HEAD
     assert s3_requests.name == "s3_requests"
 
+=======
+    assert s3_requests.period == 600
+    assert s3_requests.name == "s3_requests"
+
+    assert s3_limits.cache_interval == 55800
+    assert s3_limits.period == 172800
+
+>>>>>>> upstream/master
     if amount_buckets:
         assert len(s3_requests_results) == 1
 

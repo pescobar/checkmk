@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: Dell Compellent: Enclosure status
+=======
+title: Dell Compellent: Enclosure Status
+>>>>>>> upstream/master
 agents: snmp
 catalog: hw/storagehw/dell
 license: GPL
@@ -10,7 +14,14 @@ description:
  the state changed.
 
 item:
+<<<<<<< HEAD
  The Enclosure number is the item
 
 inventory:
  One service for each enclosure is created
+=======
+ The Enclosure number
+
+inventory:
+ One service is created for each enclosure.
+>>>>>>> upstream/master

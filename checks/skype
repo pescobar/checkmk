@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -24,6 +25,19 @@
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
 
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# NOTE: Careful when replacing the *-import below with a more specific import. This can cause
+# problems because it might remove variables from the check-context which are necessary for
+# resolving legacy discovery results such as [("SUMMARY", "diskstat_default_levels")]. Furthermore,
+# it might also remove variables needed for accessing discovery rulesets.
+from cmk.base.check_legacy_includes.wmi import *  # pylint: disable=wildcard-import,unused-wildcard-import
+>>>>>>> upstream/master
 # these defaults were specified by customer
 factory_settings['skype_mobile_defaultlevels'] = {'requests_processing': {"upper": (10000, 20000)}}
 
@@ -157,7 +171,7 @@ factory_settings['skype_defaultlevels'] = {
 }
 
 
-def check_skype(item, params, parsed):
+def check_skype(_no_item, params, parsed):
     # LS:WEB - Address Book Web Query\WEB - Failed search requests/sec
     # LS:WEB - Location Information Service\WEB - Failed Get Locations Requests/Second
     # LS:WEB - Distribution List Expansion\WEB - Timed out Active Directory Requests/sec
@@ -169,67 +183,115 @@ def check_skype(item, params, parsed):
     # LS:WEB – Auth Provider related calls\WEB – Failed validate cert calls to the cert auth provider
 
     yield wmi_yield_raw_persec(parsed.get("LS:WEB - Address Book Web Query"),
+<<<<<<< HEAD
                                item,
                                "WEB - Failed search requests/sec",
                                label=" failed search requests/sec",
+=======
+                               None,
+                               "WEB - Failed search requests/sec",
+                               infoname="Failed search requests/sec",
+>>>>>>> upstream/master
                                perfvar="failed_search_requests",
                                levels=params['failed_search_requests'])
 
     yield wmi_yield_raw_persec(parsed.get("LS:WEB - Location Information Service"),
+<<<<<<< HEAD
                                item,
                                "WEB - Failed Get Locations Requests/Second",
                                label=" failed location requests/sec",
+=======
+                               None,
+                               "WEB - Failed Get Locations Requests/Second",
+                               infoname="Failed location requests/sec",
+>>>>>>> upstream/master
                                perfvar="failed_location_requests",
                                levels=params['failed_locations_requests'])
 
     yield wmi_yield_raw_persec(parsed.get("LS:WEB - Distribution List Expansion"),
+<<<<<<< HEAD
                                item,
                                "WEB - Timed out Active Directory Requests/sec",
                                label=" timeout AD requests/sec",
+=======
+                               None,
+                               "WEB - Timed out Active Directory Requests/sec",
+                               infoname="Timeout AD requests/sec",
+>>>>>>> upstream/master
                                perfvar="failed_ad_requests",
                                levels=params['timedout_ad_requests'])
 
     yield wmi_yield_raw_persec(parsed.get("LS:WEB - UCWA"),
+<<<<<<< HEAD
                                item,
+=======
+                               None,
+>>>>>>> upstream/master
                                "UCWA - HTTP 5xx Responses/Second",
-                               label="  HTTP 5xx/sec",
+                               infoname="HTTP 5xx/sec",
                                perfvar="http_5xx",
                                levels=params['5xx_responses'])
 
     yield wmi_yield_raw_counter(parsed.get("ASP.NET Apps v4.0.30319"),
+<<<<<<< HEAD
                                 item,
+=======
+                                None,
+>>>>>>> upstream/master
                                 "Requests Rejected",
-                                label=" requests rejected",
+                                infoname="Requests rejected",
                                 perfvar="asp_requests_rejected",
                                 levels=params['asp_requests_rejected'])
 
     if "LS:WEB - Address Book File Download" in parsed:
         yield wmi_yield_raw_persec(parsed.get("LS:WEB - Address Book File Download"),
+<<<<<<< HEAD
                                    item,
                                    "WEB - Failed File Requests/Second",
                                    label=" failed file requests/sec",
+=======
+                                   None,
+                                   "WEB - Failed File Requests/Second",
+                                   infoname="Failed file requests/sec",
+>>>>>>> upstream/master
                                    perfvar="failed_file_requests",
                                    levels=params['failed_file_requests'])
 
     if "LS:JoinLauncher - Join Launcher Service Failures" in parsed:
         yield wmi_yield_raw_counter(parsed.get("LS:JoinLauncher - Join Launcher Service Failures"),
+<<<<<<< HEAD
                                     item,
                                     "JOINLAUNCHER - Join failures",
                                     label=" join failures",
+=======
+                                    None,
+                                    "JOINLAUNCHER - Join failures",
+                                    infoname="Join failures",
+>>>>>>> upstream/master
                                     perfvar="join_failures",
                                     levels=params['join_failures'])
 
     if "LS:WEB - Auth Provider related calls" in parsed:
         yield wmi_yield_raw_counter(parsed.get("LS:WEB - Auth Provider related calls"),
+<<<<<<< HEAD
                                     item,
                                     "WEB - Failed validate cert calls to the cert auth provider",
                                     label=" failed cert validations",
+=======
+                                    None,
+                                    "WEB - Failed validate cert calls to the cert auth provider",
+                                    infoname="Failed cert validations",
+>>>>>>> upstream/master
                                     perfvar="failed_validate_cert_calls",
                                     levels=params['failed_validate_cert'])
 
 
 check_info['skype'] = {
+<<<<<<< HEAD
     'inventory_function': lambda table: inventory_wmi_table(
+=======
+    'inventory_function': lambda table: inventory_wmi_table_total(
+>>>>>>> upstream/master
         table,
         required_tables=[
             "LS:WEB - Address Book Web Query", "LS:WEB - Location Information Service",
@@ -239,13 +301,20 @@ check_info['skype'] = {
     'parse_function': lambda info: parse_wmi_table(info, key="instance"),
     'has_perfdata': True,
     'service_description': "Skype Web Components",
+<<<<<<< HEAD
     'includes': ['wmi.include'],
+=======
+>>>>>>> upstream/master
     'group': 'skype',
     'default_levels_variable': 'skype_defaultlevels'
 }
 
 
+<<<<<<< HEAD
 def check_skype_mcu(item, params, parsed):
+=======
+def check_skype_mcu(_no_item, _no_params, parsed):
+>>>>>>> upstream/master
     # LS:DATAMCU - MCU Health And Performance\DATAMCU - MCU Health State
     # LS:AVMCU - MCU Health And Performance\AVMCU - MCU Health State
     # LS:AsMcu - MCU Health And Performance\ASMCU - MCU Health State
@@ -277,7 +346,11 @@ def check_skype_mcu(item, params, parsed):
 
 
 check_info['skype.mcu'] = {
+<<<<<<< HEAD
     'inventory_function': lambda parsed: inventory_wmi_table(
+=======
+    'inventory_function': lambda parsed: inventory_wmi_table_total(
+>>>>>>> upstream/master
         parsed,
         required_tables=[
             "LS:DATAMCU - MCU Health And Performance",
@@ -290,35 +363,57 @@ check_info['skype.mcu'] = {
 }
 
 
-def check_skype_conferencing(item, params, parsed):
+def check_skype_conferencing(_no_item, params, parsed):
     # LS:CAA - Operations\CAA - Incomplete calls per sec
     # LS:USrv - Conference Mcu Allocator\USrv - Create Conference Latency (msec)
     # LS:USrv - Conference Mcu Allocator\USrv – Allocation Latency (msec)
 
     yield wmi_yield_raw_persec(parsed.get("LS:CAA - Operations"),
+<<<<<<< HEAD
                                item,
                                "CAA - Incomplete calls per sec",
                                label=" incomplete calls/sec",
+=======
+                               None,
+                               "CAA - Incomplete calls per sec",
+                               infoname="Incomplete calls/sec",
+>>>>>>> upstream/master
                                perfvar="caa_incomplete_calls",
                                levels=params['incomplete_calls'])
 
     yield wmi_yield_raw_average(parsed.get("LS:USrv - Conference Mcu Allocator"),
+<<<<<<< HEAD
                                 item,
                                 "USrv - Create Conference Latency (msec)",
                                 label=" create conference latency",
+=======
+                                None,
+                                "USrv - Create Conference Latency (msec)",
+                                infoname="Create conference latency",
+>>>>>>> upstream/master
                                 perfvar="usrv_create_conference_latency",
                                 levels=params['create_conference_latency'])
 
     yield wmi_yield_raw_average(parsed.get("LS:USrv - Conference Mcu Allocator"),
+<<<<<<< HEAD
                                 item,
                                 "USrv - Allocation Latency (msec)",
                                 label=" allocation latency",
+=======
+                                None,
+                                "USrv - Allocation Latency (msec)",
+                                infoname="Allocation latency",
+>>>>>>> upstream/master
                                 perfvar="usrv_allocation_latency",
                                 levels=params['allocation_latency'])
 
 
 check_info['skype.conferencing'] = {
+<<<<<<< HEAD
     'inventory_function': lambda table: inventory_wmi_table(
+=======
+    'inventory_function': lambda table: inventory_wmi_table_total(
+>>>>>>> upstream/master
         table, required_tables=[
             "LS:CAA - Operations",
             "LS:USrv - Conference Mcu Allocator",
@@ -327,13 +422,29 @@ check_info['skype.conferencing'] = {
     'parse_function': lambda info: parse_wmi_table(info, key="instance"),
     'has_perfdata': True,
     'service_description': "Skype Conferencing",
+<<<<<<< HEAD
     'includes': ['wmi.include'],
+=======
+>>>>>>> upstream/master
     'group': 'skype_conferencing',
     'default_levels_variable': 'skype_conferencing_defaultlevels'
 }
 
 
-def check_skype_sip_stack(item, params, parsed):
+def discover_skype_sip_stack(parsed):
+    return inventory_wmi_table_total(
+        parsed,
+        required_tables=[
+            "LS:SIP - Protocol",
+            "LS:USrv - DBStore",
+            "LS:SIP - Responses",
+            "LS:SIP - Load Management",
+            "LS:SIP - Peers",
+        ],
+    )
+
+
+def check_skype_sip_stack(_no_item, params, parsed):
     # LS:SIP - Protocol\SIP - Average Incoming Message Processing Time
     # LS:SIP - Protocol\SIP - Incoming Responses Dropped /Sec
     # LS:SIP - Protocol\SIP - Incoming Requests Dropped /Sec
@@ -348,101 +459,180 @@ def check_skype_sip_stack(item, params, parsed):
     # LS:SIP - Peers\SIP - Average Outgoing Queue Delay
     # LS:SIP - Peers(*)\SIP-Sends Timed-Out/sec
     yield wmi_yield_raw_average_timer(parsed.get("LS:SIP - Protocol"),
+<<<<<<< HEAD
                                       item,
                                       "SIP - Average Incoming Message Processing Time",
                                       label=" avg incoming message processing time",
+=======
+                                      None,
+                                      "SIP - Average Incoming Message Processing Time",
+                                      infoname="Avg incoming message processing time",
+>>>>>>> upstream/master
                                       perfvar="sip_message_processing_time",
                                       levels=params['message_processing_time'])
 
     yield wmi_yield_raw_persec(parsed.get("LS:SIP - Protocol"),
+<<<<<<< HEAD
                                item,
                                "SIP - Incoming Responses Dropped /Sec",
                                label=" incoming responses dropped/sec",
+=======
+                               None,
+                               "SIP - Incoming Responses Dropped /Sec",
+                               infoname="Incoming responses dropped/sec",
+>>>>>>> upstream/master
                                perfvar="sip_incoming_responses_dropped",
                                levels=params['incoming_responses_dropped'])
 
     yield wmi_yield_raw_persec(parsed.get("LS:SIP - Protocol"),
+<<<<<<< HEAD
                                item,
                                "SIP - Incoming Requests Dropped /Sec",
                                label=" incoming requests dropped/sec",
+=======
+                               None,
+                               "SIP - Incoming Requests Dropped /Sec",
+                               infoname="Incoming requests dropped/sec",
+>>>>>>> upstream/master
                                perfvar="sip_incoming_requests_dropped",
                                levels=params['incoming_requests_dropped'])
 
     yield wmi_yield_raw_average(parsed.get("LS:USrv - DBStore"),
+<<<<<<< HEAD
                                 item,
                                 "USrv - Queue Latency (msec)",
                                 label=" ms queue latency",
+=======
+                                None,
+                                "USrv - Queue Latency (msec)",
+                                infoname="Queue latency",
+>>>>>>> upstream/master
                                 perfvar="usrv_queue_latency",
                                 perfscale=0.001,
                                 levels=params['queue_latency'])
 
     yield wmi_yield_raw_average(parsed.get("LS:USrv - DBStore"),
+<<<<<<< HEAD
                                 item,
                                 "USrv - Sproc Latency (msec)",
                                 label=" ms sproc latency",
+=======
+                                None,
+                                "USrv - Sproc Latency (msec)",
+                                infoname="Sproc latency",
+>>>>>>> upstream/master
                                 perfvar="usrv_sproc_latency",
                                 perfscale=0.001,
                                 levels=params['sproc_latency'])
 
     yield wmi_yield_raw_persec(parsed.get("LS:USrv - DBStore"),
+<<<<<<< HEAD
                                item,
                                "USrv - Throttled requests/sec",
                                label=" throttled requests/sec",
+=======
+                               None,
+                               "USrv - Throttled requests/sec",
+                               infoname="Throttled requests/sec",
+>>>>>>> upstream/master
                                perfvar="usrv_throttled_requests",
                                levels=params['throttled_requests'])
 
     yield wmi_yield_raw_persec(parsed.get("LS:SIP - Responses"),
+<<<<<<< HEAD
                                item,
                                "SIP - Local 503 Responses /Sec",
                                label=" local 503 responses/sec",
+=======
+                               None,
+                               "SIP - Local 503 Responses /Sec",
+                               infoname="Local 503 responses/sec",
+>>>>>>> upstream/master
                                perfvar="sip_503_responses",
                                levels=params['local_503_responses'])
 
     yield wmi_yield_raw_counter(parsed.get("LS:SIP - Load Management"),
+<<<<<<< HEAD
                                 item,
                                 "SIP - Incoming Messages Timed out",
                                 label=" incoming messages timed out",
+=======
+                                None,
+                                "SIP - Incoming Messages Timed out",
+                                infoname="Incoming messages timed out",
+>>>>>>> upstream/master
                                 perfvar="sip_incoming_messages_timed_out",
                                 levels=params['timedout_incoming_messages'])
 
     yield wmi_yield_raw_average_timer(parsed.get("LS:SIP - Load Management"),
+<<<<<<< HEAD
                                       item,
                                       "SIP - Average Holding Time For Incoming Messages",
                                       label=" avg holding time for incoming messages",
+=======
+                                      None,
+                                      "SIP - Average Holding Time For Incoming Messages",
+                                      infoname="Avg holding time for incoming messages",
+>>>>>>> upstream/master
                                       perfvar="sip_avg_holding_time_incoming_messages",
                                       levels=params['holding_time_incoming'])
 
     yield wmi_yield_raw_counter(parsed.get("LS:SIP - Peers"),
+<<<<<<< HEAD
                                 item,
                                 "SIP - Flow-controlled Connections",
                                 label=" flow-controlled connections",
+=======
+                                None,
+                                "SIP - Flow-controlled Connections",
+                                infoname="Flow-controlled connections",
+>>>>>>> upstream/master
                                 perfvar="sip_flow_controlled_connections",
                                 levels=params['flow_controlled_connections'])
 
     yield wmi_yield_raw_average_timer(parsed.get("LS:SIP - Peers"),
+<<<<<<< HEAD
                                       item,
                                       "SIP - Average Outgoing Queue Delay",
                                       label=" avg outgoing queue delay",
+=======
+                                      None,
+                                      "SIP - Average Outgoing Queue Delay",
+                                      infoname="Avg outgoing queue delay",
+>>>>>>> upstream/master
                                       perfvar="sip_avg_outgoing_queue_delay",
                                       levels=params['outgoing_queue_delay'])
 
     yield wmi_yield_raw_persec(parsed.get("LS:SIP - Peers"),
+<<<<<<< HEAD
                                item,
                                "SIP - Sends Timed-Out /Sec",
                                label=" sends timed out/sec",
+=======
+                               None,
+                               "SIP - Sends Timed-Out /Sec",
+                               infoname="Sends timed out/sec",
+>>>>>>> upstream/master
                                perfvar="sip_sends_timed_out",
                                levels=params['timedout_sends'])
 
     if "LS:SIP - Authentication" in parsed:
         yield wmi_yield_raw_persec(parsed.get("LS:SIP - Authentication"),
+<<<<<<< HEAD
                                    item,
                                    "SIP - Authentication System Errors /Sec",
                                    label=" authentication errors/sec",
+=======
+                                   None,
+                                   "SIP - Authentication System Errors /Sec",
+                                   infoname="Authentication errors/sec",
+>>>>>>> upstream/master
                                    perfvar="sip_authentication_errors",
                                    levels=params['authentication_errors'])
 
 
 check_info['skype.sip_stack'] = {
+<<<<<<< HEAD
     'inventory_function': lambda parsed: inventory_wmi_table(parsed,
                                                              required_tables=[
                                                                  "LS:SIP - Protocol",
@@ -451,6 +641,9 @@ check_info['skype.sip_stack'] = {
                                                                  "LS:SIP - Load Management",
                                                                  "LS:SIP - Peers",
                                                              ]),
+=======
+    'inventory_function': discover_skype_sip_stack,
+>>>>>>> upstream/master
     'check_function': check_skype_sip_stack,
     'has_perfdata': True,
     'service_description': "Skype SIP Stack",
@@ -459,45 +652,73 @@ check_info['skype.sip_stack'] = {
 }
 
 
-def check_skype_mediation_server(item, params, parsed):
+def check_skype_mediation_server(_no_item, params, parsed):
     # LS:MediationServer - Health Indices\- Load Call Failure Index
     # LS:MediationServer - Global Counters\- Total failed calls caused by unexpected interaction from the Proxy
     # LS:MediationServer - Global Per Gateway Counters(*)\- Total failed calls caused by unexpected interaction from a gateway
     # LS:MediationServer - Media Relay\- Media Connectivity Check Failure
 
     yield wmi_yield_raw_counter(parsed.get("LS:MediationServer - Health Indices"),
+<<<<<<< HEAD
                                 item,
                                 "- Load Call Failure Index",
                                 label=" load call failure index",
+=======
+                                None,
+                                "- Load Call Failure Index",
+                                infoname="Load call failure index",
+>>>>>>> upstream/master
                                 perfvar="mediation_load_call_failure_index",
                                 levels=params["load_call_failure_index"])
 
     yield wmi_yield_raw_counter(
         parsed.get("LS:MediationServer - Global Counters"),
+<<<<<<< HEAD
         item,
         "- Total failed calls caused by unexpected interaction from the Proxy",
         label=" failed calls because of proxy",
+=======
+        None,
+        "- Total failed calls caused by unexpected interaction from the Proxy",
+        infoname="Failed calls because of proxy",
+>>>>>>> upstream/master
         perfvar="mediation_failed_calls_because_of_proxy",
         levels=params['failed_calls_because_of_proxy'])
 
     yield wmi_yield_raw_counter(
         parsed.get("LS:MediationServer - Global Per Gateway Counters"),
+<<<<<<< HEAD
         item,
         "- Total failed calls caused by unexpected interaction from a gateway",
         label=" failed calls because of gateway",
+=======
+        None,
+        "- Total failed calls caused by unexpected interaction from a gateway",
+        infoname="Failed calls because of gateway",
+>>>>>>> upstream/master
         perfvar="mediation_failed_calls_because_of_gateway",
         levels=params['failed_calls_because_of_gateway'])
 
     yield wmi_yield_raw_counter(parsed.get("LS:MediationServer - Media Relay"),
+<<<<<<< HEAD
                                 item,
                                 "- Media Connectivity Check Failure",
                                 label=" media connectivity check failure",
+=======
+                                None,
+                                "- Media Connectivity Check Failure",
+                                infoname="Media connectivity check failure",
+>>>>>>> upstream/master
                                 perfvar="mediation_media_connectivity_failure",
                                 levels=params['media_connectivity_failure'])
 
 
 check_info['skype.mediation_server'] = {
+<<<<<<< HEAD
     'inventory_function': lambda parsed: inventory_wmi_table(
+=======
+    'inventory_function': lambda parsed: inventory_wmi_table_total(
+>>>>>>> upstream/master
         parsed,
         required_tables=[
             "LS:MediationServer - Health Indices",
@@ -513,18 +734,28 @@ check_info['skype.mediation_server'] = {
 }
 
 
-def check_skype_edge_auth(item, params, parsed):
+def check_skype_edge_auth(_no_item, params, parsed):
     # LS:A/V Auth - Requests\- Bad Requests Received/sec
     yield wmi_yield_raw_persec(parsed.get("LS:A/V Auth - Requests"),
+<<<<<<< HEAD
                                item,
                                "- Bad Requests Received/sec",
                                label=" bad requests/sec",
+=======
+                               None,
+                               "- Bad Requests Received/sec",
+                               infoname="Bad requests/sec",
+>>>>>>> upstream/master
                                perfvar="avauth_failed_requests",
                                levels=params['bad_requests'])
 
 
 check_info['skype.edge_auth'] = {
+<<<<<<< HEAD
     'inventory_function': lambda parsed: inventory_wmi_table(
+=======
+    'inventory_function': lambda parsed: inventory_wmi_table_total(
+>>>>>>> upstream/master
         parsed, required_tables=["LS:A/V Auth - Requests"]),
     'check_function': check_skype_edge_auth,
     'has_perfdata': True,
@@ -544,48 +775,76 @@ def check_skype_av_edge(item, params, parsed):
     yield wmi_yield_raw_persec(parsed.get("LS:A/V Edge - UDP Counters"),
                                item,
                                "A/V Edge - Authentication Failures/sec",
+<<<<<<< HEAD
                                label=" UDP auth failures/sec",
+=======
+                               infoname="UDP auth failures/sec",
+>>>>>>> upstream/master
                                perfvar="edge_udp_failed_auth",
                                levels=params['authentication_failures'])
 
     yield wmi_yield_raw_persec(parsed.get("LS:A/V Edge - TCP Counters"),
                                item,
                                "A/V Edge - Authentication Failures/sec",
+<<<<<<< HEAD
                                label=" TCP auth failures/sec",
+=======
+                               infoname="TCP auth failures/sec",
+>>>>>>> upstream/master
                                perfvar="edge_tcp_failed_auth",
                                levels=params['authentication_failures'])
 
     yield wmi_yield_raw_persec(parsed.get("LS:A/V Edge - UDP Counters"),
                                item,
                                "A/V Edge - Allocate Requests Exceeding Port Limit/sec",
+<<<<<<< HEAD
                                label=" UDP allocate requests > port limit/sec",
+=======
+                               infoname="UDP allocate requests > port limit/sec",
+>>>>>>> upstream/master
                                perfvar="edge_udp_allocate_requests_exceeding_port_limit",
                                levels=params['allocate_requests_exceeding'])
 
     yield wmi_yield_raw_persec(parsed.get("LS:A/V Edge - TCP Counters"),
                                item,
                                "A/V Edge - Allocate Requests Exceeding Port Limit/sec",
+<<<<<<< HEAD
                                label=" TCP allocate requests > port limit/sec",
+=======
+                               infoname="TCP allocate requests > port limit/sec",
+>>>>>>> upstream/master
                                perfvar="edge_tcp_allocate_requests_exceeding_port_limit",
                                levels=params['allocate_requests_exceeding'])
 
     yield wmi_yield_raw_persec(parsed.get("LS:A/V Edge - UDP Counters"),
                                item,
                                "A/V Edge - Packets Dropped/sec",
+<<<<<<< HEAD
                                label=" UDP packets dropped/sec",
+=======
+                               infoname="UDP packets dropped/sec",
+>>>>>>> upstream/master
                                perfvar="edge_udp_packets_dropped",
                                levels=params['packets_dropped'])
 
     yield wmi_yield_raw_persec(parsed.get("LS:A/V Edge - TCP Counters"),
                                item,
                                "A/V Edge - Packets Dropped/sec",
+<<<<<<< HEAD
                                label=" TCP packets dropped/sec",
+=======
+                               infoname="TCP packets dropped/sec",
+>>>>>>> upstream/master
                                perfvar="edge_tcp_packets_dropped",
                                levels=params['packets_dropped'])
 
 
 check_info['skype.edge'] = {
+<<<<<<< HEAD
     'inventory_function': lambda parsed: inventory_wmi_table(
+=======
+    'inventory_function': lambda parsed: inventory_wmi_table_instances(
+>>>>>>> upstream/master
         parsed, required_tables=["LS:A/V Edge - TCP Counters", "LS:A/V Edge - UDP Counters"]),
     'check_function': check_skype_av_edge,
     'has_perfdata': True,
@@ -602,7 +861,11 @@ def check_skype_data_proxy(item, params, parsed):
         parsed.get("LS:DATAPROXY - Server Connections"),
         item,
         "DATAPROXY - Current count of server connections that are throttled",
+<<<<<<< HEAD
         label=" server connections throttled",
+=======
+        infoname="Server connections throttled",
+>>>>>>> upstream/master
         perfvar="dataproxy_connections_throttled",
         levels=params['throttled_connections'])
 
@@ -624,26 +887,42 @@ check_info['skype.data_proxy'] = {
 }
 
 
-def check_skype_xmpp_proxy(item, params, parsed):
+def check_skype_xmpp_proxy(_no_item, params, parsed):
     # LS:XmppFederationProxy - Streams\XmppFederationProxy - Failed outbound stream establishes/sec
     # LS:XmppFederationProxy - Streams\XmppFederationProxy - Failed inbound stream establishes/sec
     yield wmi_yield_raw_persec(parsed.get("LS:XmppFederationProxy - Streams"),
+<<<<<<< HEAD
                                item,
                                "XmppFederationProxy - Failed outbound stream establishes/sec",
                                label=" failed outbound streams",
+=======
+                               None,
+                               "XmppFederationProxy - Failed outbound stream establishes/sec",
+                               infoname="Failed outbound streams",
+>>>>>>> upstream/master
                                perfvar="xmpp_failed_outbound_streams",
                                levels=params['failed_outbound_streams'])
 
     yield wmi_yield_raw_persec(parsed.get("LS:XmppFederationProxy - Streams"),
+<<<<<<< HEAD
                                item,
                                "XmppFederationProxy - Failed inbound stream establishes/sec",
                                label=" failed inbound streams",
+=======
+                               None,
+                               "XmppFederationProxy - Failed inbound stream establishes/sec",
+                               infoname="Failed inbound streams",
+>>>>>>> upstream/master
                                perfvar="xmpp_failed_inbound_streams",
                                levels=params['failed_inbound_streams'])
 
 
 check_info['skype.xmpp_proxy'] = {
+<<<<<<< HEAD
     'inventory_function': lambda parsed: inventory_wmi_table(
+=======
+    'inventory_function': lambda parsed: inventory_wmi_table_total(
+>>>>>>> upstream/master
         parsed, required_tables=["LS:XmppFederationProxy - Streams"]),
     'check_function': check_skype_xmpp_proxy,
     'has_perfdata': True,
@@ -653,7 +932,7 @@ check_info['skype.xmpp_proxy'] = {
 }
 
 
-def check_skype_mobile(item, params, parsed):
+def check_skype_mobile(_no_item, params, parsed):
     # LS:WEB - UCWA
     # LS:WEB - Throttling and Authentication\WEB - Total Requests in Processing
 
@@ -676,15 +955,25 @@ def check_skype_mobile(item, params, parsed):
                                                   ]
 
     yield wmi_yield_raw_counter(parsed.get("LS:WEB - Throttling and Authentication"),
+<<<<<<< HEAD
                                 item,
                                 "WEB - Total Requests In Processing",
                                 label=" requested",
+=======
+                                None,
+                                "WEB - Total Requests In Processing",
+                                infoname="Requested",
+>>>>>>> upstream/master
                                 perfvar="web_requests_processing",
                                 levels=params['requests_processing'])
 
 
 check_info['skype.mobile'] = {
+<<<<<<< HEAD
     'inventory_function': lambda parsed: inventory_wmi_table(
+=======
+    'inventory_function': lambda parsed: inventory_wmi_table_total(
+>>>>>>> upstream/master
         parsed, required_tables=[
             "LS:WEB - UCWA",
             "LS:WEB - Throttling and Authentication",

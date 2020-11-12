@@ -1,12 +1,27 @@
+<<<<<<< HEAD
 # -*- encoding: utf-8
 # yapf: disable
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# yapf: disable
+# type: ignore
+
+>>>>>>> upstream/master
 
 
 checkname = 'netapp_api_fcp'
 
 
 freeze_time = '2001-09-09T01:46:40'
+<<<<<<< HEAD
 # This corresponds to epoch 1000000000.0.
+=======
+>>>>>>> upstream/master
 
 
 mock_item_state = {
@@ -39,6 +54,7 @@ info = [[u'instance_name node0',
 discovery = {'': [(u'node0', {'inv_speed': 16000000000, 'inv_state': u'online'})]}
 
 
+<<<<<<< HEAD
 checks = {'': [(u'node0',
                 {'inv_speed': 16000000000, 'inv_state': u'online'},
                 [(0, u'State: online', []),
@@ -57,3 +73,21 @@ checks = {'': [(u'node0',
                  (0,
                   'Write Latency: 30.00 ms',
                   [('avg_write_latency_latency', 30.0, None, None, None, None)])])]}
+=======
+checks = {
+    '': [
+        (u'node0', {'inv_speed': 16000000000, 'inv_state': u'online'}, [
+            (0, 'Read: 150.00 B/s', [('read_bytes', 150.0)]),
+            (0, 'Write: 160.00 B/s', [('write_bytes', 160.0)]),
+            (0, 'Speed: 16 Gbit/s', []),
+            (0, '\nState: online', []),
+            (0, '\nRead OPS: 140', [('read_ops', 140)]),
+            (0, '\nWrite OPS: 130', [('write_ops', 130)]),
+            (0, '\nLatency: 90.00 ms',[('avg_latency_latency', 90.0)]),
+            (0, '\nRead Latency: 170.00 ms', [('avg_read_latency_latency', 170.0)]),
+            (0, '\nWrite Latency: 30.00 ms', [('avg_write_latency_latency', 30.0)]),
+            (0, '\nAddress de:ad:be:ef', []),
+        ]),
+    ],
+}
+>>>>>>> upstream/master

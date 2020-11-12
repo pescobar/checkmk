@@ -1,3 +1,7 @@
 .deps.cache
 .perl-modules-build-helper/
 destdir/
+<<<<<<< HEAD
+=======
+src/Crypt-SSLeay-0.72-patched.tar.gz
+>>>>>>> upstream/master

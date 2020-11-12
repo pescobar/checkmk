@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,11 +24,22 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 """Common code for reading and offering notification scripts and alert handlers.
 
 # Example header of a notification script:
 
+<<<<<<< HEAD
 #!/usr/bin/python
+=======
+#!/usr/bin/env python3
+>>>>>>> upstream/master
 # HTML Emails with included graphs
 # Bulk: yes
 # Argument 1: Full system path to the pnp4nagios index.php for fetching the graphs. Usually auto configured in OMD.
@@ -39,9 +51,17 @@
 
 import os
 import re
+<<<<<<< HEAD
 
 import cmk.utils.paths
 
+=======
+from pathlib import Path
+
+from six import ensure_str
+
+import cmk.utils.paths
+>>>>>>> upstream/master
 from cmk.gui.i18n import _u
 
 
@@ -69,11 +89,18 @@ def _load_user_scripts_from(adir):
     scripts = {}
     if os.path.exists(adir):
         for entry in os.listdir(adir):
+<<<<<<< HEAD
             entry = entry.decode("utf-8")
+=======
+            entry = ensure_str(entry)
+            if entry == ".f12":
+                continue
+>>>>>>> upstream/master
             path = adir + "/" + entry
             if os.path.isfile(path) and os.access(path, os.X_OK):
                 info = {"title": entry, "bulk": False}
                 try:
+<<<<<<< HEAD
                     lines = open(path)
                     next(lines)
                     line = next(lines).decode("utf-8").strip()
@@ -89,6 +116,23 @@ def _load_user_scripts_from(adir):
                         value = value.strip()
                         if key.lower() == "bulk":
                             info["bulk"] = (value == "yes")
+=======
+                    with Path(path).open(encoding="utf-8") as lines:
+                        next(lines)
+                        line = next(lines).strip()
+                        if line.startswith("#") and re.search(r'coding[=:]\s*([-\w.]+)', line):
+                            line = next(lines).strip()
+                        if line.startswith("#"):
+                            info["title"] = line.lstrip("#").strip().split("#", 1)[0]
+                        while True:
+                            line = next(lines).strip()
+                            if not line.startswith("#") or ":" not in line:
+                                break
+                            key, value = line[1:].strip().split(":", 1)
+                            value = value.strip()
+                            if key.lower() == "bulk":
+                                info["bulk"] = (value == "yes")
+>>>>>>> upstream/master
 
                 except Exception:
                     pass

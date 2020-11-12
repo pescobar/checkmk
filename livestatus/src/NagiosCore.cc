@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // +------------------------------------------------------------------+
 // |             ____ _               _        __  __ _  __           |
 // |            / ___| |__   ___  ___| | __   |  \/  | |/ /           |
@@ -23,18 +24,38 @@
 // Boston, MA 02110-1301 USA.
 
 #include "NagiosCore.h"
+=======
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the
+// terms and conditions defined in the file COPYING, which is part of this
+// source code package.
+
+#include "NagiosCore.h"
+
+>>>>>>> upstream/master
 #include <cstdint>
 #include <cstdlib>
 #include <ctime>
 #include <memory>
 #include <ostream>
 #include <utility>
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/master
 #include "DowntimeOrComment.h"
 #include "DowntimesOrComments.h"
 #include "Logger.h"
 #include "StringUtils.h"
+<<<<<<< HEAD
 
 void NagiosPaths::dump(Logger *logger) {
+=======
+#include "contact_fwd.h"
+#include "pnp4nagios.h"
+
+void NagiosPaths::dump(Logger *logger) const {
+>>>>>>> upstream/master
     Notice(logger) << "socket path = '" << _socket << "'";
     Notice(logger) << "pnp path = '" << _pnp << "'";
     Notice(logger) << "inventory path = '" << _mk_inventory << "'";
@@ -115,6 +136,15 @@ std::chrono::system_clock::time_point NagiosCore::last_logfile_rotation() {
     return std::chrono::system_clock::from_time_t(last_log_rotation);
 }
 
+<<<<<<< HEAD
+=======
+std::chrono::system_clock::time_point NagiosCore::last_config_change() {
+    // NOTE: Nagios doesn't reload, it restarts for config changes.
+    extern time_t program_start;
+    return std::chrono::system_clock::from_time_t(program_start);
+}
+
+>>>>>>> upstream/master
 size_t NagiosCore::maxLinesPerLogFile() const {
     return _limits._max_lines_per_logfile;
 }
@@ -162,6 +192,7 @@ bool NagiosCore::mkeventdEnabled() {
     return false;
 }
 
+<<<<<<< HEAD
 std::string NagiosCore::mkeventdSocketPath() { return _paths._mkeventd_socket; }
 std::string NagiosCore::mkLogwatchPath() { return _paths._mk_logwatch; }
 std::string NagiosCore::mkInventoryPath() { return _paths._mk_inventory; }
@@ -178,6 +209,45 @@ std::string NagiosCore::logArchivePath() {
     return log_archive_path;
 }
 std::string NagiosCore::rrdcachedSocketPath() {
+=======
+std::filesystem::path NagiosCore::mkeventdSocketPath() const {
+    return _paths._mkeventd_socket;
+}
+
+std::filesystem::path NagiosCore::mkLogwatchPath() const {
+    return _paths._mk_logwatch;
+}
+
+std::filesystem::path NagiosCore::mkInventoryPath() const {
+    return _paths._mk_inventory;
+}
+
+std::filesystem::path NagiosCore::structuredStatusPath() const {
+    return _paths._structured_status;
+}
+
+std::filesystem::path NagiosCore::crashReportPath() const {
+    return _paths._crash_reports_path;
+}
+
+std::filesystem::path NagiosCore::licenseUsageHistoryPath() const {
+    return _paths._license_usage_history_path;
+}
+
+std::filesystem::path NagiosCore::pnpPath() const { return _paths._pnp; }
+
+std::filesystem::path NagiosCore::historyFilePath() const {
+    extern char *log_file;
+    return log_file;
+}
+
+std::filesystem::path NagiosCore::logArchivePath() const {
+    extern char *log_archive_path;
+    return log_archive_path;
+}
+
+std::filesystem::path NagiosCore::rrdcachedSocketPath() const {
+>>>>>>> upstream/master
     return _paths._rrdcached_socket;
 }
 
@@ -224,9 +294,15 @@ std::string b16decode(const std::string &hex) {
 
 Attributes NagiosCore::customAttributes(const void *holder,
                                         AttributeKind kind) const {
+<<<<<<< HEAD
     auto h = *static_cast<const customvariablesmember *const *>(holder);
     Attributes attrs;
     for (auto cvm = h; cvm != nullptr; cvm = cvm->next) {
+=======
+    const auto *h = *static_cast<const customvariablesmember *const *>(holder);
+    Attributes attrs;
+    for (const auto *cvm = h; cvm != nullptr; cvm = cvm->next) {
+>>>>>>> upstream/master
         auto [k, name] = to_attribute_kind(cvm->variable_name);
         if (k == kind) {
             switch (kind) {
@@ -245,6 +321,23 @@ Attributes NagiosCore::customAttributes(const void *holder,
     return attrs;
 }
 
+<<<<<<< HEAD
+=======
+MetricLocation NagiosCore::metricLocation(
+    const std::string &host_name, const std::string &service_description,
+    const Metric::Name &var) const {
+    return MetricLocation{
+        pnpPath() / host_name /
+            pnp_cleanup(service_description + "_" +
+                        Metric::MangledName(var).string() + ".rrd"),
+        "1"};
+}
+
+bool NagiosCore::pnp4nagiosEnabled() const {
+    return true;  // TODO(sp) ???
+}
+
+>>>>>>> upstream/master
 bool NagiosCore::answerRequest(InputBuffer &input, OutputBuffer &output) {
     return _store.answerRequest(input, output);
 }

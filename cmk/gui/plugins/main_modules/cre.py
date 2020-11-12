@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -28,12 +29,30 @@
 
 import cmk.gui.main
 import cmk.gui.sidebar
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+"""Import top level modules into the application to make them able to register with the application."""
+# flake8: noqa
+# pylint: disable=unused-import
+
+import cmk.gui.default_permissions
+import cmk.gui.main
+import cmk.gui.sidebar
+import cmk.gui.main_menu
+>>>>>>> upstream/master
 import cmk.gui.cron
 import cmk.gui.login
 import cmk.gui.weblib
 import cmk.gui.help
 import cmk.gui.hooks
+<<<<<<< HEAD
 import cmk.gui.default_permissions
+=======
+>>>>>>> upstream/master
 
 import cmk.gui.visuals
 import cmk.gui.views

@@ -1,5 +1,17 @@
+<<<<<<< HEAD
 # -*- encoding: utf-8
 # yapf: disable
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# yapf: disable
+# type: ignore
+
+>>>>>>> upstream/master
 
 
 checkname = u'db2_bp_hitratios'
@@ -31,4 +43,8 @@ checks = {'': [(u'serv0:ABC DPF 0 foo1.bar2.baz3 0:IBMDEFAULTBP',
                  (0,
                   u'Index: 99.74%',
                   [(u'index_hitratio', 99.74, None, None, 0, 100)]),
+<<<<<<< HEAD
                  (0, u'XDA: 50.00%', [(u'xda_hitratio', 50.0, None, None, 0, 100)])])]}
+=======
+                 (0, u'XDA: 50.00%', [(u'xda_hitratio', 50.0, None, None, 0, 100)])])]}
+>>>>>>> upstream/master

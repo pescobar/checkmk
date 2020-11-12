@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,6 +24,13 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 from cmk.gui.i18n import _
 from cmk.gui.valuespec import (
@@ -39,6 +47,7 @@ from cmk.gui.plugins.wato import (
 )
 
 
+<<<<<<< HEAD
 def _parameter_valuespec_ddn_s2a_port_errors():
     return Dictionary(elements=[
         ("link_failure_errs",
@@ -47,70 +56,136 @@ def _parameter_valuespec_ddn_s2a_port_errors():
              elements=[
                  Integer(title=_(u"Warning at")),
                  Integer(title=_(u"Critical at")),
+=======
+def _parameter_valuespec_ddn_s2a_port_errors() -> Dictionary:
+    return Dictionary(elements=[
+        ("link_failure_errs",
+         Tuple(
+             title=_("Link failure errors"),
+             elements=[
+                 Integer(title=_("Warning at")),
+                 Integer(title=_("Critical at")),
+>>>>>>> upstream/master
              ],
          )),
         ("lost_sync_errs",
          Tuple(
+<<<<<<< HEAD
              title=_(u"Lost synchronization errors"),
              elements=[
                  Integer(title=_(u"Warning at")),
                  Integer(title=_(u"Critical at")),
+=======
+             title=_("Lost synchronization errors"),
+             elements=[
+                 Integer(title=_("Warning at")),
+                 Integer(title=_("Critical at")),
+>>>>>>> upstream/master
              ],
          )),
         ("loss_of_signal_errs",
          Tuple(
+<<<<<<< HEAD
              title=_(u"Loss of signal errors"),
              elements=[
                  Integer(title=_(u"Warning at")),
                  Integer(title=_(u"Critical at")),
+=======
+             title=_("Loss of signal errors"),
+             elements=[
+                 Integer(title=_("Warning at")),
+                 Integer(title=_("Critical at")),
+>>>>>>> upstream/master
              ],
          )),
         ("prim_seq_errs",
          Tuple(
+<<<<<<< HEAD
              title=_(u"PrimSeq erros"),
              elements=[
                  Integer(title=_(u"Warning at")),
                  Integer(title=_(u"Critical at")),
+=======
+             title=_("PrimSeq erros"),
+             elements=[
+                 Integer(title=_("Warning at")),
+                 Integer(title=_("Critical at")),
+>>>>>>> upstream/master
              ],
          )),
         ("crc_errs",
          Tuple(
+<<<<<<< HEAD
              title=_(u"CRC errors"),
              elements=[
                  Integer(title=_(u"Warning at")),
                  Integer(title=_(u"Critical at")),
+=======
+             title=_("CRC errors"),
+             elements=[
+                 Integer(title=_("Warning at")),
+                 Integer(title=_("Critical at")),
+>>>>>>> upstream/master
              ],
          )),
         ("receive_errs",
          Tuple(
+<<<<<<< HEAD
              title=_(u"Receive errors"),
              elements=[
                  Integer(title=_(u"Warning at")),
                  Integer(title=_(u"Critical at")),
+=======
+             title=_("Receive errors"),
+             elements=[
+                 Integer(title=_("Warning at")),
+                 Integer(title=_("Critical at")),
+>>>>>>> upstream/master
              ],
          )),
         ("ctio_timeouts",
          Tuple(
+<<<<<<< HEAD
              title=_(u"CTIO timeouts"),
              elements=[
                  Integer(title=_(u"Warning at")),
                  Integer(title=_(u"Critical at")),
+=======
+             title=_("CTIO timeouts"),
+             elements=[
+                 Integer(title=_("Warning at")),
+                 Integer(title=_("Critical at")),
+>>>>>>> upstream/master
              ],
          )),
         ("ctio_xmit_errs",
          Tuple(
+<<<<<<< HEAD
              title=_(u"CTIO transmission errors"),
              elements=[
                  Integer(title=_(u"Warning at")),
                  Integer(title=_(u"Critical at")),
+=======
+             title=_("CTIO transmission errors"),
+             elements=[
+                 Integer(title=_("Warning at")),
+                 Integer(title=_("Critical at")),
+>>>>>>> upstream/master
              ],
          )),
         ("ctio_other_errs",
          Tuple(
+<<<<<<< HEAD
              title=_(u"other CTIO errors"),
              elements=[
                  Integer(title=_(u"Warning at")),
                  Integer(title=_(u"Critical at")),
+=======
+             title=_("other CTIO errors"),
+             elements=[
+                 Integer(title=_("Warning at")),
+                 Integer(title=_("Critical at")),
+>>>>>>> upstream/master
              ],
          )),
     ],)
@@ -123,5 +198,9 @@ rulespec_registry.register(
         item_spec=lambda: TextAscii(title="Port index"),
         match_type="dict",
         parameter_valuespec=_parameter_valuespec_ddn_s2a_port_errors,
+<<<<<<< HEAD
         title=lambda: _("Port errors of DDN S2A devices"),
+=======
+        title=lambda: _("DDN S2A port errors"),
+>>>>>>> upstream/master
     ))

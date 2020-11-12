@@ -1,6 +1,10 @@
 title: Salesforce: Instances
 agents: salesforce
+<<<<<<< HEAD
 catalog: hw/network/salesforce
+=======
+catalog: app/salesforce
+>>>>>>> upstream/master
 license: GPL
 distribution: check_mk
 description:
@@ -9,7 +13,14 @@ description:
  The check is OK if the instance is OK; otherwise CRIT.
 
 item:
+<<<<<<< HEAD
  Instance name.
 
 inventory:
  One check per instance is created.
+=======
+ The name of the instance
+
+inventory:
+ One service is created for each instance.
+>>>>>>> upstream/master

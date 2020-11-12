@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # +------------------------------------------------------------------+
 # |             ____ _               _        __  __ _  __           |
@@ -22,6 +23,13 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 # example output
 #
@@ -80,12 +88,20 @@ def parse_nfsiostat(info):
     # at most a re-ordering of these values (in check_nfsiostat_parames) and
     # changing the check to include new metrics (via swtiches/flags)
     parsed = {m[0]: m[1:] for m in re.findall(r'(\S+:/\S+)%s' % \
+<<<<<<< HEAD
         (r'.*?([\d.]+)' * 16), str(new_info).strip('[]'), flags=re.DOTALL)}
+=======
+        (r'.*?(\d+\.\d+|\d+)' * 16), str(new_info).strip('[]'), flags=re.DOTALL)}
+>>>>>>> upstream/master
     return parsed
 
 
 def inventory_nfsiostat(parsed):
+<<<<<<< HEAD
     for mountname in parsed.keys():
+=======
+    for mountname in parsed:
+>>>>>>> upstream/master
         yield mountname, {}
 
 
@@ -127,6 +143,10 @@ check_info['nfsiostat'] = {
     'inventory_function': inventory_nfsiostat,
     'check_function': check_nfsiostat,
     'service_description': 'NFS IO stats %s',
+<<<<<<< HEAD
     'group': 'nfsiostat',
+=======
+    'group': 'nfsiostats',
+>>>>>>> upstream/master
     'has_perfdata': True,
 }

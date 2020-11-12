@@ -24,4 +24,8 @@ item:
  The ID of the enclosure.
 
 inventory:
+<<<<<<< HEAD
  Creates one service for every enclosure.
+=======
+ One service is created for each enclosure.
+>>>>>>> upstream/master

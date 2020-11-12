@@ -1,4 +1,11 @@
 #!/bin/bash
+<<<<<<< HEAD
+=======
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+>>>>>>> upstream/master
 set -e -o pipefail
 
 HOOKROOT=/docker-entrypoint.d
@@ -10,13 +17,39 @@ function exec_hook() {
         for hook in *; do
             if [ ! -d "$hook" ] && [ -x "$hook" ]; then
                 echo "### Running $HOOKDIR/$hook"
+<<<<<<< HEAD
                 ./"$hook" || true
+=======
+                ./"$hook"
+>>>>>>> upstream/master
             fi
         done
         popd >/dev/null
     fi
 }
 
+<<<<<<< HEAD
+=======
+function create_system_apache_config() {
+    # We have the special situation that the site apache is directly accessed from
+    # external without a system apache reverse proxy. We need to disable the canonical
+    # name redirect here to make redirects work as expected.
+    #
+    # In a reverse proxy setup the proxy would rewrite the host to the host requested by the user.
+    # See omd/packages/apache-omd/skel/etc/apache/apache.conf for further information.
+    #
+    # The ServerName also needs to be in a special way. See
+    # (https://forum.checkmk.com/t/check-mk-running-behind-lb-on-port-80-redirects-to-url-including-port-5000/16545)
+    APACHE_DOCKER_CFG="/omd/sites/$CMK_SITE_ID/etc/apache/conf.d/cmk_docker.conf"
+    echo -e "# Created for Checkmk docker container\\n\\nUseCanonicalName Off\\nServerName 127.0.0.1\\n" >"$APACHE_DOCKER_CFG"
+    chown "$CMK_SITE_ID:$CMK_SITE_ID" "$APACHE_DOCKER_CFG"
+    # Redirect top level requests to the sites base url
+    echo -e "# Redirect top level requests to the sites base url\\nRedirectMatch 302 ^/$ /$CMK_SITE_ID/\\n" >>"$APACHE_DOCKER_CFG"
+}
+
+exec_hook pre-entrypoint
+
+>>>>>>> upstream/master
 if [ -z "$CMK_SITE_ID" ]; then
     echo "ERROR: No site ID given"
     exit 1
@@ -26,7 +59,11 @@ trap 'omd stop '"$CMK_SITE_ID"'; exit 0' SIGTERM SIGHUP SIGINT
 
 # Prepare local MTA for sending to smart host
 # TODO: Syslog is only added to support postfix. Can we please find a better solution?
+<<<<<<< HEAD
 if [ ! -z "$MAIL_RELAY_HOST" ]; then
+=======
+if [ -n "$MAIL_RELAY_HOST" ]; then
+>>>>>>> upstream/master
     echo "### PREPARE POSTFIX (Hostname: $HOSTNAME, Relay host: $MAIL_RELAY_HOST)"
     echo "$HOSTNAME" >/etc/mailname
     postconf -e myorigin="$HOSTNAME"
@@ -55,6 +92,7 @@ if [ ! -d "/opt/omd/sites/$CMK_SITE_ID/etc" ]; then
     omd config "$CMK_SITE_ID" set APACHE_TCP_ADDR 0.0.0.0
     omd config "$CMK_SITE_ID" set APACHE_TCP_PORT 5000
 
+<<<<<<< HEAD
     # We have the special situation that the site apache is directly accessed from
     # external without a system apache reverse proxy. We need to disable the canonical
     # name redirect here to make redirects work as expected.
@@ -66,6 +104,9 @@ if [ ! -d "/opt/omd/sites/$CMK_SITE_ID/etc" ]; then
     chown "$CMK_SITE_ID:$CMK_SITE_ID" "$APACHE_DOCKER_CFG"
     # Redirect top level requests to the sites base url
     echo -e "# Redirect top level requests to the sites base url\nRedirectMatch 302 ^/$ /$CMK_SITE_ID/\n" >>"$APACHE_DOCKER_CFG"
+=======
+    create_system_apache_config
+>>>>>>> upstream/master
 
     if [ "$CMK_LIVESTATUS_TCP" = "on" ]; then
         omd config "$CMK_SITE_ID" set LIVESTATUS_TCP on
@@ -89,12 +130,20 @@ if [ ! -f "/omd/apache/$CMK_SITE_ID.conf" ]; then
 fi
 
 # In case the version symlink is dangling we are in an update situation: The
+<<<<<<< HEAD
 # volume was previously attached to a container with another Check_MK version.
+=======
+# volume was previously attached to a container with another Checkmk version.
+>>>>>>> upstream/master
 # We now have to perform the "omd update" to be able to bring the site back
 # to life.
 if [ ! -e "/omd/sites/$CMK_SITE_ID/version" ]; then
     echo "### UPDATING SITE"
     exec_hook pre-update
+<<<<<<< HEAD
+=======
+    create_system_apache_config
+>>>>>>> upstream/master
     omd -f update --conflict=install "$CMK_SITE_ID"
     exec_hook post-update
 fi

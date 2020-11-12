@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: Microsoft Azure Usage Details (Costs)
+=======
+title: Microsoft Azure: Usage Details (costs)
+>>>>>>> upstream/master
 agents: azure
 catalog: cloud/azure
 license: GPL
@@ -18,7 +22,12 @@ item:
  The name of the Azure service type or 'Summary'.
 
 inventory:
+<<<<<<< HEAD
  One service per Azure service type plus an additional summary
  are created on both the host running the agent and every
+=======
+ One service is created for each Azure service type plus an additional summary
+ service is on both the host running the agent and every
+>>>>>>> upstream/master
  host corresponding to a monitored resource group.
 

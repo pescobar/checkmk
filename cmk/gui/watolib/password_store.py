@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/env python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -25,6 +26,15 @@
 # Boston, MA 02110-1301 USA.
 
 from pathlib2 import Path
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+from pathlib import Path
+>>>>>>> upstream/master
 
 import cmk.gui.config as config
 import cmk.gui.userdb as userdb
@@ -41,16 +51,30 @@ class PasswordStore(WatoSimpleConfigFile):
         if config.user.may("wato.edit_all_passwords"):
             return entries
 
+<<<<<<< HEAD
         user_groups = userdb.contactgroups_of_user(config.user.id)
 
         passwords = self.filter_editable_entries(entries)
         passwords.update(
             dict([(k, v) for k, v in entries.items() if v["shared_with"] in user_groups]))
+=======
+        assert config.user.id is not None
+        user_groups = userdb.contactgroups_of_user(config.user.id)
+
+        passwords = self.filter_editable_entries(entries)
+        passwords.update({k: v for k, v in entries.items() if v["shared_with"] in user_groups})
+>>>>>>> upstream/master
         return passwords
 
     def filter_editable_entries(self, entries):
         if config.user.may("wato.edit_all_passwords"):
             return entries
 
+<<<<<<< HEAD
         user_groups = userdb.contactgroups_of_user(config.user.id)
         return dict([(k, v) for k, v in entries.items() if v["owned_by"] in user_groups])
+=======
+        assert config.user.id is not None
+        user_groups = userdb.contactgroups_of_user(config.user.id)
+        return {k: v for k, v in entries.items() if v["owned_by"] in user_groups}
+>>>>>>> upstream/master

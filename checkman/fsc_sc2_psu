@@ -15,5 +15,9 @@ item:
  The PSU designation
 
 inventory:
+<<<<<<< HEAD
  One service per PSU is created.
+=======
+ One service is created for each PSU.
+>>>>>>> upstream/master
 

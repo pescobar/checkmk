@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /*
 +------------------------------------------------------------------+
 |             ____ _               _        __  __ _  __           |
@@ -23,20 +24,66 @@ License along with GNU Make; see the file  COPYING.  If  not,  write
 to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 Boston, MA 02110-1301 USA.
 */
+=======
+@charset "UTF-8";
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+// conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 /* Styles used by the dashboard only */
 body.dashboard {
   overflow: hidden;
+<<<<<<< HEAD
 }
 
 div#dashboard {
   position: absolute;
+=======
+
+  &.main div#main_page_content {
+    padding-bottom: 0;
+  }
+
+  #menu_entry_toggle_edit img.icon {
+    background-size: 16px;
+  }
+
+  #menu_shortcut_toggle_edit,
+  #menu_suggestion_toggle_edit {
+    img.icon {
+      background-size: 20px;
+    }
+  }
+
+  #menu_shortcut_toggle_edit,
+  #menu_entry_toggle_edit,
+  #menu_suggestion_toggle_edit {
+    img.icon {
+      background-image: url("images/icon_dashboard_edit.png");
+      background-repeat: no-repeat;
+    }
+
+    &.edit img.icon {
+      background-image: url("images/icon_dashboard_edit_set.png");
+    }
+  }
+}
+
+div#dashboard {
+  position: relative;
+>>>>>>> upstream/master
   padding: 0;
   margin: 0;
 }
 
+<<<<<<< HEAD
 body.dashlet{
   #data_container{
+=======
+body.dashlet {
+  #data_container {
+>>>>>>> upstream/master
     padding: 0;
     border: none;
   }
@@ -59,13 +106,23 @@ div.dashlet {
     /* Dashlets with "background" set to True */
     &.background {
       background-color: $dashlet-inner-bg-color;
+<<<<<<< HEAD
+=======
+      &:first-child {
+        border-radius: $dashlet-title-border-radius;
+      }
+>>>>>>> upstream/master
     }
 
     > div {
       color: $primary-font-color;
 
       &[id*="dashlet_graph"] img[id*="dashlet_img"] {
+<<<<<<< HEAD
 	filter: $pnp4nagios-img-filter;
+=======
+        filter: $pnp4nagios-img-filter;
+>>>>>>> upstream/master
       }
     }
   }
@@ -95,6 +152,7 @@ div.dashlet {
     padding-left: 9px;
     margin: 0;
     overflow: hidden;
+<<<<<<< HEAD
     font-size: $theme-font-size-small;
     font-weight: 500;
     letter-spacing: 2px;
@@ -103,22 +161,43 @@ div.dashlet {
     white-space: nowrap;
     background: $secondary-bg-color;
     border: 1px solid $theme-color-table-border;
+=======
+    font-size: $font-size-default;
+    font-weight: 500;
+    letter-spacing: 2px;
+    color: $font-color;
+    text-align: center;
+    white-space: nowrap;
+    background: $body-dashlet-bg-color;
+    border: 1px solid $color-table-border;
+>>>>>>> upstream/master
     border-bottom: none;
     border-radius: $dashlet-title-border-radius;
     /* IE < 9 */
     filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr='#4c000000', endColorstr='#4c000000');
+<<<<<<< HEAD
+=======
+    &.highlighted {
+      background: $headline-color;
+    }
+>>>>>>> upstream/master
 
     span {
       padding-left: 8px;
     }
   }
 
+<<<<<<< HEAD
   &.edit div.title span {
     padding-left: 27px;
   }
 
   div.title a {
     color: #fff;
+=======
+  div.title a {
+    color: $font-color;
+>>>>>>> upstream/master
     text-decoration: none;
 
     &:hover {
@@ -148,28 +227,48 @@ div.dashlet {
 
   table.hoststats {
     position: absolute;
+<<<<<<< HEAD
+=======
+    top: -1px;
+>>>>>>> upstream/master
     right: 10px;
     width: 135px;
     height: 142px;
     margin-top: 0;
     border-collapse: collapse;
     border-spacing: 0;
+<<<<<<< HEAD
     top: -1px;
+=======
+>>>>>>> upstream/master
 
     &.narrow {
       /* TODO: Remove this style after decoupling from classic theme */
       margin-top: 0;
 
+<<<<<<< HEAD
       th, td {
+=======
+      th,
+      td {
+>>>>>>> upstream/master
         font-size: 11px;
         font-weight: normal;
       }
     }
 
+<<<<<<< HEAD
     th, td {
       padding: 0 4px;
       vertical-align: middle;
       border-color: #498aa6;
+=======
+    th,
+    td {
+      padding: 0 4px;
+      vertical-align: middle;
+      border-color: rgb(73, 138, 166);
+>>>>>>> upstream/master
       border-style: solid none;
       border-width: 1px;
 
@@ -186,11 +285,19 @@ div.dashlet {
 
     td {
       text-align: right;
+<<<<<<< HEAD
       background-color: #95bbcd;
     }
 
     a {
       color: #000;
+=======
+      background-color: rgb(149, 187, 205);
+    }
+
+    a {
+      color: rgb(0, 0, 0);
+>>>>>>> upstream/master
       text-decoration: none;
 
       &:hover {
@@ -200,6 +307,7 @@ div.dashlet {
   }
 }
 
+<<<<<<< HEAD
 .dashlet .dashlet_inner.background {
   background-color: $dashlet-bg-color;
 }
@@ -214,6 +322,12 @@ div.dashlet > div.title span {
   padding-left: 0; /* left align with titles of contained views */
   position: relative;
   top: 4px;
+=======
+div.dashlet > div.title span {
+  position: relative;
+  top: 4px;
+  padding-left: 0; /* left align with titles of contained views */
+>>>>>>> upstream/master
 }
 
 /* Overview dashlet is not selectable TODO: Check if this style can be dropped */
@@ -225,7 +339,11 @@ table.dashlet_overview h2 {
 div.dashlet_inner div.stats table.hoststats a,
 div.dashlet_inner div.stats table.hoststats body.main .popup_menu span,
 body.main .popup_menu div.dashlet_inner div.stats table.hoststats span {
+<<<<<<< HEAD
   color: $theme-color-text;
+=======
+  color: $font-color;
+>>>>>>> upstream/master
 }
 
 div.dashlet_inner div.stats {
@@ -234,9 +352,16 @@ div.dashlet_inner div.stats {
   height: 100%;
   padding: 0;
   margin: 0;
+<<<<<<< HEAD
   background-color: $secondary-bg-color;
 
   table th, table td {
+=======
+  background-color: $bg-color-secondary;
+
+  table th,
+  table td {
+>>>>>>> upstream/master
     background: $dashboard-stats-bg-color;
     border-top: 1px solid $dashlet-stats-border-top-color;
     border-bottom: none;
@@ -254,7 +379,11 @@ body.main.dashlet {
 
     tr.data {
       border-bottom: $dashboard-tr-border-bottom;
+<<<<<<< HEAD
       transition: .15s ease-in-out;
+=======
+      transition: 0.15s ease-in-out;
+>>>>>>> upstream/master
     }
   }
 
@@ -276,11 +405,16 @@ body.main.dashlet {
 
       &.state {
         border-top: none;
+<<<<<<< HEAD
 	border-top-color: $state-border-top-color;
+=======
+        border-top-color: $state-border-top-color;
+>>>>>>> upstream/master
       }
     }
 
     &:last-of-type > td:not(.state):not(.gap) {
+<<<<<<< HEAD
       border-bottom: 1px solid $theme-color-table-border;
     }
 
@@ -300,11 +434,46 @@ div[id^=dashlet] div.dashlet_inner > div {
 iframe[id^=dashlet_iframe] {
   background: $theme-color-white;
   transition: .15s ease-in-out;
+=======
+      border-bottom: 1px solid $color-table-border;
+    }
+
+    &:nth-child(2) > td.state {
+      border-top-color: $color-table-border !important;
+    }
+  }
+
+  /* warning messages in view dashlets */
+  div.warning {
+    margin: 0;
+    margin-bottom: 10px;
+    border-radius: 0;
+    box-shadow: 0;
+  }
+}
+
+div[id^="dashlet"] div.dashlet_inner > div {
+  border: 1px solid $color-table-border;
+  border-radius: $dashlet-title-border-radius;
+  box-sizing: border-box;
+  transition: 0.15s ease-in-out;
+}
+
+div[id^="dashlet"] div.title + div.dashlet_inner > div {
+  border-top: none;
+  border-radius: 0;
+}
+
+iframe[id^="dashlet_iframe"] {
+  background: $bg-color-secondary;
+  transition: 0.15s ease-in-out;
+>>>>>>> upstream/master
 }
 
 /*
  * Dashboard editing
  */
+<<<<<<< HEAD
 #controls_toggle {
   position: absolute;
   right: 0;
@@ -381,11 +550,17 @@ ul.sub li body.main .popup_menu span,
 body.main .popup_menu ul.sub li span {
   color: inherit;
 }
+=======
+>>>>>>> upstream/master
 
 /* dashlet controls */
 div.dashlet.edit {
   .controls {
     position: relative;
+<<<<<<< HEAD
+=======
+    border: 1px dashed #4e5d69;
+>>>>>>> upstream/master
     z-index: 100;
     width: 100%;
     height: 100%;
@@ -399,6 +574,7 @@ div.dashlet.edit {
     }
   }
 
+<<<<<<< HEAD
   /* dashlet edit button */
   .edit {
     position: absolute;
@@ -434,10 +610,60 @@ div.dashlet.edit {
 
     &:hover {
       background-image: url(images/dashlet_del_hi.png);
+=======
+  .editor {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    margin: auto;
+    height: 20px;
+    width: 60px;
+    text-align: center;
+
+    a {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border-radius: 5px;
+      background-size: 20px;
+      cursor: pointer;
+      /* IE < 9 */
+      filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr='#32000000', endColorstr='#32000000');
+
+      /* dashlet edit button */
+      &.edit {
+        background-image: url("images/dashlet_edit_lo.png");
+
+        &:hover {
+          background-image: url("images/dashlet_edit_hi.png");
+        }
+      }
+
+      /* dashlet clone button */
+      &.clone {
+        background-image: url("images/dashlet_clone_lo.png");
+
+        &:hover {
+          background-image: url("images/dashlet_clone_hi.png");
+        }
+      }
+
+      /* dashlet delete button */
+      &.del {
+        background-image: url("images/dashlet_del_lo.png");
+
+        &:hover {
+          background-image: url("images/dashlet_del_hi.png");
+        }
+      }
+>>>>>>> upstream/master
     }
   }
 
   /* position anchors */
+<<<<<<< HEAD
   .anchor {
     position: absolute;
     width: 14px;
@@ -476,6 +702,86 @@ div.dashlet.edit {
     &.anchor3 {
       bottom: 4px;
       left: 4px;
+=======
+  $corner-size: 26px;
+  $corner-size-on: 40px;
+  $dashlet-editor-free: #4e5d69;
+  $dashlet-editor-active: #13d389;
+  .anchor {
+    position: absolute;
+    cursor: pointer;
+    /* IE < 9 */
+    filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr='#32000000', endColorstr='#32000000');
+
+    // Edit with this tricks
+    // https://css-tricks.com/the-shapes-of-css/#triangle-top-left-shape
+
+    &.on div {
+      position: absolute;
+      border-radius: 12px;
+      padding: 2px 6px;
+      text-align: center;
+      background-color: $dashlet-editor-active;
+      color: #172127;
+    }
+
+    &.anchor0 {
+      top: 0;
+      left: 0;
+      border-top: $corner-size solid $dashlet-editor-free;
+      border-right: $corner-size solid transparent;
+      &.on {
+        border-top: $corner-size-on solid $dashlet-editor-active;
+        border-right: $corner-size-on solid transparent;
+        & div {
+          left: $corner-size;
+          top: -$corner-size;
+        }
+      }
+    }
+
+    &.anchor1 {
+      top: 0;
+      right: 0;
+      border-top: $corner-size solid $dashlet-editor-free;
+      border-left: $corner-size solid transparent;
+      &.on {
+        border-top: $corner-size-on solid $dashlet-editor-active;
+        border-left: $corner-size-on solid transparent;
+        & div {
+          right: $corner-size;
+          top: -$corner-size;
+        }
+      }
+    }
+
+    &.anchor2 {
+      right: 0;
+      bottom: 0;
+      border-bottom: $corner-size solid $dashlet-editor-free;
+      border-left: $corner-size solid transparent;
+      &.on {
+        border-bottom: $corner-size-on solid $dashlet-editor-active;
+        border-left: $corner-size-on solid transparent;
+        & div {
+          right: $corner-size;
+        }
+      }
+    }
+
+    &.anchor3 {
+      bottom: 0;
+      left: 0;
+      border-bottom: $corner-size solid $dashlet-editor-free;
+      border-right: $corner-size solid transparent;
+      &.on {
+        border-bottom: $corner-size-on solid $dashlet-editor-active;
+        border-right: $corner-size-on solid transparent;
+        & div {
+          left: $corner-size;
+        }
+      }
+>>>>>>> upstream/master
     }
   }
 }
@@ -487,6 +793,7 @@ div#dashboard.grid {
 .sizer {
   position: absolute;
   cursor: pointer;
+<<<<<<< HEAD
   border: 1px solid #666;
   border-radius: 2px;
   box-shadow: .5px .5px 2px #333;
@@ -669,6 +976,51 @@ div#dashboard.grid {
 .sizer_lbl0.anchor3 {
   bottom: 2.5px;
   left: 47%;
+=======
+  border-radius: 12px;
+  padding: 2px 6px;
+  text-align: center;
+  &.grow {
+    background-color: #10181d;
+  }
+  &.abs {
+    background-color: #13d389;
+    color: #172127;
+  }
+}
+
+.sizer0 {
+  margin: auto;
+  top: 0;
+  bottom: 0;
+  height: 1.5em;
+
+  &.anchor0,
+  &.anchor3 {
+    right: 27px;
+  }
+
+  &.anchor1,
+  &.anchor2 {
+    left: 27px;
+  }
+}
+.sizer1 {
+  margin: auto;
+  left: 0;
+  right: 0;
+  width: 90px;
+
+  &.anchor0,
+  &.anchor1 {
+    bottom: 27px;
+  }
+
+  &.anchor2,
+  &.anchor3 {
+    top: 27;
+  }
+>>>>>>> upstream/master
 }
 
 /* transparent resize areas for absolute sized */
@@ -678,12 +1030,44 @@ div#dashboard.grid {
 }
 
 .resize0 {
+<<<<<<< HEAD
   width: 5px;
   height: 100%;
+=======
+  height: 100%;
+  border: 1px solid #13d389;
+  border-top: 0;
+  border-bottom: 0;
+  background-color: #13d389;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+
+  &.resize0_0 {
+    left: -1px;
+    cursor: w-resize;
+    &.circle_handle {
+      width: 16px;
+      height: 32px;
+      border-radius: 0 32px 32px 0;
+    }
+  }
+
+  &.resize0_1 {
+    right: -1px;
+    cursor: e-resize;
+    &.circle_handle {
+      width: 16px;
+      height: 32px;
+      border-radius: 32px 0 0 32px;
+    }
+  }
+>>>>>>> upstream/master
 }
 
 .resize1 {
   width: 100%;
+<<<<<<< HEAD
   height: 5px;
 }
 
@@ -705,6 +1089,35 @@ div#dashboard.grid {
 .resize1_1 {
   bottom: 0;
   cursor: s-resize;
+=======
+  border: 1px solid #13d389;
+  border-right: 0;
+  border-left: 0;
+  background-color: #13d389;
+  left: 0;
+  right: 0;
+  margin: auto;
+
+  &.resize1_0 {
+    top: -1px;
+    cursor: n-resize;
+    &.circle_handle {
+      width: 32px;
+      height: 16px;
+      border-radius: 0 0 32px 32px;
+    }
+  }
+
+  &.resize1_1 {
+    bottom: -1px;
+    cursor: s-resize;
+    &.circle_handle {
+      width: 32px;
+      height: 16px;
+      border-radius: 32px 32px 0 0;
+    }
+  }
+>>>>>>> upstream/master
 }
 
 .resize_corner {
@@ -736,3 +1149,209 @@ div#dashboard.grid {
   left: 0;
   cursor: sw-resize;
 }
+<<<<<<< HEAD
+=======
+
+.dashlet.pnpgraph .dashlet_inner {
+  color: $primary-font-color;
+  text-align: center;
+  background-color: $dashlet-inner-bg-color;
+}
+
+.dashlet.pnpgraph .graph {
+  border: none;
+  box-shadow: none;
+}
+
+.dashlet.pnpgraph .container {
+  background-color: $dashlet-inner-bg-color;
+}
+
+.dashlet.pnpgraph div.title a {
+  color: $primary-font-color;
+}
+
+div.dashlet g {
+  &.state.svcstate {
+    &.state0 rect {
+      stroke: $color-state-success-background;
+    }
+
+    &.state1 rect {
+      stroke: $color-state-1-background;
+    }
+
+    &.state2 rect {
+      stroke: $color-state-2-background;
+    }
+
+    &.state3 rect {
+      stroke: $color-state-3-background;
+    }
+  }
+
+  &.state.svcstate {
+    &.state0 text {
+      fill: $color-state-success-background;
+    }
+
+    &.state1 text {
+      fill: $color-state-1-background;
+    }
+
+    &.state2 text {
+      fill: $color-state-2-background;
+    }
+
+    &.state3 text {
+      fill: $color-state-3-background;
+    }
+  }
+}
+
+div.dashlet.single_metric {
+  /* When no dashlet title (div.title) is rendered, div.dashlet_inner is the
+     first child of div.dashlet */
+  div.dashlet_inner:first-child {
+    &:not(.background) div.metric {
+      border: none;
+    }
+
+    div.metric {
+      padding: 4px;
+    }
+  }
+
+  div.single_metric {
+    a.single_value {
+      width: 100%;
+
+      text {
+        &.state0,
+        &.state0 > a,
+        &.state0 > a:link {
+          fill: $black;
+        }
+
+        &.state-fill-font,
+        &.no-state-color {
+          &,
+          > a {
+            fill: $font-color !important;
+          }
+        }
+
+        &.state-fill-font {
+          &.state0,
+          &.state0 > a,
+          &.state0 > a:link {
+            fill: $color-state-success-background !important;
+          }
+
+          &.state1,
+          &.state1 > a,
+          &.state1 > a:link {
+            fill: $color-state-1-background !important;
+          }
+
+          &.state2,
+          &.state2 > a,
+          &.state2 > a:link {
+            fill: $color-state-2-background !important;
+          }
+
+          &.state3,
+          &.state3 > a,
+          &.state3 > a:link {
+            fill: $color-state-3-background !important;
+          }
+        }
+      }
+    }
+  }
+
+  div.dashlet_inner div.metric {
+    height: inherit;
+    padding: 0 4px 4px;
+
+    table.metric_content {
+      width: 100%;
+      height: 100%;
+      margin: 0 auto;
+      table-layout: fixed;
+
+      td {
+        padding: 0;
+        text-align: center;
+        border-radius: 16px;
+
+        &.metric_value {
+          position: relative;
+          height: 100%;
+          margin: 0 auto;
+          text-align: center;
+          border-radius: 16px;
+
+          a {
+            text-decoration: none;
+            white-space: nowrap;
+          }
+
+          &.state0,
+          &.state0 > a,
+          &.state0 > a:link {
+            color: $black;
+          }
+
+          &.state-color-font,
+          &.no-state-color {
+            &,
+            > a {
+              color: $font-color !important;
+              background-color: transparent !important;
+            }
+          }
+
+          &.state-color-font {
+            &.state0,
+            &.state0 > a,
+            &.state0 > a:link {
+              color: $color-state-success-background !important;
+            }
+
+            &.state1,
+            &.state1 > a,
+            &.state1 > a:link {
+              color: $color-state-1-background !important;
+            }
+
+            &.state2,
+            &.state2 > a,
+            &.state2 > a:link {
+              color: $color-state-2-background !important;
+            }
+
+            &.state3,
+            &.state3 > a,
+            &.state3 > a:link {
+              color: $color-state-3-background !important;
+            }
+          }
+        }
+      }
+
+      div.no_metric_match {
+        margin: 8px 0;
+      }
+
+      a {
+        text-decoration: none;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}
+>>>>>>> upstream/master

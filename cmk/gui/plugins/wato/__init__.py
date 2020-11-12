@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/env python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,6 +24,16 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# flake8: noqa
+# pylint: disable=unused-import
+>>>>>>> upstream/master
 
 from cmk.utils.plugin_loader import load_plugins
 
@@ -39,6 +50,10 @@ from cmk.utils.plugin_loader import load_plugins
 from cmk.gui.watolib.wato_background_job import WatoBackgroundJob
 from cmk.gui.plugins.wato.utils import (
     PermissionSectionWATO,
+<<<<<<< HEAD
+=======
+    ACResult,
+>>>>>>> upstream/master
     ACResultCRIT,
     ACResultOK,
     ACResultWARN,
@@ -47,10 +62,14 @@ from cmk.gui.plugins.wato.utils import (
     ac_test_registry,
     add_change,
     add_replication_paths,
+<<<<<<< HEAD
     global_buttons,
     changelog_button,
     home_button,
     host_status_button,
+=======
+    ReplicationPath,
+>>>>>>> upstream/master
     CheckTypeSelection,
     config_domain_registry,
     ABCConfigDomain,
@@ -71,7 +90,11 @@ from cmk.gui.plugins.wato.utils import (
     ABCHostAttributeValueSpec,
     ABCHostAttributeNagiosText,
     host_attribute_registry,
+<<<<<<< HEAD
     EventsMode,
+=======
+    ABCEventsMode,
+>>>>>>> upstream/master
     folder_preserving_link,
     get_search_expression,
     ContactGroupSelection,
@@ -88,6 +111,10 @@ from cmk.gui.plugins.wato.utils import (
     LivestatusViaTCP,
     MainMenu,
     make_action_link,
+<<<<<<< HEAD
+=======
+    make_confirm_link,
+>>>>>>> upstream/master
     may_edit_ruleset,
     MenuItem,
     mode_registry,
@@ -103,7 +130,21 @@ from cmk.gui.plugins.wato.utils import (
     register_configvar,
     register_check_parameters,
     main_module_registry,
+<<<<<<< HEAD
     MainModule,
+=======
+    MainModuleTopic,
+    MainModuleTopicHosts,
+    MainModuleTopicServices,
+    MainModuleTopicBI,
+    MainModuleTopicAgents,
+    MainModuleTopicEvents,
+    MainModuleTopicUsers,
+    MainModuleTopicGeneral,
+    MainModuleTopicMaintenance,
+    MainModuleTopicCustom,
+    ABCMainModule,
+>>>>>>> upstream/master
     WatoModule,
     register_modules,
     register_notification_parameters,
@@ -118,6 +159,7 @@ from cmk.gui.plugins.wato.utils import (
     CheckParameterRulespecWithItem,
     CheckParameterRulespecWithoutItem,
     ManualCheckParameterRulespec,
+<<<<<<< HEAD
     RulespecGroupManualChecksNetworking,
     RulespecGroupManualChecksApplications,
     RulespecGroupManualChecksEnvironment,
@@ -125,6 +167,15 @@ from cmk.gui.plugins.wato.utils import (
     RulespecGroupManualChecksHardware,
     RulespecGroupManualChecksStorage,
     RulespecGroupManualChecksVirtualization,
+=======
+    RulespecGroupEnforcedServicesNetworking,
+    RulespecGroupEnforcedServicesApplications,
+    RulespecGroupEnforcedServicesEnvironment,
+    RulespecGroupEnforcedServicesOperatingSystem,
+    RulespecGroupEnforcedServicesHardware,
+    RulespecGroupEnforcedServicesStorage,
+    RulespecGroupEnforcedServicesVirtualization,
+>>>>>>> upstream/master
     rulespec_group_registry,
     RulespecGroup,
     RulespecSubGroup,
@@ -149,10 +200,17 @@ from cmk.gui.plugins.wato.utils import (
     UserIconOrAction,
     user_script_choices,
     user_script_title,
+<<<<<<< HEAD
     wato_confirm,
     wato_fileheader,
     register_hook,
     WatoMode,
+=======
+    wato_fileheader,
+    register_hook,
+    WatoMode,
+    ActionResult,
+>>>>>>> upstream/master
     SimpleModeType,
     SimpleListMode,
     SimpleEditMode,
@@ -166,6 +224,12 @@ from cmk.gui.plugins.wato.utils import (
     get_check_information,
     SampleConfigGenerator,
     sample_config_generator_registry,
+<<<<<<< HEAD
+=======
+    mode_url,
+    flash,
+    redirect,
+>>>>>>> upstream/master
 )
 
 #.

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,18 +24,39 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 import ast
 import re
 import pprint
 import base64
 import pickle
+<<<<<<< HEAD
 
 import cmk
+=======
+from typing import Any, Union, List
+
+from six import ensure_binary, ensure_str
+
+from livestatus import SiteId
+from cmk.utils.type_defs import HostName
+import cmk.utils.version as cmk_version
+>>>>>>> upstream/master
 import cmk.utils.paths
 import cmk.utils.rulesets.tuple_rulesets
 
 import cmk.gui.config as config
+<<<<<<< HEAD
+=======
+from cmk.gui.background_job import BackgroundJobAlreadyRunning
+>>>>>>> upstream/master
 from cmk.gui.globals import html
 from cmk.gui.i18n import _
 from cmk.gui.exceptions import MKGeneralException
@@ -111,13 +133,19 @@ def host_attribute_matches(crit, value):
 # slave sites, we don't know the site ID of the master site. We set this explicit
 # to false to configure that this host is monitored by another site (that we don't
 # know about).
+<<<<<<< HEAD
 # TODO: Find a better place later
 def default_site():
+=======
+# TODO: Find a better place later. Find a less depressing return type.
+def default_site() -> Union[bool, None, SiteId]:
+>>>>>>> upstream/master
     if config.is_wato_slave_site():
         return False
     return config.default_site()
 
 
+<<<<<<< HEAD
 def format_config_value(value):
     format_func = pprint.pformat if config.wato_pprint_config else repr
     return format_func(value)
@@ -136,11 +164,41 @@ def mk_eval(s):
             return ast.literal_eval(base64.b64decode(s))
         return pickle.loads(base64.b64decode(s))
     except:
+=======
+def format_config_value(value: Any) -> str:
+    return pprint.pformat(value) if config.wato_pprint_config else repr(value)
+
+
+def mk_repr(x: Any) -> bytes:
+    r = pickle.dumps(x) if config.wato_legacy_eval else ensure_binary(repr(x))
+    return base64.b64encode(r)
+
+
+# TODO: Deprecate this legacy format with 1.4.0 or later?!
+def mk_eval(s: Union[bytes, str]) -> Any:
+    try:
+        d = base64.b64decode(s)
+        return pickle.loads(d) if config.wato_legacy_eval else ast.literal_eval(ensure_str(d))
+    except Exception:
+>>>>>>> upstream/master
         raise MKGeneralException(_('Unable to parse provided data: %s') % html.render_text(repr(s)))
 
 
 def has_agent_bakery():
+<<<<<<< HEAD
     return not cmk.is_raw_edition()
+=======
+    return not cmk_version.is_raw_edition()
+
+
+def try_bake_agents_for_hosts(hosts: List[HostName]) -> None:
+    if has_agent_bakery():
+        import cmk.gui.cee.plugins.wato.agent_bakery.misc as agent_bakery  # pylint: disable=import-error,no-name-in-module
+        try:
+            agent_bakery.start_bake_agents(host_names=hosts, signing_credentials=None)
+        except BackgroundJobAlreadyRunning:
+            pass
+>>>>>>> upstream/master
 
 
 def site_neutral_path(path):

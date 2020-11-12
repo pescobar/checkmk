@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/env python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,14 +24,30 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+from typing import Any, Dict, List
+>>>>>>> upstream/master
 
 import cmk.gui.config as config
 import cmk.gui.sites as sites
 import cmk.gui.watolib as watolib
 from cmk.gui.i18n import _
+<<<<<<< HEAD
 from cmk.gui.globals import html
 from cmk.gui.exceptions import MKUserError
 from cmk.gui.htmllib import HTML
+=======
+from cmk.gui.globals import html, request
+from cmk.gui.exceptions import MKUserError
+from cmk.gui.htmllib import HTML
+from cmk.gui.utils.urls import makeuri_contextless
+>>>>>>> upstream/master
 
 from cmk.gui.plugins.wato.check_mk_configuration import transform_virtual_host_trees
 from . import SidebarSnapin, snapin_registry
@@ -47,9 +64,16 @@ class VirtualHostTree(SidebarSnapin):
         self._load_user_settings()
 
     def _load_trees(self):
+<<<<<<< HEAD
         self._trees = dict([
             (tree["id"], tree) for tree in transform_virtual_host_trees(config.virtual_host_trees)
         ])
+=======
+        self._trees = {
+            tree["id"]: tree  #
+            for tree in transform_virtual_host_trees(config.virtual_host_trees)
+        }
+>>>>>>> upstream/master
 
     def _load_user_settings(self):
         tree_conf = config.user.load_file("virtual_host_tree", {"tree": 0, "cwd": {}})
@@ -127,7 +151,12 @@ class VirtualHostTree(SidebarSnapin):
                       key=lambda x: x[1])
 
     def _render_tag_tree_level(self, tree_spec, path, cwd, title, tree):
+<<<<<<< HEAD
         if not self._is_tag_subdir(path, cwd) and not self._is_tag_subdir(cwd, path):
+=======
+        if (not self._is_tag_subdir(path=path, cwd=cwd) and
+                not self._is_tag_subdir(path=cwd, cwd=path)):
+>>>>>>> upstream/master
             return
 
         if path != cwd and self._is_tag_subdir(path, cwd):
@@ -172,18 +201,32 @@ class VirtualHostTree(SidebarSnapin):
     def _is_tag_subdir(self, path, cwd):
         if not cwd:
             return True
+<<<<<<< HEAD
         elif not path:
             return False
         elif path[0] != cwd[0]:
+=======
+        if not path:
+            return False
+        if path[0] != cwd[0]:
+>>>>>>> upstream/master
             return False
         return self._is_tag_subdir(path[1:], cwd[1:])
 
     def _tag_tree_bullet(self, state, path, leaf):
+<<<<<<< HEAD
         code = '<div class="tagtree %sstatebullet state%d">&nbsp;</div>' % (
             (leaf and "leaf " or ""), state)
         if not leaf:
             code = '<a title="%s" href="javascript:virtual_host_tree_enter(\'%s\');">%s</a>' % \
                (_("Display the tree only below this node"), "|".join(path), code)
+=======
+        code = (u'<div class="tagtree %sstatebullet state%d">&nbsp;</div>' %
+                ((leaf and "leaf " or ""), state))
+        if not leaf:
+            code = ('<a title="%s" href="javascript:virtual_host_tree_enter(\'%s\');">%s</a>' %
+                    (_("Display the tree only below this node"), "|".join(path), code))
+>>>>>>> upstream/master
         return code + " "
 
     def _tag_tree_url(self, tree_spec, node_values, viewname):
@@ -194,7 +237,11 @@ class VirtualHostTree(SidebarSnapin):
         urlvars += self._get_tag_url_vars(tree_spec, node_values)
         urlvars += self._get_folder_url_vars(node_values)
 
+<<<<<<< HEAD
         return html.makeuri_contextless(urlvars, "view.py")
+=======
+        return makeuri_contextless(request, urlvars, "view.py")
+>>>>>>> upstream/master
 
     def _get_tag_url_vars(self, tree_spec, node_values):
         urlvars = []
@@ -251,7 +298,11 @@ class VirtualHostTree(SidebarSnapin):
         if "_state" in tree:
             return tree["_state"]
 
+<<<<<<< HEAD
         states = map(self._tag_tree_worst_state, tree.values())
+=======
+        states = [self._tag_tree_worst_state(s) for s in tree.values()]
+>>>>>>> upstream/master
         for x in states:
             if x == 2:
                 return 2
@@ -290,11 +341,17 @@ function virtual_host_tree_enter(path)
 
     def _compute_tag_tree(self, tree_spec):
         tag_groups, topics = self._get_tag_config()
+<<<<<<< HEAD
 
         tree = {}
         for host_row in self._get_all_hosts():
             self._add_host_to_tree(tree_spec, tree, host_row, tag_groups, topics)
 
+=======
+        tree: Dict[Any, Any] = {}
+        for host_row in self._get_all_hosts():
+            self._add_host_to_tree(tree_spec, tree, host_row, tag_groups, topics)
+>>>>>>> upstream/master
         return tree
 
     def _add_host_to_tree(self, tree_spec, tree, host_row, tag_groups, topics):
@@ -407,7 +464,11 @@ function virtual_host_tree_enter(path)
     # Prepare list of host tag groups and topics
     def _get_tag_config(self):
         tag_groups = {}
+<<<<<<< HEAD
         topics = {}
+=======
+        topics: Dict[str, List[Any]] = {}
+>>>>>>> upstream/master
         for tag_group in config.tags.tag_groups:
             if tag_group.topic:
                 topics.setdefault(tag_group.topic, []).append(tag_group)
@@ -484,7 +545,12 @@ function virtual_host_tree_enter(path)
     def _ajax_tag_tree_enter(self):
         html.set_output_format("json")
         self._load()
+<<<<<<< HEAD
         path = html.request.var("path").split("|") if html.request.var("path") else []
+=======
+        path = (html.request.get_str_input_mandatory("path").split("|")
+                if html.request.var("path") else [])
+>>>>>>> upstream/master
         self._cwds[self._current_tree_id] = path
         self._save_user_settings()
         html.write("OK")

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -26,6 +27,15 @@
 
 import copy
 import six
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+import copy
+>>>>>>> upstream/master
 
 import cmk.gui.mkeventd as mkeventd
 from cmk.gui.i18n import _
@@ -40,6 +50,10 @@ from cmk.gui.valuespec import (
     ListOfStrings,
     Age,
     TextUnicode,
+<<<<<<< HEAD
+=======
+    TextAreaUnicode,
+>>>>>>> upstream/master
     DropdownChoice,
     RegExp,
     RegExpUnicode,
@@ -47,11 +61,17 @@ from cmk.gui.valuespec import (
     EmailAddress,
     ListOf,
     Checkbox,
+<<<<<<< HEAD
     RadioChoice,
     Password,
     Percentage,
     CascadingDropdown,
     UploadOrPasteTextFile,
+=======
+    Password,
+    Percentage,
+    CascadingDropdown,
+>>>>>>> upstream/master
     Hostname,
     Optional,
 )
@@ -71,6 +91,25 @@ from cmk.gui.exceptions import MKUserError
 
 
 @rulespec_group_registry.register
+<<<<<<< HEAD
+=======
+class RulespecGroupIntegrateOtherServices(RulespecGroup):
+    @property
+    def name(self):
+        return "custom_checks"
+
+    @property
+    def title(self):
+        return _("Other services")
+
+    @property
+    def help(self):
+        return _("This services are provided by so called active checks. "
+                 "You can also integrate custom nagios plugins.")
+
+
+@rulespec_group_registry.register
+>>>>>>> upstream/master
 class RulespecGroupActiveChecks(RulespecGroup):
     @property
     def name(self):
@@ -78,11 +117,39 @@ class RulespecGroupActiveChecks(RulespecGroup):
 
     @property
     def title(self):
+<<<<<<< HEAD
         return _("Active checks (HTTP, TCP, etc.)")
 
     @property
     def help(self):
         return _("Configure active networking checks like HTTP and TCP")
+=======
+        return _("HTTP, TCP, Email, ...")
+
+    @property
+    def help(self):
+        return _("Rules to add [cms_active_checks|network services] like HTTP and TCP to the "
+                 "monitoring. The services are provided by so called active checks that allow "
+                 "you to monitor network services directly from the outside.")
+
+
+@rulespec_group_registry.register
+class RulespecGroupBI(RulespecGroup):
+    @property
+    def name(self):
+        return "bi"
+
+    @property
+    def title(self):
+        return _("Check state of BI aggregations")
+
+    @property
+    def help(self):
+        return _(
+            "Connect to the local or a remote monitoring host, which uses Check_MK BI to aggregate "
+            "several states to a single BI aggregation, which you want to show up as a single "
+            "service.")
+>>>>>>> upstream/master
 
 
 # These elements are also used in check_parameters.py
@@ -253,7 +320,11 @@ def _valuespec_active_checks_ssh():
 
 rulespec_registry.register(
     HostRulespec(
+<<<<<<< HEAD
         group=RulespecGroupActiveChecks,
+=======
+        group=RulespecGroupIntegrateOtherServices,
+>>>>>>> upstream/master
         match_type="all",
         name="active_checks:ssh",
         valuespec=_valuespec_active_checks_ssh,
@@ -510,12 +581,22 @@ def _valuespec_active_checks_dns():
                         "expected_address",
                         Transform(
                             ListOfStrings(
+<<<<<<< HEAD
                                 title=_("Expected answer (IP address or hostname)"),
                                 help=_("List all allowed expected answers here. If query for an "
                                        "IP address then the answer will be host names, that end "
                                        "with a dot."),
                             ),
                             forth=lambda old: isinstance(old, six.string_types) and [old] or old,
+=======
+                                title=_("Expected DNS answers"),
+                                help=_("List all allowed expected answers here. If query for an "
+                                       "IP address then the answer will be host names, that end "
+                                       "with a dot. Multiple IP addresses within one answer must "
+                                       "be separated by comma."),
+                            ),
+                            forth=lambda old: isinstance(old, str) and [old] or old,
+>>>>>>> upstream/master
                         ),
                     ),
                     ("expected_authority",
@@ -603,6 +684,7 @@ def _valuespec_active_checks_sql():
                  help=_('The password used to connect to the database'),
                  allow_empty=False,
              )),
+<<<<<<< HEAD
             ("sql",
              Alternative(
                  title=_("Query or SQL statement"),
@@ -626,6 +708,33 @@ def _valuespec_active_checks_sql():
                      ),
                  ],
              )),
+=======
+            (
+                "sql",
+                Transform(
+                    TextAreaUnicode(
+                        title=_("Query or SQL statement"),
+                        help=
+                        _('The SQL-statement or procedure name which is executed on the DBMS. It must return '
+                          'a result table with one row and at least two columns. The first column must be '
+                          'an integer and is interpreted as the state (0 is OK, 1 is WARN, 2 is CRIT). '
+                          'Alternatively the first column can be interpreted as number value and you can '
+                          'define levels for this number. The '
+                          'second column is used as check output. The third column is optional and can '
+                          'contain performance data.'),
+                        allow_empty=False,
+                        monospaced=True,
+                    ),
+                    # Former Alternative(Text, Alternative(FileUpload, Text)) based implementation
+                    # would save a string or a tuple with a string or a binary array as third element
+                    # which would then be turned into a string.
+                    # Just make all this a string
+                    forth=lambda old_val: [
+                        elem.decode() if isinstance(elem, bytes) else str(elem)
+                        for elem in ((old_val[-1] if isinstance(old_val, tuple) else old_val),)
+                    ][0],
+                )),
+>>>>>>> upstream/master
             (
                 "procedure",
                 Dictionary(
@@ -653,6 +762,7 @@ def _valuespec_active_checks_sql():
                     ]),
             ),
             ("levels",
+<<<<<<< HEAD
              Tuple(
                  title=_("Upper levels for first output item"),
                  elements=[Float(title=_("Warning if above")),
@@ -662,6 +772,15 @@ def _valuespec_active_checks_sql():
                  title=_("Lower levels for first output item"),
                  elements=[Float(title=_("Warning if below")),
                            Float(title=_("Critical if below"))])),
+=======
+             Tuple(title=_("Upper levels for first output item"),
+                   elements=[Float(title=_("Warning at")),
+                             Float(title=_("Critical at"))])),
+            ("levels_low",
+             Tuple(title=_("Lower levels for first output item"),
+                   elements=[Float(title=_("Warning below")),
+                             Float(title=_("Critical below"))])),
+>>>>>>> upstream/master
             ("perfdata",
              FixedValue(
                  title=_("Performance Data"),
@@ -687,7 +806,11 @@ rulespec_registry.register(
 
 def _valuespec_active_checks_tcp():
     return Tuple(
+<<<<<<< HEAD
         title=_("Check connecting to a TCP port"),
+=======
+        title=_("Check TCP port connection"),
+>>>>>>> upstream/master
         help=_("This check tests the connection to a TCP port. It uses "
                "<tt>check_tcp</tt> from the standard Nagios plugins."),
         elements=[
@@ -858,7 +981,11 @@ def _valuespec_active_checks_uniserv():
 
 rulespec_registry.register(
     HostRulespec(
+<<<<<<< HEAD
         group=RulespecGroupActiveChecks,
+=======
+        group=RulespecGroupIntegrateOtherServices,
+>>>>>>> upstream/master
         name="active_checks:uniserv",
         valuespec=_valuespec_active_checks_uniserv,
     ))
@@ -896,12 +1023,22 @@ def _active_checks_http_hostspec():
     return Dictionary(
         title=_("Host settings"),
         help=_("Usually Check_MK will nail this check to the primary IP address of the host"
+<<<<<<< HEAD
                " it is attached to. It will use corresponding IP version (IPv4/IPv6) and"
                " the default port (80/443). With this option you can override either of these"
                " parameters. By default the host name / IP address will be used as virtual"
                " host as well. In some setups however, you may want to distiguish the contacted"
                " servers address from your virtual host name (e.g. if the virtual host name is"
                " not resolvable by DNS)."),
+=======
+               " it is attached to. It will use the corresponding IP version (IPv4/IPv6) and"
+               " default port (80/443). With this option you can override either of these"
+               " parameters. By default no virtual host is set and HTTP/1.0 will be used."
+               " In some setups however, you may want to distiguish the contacted server"
+               " address from your virtual host name (e.g. if the virtual host name is"
+               " not resolvable by DNS). In this case the HTTP Host header will be set and "
+               "HTTP/1.1 is used."),
+>>>>>>> upstream/master
         elements=[
             ("address", TextAscii(title=_("Hosts name / IP address"), allow_empty=False)),
             ("port", _active_checks_http_portspec(443)),
@@ -970,6 +1107,14 @@ def _active_checks_http_transform_check_http(params):
     return transformed
 
 
+<<<<<<< HEAD
+=======
+def _validate_active_check_http_name(value, varprefix):
+    if value.strip() == "^":
+        raise MKUserError(varprefix, _("Please provide a valid name"))
+
+
+>>>>>>> upstream/master
 def _valuespec_active_checks_http():
     return Transform(
         Dictionary(
@@ -988,7 +1133,13 @@ def _valuespec_active_checks_http():
                          "Will be used in the service description. If the name starts with "
                          "a caret (<tt>^</tt>), the service description will not be prefixed with either "
                          "<tt>HTTP</tt> or <tt>HTTPS</tt>."),
+<<<<<<< HEAD
                      allow_empty=False)),
+=======
+                     allow_empty=False,
+                     validate=_validate_active_check_http_name,
+                 )),
+>>>>>>> upstream/master
                 ("host", _active_checks_http_hostspec()),
                 ("proxy", _active_checks_http_proxyspec()),
                 ("mode",
@@ -1245,7 +1396,11 @@ rulespec_registry.register(
 
 def _valuespec_active_checks_ldap():
     return Tuple(
+<<<<<<< HEAD
         title=_("Check access to LDAP service"),
+=======
+        title=_("Check LDAP service access"),
+>>>>>>> upstream/master
         help=_("This check uses <tt>check_ldap</tt> from the standard "
                "Nagios plugins in order to try the response of an LDAP "
                "server."),
@@ -1362,7 +1517,11 @@ def _active_checks_smtp_transform_smtp_address_family(val):
 
 def _valuespec_active_checks_smtp():
     return Tuple(
+<<<<<<< HEAD
         title=_("Check access to SMTP services"),
+=======
+        title=_("Check SMTP service access"),
+>>>>>>> upstream/master
         help=_("This check uses <tt>check_smtp</tt> from the standard "
                "Nagios plugins in order to try the response of an SMTP "
                "server."),
@@ -1504,7 +1663,11 @@ rulespec_registry.register(
 
 def _valuespec_active_checks_disk_smb():
     return Dictionary(
+<<<<<<< HEAD
         title=_("Check access to SMB share"),
+=======
+        title=_("Check SMB share access"),
+>>>>>>> upstream/master
         help=_("This ruleset helps you to configure the classical Nagios "
                "plugin <tt>check_disk_smb</tt> that checks the access to "
                "filesystem shares that are exported via SMB/CIFS."),
@@ -1569,8 +1732,13 @@ rulespec_registry.register(
 
 def _valuespec_custom_checks():
     return Dictionary(
+<<<<<<< HEAD
         title=_("Classical active and passive Monitoring checks"),
         help=_("With this ruleset you can configure &quot;classical Monitoring checks&quot; "
+=======
+        title=_("Integrate Nagios plugins"),
+        help=_("With this ruleset you can configure \"classical Monitoring checks\" "
+>>>>>>> upstream/master
                "to be executed directly on your monitoring server. These checks "
                "will not use Check_MK. It is also possible to configure passive "
                "checks that are fed with data from external sources via the "
@@ -1627,6 +1795,10 @@ def _valuespec_custom_checks():
                       DropdownChoice(
                           title=_("State in case of absent updates"),
                           choices=[
+<<<<<<< HEAD
+=======
+                              (0, _("OK")),
+>>>>>>> upstream/master
                               (1, _("WARN")),
                               (2, _("CRIT")),
                               (3, _("UNKNOWN")),
@@ -1647,7 +1819,11 @@ def _valuespec_custom_checks():
 
 rulespec_registry.register(
     HostRulespec(
+<<<<<<< HEAD
         group=RulespecGroupActiveChecks,
+=======
+        group=RulespecGroupIntegrateOtherServices,
+>>>>>>> upstream/master
         match_type="all",
         name="custom_checks",
         valuespec=_valuespec_custom_checks,
@@ -1738,6 +1914,7 @@ def _valuespec_active_checks_bi_aggr():
                           default_value=60,
                       )),
                      ("in_downtime",
+<<<<<<< HEAD
                       RadioChoice(title=_("State, if BI aggregate is in scheduled downtime"),
                                   orientation="vertical",
                                   choices=[
@@ -1753,6 +1930,21 @@ def _valuespec_active_checks_bi_aggr():
                                       ("ok", _("Force to be OK")),
                                       ("warn", _("Force to be WARN, if aggregate is not OK")),
                                   ])),
+=======
+                      DropdownChoice(title=_("State, if BI aggregate is in scheduled downtime"),
+                                     choices=[
+                                         (None, _("Use normal state, ignore downtime")),
+                                         ("ok", _("Force to be OK")),
+                                         ("warn", _("Force to be WARN, if aggregate is not OK")),
+                                     ])),
+                     ("acknowledged",
+                      DropdownChoice(title=_("State, if BI aggregate is acknowledged"),
+                                     choices=[
+                                         (None, _("Use normal state, ignore acknowledgement")),
+                                         ("ok", _("Force to be OK")),
+                                         ("warn", _("Force to be WARN, if aggregate is not OK")),
+                                     ])),
+>>>>>>> upstream/master
                      ("track_downtimes",
                       Checkbox(
                           title=_("Track downtimes"),
@@ -1770,7 +1962,11 @@ def _valuespec_active_checks_bi_aggr():
 
 rulespec_registry.register(
     HostRulespec(
+<<<<<<< HEAD
         group=RulespecGroupActiveChecks,
+=======
+        group=RulespecGroupBI,
+>>>>>>> upstream/master
         match_type="all",
         name="active_checks:bi_aggr",
         valuespec=_valuespec_active_checks_bi_aggr,
@@ -1877,7 +2073,11 @@ rulespec_registry.register(
 
 def _valuespec_active_checks_notify_count():
     return Tuple(
+<<<<<<< HEAD
         title=_("Check Number of Notifications per Contact"),
+=======
+        title=_("Check notification number per contact"),
+>>>>>>> upstream/master
         help=
         _("Check the number of sent notifications per contact using the plugin <tt>check_notify_count</tt> "
           "provided with Check_MK. This plugin counts the total number of notifications sent by the local "
@@ -1910,7 +2110,11 @@ def _valuespec_active_checks_notify_count():
 
 rulespec_registry.register(
     HostRulespec(
+<<<<<<< HEAD
         group=RulespecGroupActiveChecks,
+=======
+        group=RulespecGroupIntegrateOtherServices,
+>>>>>>> upstream/master
         match_type="all",
         name="active_checks:notify_count",
         valuespec=_valuespec_active_checks_notify_count,
@@ -2356,7 +2560,11 @@ def _valuespec_active_checks_by_ssh():
 
 rulespec_registry.register(
     HostRulespec(
+<<<<<<< HEAD
         group=RulespecGroupActiveChecks,
+=======
+        group=RulespecGroupIntegrateOtherServices,
+>>>>>>> upstream/master
         match_type="all",
         name="active_checks:by_ssh",
         valuespec=_valuespec_active_checks_by_ssh,
@@ -2472,7 +2680,11 @@ def _valuespec_active_checks_elasticsearch_query():
 
 rulespec_registry.register(
     HostRulespec(
+<<<<<<< HEAD
         group=RulespecGroupActiveChecks,
+=======
+        group=RulespecGroupIntegrateOtherServices,
+>>>>>>> upstream/master
         match_type="all",
         name="active_checks:elasticsearch_query",
         valuespec=_valuespec_active_checks_elasticsearch_query,

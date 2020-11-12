@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -25,11 +26,29 @@
 # Boston, MA 02110-1301 USA.
 
 from cmk.utils.i18n import _
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+__all__ = [
+    "MKException",
+    "MKGeneralException",
+    "MKTerminate",
+    "MKBailOut",
+    "MKTimeout",
+    "MKSNMPError",
+    "MKIPAddressLookupError",
+]
+>>>>>>> upstream/master
 
 
 # never used directly in the code. Just some wrapper to make all of our
 # exceptions handleable with one call
 class MKException(Exception):
+<<<<<<< HEAD
     # TODO: The comment and the method below are nonsense: If we want unicode,
     # it is __unicode__'s task. This just seems to be a workaround for incorrect
     # call sites confusing both kinds of strings. Sometimes returning a unicode
@@ -59,6 +78,13 @@ class MKGeneralException(MKException):
 
     def title(self):
         return _("Error")
+=======
+    pass
+
+
+class MKGeneralException(MKException):
+    pass
+>>>>>>> upstream/master
 
 
 # This exception is raises when the current program execution should be
@@ -68,13 +94,18 @@ class MKGeneralException(MKException):
 # "normal" case and no exception handling like printing a stack trace
 # nor an error message should be done. The program is stopped with
 # exit code 0.
+<<<<<<< HEAD
 class MKTerminate(Exception):
+=======
+class MKTerminate(MKException):
+>>>>>>> upstream/master
     pass
 
 
 # This is raised to print an error message and then end the program.
 # The program should catch this at top level and end exit the program
 # with exit code 3, in order to be compatible with monitoring plugin API.
+<<<<<<< HEAD
 class MKBailOut(Exception):
     def __init__(self, reason):
         self.reason = reason
@@ -82,6 +113,10 @@ class MKBailOut(Exception):
 
     def __str__(self):
         return self.reason
+=======
+class MKBailOut(MKException):
+    pass
+>>>>>>> upstream/master
 
 
 # This exception is raised when a previously configured timeout is reached.
@@ -89,3 +124,14 @@ class MKBailOut(Exception):
 # which have a timeout set.
 class MKTimeout(MKException):
     pass
+<<<<<<< HEAD
+=======
+
+
+class MKSNMPError(MKException):
+    pass
+
+
+class MKIPAddressLookupError(MKGeneralException):
+    pass
+>>>>>>> upstream/master

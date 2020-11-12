@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import pytest  # type: ignore
 import testlib
 from testlib.base import Scenario
@@ -6,6 +7,16 @@ from testlib.base import Scenario
 @pytest.fixture(scope="module")
 def check_manager():
     return testlib.CheckManager()
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+import pytest  # type: ignore[import]
+from testlib.base import Scenario  # type: ignore[import]
+>>>>>>> upstream/master
 
 
 # patch cmk.utils.paths
@@ -20,10 +31,16 @@ def patch_cmk_utils_paths(monkeypatch, tmp_path):
 # Automatically refresh caches for each test
 @pytest.fixture(autouse=True, scope="function")
 def clear_config_caches(monkeypatch):
+<<<<<<< HEAD
     import cmk_base
     import cmk_base.caching
     monkeypatch.setattr(cmk_base, "config_cache", cmk_base.caching.CacheManager())
     monkeypatch.setattr(cmk_base, "runtime_cache", cmk_base.caching.CacheManager())
+=======
+    from cmk.base.caching import config_cache as _config_cache, runtime_cache as _runtime_cache
+    _config_cache.reset()
+    _runtime_cache.reset()
+>>>>>>> upstream/master
 
     ts = Scenario()
     ts.add_host("non-existent-testhost")

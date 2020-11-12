@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,6 +24,13 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 #<<<jenkins_jobs>>>
 #cmk_140 clang_tidy blue 90 1554371146806 200 SUCCESS 1251806 1554371146806
@@ -40,6 +48,7 @@ JenkinsJobInfo = collections.namedtuple("job_info", [
 ])
 
 MAP_JOB_STATES = {
+<<<<<<< HEAD
     "aborted": 0,
     "aborted_anime": 0,
     "blue": 0,
@@ -54,6 +63,32 @@ MAP_JOB_STATES = {
     "red_anime": 0,
     "yellow": 1,
     "yellow_anime": 0,
+=======
+    "aborted": {
+        "state": 0,
+        "info": "Aborted"
+    },
+    "blue": {
+        "state": 0,
+        "info": "Success"
+    },
+    "disabled": {
+        "state": 0,
+        "info": "Disabled"
+    },
+    "notbuilt": {
+        "state": 0,
+        "info": "Not built"
+    },
+    "red": {
+        "state": 2,
+        "info": "Failed"
+    },
+    "yellow": {
+        "state": 1,
+        "info": "Unstable"
+    },
+>>>>>>> upstream/master
 }
 
 MAP_BUILD_STATES = {
@@ -85,6 +120,7 @@ def check_jenkins_jobs(item, params, item_data):
 
     job_state = item_data[0].state
     if job_state is not None:
+<<<<<<< HEAD
         yield params.get("job_state",
                          {}).get(job_state,
                                  MAP_JOB_STATES[job_state]), "State: %s" % job_state.title()
@@ -98,13 +134,44 @@ def check_jenkins_jobs(item, params, item_data):
         ("jenkins_time_since", time_since_last_suc, "Time since last successful build",
          get_age_human_readable),
         (None, item_data[0].build_timestamp, "Last build at", get_timestamp_human_readable),
+=======
+        if "grey" in job_state:
+            job_state = "aborted"
+
+        job_cleanup = job_state.replace("_anime", "")
+        infotext = "State: %s" % MAP_JOB_STATES[job_cleanup]["info"]
+        state = MAP_JOB_STATES[job_cleanup]["state"]
+        if "_anime" in job_state:
+            infotext += " (in progress)"
+
+        yield params.get("job_state", {}).get(job_cleanup, state), infotext
+
+    now = time.time()
+    time_since_last_build = None
+    if item_data[0].build_timestamp:
+        time_since_last_build = now - item_data[0].build_timestamp
+
+    time_since_last_suc = None
+    if item_data[0].last_suc_build:
+        time_since_last_suc = now - item_data[0].last_suc_build
+
+    for key, value, infotext, hr_func in [
+        ("jenkins_job_score", item_data[0].job_score, "Job score", get_percent_human_readable),
+        ("jenkins_last_build", time_since_last_build, "Time since last build",
+         get_age_human_readable),
+        ("jenkins_time_since", time_since_last_suc, "Time since last successful build",
+         get_age_human_readable),
+>>>>>>> upstream/master
         (None, item_data[0].build_id, "Build id", int),
         ("jenkins_build_duration", item_data[0].build_duration, "Build duration",
          get_age_human_readable),
     ]:
 
         param_checking = (None, None)
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/master
         if params.get(key):
             warn, crit = params.get(key)
             if key == "jenkins_job_score":

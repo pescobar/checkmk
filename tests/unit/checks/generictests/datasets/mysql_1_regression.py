@@ -1,4 +1,16 @@
+<<<<<<< HEAD
 # yapf: disable
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# yapf: disable
+# type: ignore
+
+>>>>>>> upstream/master
 
 
 checkname = 'mysql'
@@ -18,7 +30,11 @@ info = [['[[mysql]]'],
         ['Com_assign_to_keycache', '0'],
         ['Com_alter_db', '0'],
         ['Com_alter_db_upgrade', '0'],
+<<<<<<< HEAD
         ['Threads_connected', '42'],
+=======
+        ['Threads_connected', '3'],
+>>>>>>> upstream/master
         ['Connections', '2'],
         ['Threads_running', '23'],
         ['Innodb_data_read', '1024'],
@@ -240,11 +256,29 @@ checks = {
         ])
     ],
     'connections': [
+<<<<<<< HEAD
         ('mysql', {}, [
             (0, 'Max. parallel Connections: 2 (Max.: 4): 50.00%', [
                 ('connections_max_used', 2.0, None, None, None, None),
                 ('connections_max', 4.0, None, None, None, None),
                 ('connections_perc_used', 50.0, None, None, None, None),
+=======
+        ('mysql', {'perc_used': (75, 80), 'perc_conn_threads': (40, 50)}, [
+            (0, 'Max. parallel connections since server start: 50.0%', [
+                ('connections_perc_used', 50.0, 75, 80, None, None),
+            ]),
+            (0, '', [
+                ('connections_max_used', 2.0, None, None, None, None),
+            ]),
+            (0, '', [
+                ('connections_max', 4.0, None, None, None, None),
+            ]),
+            (2, 'Currently open connections: 75.0% (warn/crit at 40.0%/50.0%)', [
+                ('connections_perc_conn_threads', 75.0, 40, 50, None, None),
+            ]),
+            (0, '', [
+                ('connections_conn_threads', 3.0, None, None, None, None),
+>>>>>>> upstream/master
             ]),
         ])
     ],
@@ -258,8 +292,13 @@ checks = {
     ],
     'sessions': [
         ('mysql', {}, [
+<<<<<<< HEAD
             (0, '42 total', [
                 ('total_sessions', 42, None, None, None, None),
+=======
+            (0, '3 total', [
+                ('total_sessions', 3, None, None, None, None),
+>>>>>>> upstream/master
             ]),
             (0, '23 running', [
                 ('running_sessions', 23, None, None, None, None),

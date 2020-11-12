@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/env python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,11 +24,22 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 import subprocess
 
 import os
+<<<<<<< HEAD
 from pathlib2 import Path
+=======
+from pathlib import Path
+>>>>>>> upstream/master
 
 
 def test_no_exeption(site):
@@ -38,7 +50,11 @@ def test_no_exeption(site):
     errors or a wrong PYTHONPATH.
     """
     special_agent_dir = Path(site.root) / 'share' / 'check_mk' / 'agents' / 'special'
+<<<<<<< HEAD
     for special_agent_path in special_agent_dir.glob('agent_*'):  # pylint: disable=no-member
+=======
+    for special_agent_path in special_agent_dir.glob('agent_*'):
+>>>>>>> upstream/master
         command = [str(special_agent_path)]
         p = site.execute(command,
                          stdout=subprocess.PIPE,

@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: Stormshield HA Status
+=======
+title: Stormshield: HA-Status
+>>>>>>> upstream/master
 agents: snmp
 catalog: app/stormshield
 license: GPL
@@ -9,9 +13,14 @@ description:
 
  The services will only be inventorized if you configured HA on your firewall.
 
+<<<<<<< HEAD
 item:
  The description of the service as provided by
  the device.
 
 inventory:
  One check is created which holds information about the status of your HA.
+=======
+inventory:
+ One service is created which holds information about the status of your HA.
+>>>>>>> upstream/master

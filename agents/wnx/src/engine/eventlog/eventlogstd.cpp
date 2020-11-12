@@ -20,7 +20,11 @@ std::vector<std::wstring> MessageResolver::getMessageFiles(
     DWORD ret =
         RegOpenKeyExW(HKEY_LOCAL_MACHINE, regpath.c_str(), 0, KEY_READ, &key);
     if (ret != ERROR_SUCCESS) {
+<<<<<<< HEAD
         XLOG::t("Can't open HKLM: '{}'", wtools::ConvertToUTF8(regpath));
+=======
+        // XLOG::t("Can't open HKLM: '{}'", wtools::ConvertToUTF8(regpath));
+>>>>>>> upstream/master
         return {};
     }
     ON_OUT_OF_SCOPE(RegCloseKey(key));
@@ -38,8 +42,15 @@ std::vector<std::wstring> MessageResolver::getMessageFiles(
     }
 
     if (res != ERROR_SUCCESS) {
+<<<<<<< HEAD
         XLOG::t("Can't read EventMessageFile in registry '{}' : {:X}",
                 wtools::ConvertToUTF8(regpath), (unsigned int)res);
+=======
+        /*
+                XLOG::t("Can't read EventMessageFile in registry '{}' : {:X}",
+                        wtools::ConvertToUTF8(regpath), (unsigned int)res);
+        */
+>>>>>>> upstream/master
         return {};
     }
 
@@ -81,9 +92,18 @@ std::wstring MessageResolver::resolveInt(DWORD eventID, LPCWSTR dllpath,
     DWORD dwFlags = FORMAT_MESSAGE_ARGUMENT_ARRAY | FORMAT_MESSAGE_FROM_SYSTEM;
     if (dll) dwFlags |= FORMAT_MESSAGE_FROM_HMODULE;
 
+<<<<<<< HEAD
     XLOG::t("Event ID: {}.{}",
             eventID / 65536,   // "Qualifiers": no idea what *that* is
             eventID % 65536);  // the actual event id
+=======
+#if 0
+    // disabled as useless
+    XLOG::t("Event ID: {}.{}",
+            eventID / 65536,   // "Qualifiers": no idea what *that* is
+            eventID % 65536);  // the actual event id
+#endif
+>>>>>>> upstream/master
 
     DWORD len =
         ::FormatMessageW(dwFlags, dll, eventID,
@@ -196,7 +216,12 @@ EventLog::EventLog(const std::wstring &Name)
     handle_ = OpenEventLogW(nullptr, name_.c_str());
 
     if (handle_ == nullptr) {
+<<<<<<< HEAD
         XLOG::l("failed to open eventlog: '{}'", wtools::ConvertToUTF8(name_));
+=======
+        XLOG::l("failed to open eventlog: '{}' error = [{}]",
+                wtools::ConvertToUTF8(name_), GetLastError());
+>>>>>>> upstream/master
     }
 
     buffer_.resize(INIT_BUFFER_SIZE);

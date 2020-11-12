@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: Teracom Ethernet IO module TCW241
+=======
+title: Teracom Ethernet IO Module TCW241: Digital Inputs
+>>>>>>> upstream/master
 agents: snmp
 catalog: hw/environment/teracom
 license: GPL
@@ -7,5 +11,13 @@ description:
 
  This check monitors digital “dry contact” inputs.
 
+<<<<<<< HEAD
 inventory:
  One service for every sensor will be created.
+=======
+item:
+ The index of the module
+
+inventory:
+ One service is created for each sensor.
+>>>>>>> upstream/master

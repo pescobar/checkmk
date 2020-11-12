@@ -9,7 +9,14 @@ description:
  assuming, that only 750W PSUs are used in OSN devices.
 
 item:
+<<<<<<< HEAD
  The PSU BID is used as item name
 
 inventory:
  One service for each PSU is created
+=======
+ The slot ID of the Piu Board ({{BID}})
+
+inventory:
+ One service is created for each PSU.
+>>>>>>> upstream/master

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -33,6 +34,27 @@ import cmk.gui.sites as sites
 import cmk.gui.mkeventd as mkeventd
 from cmk.gui.valuespec import MonitoringState
 from cmk.gui.i18n import _
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+from typing import Callable, Optional, TypeVar, Union
+import urllib.parse
+
+from cmk.utils.defines import short_service_state_name
+
+import cmk.gui.escaping as escaping
+import cmk.gui.config as config
+import cmk.gui.sites as sites
+from cmk.gui.type_defs import HTTPVariables
+
+import cmk.gui.mkeventd as mkeventd
+from cmk.gui.valuespec import MonitoringState
+from cmk.gui.i18n import _, _l
+>>>>>>> upstream/master
 
 from cmk.gui.globals import html
 
@@ -41,7 +63,11 @@ from cmk.gui.plugins.views import (
     command_registry,
     Command,
     data_source_registry,
+<<<<<<< HEAD
     DataSource,
+=======
+    ABCDataSource,
+>>>>>>> upstream/master
     RowTableLivestatus,
     painter_registry,
     Painter,
@@ -112,7 +138,11 @@ def _ec_filter_host_information_of_not_permitted_hosts(rows):
     if config.user.may("mkeventd.seeall"):
         return  # Don't remove anything. The user may see everything
 
+<<<<<<< HEAD
     user_groups = set(config.user.contact_groups())
+=======
+    user_groups = set(config.user.contact_groups)
+>>>>>>> upstream/master
 
     def is_contact(row):
         return bool(user_groups.intersection(row["host_contact_groups"]))
@@ -140,6 +170,7 @@ def _ec_filter_host_information_of_not_permitted_hosts(rows):
                 row[key] = 0.0
             elif isinstance(row[key], str):
                 row[key] = ""
+<<<<<<< HEAD
             elif isinstance(row[key], six.text_type):
                 row[key] = u""
 
@@ -220,6 +251,48 @@ class PermissionECSeeInTacticalOverview(Permission):
 
 @data_source_registry.register
 class DataSourceECEvents(DataSource):
+=======
+            elif isinstance(row[key], str):
+                row[key] = u""
+
+
+permission_registry.register(
+    Permission(
+        section=mkeventd.PermissionSectionEventConsole,
+        name="seeall",
+        title=_("See all events"),
+        description=_("If a user lacks this permission then he/she can see only those events that "
+                      "originate from a host that he/she is a contact for."),
+        defaults=config.builtin_role_ids,
+    ))
+
+permission_registry.register(
+    Permission(
+        section=mkeventd.PermissionSectionEventConsole,
+        name="seeunrelated",
+        title=_("See events not related to a known host"),
+        description=_(
+            "If that user does not have the permission <i>See all events</i> then this permission "
+            "controls wether he/she can see events that are not related to a host in the monitoring "
+            "and that do not have been assigned specific contact groups to via the event rule."),
+        defaults=config.builtin_role_ids,
+    ))
+
+permission_registry.register(
+    Permission(
+        section=mkeventd.PermissionSectionEventConsole,
+        name="see_in_tactical_overview",
+        title=_("See events in tactical overview snapin"),
+        description=_(
+            "Whether or not the user is permitted to see the number of open events in the "
+            "tactical overview snapin."),
+        defaults=config.builtin_role_ids,
+    ))
+
+
+@data_source_registry.register
+class DataSourceECEvents(ABCDataSource):
+>>>>>>> upstream/master
     @property
     def ident(self):
         return "mkeventd_events"
@@ -254,7 +327,11 @@ class DataSourceECEvents(DataSource):
 
 
 @data_source_registry.register
+<<<<<<< HEAD
 class DataSourceECEventHistory(DataSource):
+=======
+class DataSourceECEventHistory(ABCDataSource):
+>>>>>>> upstream/master
     @property
     def ident(self):
         return "mkeventd_history"
@@ -305,12 +382,19 @@ class PainterEventId(Painter):
     def ident(self):
         return "event_id"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("ID of the event")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("ID of the event")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("ID")
 
     @property
@@ -327,12 +411,19 @@ class PainterEventCount(Painter):
     def ident(self):
         return "event_count"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Count (number of recent occurrances)")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Count (number of recent occurrances)")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Cnt.")
 
     @property
@@ -349,12 +440,19 @@ class PainterEventText(Painter):
     def ident(self):
         return "event_text"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Text/Message of the event")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Text/Message of the event")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Message")
 
     @property
@@ -362,7 +460,11 @@ class PainterEventText(Painter):
         return ['event_text']
 
     def render(self, row, cell):
+<<<<<<< HEAD
         return ("", html.attrencode(row["event_text"]).replace("\x01", "<br>"))
+=======
+        return "", escaping.escape_attribute(row["event_text"]).replace("\x01", "<br>")
+>>>>>>> upstream/master
 
 
 @painter_registry.register
@@ -371,12 +473,19 @@ class PainterEventMatchGroups(Painter):
     def ident(self):
         return "event_match_groups"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Match Groups")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Match Groups")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Match")
 
     @property
@@ -399,12 +508,19 @@ class PainterEventFirst(Painter):
     def ident(self):
         return "event_first"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Time of first occurrence of this serial")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Time of first occurrence of this serial")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("First")
 
     @property
@@ -425,12 +541,19 @@ class PainterEventLast(Painter):
     def ident(self):
         return "event_last"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Time of last occurrance")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Time of last occurrance")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Last")
 
     @property
@@ -451,12 +574,19 @@ class PainterEventComment(Painter):
     def ident(self):
         return "event_comment"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Comment to the event")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Comment to the event")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Comment")
 
     @property
@@ -473,12 +603,19 @@ class PainterEventSl(Painter):
     def ident(self):
         return "event_sl"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Service-Level")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Service-Level")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Level")
 
     @property
@@ -496,12 +633,19 @@ class PainterEventHost(Painter):
     def ident(self):
         return "event_host"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Hostname")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Hostname")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Host")
 
     @property
@@ -520,12 +664,19 @@ class PainterEventIpaddress(Painter):
     def ident(self):
         return "event_ipaddress"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Original IP-Address")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Original IP-Address")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Orig. IP")
 
     @property
@@ -542,12 +693,19 @@ class PainterEventHostInDowntime(Painter):
     def ident(self):
         return "event_host_in_downtime"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Host in downtime during event creation")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Host in downtime during event creation")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Dt.")
 
     @property
@@ -564,12 +722,19 @@ class PainterEventOwner(Painter):
     def ident(self):
         return "event_owner"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Owner of event")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Owner of event")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("owner")
 
     @property
@@ -586,12 +751,19 @@ class PainterEventContact(Painter):
     def ident(self):
         return "event_contact"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Contact Person")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Contact Person")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Contact")
 
     @property
@@ -608,12 +780,19 @@ class PainterEventApplication(Painter):
     def ident(self):
         return "event_application"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Application / Syslog-Tag")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Application / Syslog-Tag")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Application")
 
     @property
@@ -630,12 +809,19 @@ class PainterEventPid(Painter):
     def ident(self):
         return "event_pid"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Process ID")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Process ID")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("PID")
 
     @property
@@ -646,18 +832,36 @@ class PainterEventPid(Painter):
         return ("", "%s" % row["event_pid"])
 
 
+<<<<<<< HEAD
+=======
+# TODO: Rethink the typing of syslog_facilites/syslog_priorities.
+T = TypeVar('T')
+
+
+def _deref(x: Union[T, Callable[[], T]]) -> T:
+    return x() if callable(x) else x
+
+
+>>>>>>> upstream/master
 @painter_registry.register
 class PainterEventPriority(Painter):
     @property
     def ident(self):
         return "event_priority"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Syslog-Priority")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Syslog-Priority")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Prio")
 
     @property
@@ -665,7 +869,11 @@ class PainterEventPriority(Painter):
         return ['event_priority']
 
     def render(self, row, cell):
+<<<<<<< HEAD
         return ("", dict(mkeventd.syslog_priorities)[row["event_priority"]])
+=======
+        return ("", dict(_deref(mkeventd.syslog_priorities))[row["event_priority"]])
+>>>>>>> upstream/master
 
 
 @painter_registry.register
@@ -674,12 +882,19 @@ class PainterEventFacility(Painter):
     def ident(self):
         return "event_facility"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Syslog-Facility")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Syslog-Facility")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Facility")
 
     @property
@@ -687,7 +902,11 @@ class PainterEventFacility(Painter):
         return ['event_facility']
 
     def render(self, row, cell):
+<<<<<<< HEAD
         return ("", dict(mkeventd.syslog_facilities)[row["event_facility"]])
+=======
+        return ("", dict(_deref(mkeventd.syslog_facilities))[row["event_facility"]])
+>>>>>>> upstream/master
 
 
 @painter_registry.register
@@ -696,12 +915,19 @@ class PainterEventRuleId(Painter):
     def ident(self):
         return "event_rule_id"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Rule-ID")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Rule-ID")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Rule")
 
     @property
@@ -722,12 +948,19 @@ class PainterEventState(Painter):
     def ident(self):
         return "event_state"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("State (severity) of event")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("State (severity) of event")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("State")
 
     @property
@@ -746,12 +979,19 @@ class PainterEventPhase(Painter):
     def ident(self):
         return "event_phase"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Phase of event (open, counting, etc.)")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Phase of event (open, counting, etc.)")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Phase")
 
     @property
@@ -792,6 +1032,7 @@ def render_event_phase_icons(row):
 
 
 def render_delete_event_icons(row):
+<<<<<<< HEAD
     if config.user.may("mkeventd.delete"):
         urlvars = []
 
@@ -831,6 +1072,42 @@ def render_delete_event_icons(row):
         return html.render_icon_button(url, _("Archive this event"), "archive_event")
     else:
         return ''
+=======
+    if not config.user.may("mkeventd.delete"):
+        return ''
+    urlvars: HTTPVariables = []
+
+    # Found no cleaner way to get the view. Sorry.
+    # TODO: This needs to be cleaned up with the new view implementation.
+    if html.request.has_var("name") and html.request.has_var("id"):
+        ident = html.request.get_integer_input_mandatory("id")
+
+        import cmk.gui.dashboard as dashboard
+        view = dashboard.get_dashlet(html.request.get_str_input_mandatory("name"), ident)
+
+        # These actions are not performed within the dashlet. Assume the title url still
+        # links to the source view where the action can be performed.
+        title_url = view.get("title_url")
+        if title_url:
+            parsed_url = urllib.parse.urlparse(title_url)
+            filename: Optional[str] = parsed_url.path
+            urlvars += urllib.parse.parse_qsl(parsed_url.query)
+    else:
+        # Regular view
+        view = get_permitted_views()[(html.request.get_str_input_mandatory("view_name"))]
+        filename = None
+
+    urlvars += [
+        ("filled_in", "actions"),
+        ("actions", "yes"),
+        ("_do_actions", "yes"),
+        ("_row_id", row_id(view, row)),
+        ("_delete_event", _("Archive Event")),
+        ("_show_result", "0"),
+    ]
+    url = html.makeactionuri(urlvars, filename=filename, delvars=["selection", "show_checkboxes"])
+    return html.render_icon_button(url, _("Archive this event"), "archive_event")
+>>>>>>> upstream/master
 
 
 @painter_registry.register
@@ -839,12 +1116,19 @@ class PainterEventIcons(Painter):
     def ident(self):
         return "event_icons"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Event Icons")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Event Icons")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Icons")
 
     @property
@@ -865,12 +1149,19 @@ class PainterEventHistoryIcons(Painter):
     def ident(self):
         return "event_history_icons"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Event Icons")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Event Icons")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Icons")
 
     @property
@@ -891,12 +1182,19 @@ class PainterEventContactGroups(Painter):
     def ident(self):
         return "event_contact_groups"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Contact groups defined in rule")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Contact groups defined in rule")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Rule contact groups")
 
     @property
@@ -907,7 +1205,11 @@ class PainterEventContactGroups(Painter):
         cgs = row.get("event_contact_groups")
         if cgs is None:
             return "", ""
+<<<<<<< HEAD
         elif cgs:
+=======
+        if cgs:
+>>>>>>> upstream/master
             return "", ", ".join(cgs)
         return "", "<i>" + _("none") + "</i>"
 
@@ -918,12 +1220,19 @@ class PainterEventEffectiveContactGroups(Painter):
     def ident(self):
         return "event_effective_contact_groups"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Contact groups effective (Host or rule contact groups)")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Contact groups effective (Host or rule contact groups)")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Contact groups")
 
     @property
@@ -942,7 +1251,11 @@ class PainterEventEffectiveContactGroups(Painter):
 
         if cgs is None:
             return "", ""
+<<<<<<< HEAD
         elif cgs:
+=======
+        if cgs:
+>>>>>>> upstream/master
             return "", ", ".join(sorted(cgs))
         return "", "<i>" + _("none") + "</i>"
 
@@ -956,12 +1269,19 @@ class PainterHistoryLine(Painter):
     def ident(self):
         return "history_line"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Line number in log file")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Line number in log file")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Line")
 
     @property
@@ -978,12 +1298,19 @@ class PainterHistoryTime(Painter):
     def ident(self):
         return "history_time"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Time of entry in logfile")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Time of entry in logfile")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Time")
 
     @property
@@ -1004,12 +1331,19 @@ class PainterHistoryWhat(Painter):
     def ident(self):
         return "history_what"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Type of event action")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Type of event action")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Action")
 
     @property
@@ -1027,8 +1361,12 @@ class PainterHistoryWhatExplained(Painter):
     def ident(self):
         return "history_what_explained"
 
+<<<<<<< HEAD
     @property
     def title(self):
+=======
+    def title(self, cell):
+>>>>>>> upstream/master
         return _("Explanation for event action")
 
     @property
@@ -1045,12 +1383,19 @@ class PainterHistoryWho(Painter):
     def ident(self):
         return "history_who"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("User who performed action")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("User who performed action")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Who")
 
     @property
@@ -1067,12 +1412,19 @@ class PainterHistoryAddinfo(Painter):
     def ident(self):
         return "history_addinfo"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Additional Information")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Additional Information")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Info")
 
     @property
@@ -1093,6 +1445,7 @@ class PainterHistoryAddinfo(Painter):
 #   |                                                                      |
 #   '----------------------------------------------------------------------'
 
+<<<<<<< HEAD
 
 @permission_registry.register
 class PermissionECUpdateEvent(Permission):
@@ -1164,6 +1517,35 @@ class PermissionECUpdateContact(Permission):
     @property
     def defaults(self):
         return ["user", "admin"]
+=======
+permission_registry.register(PermissionECUpdateEvent := Permission(
+    section=mkeventd.PermissionSectionEventConsole,
+    name="update",
+    title=_l("Update an event"),
+    description=_l("Needed for acknowledging and changing the comment and contact of an event"),
+    defaults=["user", "admin"],
+))
+
+# Sub-Permissions for Changing Comment, Contact and Acknowledgement
+permission_registry.register(
+    Permission(
+        section=mkeventd.PermissionSectionEventConsole,
+        name="update_comment",
+        title=_l("Update an event: change comment"),
+        description=_l("Needed for changing a comment when updating an event"),
+        defaults=["user", "admin"],
+    ))
+
+# Sub-Permissions for Changing Comment, Contact and Acknowledgement
+permission_registry.register(
+    Permission(
+        section=mkeventd.PermissionSectionEventConsole,
+        name="update_contact",
+        title=_l("Update an event: change contact"),
+        description=_l("Needed for changing a contact when updating an event"),
+        defaults=["user", "admin"],
+    ))
+>>>>>>> upstream/master
 
 
 class ECCommand(Command):
@@ -1190,7 +1572,11 @@ class CommandECUpdateEvent(ECCommand):
         return PermissionECUpdateEvent
 
     def render(self, what):
+<<<<<<< HEAD
         html.open_table(border=0, cellpadding=0, cellspacing=3)
+=======
+        html.open_table(border="0", cellpadding="0", cellspacing="3")
+>>>>>>> upstream/master
         if config.user.may("mkeventd.update_comment"):
             html.open_tr()
             html.open_td()
@@ -1221,11 +1607,21 @@ class CommandECUpdateEvent(ECCommand):
     def action(self, cmdtag, spec, row, row_index, num_rows):
         if html.request.var('_mkeventd_update'):
             if config.user.may("mkeventd.update_comment"):
+<<<<<<< HEAD
                 comment = html.get_unicode_input("_mkeventd_comment").strip().replace(";", ",")
             else:
                 comment = ""
             if config.user.may("mkeventd.update_contact"):
                 contact = html.get_unicode_input("_mkeventd_contact").strip().replace(":", ",")
+=======
+                comment = html.request.get_unicode_input_mandatory(
+                    "_mkeventd_comment").strip().replace(";", ",")
+            else:
+                comment = ""
+            if config.user.may("mkeventd.update_contact"):
+                contact = html.request.get_unicode_input_mandatory(
+                    "_mkeventd_contact").strip().replace(":", ",")
+>>>>>>> upstream/master
             else:
                 contact = ""
             ack = html.get_checkbox("_mkeventd_acknowledge")
@@ -1233,6 +1629,7 @@ class CommandECUpdateEvent(ECCommand):
                                               0, comment, contact), _("update")
 
 
+<<<<<<< HEAD
 @permission_registry.register
 class PermissionECChangeEventState(Permission):
     @property
@@ -1255,6 +1652,16 @@ class PermissionECChangeEventState(Permission):
     @property
     def defaults(self):
         return ["user", "admin"]
+=======
+permission_registry.register(PermissionECChangeEventState := Permission(
+    section=mkeventd.PermissionSectionEventConsole,
+    name="changestate",
+    title=_l("Change event state"),
+    description=_l("This permission allows to change the state classification of an event "
+                   "(e.g. from CRIT to WARN)."),
+    defaults=["user", "admin"],
+))
+>>>>>>> upstream/master
 
 
 @command_registry.register
@@ -1283,6 +1690,7 @@ class CommandECChangeState(ECCommand):
                                              state), _("change the state")
 
 
+<<<<<<< HEAD
 @permission_registry.register
 class PermissionECCustomActions(Permission):
     @property
@@ -1305,6 +1713,16 @@ class PermissionECCustomActions(Permission):
     @property
     def defaults(self):
         return ["user", "admin"]
+=======
+permission_registry.register(PermissionECCustomActions := Permission(
+    section=mkeventd.PermissionSectionEventConsole,
+    name="actions",
+    title=_l("Perform custom action"),
+    description=_l("This permission is needed for performing the configured actions "
+                   "(execution of scripts and sending emails)."),
+    defaults=["user", "admin"],
+))
+>>>>>>> upstream/master
 
 
 @command_registry.register
@@ -1333,6 +1751,7 @@ class CommandECCustomAction(ECCommand):
                     _("execute the action \"%s\"") % title)
 
 
+<<<<<<< HEAD
 @permission_registry.register
 class PermissionECArchiveEvent(Permission):
     @property
@@ -1354,6 +1773,15 @@ class PermissionECArchiveEvent(Permission):
     @property
     def defaults(self):
         return ["user", "admin"]
+=======
+permission_registry.register(PermissionECArchiveEvent := Permission(
+    section=mkeventd.PermissionSectionEventConsole,
+    name="delete",
+    title=_l("Archive an event"),
+    description=_l("Finally archive an event without any further action"),
+    defaults=["user", "admin"],
+))
+>>>>>>> upstream/master
 
 
 @command_registry.register
@@ -1380,6 +1808,7 @@ class CommandECArchiveEvent(ECCommand):
             return command, title
 
 
+<<<<<<< HEAD
 @permission_registry.register
 class PermissionECArchiveEventsOfHost(Permission):
     @property
@@ -1401,6 +1830,15 @@ class PermissionECArchiveEventsOfHost(Permission):
     @property
     def defaults(self):
         return ["user", "admin"]
+=======
+permission_registry.register(PermissionECArchiveEventsOfHost := Permission(
+    section=mkeventd.PermissionSectionEventConsole,
+    name="archive_events_of_hosts",
+    title=_l("Archive events of hosts"),
+    description=_l("Archive all open events of all hosts shown in host views"),
+    defaults=["user", "admin"],
+))
+>>>>>>> upstream/master
 
 
 @command_registry.register
@@ -1422,12 +1860,20 @@ class CommandECArchiveEventsOfHost(ECCommand):
         return ["host", "service"]
 
     def render(self, what):
+<<<<<<< HEAD
         html.button("_archive_events_of_hosts", _('Archive events'))
+=======
+        html.button("_archive_events_of_hosts", _('Archive events'), cssclass="hot")
+>>>>>>> upstream/master
 
     def action(self, cmdtag, spec, row, row_index, num_rows):
         if html.request.var("_archive_events_of_hosts"):
             if cmdtag == "HOST":
+<<<<<<< HEAD
                 tag = "host"
+=======
+                tag: Optional[str] = "host"
+>>>>>>> upstream/master
             elif cmdtag == "SVC":
                 tag = "service"
             else:
@@ -1500,10 +1946,17 @@ declare_1to1_sorter("history_addinfo", cmp_simple_string)
 
 def mkeventd_view(d):
     x = {
+<<<<<<< HEAD
         'topic': _('Event Console'),
         'browser_reload': 60,
         'column_headers': 'pergroup',
         'icon': 'mkeventd',
+=======
+        'topic': "events",
+        'browser_reload': 60,
+        'column_headers': 'pergroup',
+        'icon': 'event',
+>>>>>>> upstream/master
         'mobile': False,
         'hidden': False,
         'mustsearch': False,
@@ -1525,6 +1978,10 @@ def mkeventd_view(d):
 
 # Table of all open events
 multisite_builtin_views['ec_events'] = mkeventd_view({
+<<<<<<< HEAD
+=======
+    "sort_index": 10,
+>>>>>>> upstream/master
     'title': _('Events'),
     'description': _('Table of all currently open events (handled and unhandled)'),
     'datasource': 'mkeventd_events',
@@ -1658,7 +2115,10 @@ multisite_builtin_views['ec_events_of_host'] = mkeventd_view({
 multisite_builtin_views['ec_event'] = mkeventd_view({
     'title': _('Event Details'),
     'description': _('Details about one event'),
+<<<<<<< HEAD
     'linktitle': 'Event Details',
+=======
+>>>>>>> upstream/master
     'datasource': 'mkeventd_events',
     'layout': 'dataset',
     'hidden': True,
@@ -1695,8 +2155,18 @@ multisite_builtin_views['ec_event'] = mkeventd_view({
 })
 
 multisite_builtin_views['ec_history_recent'] = mkeventd_view({
+<<<<<<< HEAD
     'title': _('Recent Event History'),
     'description': _('Information about events and actions on events during the recent 24 hours.'),
+=======
+    "sort_index": 20,
+    'title': _('Recent Event History'),
+    'description': _('Information about events and actions on events during the recent 24 hours.'),
+    'icon': {
+        'icon': 'event',
+        'emblem': 'time'
+    },
+>>>>>>> upstream/master
     'datasource': 'mkeventd_history',
     'layout': 'table',
     'painters': [
@@ -1887,9 +2357,14 @@ multisite_builtin_views['ec_event_mobile'] = {
     'group_painters': [],
     'hidden': True,
     'hidebutton': False,
+<<<<<<< HEAD
     'icon': 'mkeventd',
     'layout': 'mobiledataset',
     'linktitle': u'Event Details',
+=======
+    'icon': 'event',
+    'layout': 'mobiledataset',
+>>>>>>> upstream/master
     'mobile': True,
     'name': 'ec_event_mobile',
     'num_columns': 1,
@@ -2009,9 +2484,14 @@ multisite_builtin_views['ec_events_mobile'] = {
     'group_painters': [],
     'hidden': False,
     'hidebutton': False,
+<<<<<<< HEAD
     'icon': 'mkeventd',
     'layout': 'mobilelist',
     'linktitle': u'Events',
+=======
+    'icon': 'event',
+    'layout': 'mobilelist',
+>>>>>>> upstream/master
     'mobile': True,
     'name': 'ec_events_mobile',
     'num_columns': 1,
@@ -2019,7 +2499,11 @@ multisite_builtin_views['ec_events_mobile'] = {
     'painters': [
         ('event_id', 'ec_event_mobile', None),
         ('event_state', None, None),
+<<<<<<< HEAD
         ('event_host', 'ec_events_of_host', None),
+=======
+        ('event_host', None, None),
+>>>>>>> upstream/master
         ('event_application', None, None),
         ('event_text', None, None),
         ('event_last', None, None),

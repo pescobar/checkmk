@@ -1,3 +1,9 @@
+<<<<<<< HEAD
+=======
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+// conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 // API "Internal transport"
 
@@ -7,7 +13,11 @@
 #include <functional>  // callback in the main function
 
 #include "common/cfg_info.h"  // default logfile name
+<<<<<<< HEAD
 #include "common/mailslot_transport.h"
+=======
+#include "common/wtools.h"    // conversion
+>>>>>>> upstream/master
 #include "logger.h"
 #include "tools/_misc.h"
 #include "tools/_xlog.h"
@@ -158,7 +168,11 @@ public:
     virtual ~CoreCarrier() {}
 
     // BASE API
+<<<<<<< HEAD
     bool establishCommunication(const std::string& CarrierName);
+=======
+    bool establishCommunication(const std::string& internal_port);
+>>>>>>> upstream/master
     bool sendData(const std::string& PeerName, uint64_t Marker,
                   const void* Data, size_t Length);
     bool sendLog(const std::string& PeerName, const void* Data, size_t Length);
@@ -175,11 +189,19 @@ public:
 
         auto id = ConvertToUint64(Id);
         if (id.has_value()) {
+<<<<<<< HEAD
             std::string port(Port.begin(), Port.end());
             CoreCarrier cc;
             cc.establishCommunication(port);
             auto ret = cc.sendData(ConvertToString(PeerName), id.value(), Data,
                                    Length);
+=======
+            auto port = wtools::ConvertToUTF8(Port);
+            CoreCarrier cc;
+            cc.establishCommunication(port);
+            auto ret = cc.sendData(wtools::ConvertToUTF8(PeerName), id.value(),
+                                   Data, Length);
+>>>>>>> upstream/master
             cc.shutdownCommunication();
             return ret;
         } else {
@@ -194,10 +216,17 @@ public:
     static bool FireCommand(const std::wstring& Name, const T& Port,
                             const void* Data, size_t Length) {
         CoreCarrier cc;
+<<<<<<< HEAD
         std::string port(Port.begin(), Port.end());
         cc.establishCommunication(port);
 
         cc.sendLog(cma::tools::ConvertToString(Name), Data, Length);
+=======
+        auto port = wtools::ConvertToUTF8(Port);
+        cc.establishCommunication(port);
+
+        cc.sendLog(wtools::ConvertToUTF8(Name), Data, Length);
+>>>>>>> upstream/master
         cc.shutdownCommunication();
         return true;
     }
@@ -207,10 +236,17 @@ public:
     static bool FireLog(const std::wstring& Name, const T& Port,
                         const void* Data, size_t Length) {
         CoreCarrier cc;
+<<<<<<< HEAD
         std::string port(Port.begin(), Port.end());
         cc.establishCommunication(port);
 
         cc.sendLog(cma::tools::ConvertToString(Name), Data, Length);
+=======
+        auto port = wtools::ConvertToUTF8(Port);
+        cc.establishCommunication(port);
+
+        cc.sendLog(wtools::ConvertToUTF8(Name), Data, Length);
+>>>>>>> upstream/master
         cc.shutdownCommunication();
         return true;
     }
@@ -236,8 +272,13 @@ private:
                             uint64_t Marker, const void* Data, size_t Length);
     bool mailSlotSend(DataType Type, const std::string& PeerName,
                       uint64_t Marker, const void* Data, size_t Length);
+<<<<<<< HEAD
     bool dumpSlotSend(DataType Type, const std::string& PeerName,
                       uint64_t Marker, const void* Data, size_t Length);
+=======
+    bool dumpSlotSend(DataType type, const std::string& peer_name,
+                      uint64_t marker, const void* data_in, size_t length);
+>>>>>>> upstream/master
     bool fileSlotSend(DataType Type, const std::string& PeerName,
                       uint64_t Marker, const void* Data, size_t Length);
     bool nullSlotSend(DataType Type, const std::string& PeerName,
@@ -262,5 +303,9 @@ private:
     FRIEND_TEST(CarrierTest, EstablishShutdown);
 #endif
 };
+<<<<<<< HEAD
+=======
+void InformByMailSlot(std::string_view mail_slot, std::string_view cmd);
+>>>>>>> upstream/master
 
 };  // namespace cma::carrier

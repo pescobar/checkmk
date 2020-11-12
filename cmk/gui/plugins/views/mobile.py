@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,6 +24,13 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 from cmk.gui.i18n import _
 from cmk.gui.globals import html
@@ -223,7 +231,10 @@ multisite_builtin_views.update({
             ('stateage', False),
             ('svcdescr', False),
         ],
+<<<<<<< HEAD
         'linktitle': _('Problems (unhandled)'),
+=======
+>>>>>>> upstream/master
         'title': _('Problems (unhandled)'),
         'topic': _('Services'),
     }),
@@ -236,7 +247,10 @@ multisite_builtin_views.update({
         'hard_filtervars': [],
         'hide_filters': ['site', 'service', 'host'],
         'layout': 'mobiledataset',
+<<<<<<< HEAD
         'linktitle': 'Details',
+=======
+>>>>>>> upstream/master
         'name': 'mobile_service',
         'num_columns': 1,
         'hidden': True,
@@ -245,7 +259,10 @@ multisite_builtin_views.update({
             ('host', 'mobile_host', ''),
             ('service_description', ''),
             ('svc_plugin_output', None, ''),
+<<<<<<< HEAD
             ('service_icons', None, ''),
+=======
+>>>>>>> upstream/master
             ('service_state', None, ''),
             ('svc_state_age', None, ''),
             ('svc_check_age', None, ''),
@@ -298,7 +315,10 @@ multisite_builtin_views.update({
         ],
         'show_filters': ['svcstate', 'serviceregex'],
         'sorters': [('svcstate', True), ('stateage', False), ('svcdescr', False)],
+<<<<<<< HEAD
         'linktitle': _('Services of this host'),
+=======
+>>>>>>> upstream/master
         'title': _('Services of host'),
     }),
 
@@ -316,7 +336,10 @@ multisite_builtin_views.update({
             ('sitealias', None),
             ('host', 'mobile_host'),
             ('alias', None),
+<<<<<<< HEAD
             ('host_icons', None),
+=======
+>>>>>>> upstream/master
             ('host_state', None),
             ('host_address', None),
             ('host_parents', None),
@@ -367,7 +390,10 @@ multisite_builtin_views.update({
         ],
         'hide_filters': [],
         'layout': 'mobilelist',
+<<<<<<< HEAD
         'linktitle': 'Host search',
+=======
+>>>>>>> upstream/master
         'mustsearch': True,
         'num_columns': 2,
         'painters': [
@@ -473,7 +499,10 @@ multisite_builtin_views.update({
         ],
         'hide_filters': [],
         'layout': 'mobilelist',
+<<<<<<< HEAD
         'linktitle': 'Events',
+=======
+>>>>>>> upstream/master
         'mustsearch': False,
         'name': 'mobile_events',
         'num_columns': 1,
@@ -513,7 +542,10 @@ multisite_builtin_views.update({
         'hide_filters': [],
         'icon': 'notification',
         'layout': 'mobilelist',
+<<<<<<< HEAD
         'linktitle': _('Notifications'),
+=======
+>>>>>>> upstream/master
         'mustsearch': False,
         'name': 'mobile_notifications',
         'num_columns': 2,
@@ -552,7 +584,10 @@ multisite_builtin_views.update({
         'hide_filters': ['site', 'host'],
         'icon': 'history',
         'layout': 'mobilelist',
+<<<<<<< HEAD
         'linktitle': _('Host+Svc history'),
+=======
+>>>>>>> upstream/master
         'name': 'events',
         'num_columns': 2,
         'painters': [
@@ -583,7 +618,10 @@ multisite_builtin_views.update({
         'hide_filters': ['site', 'host', 'service'],
         'icon': 'history',
         'layout': 'mobilelist',
+<<<<<<< HEAD
         'linktitle': _('History'),
+=======
+>>>>>>> upstream/master
         'name': 'events',
         'num_columns': 2,
         'painters': [
@@ -622,7 +660,10 @@ multisite_builtin_views.update({
         'hidebutton': False,
         'icon': 'notification',
         'layout': 'mobilelist',
+<<<<<<< HEAD
         'linktitle': _('Contact notification'),
+=======
+>>>>>>> upstream/master
         'name': 'mobile_contactnotifications',
         'num_columns': 2,
         'painters': [
@@ -663,7 +704,10 @@ multisite_builtin_views.update({
         'hidebutton': False,
         'icon': 'notification',
         'layout': 'mobilelist',
+<<<<<<< HEAD
         'linktitle': _('Host+Svc notifications'),
+=======
+>>>>>>> upstream/master
         'name': 'hostsvcnotifications',
         'num_columns': 2,
         'painters': [
@@ -703,7 +747,10 @@ multisite_builtin_views.update({
         'hidebutton': False,
         'icon': 'notification',
         'layout': 'mobilelist',
+<<<<<<< HEAD
         'linktitle': _('Notifications'),
+=======
+>>>>>>> upstream/master
         'name': 'mobile_svcnotifications',
         'num_columns': 2,
         'painters': [
@@ -788,10 +835,13 @@ class LayoutMobileTable(Layout):
     def can_display_checkboxes(self):
         return False
 
+<<<<<<< HEAD
     @property
     def is_hidden(self):
         return False
 
+=======
+>>>>>>> upstream/master
     def render(self, rows, view, group_cells, cells, num_columns, show_checkboxes):
         # TODO: Move to class
         render_mobile_table(rows, view, group_cells, cells, num_columns, show_checkboxes)
@@ -853,10 +903,13 @@ class LayoutMobileList(Layout):
     def can_display_checkboxes(self):
         return False
 
+<<<<<<< HEAD
     @property
     def is_hidden(self):
         return False
 
+=======
+>>>>>>> upstream/master
     def render(self, rows, view, group_cells, cells, num_columns, show_checkboxes):
         # TODO: Move to class
         render_mobile_list(rows, view, group_cells, cells, num_columns, show_checkboxes)
@@ -907,10 +960,13 @@ class LayoutMobileDataset(Layout):
     def can_display_checkboxes(self):
         return False
 
+<<<<<<< HEAD
     @property
     def is_hidden(self):
         return False
 
+=======
+>>>>>>> upstream/master
     def render(self, rows, view, group_cells, cells, num_columns, show_checkboxes):
         # TODO: Move to class
         render_mobile_dataset(rows, view, group_cells, cells, num_columns, show_checkboxes)

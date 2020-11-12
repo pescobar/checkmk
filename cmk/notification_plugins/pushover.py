@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # +------------------------------------------------------------------+
 # |             ____ _               _        __  __ _  __           |
 # |            / ___| |__   ___  ___| | __   |  \/  | |/ /           |
@@ -21,6 +22,13 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 import sys
 import requests
@@ -48,7 +56,11 @@ def get_subject(context):
 
     notification_type = context["NOTIFICATIONTYPE"]
     if notification_type in ["PROBLEM", "RECOVERY"]:
+<<<<<<< HEAD
         s += "$PREVIOUS@HARDSHORTSTATE$ %s $@SHORTSTATE$" % unichr(8594)
+=======
+        s += u"$PREVIOUS@HARDSHORTSTATE$ \u2192 $@SHORTSTATE$"
+>>>>>>> upstream/master
 
     elif notification_type.startswith("FLAP"):
         if "START" in notification_type:

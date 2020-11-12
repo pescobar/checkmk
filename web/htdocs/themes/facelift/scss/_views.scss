@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /*
 +------------------------------------------------------------------+
 |             ____ _               _        __  __ _  __           |
@@ -23,6 +24,12 @@ License along with GNU Make; see the file  COPYING.  If  not,  write
 to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 Boston, MA 02110-1301 USA.
 */
+=======
+@charset "UTF-8";
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+// conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 /*-------------------------------------------------------------------------.
 |  _____     _            ___      ___        _   _                        |
@@ -47,6 +54,7 @@ table.filterform {
 }
 
 div.floatfilter {
+<<<<<<< HEAD
   float: left;
   width: 310px;
   height: 53px;
@@ -97,6 +105,36 @@ div.floatfilter {
     padding-left: 4px;
     margin-top: 0;
     margin-left: 0;
+=======
+  width: 333px;
+  padding: 4px;
+  padding-left: 10px;
+  margin: 0 5px 5px 0;
+  color: $primary-font-color;
+  background-color: $bg-color-secondary;
+
+  .legend {
+    width: 100%;
+    height: 17px;
+    padding: 5px 8px;
+    padding-left: 0;
+    font-size: 11px;
+    font-weight: bold;
+    color: $font-color;
+    background-color: $floatfilter-bg-color;
+
+    span {
+      padding-bottom: 3px;
+      border-bottom: $floatfilter-legend-border;
+    }
+  }
+
+  .content {
+    width: 100%;
+    height: auto;
+    padding: 0;
+    margin: 0;
+>>>>>>> upstream/master
     text-align: left;
 
     > select {
@@ -128,13 +166,101 @@ div.floatfilter {
     .filtertime select {
       width: 136px;
     }
+<<<<<<< HEAD
   }
 
   &.service_custom_variable, &.host_custom_variable {
+=======
+
+    select {
+      box-sizing: border-box;
+    }
+
+    .checkbox {
+      display: inline-block;
+      margin: 3px 0;
+
+      &:not(:last-of-type) {
+        margin-right: 8px;
+      }
+    }
+
+    input,
+    select,
+    textarea,
+    #mk_side_search_field {
+      margin-bottom: 0;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      box-sizing: border-box;
+
+      &.number {
+        text-align: center;
+      }
+
+      &.neg {
+        width: 229px;
+      }
+    }
+
+    input.neg[type="text"] {
+      position: relative;
+      top: -1px;
+      width: 237px;
+    }
+
+    input[type^="radio"],
+    select[type^="radio"],
+    textarea[type^="radio"],
+    [type^="radio"]#mk_side_search_field {
+      width: auto;
+      margin-bottom: 0;
+    }
+
+    input[type="radio"] {
+      margin-left: 5px;
+    }
+
+    .radiobutton_group {
+      display: inline-block;
+
+      input[type="radio"] {
+        margin-left: 0;
+      }
+
+      &:not(:last-of-type) label {
+        margin-right: 5px;
+      }
+    }
+
+    .valuespec_tuple {
+      width: 100%;
+      border-spacing: 2px 2px;
+    }
+
+    nobr {
+      margin-left: 4px;
+    }
+
+    table {
+      border-spacing: 0;
+
+      td {
+        padding: 0 4px 4px 0;
+      }
+    }
+  }
+
+  &.service_custom_variable,
+  &.host_custom_variable {
+>>>>>>> upstream/master
     .select2-container {
       max-width: 55%;
     }
 
+<<<<<<< HEAD
     input, select {
       display: inline-block;
       width: 45%;
@@ -142,11 +268,18 @@ div.floatfilter {
 
     select {
       margin-right: 10px;
+=======
+    input[type="text"] {
+      display: inline-block;
+      width: 43%;
+      margin-left: 4px;
+>>>>>>> upstream/master
     }
   }
 
   table.vs_duallist {
     width: 300px;
+<<<<<<< HEAD
     border-spacing: 0px 3px !important;
 
     a.control {
@@ -164,6 +297,23 @@ div.floatfilter {
   }
 
   &.invswpac_version, &.invswpac_package_version {
+=======
+    border-spacing: 0 3px;
+
+    a.control {
+      padding: 0 6px;
+    }
+
+    select {
+      height: 43px;
+      padding: 0;
+      margin-bottom: 0;
+    }
+  }
+
+  &.invswpac_version,
+  &.invswpac_package_version {
+>>>>>>> upstream/master
     input.text {
       margin-left: 4px;
     }
@@ -178,6 +328,7 @@ div.floatfilter {
       margin-left: 4px;
     }
   }
+<<<<<<< HEAD
 }
 
 .filterform > tbody > tr > td div.floatfilter {
@@ -217,6 +368,40 @@ div.floatfilter {
 
       .checkbox {
 	margin-bottom: 4px;
+=======
+
+  &.downtimes span.checkbox {
+    white-space: normal;
+  }
+
+  span.select2 {
+    position: relative;
+  }
+
+  > div.content > span.select2:last-child {
+    width: 100%;
+  }
+
+  &.double {
+    &.log_class .content,
+    &.log_state .content {
+      table {
+        border-spacing: 6px 0;
+
+        &.alertstatefilter {
+          td {
+            vertical-align: top;
+          }
+
+          .checkbox {
+            margin: 3px 3px 0 0;
+          }
+        }
+      }
+
+      .checkbox {
+        margin-bottom: 4px;
+>>>>>>> upstream/master
       }
     }
 
@@ -229,6 +414,7 @@ div.floatfilter {
     }
   }
 
+<<<<<<< HEAD
   .legend {
     width: 100%;
     height: auto;
@@ -299,6 +485,10 @@ div.floatfilter {
   }
 
   &.svchardstate .content, &.svcstate .content {
+=======
+  &.svchardstate .content,
+  &.svcstate .content {
+>>>>>>> upstream/master
     .checkbox:not(:last-of-type) {
       margin-right: 8px;
     }
@@ -316,8 +506,12 @@ div.floatfilter {
     height: 22px;
   }
 
+<<<<<<< HEAD
   .select2-container--default .select2-selection--single
   .select2-selection__rendered {
+=======
+  .select2-container--default .select2-selection--single .select2-selection__rendered {
+>>>>>>> upstream/master
     line-height: 20px;
   }
 
@@ -325,6 +519,7 @@ div.floatfilter {
     border-color: $select2-border-color;
   }
 
+<<<<<<< HEAD
   &.single span.select2 {
     position: relative;
   }
@@ -360,6 +555,70 @@ table.valuespec_listof.filter {
       border-style: none;
     }
   }
+=======
+  &.rangespec table.valuespec_tuple {
+    width: 100%;
+
+    span.title {
+      top: 7px;
+    }
+
+    input {
+      padding: 3px;
+    }
+  }
+
+  &.address_families {
+    span.radiobutton_group {
+      margin-bottom: 4px;
+    }
+  }
+
+  &.host_address,
+  &.host_ipv4_address,
+  &.host_ipv6_address {
+    input[type="text"] {
+      margin-bottom: 8px;
+    }
+  }
+
+  &.invswpac {
+    div.content > input[type="text"] {
+      margin-bottom: 8px;
+    }
+
+    span.min_max_row {
+      display: inline-block;
+      margin: 8px 0;
+    }
+  }
+}
+
+/* Specific styling for side popup floatfilters that are contained in a ListOf() */
+div.side_popup_content table.valuespec_listof.filter {
+  td.vlof_buttons {
+    width: 0;
+
+    a.delete_button img {
+      position: absolute;
+      top: 7px;
+      right: $spacing;
+      z-index: 5;
+      width: 16px;
+      height: 16px;
+      filter: $inpage-close-button-filter;
+    }
+  }
+
+  td.vlof_content {
+    position: relative;
+    left: -4px;
+  }
+
+  > tbody > tr {
+    position: relative;
+  }
+>>>>>>> upstream/master
 }
 
 select.vlof_filter {
@@ -373,7 +632,12 @@ table.nform table.valuespec_listof {
     vertical-align: middle;
   }
 
+<<<<<<< HEAD
   .vlof_content, .vlof_buttons {
+=======
+  .vlof_content,
+  .vlof_buttons {
+>>>>>>> upstream/master
     border-bottom: 1px solid $nform-vlof-border-color;
   }
 
@@ -392,6 +656,7 @@ table.nform table.valuespec_listof {
   }
 
   .vlof_buttons {
+<<<<<<< HEAD
     width: 1px;
     padding-top: 14px;
     padding-bottom: 26px;
@@ -427,6 +692,21 @@ table.nform table.valuespec_listof {
     .vlof_buttons.filter img {
       top: 8px;
       left: -40px;
+=======
+    width: 44px;
+    min-width: 44px;
+    padding-right: 8px;
+    text-align: center;
+    vertical-align: middle;
+
+    img {
+      width: 16px;
+      height: 16px;
+    }
+
+    a:not(:last-child) {
+      margin-right: 4px;
+>>>>>>> upstream/master
     }
   }
 }
@@ -436,12 +716,19 @@ table.filtertime td {
 }
 
 div.optiondial {
+<<<<<<< HEAD
   &, &.num_columns, &.refresh {
+=======
+  &,
+  &.num_columns,
+  &.refresh {
+>>>>>>> upstream/master
     top: 0;
     width: 80.5px;
     height: 28px;
     margin-right: 5px;
     margin-bottom: 5px;
+<<<<<<< HEAD
     color: $theme-color-text;
     background: $secondary-bg-color;
     border: 1px solid $theme-color-table-border;
@@ -449,6 +736,14 @@ div.optiondial {
     box-sizing: border-box;
 
 
+=======
+    color: $font-color;
+    background: $bg-color-secondary;
+    border: 1px solid $color-table-border;
+    box-shadow: none;
+    box-sizing: border-box;
+
+>>>>>>> upstream/master
     div {
       padding: 0;
       line-height: 27px;
@@ -461,11 +756,19 @@ div.optiondial {
     margin-top: 0;
     margin-left: 0;
     overflow: hidden;
+<<<<<<< HEAD
     color: #222;
     text-shadow: 0 0.5px 0.5px #fff;
     cursor: pointer;
     border-radius: $primary-border-radius;
     box-shadow: 0 0 3px #123;
+=======
+    color: rgb(34, 34, 34);
+    text-shadow: 0 0.5px 0.5px rgb(255, 255, 255);
+    cursor: pointer;
+    border-radius: $primary-border-radius;
+    box-shadow: 0 0 3px rgb(17, 34, 51);
+>>>>>>> upstream/master
   }
 
   &.num_columns {
@@ -503,19 +806,28 @@ div.view_form {
 | Styles used by layouts of the views (plugins/views/layouts.py)           |
 '-------------------------------------------------------------------------*/
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/master
 table.data tr.data > td.gap,
 table.data tr > td.last_col,
 table.data tr > th.last_col {
   border-right: none;
 }
 
+<<<<<<< HEAD
 td.gap, table.data .checkbox_hover.gap {
   width: 5px;
   /* #TODO: Check whether these background styles are needed */
   background-attachment: fixed;
   background-image: url("images/contentframe_background.jpg");
   background-repeat: repeat;
+=======
+td.gap,
+table.data .checkbox_hover.gap {
+  width: 5px;
+>>>>>>> upstream/master
 }
 
 /* boxed layout */
@@ -545,10 +857,17 @@ table.tiled td {
   width: 180px;
   margin-right: 6px;
   margin-bottom: 6px;
+<<<<<<< HEAD
   background-color: #ccc;
   border: 1px solid #000;
   border-radius: 0;
   box-shadow: 1px 1px 3px #000;
+=======
+  background-color: rgb(204, 204, 204);
+  border: 1px solid rgb(0, 0, 0);
+  border-radius: 0;
+  box-shadow: 1px 1px 3px rgb(0, 0, 0);
+>>>>>>> upstream/master
 
   img.icon {
     width: 16px;
@@ -564,11 +883,21 @@ table.tiled td {
     font-size: 9px;
     border-style: none;
 
+<<<<<<< HEAD
     &.tl, &.bl {
       text-align: left;
     }
 
     &.tr, &.br {
+=======
+    &.tl,
+    &.bl {
+      text-align: left;
+    }
+
+    &.tr,
+    &.br {
+>>>>>>> upstream/master
       text-align: right;
     }
 
@@ -576,6 +905,7 @@ table.tiled td {
       vertical-align: middle;
     }
 
+<<<<<<< HEAD
     &.center, &.cont {
       text-align: center;
     }
@@ -585,6 +915,22 @@ table.tiled td {
     }
 
     &.bl, &.br, &.tl, &.tr {
+=======
+    &.center,
+    &.cont {
+      text-align: center;
+    }
+
+    &.bl,
+    &.br {
+      vertical-align: bottom;
+    }
+
+    &.bl,
+    &.br,
+    &.tl,
+    &.tr {
+>>>>>>> upstream/master
       height: 20px;
     }
   }
@@ -596,8 +942,13 @@ table.data.tiled td.tiles {
   div.tile {
     width: 240px;
     padding: 4px;
+<<<<<<< HEAD
     background: $secondary-bg-color;
     border: 1px solid $theme-color-table-border;
+=======
+    background: $bg-color-secondary;
+    border: 1px solid $color-table-border;
+>>>>>>> upstream/master
     border-radius: $theme-border-radius;
     box-shadow: none;
 
@@ -611,10 +962,17 @@ table.data.tiled td.tiles {
           border-radius: $theme-border-radius;
         }
 
+<<<<<<< HEAD
 	&.center {
 	  white-space: break-spaces;
 	  word-wrap: anywhere;
 	}
+=======
+        &.center {
+          word-wrap: anywhere;
+          white-space: break-spaces;
+        }
+>>>>>>> upstream/master
       }
     }
 
@@ -654,6 +1012,7 @@ table.data.single {
 
     td.invtree table {
       margin: 8px 0 12px;
+<<<<<<< HEAD
       border: 1px solid $theme-color-table-border;
       box-shadow: none;
 
@@ -673,6 +1032,31 @@ table.data.single {
     &.odd0, &.even0 {
       .state, .svcstate:not(.statex), .badflag {
 	padding-left: 16px;
+=======
+      border: 1px solid $color-table-border;
+      box-shadow: none;
+
+      th,
+      td {
+        height: 14px;
+        padding: 2px 6px;
+        background-color: $invtree-td-bg-color;
+        border: 1px solid $color-table-border;
+      }
+
+      th {
+        color: $font-color;
+        background-color: $invtree-th-bg-color;
+      }
+    }
+
+    &.odd0,
+    &.even0 {
+      .state,
+      .svcstate:not(.statex),
+      .badflag {
+        padding-left: 16px;
+>>>>>>> upstream/master
       }
     }
   }
@@ -685,9 +1069,15 @@ table.data.single {
     border-radius: 0;
 
     &.left {
+<<<<<<< HEAD
       font-weight: $theme-font-weight-bold;
       border-right: $td-single-left-border-right;
       transition: .15s ease-in-out;
+=======
+      font-weight: $font-weight-bold;
+      border-right: $td-single-left-border-right;
+      transition: 0.15s ease-in-out;
+>>>>>>> upstream/master
     }
 
     &.perfometer {
@@ -721,6 +1111,7 @@ table.data.matrix {
   tbody > tr.data {
     > td {
       padding: 8px;
+<<<<<<< HEAD
       border: 1px solid $theme-color-table-border;
       border-left: none;
 
@@ -737,6 +1128,25 @@ table.data.matrix {
 
       &.cell td.perfometer {
         div.title, div.content {
+=======
+      border: 1px solid $color-table-border;
+      border-left: none;
+
+      &.left {
+        font-weight: $font-weight-bold;
+        background-color: $bg-color-secondary;
+        transition: 0.15s ease-in-out;
+
+        &:not(.state) {
+          border-right: 1px solid $color-table-border;
+          border-left: 1px solid $color-table-border;
+        }
+      }
+
+      &.cell td.perfometer {
+        div.title,
+        div.content {
+>>>>>>> upstream/master
           padding: 0;
         }
       }
@@ -746,27 +1156,44 @@ table.data.matrix {
       background: transparent;
 
       td.matrixhead {
+<<<<<<< HEAD
 	font-size: $theme-font-size-global;
 	letter-spacing: $theme-letter-spacing-table;
 	text-transform: uppercase;
+=======
+        font-size: $font-size-global;
+        letter-spacing: $letter-spacing-table;
+        text-transform: uppercase;
+>>>>>>> upstream/master
       }
     }
   }
 
   td.minority {
+<<<<<<< HEAD
     &, a, a:link {
+=======
+    &,
+    a,
+    a:link {
+>>>>>>> upstream/master
       color: $minority-font-color;
     }
   }
 
   tr.even0 {
     td.left.minority {
+<<<<<<< HEAD
       background-color: #bdd;
+=======
+      background-color: rgb(187, 221, 221);
+>>>>>>> upstream/master
     }
   }
 
   tr.odd0 {
     td.left.minority {
+<<<<<<< HEAD
       background-color: #cee;
     }
   }
@@ -775,6 +1202,17 @@ table.data.matrix {
     tbody & td.matrixhead {
       font-weight: $theme-font-weight-bold;
       color: $theme-color-text;
+=======
+      background-color: rgb(204, 238, 238);
+    }
+  }
+
+  tr.even0,
+  tr.odd0 {
+    tbody & td.matrixhead {
+      font-weight: $font-weight-bold;
+      color: $font-color;
+>>>>>>> upstream/master
     }
   }
 
@@ -789,11 +1227,19 @@ table.data.matrix {
 }
 
 .even0 .minority {
+<<<<<<< HEAD
   background-color: #cff;
 }
 
 .odd0 .minority {
   background-color: #dff;
+=======
+  background-color: rgb(204, 255, 255);
+}
+
+.odd0 .minority {
+  background-color: rgb(221, 255, 255);
+>>>>>>> upstream/master
 }
 
 /*-------------------------------------------------------------------------.
@@ -815,7 +1261,10 @@ input#try {
   float: left;
 }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/master
 /*-------------------------------------------------------------------------.
 |       _     _     _            __         _                              |
 |      | |   (_)___| |_    ___  / _| __   _(_) _____      _____            |
@@ -835,10 +1284,18 @@ table.views {
   border-collapse: collapse;
   empty-cells: show;
 
+<<<<<<< HEAD
   td, th{
     padding: 2px 1ex;
     color: #fff;
     border: 1px solid #444;
+=======
+  td,
+  th {
+    padding: 2px 1ex;
+    color: rgb(255, 255, 255);
+    border: 1px solid rgb(68, 68, 68);
+>>>>>>> upstream/master
   }
 
   td {
@@ -846,6 +1303,7 @@ table.views {
     padding-top: 3px;
 
     &.legend {
+<<<<<<< HEAD
       color: #fff;
       background-color: #8eaeb8;
     }
@@ -853,22 +1311,43 @@ table.views {
     &.content {
       color: #fff;
       background-color: #9ebec8;
+=======
+      color: rgb(255, 255, 255);
+      background-color: rgb(142, 174, 184);
+    }
+
+    &.content {
+      color: rgb(255, 255, 255);
+      background-color: rgb(158, 190, 200);
+>>>>>>> upstream/master
     }
 
     &.edit {
       text-align: center;
+<<<<<<< HEAD
       background-color: #6ab;
+=======
+      background-color: rgb(102, 170, 187);
+>>>>>>> upstream/master
     }
 
     &.buttons {
       padding: 3px;
       vertical-align: middle;
+<<<<<<< HEAD
       background-color: #8eaeb8;
+=======
+      background-color: rgb(142, 174, 184);
+>>>>>>> upstream/master
     }
   }
 
   th {
+<<<<<<< HEAD
     background-color: #709aa5;
+=======
+    background-color: rgb(112, 154, 165);
+>>>>>>> upstream/master
   }
 }
 
@@ -883,23 +1362,39 @@ table.data.availability {
   }
 
   td.unused {
+<<<<<<< HEAD
     color: #888;
+=======
+    color: rgb(136, 136, 136);
+>>>>>>> upstream/master
   }
 
   tr.summary td {
     padding-top: 1px;
     padding-bottom: 1px;
     font-weight: bold;
+<<<<<<< HEAD
     border-top: 1px solid $theme-color-table-border;
+=======
+    border-top: 1px solid $color-table-border;
+>>>>>>> upstream/master
     border-bottom-style: none;
   }
 
   tr.odd0 td.number.stats {
+<<<<<<< HEAD
     opacity: .5;
   }
 
   td {
     border-color: $theme-color-table-border !important;
+=======
+    opacity: 0.5;
+  }
+
+  td {
+    border-color: $color-table-border !important;
+>>>>>>> upstream/master
   }
 
   th {
@@ -907,6 +1402,7 @@ table.data.availability {
   }
 }
 
+<<<<<<< HEAD
 table.data td.flapping, table.timeline td.flapping, div.avlegend.timeline div.state.flapping {
   background-color: #f0f;
 }
@@ -914,6 +1410,23 @@ table.data td.downtime, table.timeline td.downtime, div.avlegend.timeline div.st
   background-color: #0af;
 }
 table.data tr.data > td.hostdown, table.timeline td.hostdown, div.avlegend.timeline div.state.hostdown {
+=======
+table.data td.flapping,
+table.timeline td.flapping,
+div.avlegend.timeline div.state.flapping {
+  background-color: rgb(255, 0, 255);
+}
+
+table.data td.downtime,
+table.timeline td.downtime,
+div.avlegend.timeline div.state.downtime {
+  background-color: rgb(0, 170, 255);
+}
+
+table.data tr.data > td.hostdown,
+table.timeline td.hostdown,
+div.avlegend.timeline div.state.hostdown {
+>>>>>>> upstream/master
   color: $white;
   background-color: $hostdown-bg-color;
 }
@@ -935,12 +1448,19 @@ table.data.availability tr.even0 td {
   }
 }
 
+<<<<<<< HEAD
 table.timeline td.ooservice, div.avlegend.timeline div.state.ooservice {
   background-color: #cacaca;
+=======
+table.timeline td.ooservice,
+div.avlegend.timeline div.state.ooservice {
+  background-color: rgb(202, 202, 202);
+>>>>>>> upstream/master
   background-image: url("images/ooservice.png");
   background-repeat: repeat;
 }
 
+<<<<<<< HEAD
 div.floatfilter.rangespec table.valuespec_tuple {
   width: 100%;
 
@@ -950,6 +1470,8 @@ div.floatfilter.rangespec table.valuespec_tuple {
   }
 }
 
+=======
+>>>>>>> upstream/master
 /* #TODO: Reproduce this html element */
 div#avoptions_on {
   margin-right: 3px;
@@ -980,21 +1502,34 @@ table.timeline {
   &.inline {
     width: 500px;
     border-style: none;
+<<<<<<< HEAD
     box-shadow: 0 0 1px #555 inset;
+=======
+    box-shadow: 0 0 1px rgb(85, 85, 85) inset;
+>>>>>>> upstream/master
   }
 
   td {
     padding: 0;
     border-style: none;
 
+<<<<<<< HEAD
     &.hilite, &.hilite.state2 {
+=======
+    &.hilite,
+    &.hilite.state2 {
+>>>>>>> upstream/master
       padding: 0;
       border: $timeline-hilite-border;
       filter: brightness(80%);
     }
 
     &.chaos {
+<<<<<<< HEAD
       background-color: #84f;
+=======
+      background-color: rgb(136, 68, 255);
+>>>>>>> upstream/master
     }
   }
 }
@@ -1016,7 +1551,11 @@ div.timelinerange {
       top: 0;
       width: 5px;
       height: 30px;
+<<<<<<< HEAD
       border-color: #666;
+=======
+      border-color: rgb(102, 102, 102);
+>>>>>>> upstream/master
       border-style: none none none solid;
       border-width: 0 0 0 1px;
     }
@@ -1037,7 +1576,11 @@ table.timelineevents {
   border: $wato-data-table-border;
   box-shadow: $wato-data-table-box-shadow;
 
+<<<<<<< HEAD
   th{
+=======
+  th {
+>>>>>>> upstream/master
     background: $timelineevents-data-th-bg-color;
   }
 }
@@ -1054,6 +1597,7 @@ table.data.oddeven.timelineevents > tbody > tr.hilite {
   }
 }
 
+<<<<<<< HEAD
 .timelinerange .from, .timelinerange .until {
   display: inline-block;
   margin-top: 8px;
@@ -1061,13 +1605,27 @@ table.data.oddeven.timelineevents > tbody > tr.hilite {
   font-size: $theme-font-size-small;
   letter-spacing: $theme-letter-spacing-table;
   color: $theme-color-darkgrey;
+=======
+.timelinerange .from,
+.timelinerange .until {
+  display: inline-block;
+  margin-top: 8px;
+  margin-bottom: 4px;
+  font-size: $font-size-small;
+  letter-spacing: $letter-spacing-table;
+  color: $darkgrey;
+>>>>>>> upstream/master
 }
 
 .timelinerange .timeline {
   box-shadow: none;
 
   &.standalone td {
+<<<<<<< HEAD
     border: 1px solid $theme-color-table-border;
+=======
+    border: 1px solid $color-table-border;
+>>>>>>> upstream/master
   }
 }
 
@@ -1087,7 +1645,11 @@ div.avlegend {
   h3 {
     margin-top: 0;
     font-size: 13px;
+<<<<<<< HEAD
     color: #000;
+=======
+    color: rgb(0, 0, 0);
+>>>>>>> upstream/master
   }
 
   div {
@@ -1109,19 +1671,30 @@ div.avlegend {
 
   &.levels div.level {
     margin-right: 15px;
+<<<<<<< HEAD
     color: #000;
+=======
+    color: rgb(0, 0, 0);
+>>>>>>> upstream/master
   }
 
   &.timeline div.state {
     width: 75px;
 
     &.ooservice {
+<<<<<<< HEAD
       color: #000;
+=======
+      color: rgb(0, 0, 0);
+>>>>>>> upstream/master
     }
   }
 }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/master
 /*--Inventory--------------------------------------------------------------.
 |            ___                      _                                    |
 |           |_ _|_ ____   _____ _ __ | |_ ___  _ __ _   _                  |
@@ -1139,7 +1712,11 @@ td.invtree {
   /* TODO: Reproduce this html element */
   b.treeangle.title {
     font-weight: normal;
+<<<<<<< HEAD
     color: #000;
+=======
+    color: rgb(0, 0, 0);
+>>>>>>> upstream/master
   }
 
   ul.treeangle {
@@ -1152,10 +1729,18 @@ td.invtree {
     border-collapse: collapse;
   }
 
+<<<<<<< HEAD
   table td, table th {
     height: 14px;
     padding: 1px 5px;
     border: 1px solid #888;
+=======
+  table td,
+  table th {
+    height: 14px;
+    padding: 1px 5px;
+    border: 1px solid rgb(136, 136, 136);
+>>>>>>> upstream/master
   }
 
   table th {
@@ -1163,17 +1748,33 @@ td.invtree {
   }
 
   table td {
+<<<<<<< HEAD
     background-color: #fff;
+=======
+    background-color: rgb(255, 255, 255);
+>>>>>>> upstream/master
   }
 }
 
 /* TODO: Reproduce this html element */
+<<<<<<< HEAD
 td.invtree span.invold, span.invold table.data {
   color: #ff0000;
 }
 /* TODO: Reproduce this html element */
 td.invtree span.invnew, span.invnew table.data {
   color: #00bf00;
+=======
+td.invtree span.invold,
+span.invold table.data {
+  color: rgb(255, 0, 0);
+}
+
+/* TODO: Reproduce this html element */
+td.invtree span.invnew,
+span.invnew table.data {
+  color: rgb(0, 191, 0);
+>>>>>>> upstream/master
 }
 
 /* Positioning of the link from an inventory dicttable to the matching multisite table */
@@ -1193,6 +1794,7 @@ table.data.single tr.data td.invtree table td.if_state,
 table.data tr.data td.if_state {
   &.if_state_up {
     color: $if-state-up-font-color;
+<<<<<<< HEAD
     background-color: $theme-color-state-success-background;
   }
 
@@ -1212,6 +1814,27 @@ table.data tr.data td.if_state {
   &.if_not_available {
     color: $theme-color-black;
     background-color: $theme-color-state-4-background;
+=======
+    background-color: $color-state-success-background;
+  }
+
+  &.if_state_down {
+    background-color: $color-state-2-background;
+  }
+
+  &.if_state_other {
+    background-color: $color-state-9-background;
+  }
+
+  &.if_available {
+    color: $black;
+    background-color: $color-state-success-background;
+  }
+
+  &.if_not_available {
+    color: $black;
+    background-color: $color-state-4-background;
+>>>>>>> upstream/master
   }
 }
 
@@ -1254,7 +1877,11 @@ table.data.headerleft.sla {
   }
 
   a {
+<<<<<<< HEAD
     color: #fff;
+=======
+    color: rgb(255, 255, 255);
+>>>>>>> upstream/master
     text-decoration: underline;
   }
 }
@@ -1265,7 +1892,11 @@ table.timeline {
 
     td {
       padding: 0;
+<<<<<<< HEAD
       border: none solid #444;
+=======
+      border: none solid rgb(68, 68, 68);
+>>>>>>> upstream/master
     }
 
     &.period {
@@ -1275,6 +1906,7 @@ table.timeline {
   }
 
   td.state0.even {
+<<<<<<< HEAD
     background-color: #0b3;
   }
 
@@ -1288,15 +1920,38 @@ table.timeline {
 
   td.state2.odd {
     background-color: #900;
+=======
+    background-color: rgb(0, 187, 51);
+  }
+
+  td.state0.odd {
+    background-color: rgb(0, 153, 34);
+  }
+
+  td.state2.even {
+    background-color: rgb(255, 0, 0);
+  }
+
+  td.state2.odd {
+    background-color: rgb(153, 0, 0);
+>>>>>>> upstream/master
   }
 }
 
 div.sla_details {
+<<<<<<< HEAD
   background-color: #73a1b4;
 }
 
 td.sla > div.foldable > b {
   color: #000;
+=======
+  background-color: rgb(115, 161, 180);
+}
+
+td.sla > div.foldable > b {
+  color: rgb(0, 0, 0);
+>>>>>>> upstream/master
 }
 
 h2.sla {
@@ -1312,7 +1967,11 @@ table.data tr.sla_horizontal_line > td.sla_horizontal_line {
 
   &.black {
     height: 1px;
+<<<<<<< HEAD
     border-bottom: 1px solid #000;
+=======
+    border-bottom: 1px solid rgb(0, 0, 0);
+>>>>>>> upstream/master
   }
 }
 
@@ -1337,7 +1996,12 @@ div.timelinerange.sla {
 table.data.headerleft.sla {
   tbody tr {
     td {
+<<<<<<< HEAD
       &, &.sla {
+=======
+      &,
+      &.sla {
+>>>>>>> upstream/master
         padding: 4px 8px;
       }
 
@@ -1368,8 +2032,13 @@ table.data.headerleft.sla {
           &.title {
             display: table-cell;
             width: 280px;
+<<<<<<< HEAD
             font-weight: $theme-font-weight-bold;
             color: $theme-color-text;
+=======
+            font-weight: $font-weight-bold;
+            color: $font-color;
+>>>>>>> upstream/master
             background: transparent;
           }
 
@@ -1395,7 +2064,11 @@ table.data.headerleft.sla {
   a,
   body.main .popup_menu span,
   body.main .popup_menu & span {
+<<<<<<< HEAD
     color: $theme-color-text;
+=======
+    color: $font-color;
+>>>>>>> upstream/master
   }
 }
 
@@ -1417,7 +2090,11 @@ td.agent_config table.rulesets table,
 table.data tr.ac_test_details table,
 table.data tr.notification_context table {
   margin-top: 3px;
+<<<<<<< HEAD
   border: 0.5px solid $theme-color-table-border;
+=======
+  border: 0.5px solid $color-table-border;
+>>>>>>> upstream/master
   border-collapse: collapse;
   box-shadow: $primary-box-shadow;
 }
@@ -1425,7 +2102,13 @@ table.data tr.notification_context table {
 table.data tr.ac_test_details td {
   padding: 8px;
 
+<<<<<<< HEAD
   p, ul, table {
+=======
+  p,
+  ul,
+  table {
+>>>>>>> upstream/master
     margin: 8px 0;
 
     &:first-child:not(:last-child) {
@@ -1447,7 +2130,11 @@ table.data tr.notification_context table th,
 td.rule_conditions table td {
   height: 14px;
   padding: 1px 5px;
+<<<<<<< HEAD
   border: 1px solid $theme-color-table-border;
+=======
+  border: 1px solid $color-table-border;
+>>>>>>> upstream/master
 }
 
 table.data tr.ac_test_details table td {
@@ -1465,14 +2152,22 @@ td.agent_config table.rulesets table td,
 table.data tr.ac_test_details table td,
 table.data tr.notification_context table td,
 td.rule_conditions table td {
+<<<<<<< HEAD
   background-color: $primary-bg-color;
+=======
+  background-color: $bg-color;
+>>>>>>> upstream/master
 }
 
 td.sla_spec table td.title,
 td.agent_config table.rulesets table td.title,
 table.data tr.notification_context table th,
 td.rule_conditions table td.title {
+<<<<<<< HEAD
   background-color: $theme-color-table-background;
+=======
+  background-color: $color-table-background;
+>>>>>>> upstream/master
 }
 
 table.agents tbody > tr.data > td {

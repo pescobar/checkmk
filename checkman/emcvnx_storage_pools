@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: EMC VNX Storage: Storage pools
+=======
+title: EMC VNX Storage: Storage Pools
+>>>>>>> upstream/master
 agents: emc
 catalog: hw/storagehw/emc
 license: GPL
@@ -13,4 +17,8 @@ item:
  Pool name
 
 inventory:
+<<<<<<< HEAD
  Creates one service per pool.
+=======
+ One service is created for each pool.
+>>>>>>> upstream/master

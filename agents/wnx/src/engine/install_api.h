@@ -1,3 +1,9 @@
+<<<<<<< HEAD
+=======
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+// conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 // provides api to automatic install MSI files by service
 
@@ -16,8 +22,20 @@ namespace cma {
 namespace install {
 enum class UpdateType { exec_normal, exec_quiet };
 enum class UpdateProcess { execute, skip };
+<<<<<<< HEAD
 constexpr const std::wstring_view kDefaultMsiFileName = L"check_mk_agent.msi";
 
+=======
+enum class InstallMode { normal, reinstall };
+InstallMode GetInstallMode();
+std::pair<std::wstring, std::wstring> MakeCommandLine(
+    const std::filesystem::path& msi, UpdateType update_type);
+
+constexpr const std::wstring_view kDefaultMsiFileName = L"check_mk_agent.msi";
+
+constexpr const std::string_view kMsiLogFileName = "agent_msi.log";
+
+>>>>>>> upstream/master
 namespace registry
 
 {
@@ -47,6 +65,10 @@ bool CheckForUpdateFile(std::wstring_view Name, std::wstring_view DirWithMsi,
                         std::wstring_view BackupPath = L"");
 
 std::filesystem::path MakeTempFileNameInTempPath(std::wstring_view Name);
+<<<<<<< HEAD
+=======
+std::filesystem::path GenerateTempFileNameInTempPath(std::wstring_view Name);
+>>>>>>> upstream/master
 
 // internal API with diag published to simplify testing or for later use
 // ****************************************

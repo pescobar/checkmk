@@ -92,6 +92,18 @@ TEST(Wtools, StopWatch) {
     sw.reset();
     EXPECT_TRUE(sw.getUsCount() == 0);
     EXPECT_EQ(sw.getCount(), 0);
+<<<<<<< HEAD
+=======
+
+    {
+        StopWatch sw;
+        sw.start();
+        pos = sw.pos_;
+        sw.skip();
+        EXPECT_TRUE(sw.pos_ == pos);
+        EXPECT_FALSE(sw.started_);
+    }
+>>>>>>> upstream/master
 }
 
 }  // namespace wtools

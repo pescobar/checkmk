@@ -6,9 +6,15 @@ source =
     ../checkman
     ../checks
     ../cmk
+<<<<<<< HEAD
     ../cmk_base
+=======
+>>>>>>> upstream/master
     ../enterprise/cmk/cee
     ../tests/unit
     ../web
 branch = True
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/master

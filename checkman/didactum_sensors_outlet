@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: Didactum devices: Relays
+=======
+title: Didactum Devices: Relays
+>>>>>>> upstream/master
 agents: snmp
 catalog: hw/environment/didactum
 license: GPL
@@ -13,4 +17,8 @@ item:
  The relay identifier.
 
 inventory:
+<<<<<<< HEAD
  One service per relay is created.
+=======
+ One service is created for each relay.
+>>>>>>> upstream/master

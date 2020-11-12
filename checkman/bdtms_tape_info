@@ -9,7 +9,12 @@ description:
  The check always returns the status {OK}.
 
 inventory:
+<<<<<<< HEAD
  One service per host will be created.
 
 item:
  No item.
+=======
+ One service is created for each host.
+
+>>>>>>> upstream/master

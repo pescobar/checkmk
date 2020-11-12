@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -24,6 +25,19 @@
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
 
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# NOTE: Careful when replacing the *-import below with a more specific import. This can cause
+# problems because it might remove variables from the check-context which are necessary for
+# resolving legacy discovery results such as [("SUMMARY", "diskstat_default_levels")]. Furthermore,
+# it might also remove variables needed for accessing discovery rulesets.
+from cmk.base.check_legacy_includes.graylog import *  # pylint: disable=wildcard-import,unused-wildcard-import
+>>>>>>> upstream/master
 # <<<graylog_cluster_stats>>>
 # [[u'{"stream_rule_count": 7, "input_count_by_type":
 # {"org.graylog.plugins.beats.Beats2Input": 1,
@@ -74,7 +88,11 @@ def check_graylog_cluster_stats(no_item, params, parsed):
         ("input_count", "Number of inputs", "num_input"),
         ("output_count", "Number of outputs", "num_output"),
         ("stream_count", "Number of streams", "streams"),
+<<<<<<< HEAD
         ("stream_rule_count", "Number of stream rules", "num_stream_rules"),
+=======
+        ("stream_rule_count", "Number of stream rules", "num_stream_rule"),
+>>>>>>> upstream/master
         ("extractor_count", "Number of extractors", "num_extractor"),
         ("user_count", "Number of user", "num_user"),
     ]:
@@ -98,7 +116,10 @@ check_info["graylog_cluster_stats"] = {
     "service_description": "Graylog Cluster Stats",
     "has_perfdata": True,
     "group": "graylog_cluster_stats",
+<<<<<<< HEAD
     "includes": ["graylog.include"],
+=======
+>>>>>>> upstream/master
 }
 
 
@@ -204,7 +225,10 @@ check_info["graylog_cluster_stats.elastic"] = {
     "service_description": "Graylog Cluster Elasticsearch Stats",
     "has_perfdata": True,
     "group": "graylog_cluster_stats_elastic",
+<<<<<<< HEAD
     "includes": ["graylog.include"],
+=======
+>>>>>>> upstream/master
 }
 
 
@@ -264,5 +288,8 @@ check_info["graylog_cluster_stats.mongodb"] = {
     "service_description": "Graylog Cluster MongoDB Stats",
     "has_perfdata": True,
     "group": "graylog_cluster_stats_mongodb",
+<<<<<<< HEAD
     "includes": ["graylog.include"],
+=======
+>>>>>>> upstream/master
 }

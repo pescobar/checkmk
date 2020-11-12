@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -24,6 +25,19 @@
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
 
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# NOTE: Careful when replacing the *-import below with a more specific import. This can cause
+# problems because it might remove variables from the check-context which are necessary for
+# resolving legacy discovery results such as [("SUMMARY", "diskstat_default_levels")]. Furthermore,
+# it might also remove variables needed for accessing discovery rulesets.
+from cmk.base.check_legacy_includes.aws import *  # pylint: disable=wildcard-import,unused-wildcard-import
+>>>>>>> upstream/master
 AWSCostAndUageMetrics = [
     ("Unblended", "UnblendedCost", "unblended"),
 ]
@@ -35,7 +49,11 @@ def parse_aws_costs_and_usage(info):
         timeperiod = row['TimePeriod']['Start']
         for group in row.get('Groups', []):
             service_name = " ".join(group['Keys'])
+<<<<<<< HEAD
             for metric_name, metrics in group['Metrics'].iteritems():
+=======
+            for metric_name, metrics in group['Metrics'].items():
+>>>>>>> upstream/master
                 try:
                     costs = float(metrics['Amount'])
                     unit = metrics['Unit']
@@ -64,12 +82,20 @@ def inventory_aws_costs_and_usage_summary(parsed):
 
 def check_aws_costs_and_usage_summary(item, params, parsed):
     amounts_by_metrics = collections.defaultdict(float)
+<<<<<<< HEAD
     for (timeperiod, _service_name), metrics in parsed.iteritems():
+=======
+    for (timeperiod, _service_name), metrics in parsed.items():
+>>>>>>> upstream/master
         for title, metric_name, key, in AWSCostAndUageMetrics:
             costs, unit = metrics[metric_name]
             amounts_by_metrics[(timeperiod, title, unit, key)] += costs
 
+<<<<<<< HEAD
     for (timeperiod, title, unit, key), costs in amounts_by_metrics.iteritems():
+=======
+    for (timeperiod, title, unit, key), costs in amounts_by_metrics.items():
+>>>>>>> upstream/master
         yield check_levels(costs,
                            "aws_costs_%s" % key,
                            params.get('levels_%s' % key, (None, None)),
@@ -81,7 +107,10 @@ check_info['aws_costs_and_usage'] = {
     'inventory_function': inventory_aws_costs_and_usage_summary,
     'check_function': check_aws_costs_and_usage_summary,
     'service_description': 'AWS/CE %s',
+<<<<<<< HEAD
     'includes': ['aws.include'],
+=======
+>>>>>>> upstream/master
     'group': 'aws_costs_and_usage',
     'has_perfdata': True,
 }
@@ -98,14 +127,22 @@ check_info['aws_costs_and_usage'] = {
 
 
 def inventory_aws_costs_and_usage_per_service(parsed):
+<<<<<<< HEAD
     for (_timeperiod, service_name) in parsed.iterkeys():
+=======
+    for (_timeperiod, service_name) in parsed:
+>>>>>>> upstream/master
         yield service_name, {}
 
 
 def check_aws_costs_and_usage_per_service(item, params, parsed):
     data = None
     timeperiod = None
+<<<<<<< HEAD
     for (timeperiod, service_name), metrics in parsed.iteritems():
+=======
+    for (timeperiod, service_name), metrics in parsed.items():
+>>>>>>> upstream/master
         if item == service_name:
             data = metrics
             break

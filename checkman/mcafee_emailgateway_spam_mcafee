@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: McAfee Email gateway: Spam Engine
+=======
+title: McAfee Email Gateway: Spam Engine
+>>>>>>> upstream/master
 agents: snmp
 catalog: app/mcafee
 license: GPL

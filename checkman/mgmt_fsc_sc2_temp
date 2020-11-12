@@ -17,5 +17,9 @@ item:
  The temperature sensor designation
 
 inventory:
+<<<<<<< HEAD
  One service per sensor is created.
+=======
+ One service is created for each sensor.
+>>>>>>> upstream/master
 

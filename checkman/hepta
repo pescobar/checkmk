@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: Hepta 8030
+=======
+title: Hepta: General Information
+>>>>>>> upstream/master
 agents: snmp
 catalog: hw/time/hopf
 license: GPL
@@ -6,6 +10,11 @@ distribution: check_mk
 description:
  This check monitors the Device Type, Serial Number, Firmware Version and Data and the device version.
 
+<<<<<<< HEAD
+=======
+ This check supports Hepta 8029 and Hepta 8030 devices.
+
+>>>>>>> upstream/master
  One general service is created for showing the following information:
  Device Type ;
  Serial Number ;
@@ -14,7 +23,11 @@ description:
  Device Version ;
 
 inventory:
+<<<<<<< HEAD
  One service for HPF8038 Info
 
 item:
  "HPF8030 Info"
+=======
+ One service is created.
+>>>>>>> upstream/master

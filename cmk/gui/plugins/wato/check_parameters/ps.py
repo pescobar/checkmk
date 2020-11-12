@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -25,12 +26,24 @@
 # Boston, MA 02110-1301 USA.
 
 import re
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+import re
+from typing import Any, Dict
+import copy
+>>>>>>> upstream/master
 
 from cmk.gui.exceptions import MKUserError
 from cmk.gui.i18n import _
 from cmk.gui.valuespec import (
     Age,
     Alternative,
+<<<<<<< HEAD
     Checkbox,
     Dictionary,
     DropdownChoice,
@@ -51,6 +64,29 @@ from cmk.gui.valuespec import (
 )
 from cmk.gui.plugins.wato import (
     RulespecGroupManualChecksApplications,
+=======
+    CascadingDropdown,
+    Checkbox,
+    Dictionary,
+    DropdownChoice,
+    DropdownChoices,
+    Filesize,
+    FixedValue,
+    Integer,
+    Labels,
+    ListChoice,
+    ListOf,
+    MonitoringState,
+    Percentage,
+    RegExp,
+    TextAscii,
+    TextUnicode,
+    Transform,
+    Tuple,
+)
+from cmk.gui.plugins.wato import (
+    RulespecGroupEnforcedServicesApplications,
+>>>>>>> upstream/master
     RulespecGroupCheckParametersApplications,
     RulespecGroupCheckParametersDiscovery,
     UserIconOrAction,
@@ -59,6 +95,7 @@ from cmk.gui.plugins.wato import (
     ManualCheckParameterRulespec,
     CheckParameterRulespecWithItem,
 )
+<<<<<<< HEAD
 from cmk.gui.htmllib import HTML
 
 
@@ -66,6 +103,24 @@ def process_level_elements():
     return [
         ("cpu_rescale_max",
          RadioChoice(
+=======
+
+# This object indicates that the setting 'CPU rescale maximum load' has not been set, which can only
+# be the case for legacy rules from before version 1.6.0, see werk #6646. Note that we cannot use
+# None here because DropdownChoice only renders invalid_choice_title if the input value is not
+# None...
+CPU_RESCALE_MAX_UNSPEC = 'cpu_rescale_max_unspecified'
+
+
+def process_level_elements():
+    cpu_rescale_max_choices: DropdownChoices = [
+        (True, _("100% is all cores at full load")),
+        (False, _("N * 100% as each core contributes with 100% at full load")),
+    ]
+    return [
+        ("cpu_rescale_max",
+         DropdownChoice(
+>>>>>>> upstream/master
              title=_("CPU rescale maximum load"),
              help=_("CPU utilization is delivered by the Operating "
                     "System as a per CPU core basis. Thus each core contributes "
@@ -74,18 +129,26 @@ def process_level_elements():
                     "can be rescaled down, making 100% the maximum and thinking "
                     "in terms of total CPU utilization."),
              default_value=True,
+<<<<<<< HEAD
              orientation="vertical",
              choices=[
                  (True, _("100% is all cores at full load")),
                  (False,
                   HTML(_("<b>N</b> * 100% as each core contributes with 100% at full load"))),
              ],
+=======
+             choices=cpu_rescale_max_choices,
+>>>>>>> upstream/master
              invalid_choice_title=_("Unspecified.") + " " +
              _("Starting from version 1.6.0 this value must be configured. "
                "Read Werk #6646 for further information."),
              invalid_choice_error=_("CPU rescale maximum load is Unspecified.") + " " +
              _("Starting from version 1.6.0 this value must be configured. "
                "Read Werk #6646 for further information."),
+<<<<<<< HEAD
+=======
+             deprecated_choices=[CPU_RESCALE_MAX_UNSPEC],
+>>>>>>> upstream/master
          )),
         ('levels',
          Tuple(
@@ -149,6 +212,7 @@ def process_level_elements():
                  Percentage(title=_("Critical at"), default_value=98, maxvalue=10000),
              ],
          )),
+<<<<<<< HEAD
         ("max_age",
          Tuple(title=_("Maximum allowed age"),
                help=_("Alarms you if the age of the process (not the consumed CPU "
@@ -157,6 +221,28 @@ def process_level_elements():
                    Age(title=_("Warning at"), default_value=3600),
                    Age(title=_("Critical at"), default_value=7200),
                ])),
+=======
+        ("min_age",
+         Tuple(
+             title=_("Minimum allowed age"),
+             help=_("Set lower levels on the age of the process (not the consumed CPU time, "
+                    "but the real time)."),
+             elements=[
+                 Age(title=_("Warning at"), default_value=3600),
+                 Age(title=_("Critical at"), default_value=1800),
+             ],
+         )),
+        ("max_age",
+         Tuple(
+             title=_("Maximum allowed age"),
+             help=_("Set upper levels on the age of the process (not the consumed CPU time, "
+                    "but the real time)."),
+             elements=[
+                 Age(title=_("Warning at"), default_value=3600),
+                 Age(title=_("Critical at"), default_value=7200),
+             ],
+         )),
+>>>>>>> upstream/master
         ("virtual_levels",
          Tuple(
              title=_("Virtual memory usage"),
@@ -199,6 +285,7 @@ def process_level_elements():
          DropdownChoice(
              title=_("Enable per-process details in long-output"),
              label=_("Enable per-process details"),
+<<<<<<< HEAD
              help=_("If active, the long output of this service will contain a list of all the "
                     "matching processes and their details (i.e. PID, CPU usage, memory usage). "
                     "Please note that HTML output will only work if \"Escape HTML codes in "
@@ -206,6 +293,18 @@ def process_level_elements():
                     "Cross-Site-Scripting (everyone with write-access to checks could get "
                     "scripts executed on the monitoring site in the context of the user of the "
                     "monitoring site) so please do this if you understand the consequences."),
+=======
+             help=_(
+                 "If active, the long output of this service will contain a list of all the "
+                 "matching processes and their details (i.e. PID, CPU usage, memory usage). "
+                 "Please note that HTML output will only work if rules in the rulesets "
+                 "\"Escape HTML codes in host output\" or \"Escape HTML codes in service output\" "
+                 "are created or the global setting \"Escape HTML codes in plugin output\" "
+                 "is disabled. This might expose you to "
+                 "Cross-Site-Scripting attacks (everyone with write-access to checks could get "
+                 "scripts executed on the monitoring site in the context of the user of the "
+                 "monitoring site) so please do this if you understand the consequences."),
+>>>>>>> upstream/master
              choices=[
                  (None, _("Disable")),
                  ("text", _("Text output")),
@@ -233,6 +332,29 @@ def process_level_elements():
 
 # Add checks that have parameters but are only configured as manual checks
 def ps_cleanup_params(params):
+<<<<<<< HEAD
+=======
+    # New parameter format: dictionary. Example:
+    # {
+    #    "user" : "foo",
+    #    "process" : "/usr/bin/food",
+    #    "warnmin" : 1,
+    #    "okmin"   : 1,
+    #    "okmax"   : 1,
+    #    "warnmax" : 1,
+    # }
+
+    # Even newer format:
+    # {
+    #   "user" : "foo",
+    #   "levels" : (1, 1, 99999, 99999)
+    # }
+
+    # TODO: This is a workaround which makes sure input arguments are not getting altered.
+    #       A nice implementation would return a new dict based on the input
+    params = copy.deepcopy(params)
+
+>>>>>>> upstream/master
     if isinstance(params, (list, tuple)):
         if len(params) == 5:
             procname, warnmin, okmin, okmax, warnmax = params
@@ -245,6 +367,7 @@ def ps_cleanup_params(params):
             "user": user,
         }
 
+<<<<<<< HEAD
     if any(k in params for k in ['okmin', 'warnmin', 'okmax', 'warnmax']):
         params["levels"] = (
             params.pop("warnmin", 1),
@@ -255,6 +378,18 @@ def ps_cleanup_params(params):
 
     if "cpu_rescale_max" not in params:
         params["cpu_rescale_max"] = None
+=======
+    elif any(k in params for k in ['okmin', 'warnmin', 'okmax', 'warnmax']):
+        params["levels"] = (
+            params.pop("warnmin", 1),
+            params.pop("okmin", 1),
+            params.pop("okmax", 99999),
+            params.pop("warnmax", 99999),
+        )
+
+    if "cpu_rescale_max" not in params:
+        params["cpu_rescale_max"] = CPU_RESCALE_MAX_UNSPEC
+>>>>>>> upstream/master
 
     return params
 
@@ -301,7 +436,11 @@ def validate_process_discovery_descr_option(description, varprefix):
 
 
 def process_discovery_descr_option():
+<<<<<<< HEAD
     return TextAscii(
+=======
+    return TextUnicode(
+>>>>>>> upstream/master
         title=_('Process Name'),
         allow_empty=False,
         validate=validate_process_discovery_descr_option,
@@ -327,7 +466,10 @@ def process_discovery_descr_option():
 def process_match_options():
     return Alternative(
         title=_("Process Matching"),
+<<<<<<< HEAD
         style="dropdown",
+=======
+>>>>>>> upstream/master
         elements=[
             TextAscii(
                 title=_("Exact name of the process without argments"),
@@ -370,7 +512,10 @@ def user_match_options(extra_elements=None):
 
     return Alternative(
         title=_("Name of operating system user"),
+<<<<<<< HEAD
         style="dropdown",
+=======
+>>>>>>> upstream/master
         elements=[
             TextAscii(title=_("Exact name of the operating system user"), label=_("User:"),
                       size=50),
@@ -408,7 +553,10 @@ def cgroup_match_options():
         title=_("Operating system control group information"),
         elements=[
             Alternative(
+<<<<<<< HEAD
                 style="dropdown",
+=======
+>>>>>>> upstream/master
                 elements=[
                     TextAscii(title=_("Exact content of the operating system control group info"),
                               label=_("Control group:"),
@@ -495,7 +643,11 @@ def _manual_parameter_valuespec_ps():
 rulespec_registry.register(
     ManualCheckParameterRulespec(
         check_group_name="ps",
+<<<<<<< HEAD
         group=RulespecGroupManualChecksApplications,
+=======
+        group=RulespecGroupEnforcedServicesApplications,
+>>>>>>> upstream/master
         item_spec=_manual_item_spec_ps,
         parameter_valuespec=_manual_parameter_valuespec_ps,
         title=lambda: _("State and count of processes"),
@@ -508,7 +660,11 @@ rulespec_registry.register(
 # configuration we allow reading old discovery rules and ship these
 # settings in an optional sub-dictionary.
 def convert_inventory_processes(old_dict):
+<<<<<<< HEAD
     new_dict = {"default_params": {}}
+=======
+    new_dict: Dict[str, Dict[str, Any]] = {"default_params": {}}
+>>>>>>> upstream/master
     for key in old_dict:
         if key in [
                 'levels',
@@ -524,7 +680,11 @@ def convert_inventory_processes(old_dict):
 
     # cmk1.6 cpu rescaling load rule
     if "cpu_rescale_max" not in old_dict.get("default_params", {}):
+<<<<<<< HEAD
         new_dict["default_params"]["cpu_rescale_max"] = None
+=======
+        new_dict["default_params"]["cpu_rescale_max"] = CPU_RESCALE_MAX_UNSPEC
+>>>>>>> upstream/master
 
     # cmk1.6 move icon into default_params to match setup of static and discovered ps checks
     if "icon" in old_dict:
@@ -536,7 +696,11 @@ def convert_inventory_processes(old_dict):
 def _valuespec_inventory_processes_rules():
     return Transform(
         Dictionary(
+<<<<<<< HEAD
             title=_('Process Discovery'),
+=======
+            title=_('Process discovery'),
+>>>>>>> upstream/master
             help=_("This ruleset defines criteria for automatically creating checks for running "
                    "processes based upon what is running when the service discovery is "
                    "done. These services will be created with default parameters. They will get "
@@ -622,7 +786,10 @@ def match_hr_alternative(x):
 def hr_process_match_name_option():
     return Alternative(
         title=_("Process Name Matching"),
+<<<<<<< HEAD
         style="dropdown",
+=======
+>>>>>>> upstream/master
         elements=[
             TextAscii(
                 title=_("Exact name of the textual description"),
@@ -657,7 +824,10 @@ def hr_process_match_name_option():
 def hr_process_match_path_option():
     return Alternative(
         title=_("Process Path Matching"),
+<<<<<<< HEAD
         style="dropdown",
+=======
+>>>>>>> upstream/master
         elements=[
             TextAscii(
                 title=_("Exact name of the process path"),
@@ -762,7 +932,11 @@ def hr_process_parameter_elements():
 
 def _valuespec_discovery_hr_processes_rules():
     return Dictionary(
+<<<<<<< HEAD
         title=_('Process Discovery (only SNMP)'),
+=======
+        title=_('Process discovery (only SNMP)'),
+>>>>>>> upstream/master
         help=_("This ruleset defines criteria for automatically creating checks for running "
                "SNMP processes based upon the HOST Resource MIB and what is running when the "
                "service discovery is done. You can either specify the textual description "
@@ -843,7 +1017,11 @@ def _manual_parameter_valuespec_hr_ps():
 rulespec_registry.register(
     ManualCheckParameterRulespec(
         check_group_name="hr_ps",
+<<<<<<< HEAD
         group=RulespecGroupManualChecksApplications,
+=======
+        group=RulespecGroupEnforcedServicesApplications,
+>>>>>>> upstream/master
         item_spec=_manual_item_spec_hr_ps,
         parameter_valuespec=_manual_parameter_valuespec_hr_ps,
         title=lambda: _("State and count of processes (only SNMP)"),

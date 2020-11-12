@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // +------------------------------------------------------------------+
 // |             ____ _               _        __  __ _  __           |
 // |            / ___| |__   ___  ___| | __   |  \/  | |/ /           |
@@ -21,6 +22,12 @@
 // License along with GNU Make; see the file  COPYING.  If  not,  write
 // to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 // Boston, MA 02110-1301 USA.
+=======
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the
+// terms and conditions defined in the file COPYING, which is part of this
+// source code package.
+>>>>>>> upstream/master
 
 #include <arpa/inet.h>
 #include <fcntl.h>
@@ -28,6 +35,7 @@
 #include <sys/socket.h>
 #include <sys/stat.h>
 #include <unistd.h>
+
 #include <cctype>
 #include <cerrno>
 #include <cstdio>
@@ -167,7 +175,7 @@ int main(int argc, char **argv) {
         w = append_str(text, w);
         *w = 0;
     } else {
-        strncpy(message, argv[1], sizeof(message));
+        strncpy(message, argv[1], sizeof(message) - 1);
     }
 
     /* If we have a remote host and there is no local event Console running,

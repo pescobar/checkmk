@@ -1,22 +1,47 @@
+<<<<<<< HEAD
 import pytest
 import cmk.gui.views
 import cmk.gui.cee.plugins.views.icons
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+from typing import Dict, Any
+
+import cmk.utils.version as cmk_version
+import cmk.gui.views
+
+if not cmk_version.is_raw_edition():
+    import cmk.gui.cee.plugins.views.icons  # pylint: disable=no-name-in-module
+
+>>>>>>> upstream/master
 import cmk.gui.plugins.views.icons as icons
 
 
 def test_builtin_icons_and_actions():
+<<<<<<< HEAD
     cmk.gui.views.transform_old_dict_based_icons()
     builtin_icons = sorted(icons.get_multisite_icons().keys())
     assert builtin_icons == sorted([
         'action_menu',
         'agent_deployment',
+=======
+    expected_icons_and_actions = [
+        'action_menu',
+>>>>>>> upstream/master
         'aggregation_checks',
         'aggregations',
         'check_manpage',
         'check_period',
         'crashed_check',
         'custom_action',
+<<<<<<< HEAD
         'deployment_status',
+=======
+>>>>>>> upstream/master
         'download_agent_output',
         'download_snmp_walk',
         'icon_image',
@@ -39,6 +64,7 @@ def test_builtin_icons_and_actions():
         'status_notifications_enabled',
         'status_passive_checks',
         'status_service_period',
+<<<<<<< HEAD
         'status_shadow',
         'status_stale',
         'wato',
@@ -47,6 +73,28 @@ def test_builtin_icons_and_actions():
 
 def test_legacy_icon_plugin():
     icon = {
+=======
+        'status_stale',
+        'wato',
+    ]
+
+    if not cmk_version.is_raw_edition():
+        expected_icons_and_actions += [
+            'agent_deployment',
+            'deployment_status',
+            'status_shadow',
+            'ntop_host',
+            'ntop_service_interface',
+        ]
+
+    cmk.gui.views.transform_old_dict_based_icons()
+    builtin_icons = sorted(icons.get_multisite_icons().keys())
+    assert builtin_icons == sorted(expected_icons_and_actions)
+
+
+def test_legacy_icon_plugin():
+    icon: Dict[str, Any] = {
+>>>>>>> upstream/master
         "columns": ["column"],
         "host_columns": ["hcol"],
         "service_columns": ["scol"],

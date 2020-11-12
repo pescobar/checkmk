@@ -1,34 +1,20 @@
-// +------------------------------------------------------------------+
-// |             ____ _               _        __  __ _  __           |
-// |            / ___| |__   ___  ___| | __   |  \/  | |/ /           |
-// |           | |   | '_ \ / _ \/ __| |/ /   | |\/| | ' /            |
-// |           | |___| | | |  __/ (__|   <    | |  | | . \            |
-// |            \____|_| |_|\___|\___|_|\_\___|_|  |_|_|\_\           |
-// |                                                                  |
-// | Copyright Mathias Kettner 2014             mk@mathias-kettner.de |
-// +------------------------------------------------------------------+
-//
-// This file is part of Check_MK.
-// The official homepage is at http://mathias-kettner.de/check_mk.
-//
-// check_mk is free software;  you can redistribute it and/or modify it
-// under the  terms of the  GNU General Public License  as published by
-// the Free Software Foundation in version 2.  check_mk is  distributed
-// in the hope that it will be useful, but WITHOUT ANY WARRANTY;  with-
-// out even the implied warranty of  MERCHANTABILITY  or  FITNESS FOR A
-// PARTICULAR PURPOSE. See the  GNU General Public License for more de-
-// tails. You should have  received  a copy of the  GNU  General Public
-// License along with GNU Make; see the file  COPYING.  If  not,  write
-// to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
-// Boston, MA 02110-1301 USA.
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the
+// terms and conditions defined in the file COPYING, which is part of this
+// source code package.
 
 #ifndef HostListStateColumn_h
 #define HostListStateColumn_h
 
 #include "config.h"  // IWYU pragma: keep
+
 #include <cstdint>
 #include <string>
+#include <utility>
+
+#include "Column.h"
 #include "IntColumn.h"
+#include "LogEntry.h"
 #include "ServiceListStateColumn.h"
 class MonitoringCore;
 class Row;
@@ -41,6 +27,7 @@ class Row;
 
 class HostListStateColumn : public IntColumn {
 public:
+<<<<<<< HEAD
     // TODO(sp) Remove the magic arithmetic
     enum class Type {
         num_svc = static_cast<int>(ServiceListStateColumn::Type::num),
@@ -77,6 +64,41 @@ public:
                         Type logictype)
         : IntColumn(name, description, indirect_offset, extra_offset,
                     extra_extra_offset, offset)
+=======
+    enum class Type {
+        num_hst,
+        num_hst_pending,
+        num_hst_handled_problems,
+        num_hst_unhandled_problems,
+        //
+        num_hst_up,
+        num_hst_down,
+        num_hst_unreach,
+        worst_hst_state,
+        //
+        num_svc,
+        num_svc_pending,
+        num_svc_handled_problems,
+        num_svc_unhandled_problems,
+        //
+        num_svc_ok,
+        num_svc_warn,
+        num_svc_crit,
+        num_svc_unknown,
+        worst_svc_state,
+        //
+        num_svc_hard_ok,
+        num_svc_hard_warn,
+        num_svc_hard_crit,
+        num_svc_hard_unknown,
+        worst_svc_hard_state,
+    };
+
+    HostListStateColumn(const std::string &name, const std::string &description,
+                        ColumnOffsets offsets, MonitoringCore *mc,
+                        Type logictype)
+        : IntColumn(name, description, std::move(offsets))
+>>>>>>> upstream/master
         , _mc(mc)
         , _logictype(logictype) {}
 
@@ -86,7 +108,14 @@ private:
     MonitoringCore *_mc;
     const Type _logictype;
 
+<<<<<<< HEAD
     void update(host *hst, const contact *auth_user, int32_t &result) const;
+=======
+    void update(const contact *auth_user, HostState current_state,
+                bool has_been_checked,
+                ServiceListStateColumn::service_list services, bool handled,
+                int32_t &result) const;
+>>>>>>> upstream/master
 };
 
 #endif  // HostListStateColumn_h

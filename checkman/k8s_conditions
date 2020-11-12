@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: Kubernetes conditions
+=======
+title: Kubernetes: Conditions
+>>>>>>> upstream/master
 agents: kubernetes
 catalog: containerization/kubernetes
 license: GPL
@@ -9,5 +13,11 @@ description:
  If an error condition is detected or a node or a pod is not ready the check returns
  {CRIT} otherwise {OK}.
 
+<<<<<<< HEAD
+=======
+item:
+ Name of the condition
+
+>>>>>>> upstream/master
 inventory:
  One service is created for each condition and one for the readiness status.

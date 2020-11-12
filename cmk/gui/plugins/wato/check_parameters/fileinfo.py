@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -33,6 +34,20 @@ from cmk.gui.valuespec import (
     MonitoringState,
     TextAscii,
     Tuple,
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+from cmk.gui.i18n import _
+from cmk.gui.valuespec import (
+    Dictionary,
+    ListOfTimeRanges,
+    MonitoringState,
+    TextAscii,
+>>>>>>> upstream/master
 )
 
 from cmk.gui.plugins.wato import (
@@ -41,6 +56,7 @@ from cmk.gui.plugins.wato import (
     RulespecGroupCheckParametersStorage,
 )
 
+<<<<<<< HEAD
 
 def _parameter_valuespec_fileinfo():
     return Dictionary(elements=[
@@ -76,6 +92,22 @@ def _parameter_valuespec_fileinfo():
                  Filesize(title=_("Critical at")),
              ],
          )),
+=======
+from cmk.gui.plugins.wato.check_parameters.file_attributes_utils import (
+    min_age_levels,
+    max_age_levels,
+    min_size_levels,
+    max_size_levels,
+)
+
+
+def _parameter_valuespec_fileinfo():
+    return Dictionary(elements=[
+        ("minage", min_age_levels()),
+        ("maxage", max_age_levels()),
+        ("minsize", min_size_levels()),
+        ("maxsize", max_size_levels()),
+>>>>>>> upstream/master
         ("timeofday",
          ListOfTimeRanges(
              title=_("Only check during the following times of the day"),

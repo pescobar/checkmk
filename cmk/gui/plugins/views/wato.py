@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -25,6 +26,17 @@
 # Boston, MA 02110-1301 USA.
 
 import cmk.gui.watolib as watolib
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+from typing import Dict, Union
+import cmk.gui.watolib as watolib
+from cmk.gui.htmllib import HTML
+>>>>>>> upstream/master
 from cmk.gui.i18n import _
 from cmk.gui.globals import html
 from cmk.gui.exceptions import MKGeneralException
@@ -34,6 +46,10 @@ from cmk.gui.plugins.views import (
     painter_registry,
     Painter,
 )
+<<<<<<< HEAD
+=======
+from cmk.gui.type_defs import Row
+>>>>>>> upstream/master
 
 
 @painter_registry.register
@@ -42,12 +58,19 @@ class PainterHostFilename(Painter):
     def ident(self):
         return "host_filename"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("Check_MK config filename")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("Checkmk config filename")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("Filename")
 
     @property
@@ -58,7 +81,13 @@ class PainterHostFilename(Painter):
         return ("tt", row["host_filename"])
 
 
+<<<<<<< HEAD
 def get_wato_folder(row, how, with_links=True):
+=======
+# TODO: Extremely bad idea ahead! The return type depends on a combination of
+# the values of how and with_links. :-P
+def get_wato_folder(row: Dict, how: str, with_links: bool = True) -> Union[str, HTML]:
+>>>>>>> upstream/master
     filename = row["host_filename"]
     if not filename.startswith("/wato/") or not filename.endswith("/hosts.mk"):
         return ""
@@ -76,6 +105,7 @@ def get_wato_folder(row, how, with_links=True):
 
     if how == "plain":
         return title_path[-1]
+<<<<<<< HEAD
     elif how == "abs":
         return " / ".join(title_path)
     else:
@@ -88,6 +118,18 @@ def get_wato_folder(row, how, with_links=True):
 
         depth = current_path.count('/') + 1
         return " / ".join(title_path[depth:])
+=======
+    if how == "abs":
+        return HTML(" / ").join(title_path)
+    # We assume that only hosts are show, that are below the current WATO path.
+    # If not then better output absolute path then wrong path.
+    current_path = html.request.var("wato_folder")
+    if not current_path or not wato_path.startswith(current_path):
+        return HTML(" / ").join(title_path)
+
+    depth = current_path.count('/') + 1
+    return HTML(" / ").join(title_path[depth:])
+>>>>>>> upstream/master
 
 
 def paint_wato_folder(row, how):
@@ -100,12 +142,19 @@ class PainterWatoFolderAbs(Painter):
     def ident(self):
         return "wato_folder_abs"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("WATO folder - complete path")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("WATO folder - complete path")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("WATO folder")
 
     @property
@@ -126,12 +175,19 @@ class PainterWatoFolderRel(Painter):
     def ident(self):
         return "wato_folder_rel"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("WATO folder - relative path")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("WATO folder - relative path")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("WATO folder")
 
     @property
@@ -152,12 +208,19 @@ class PainterWatoFolderPlain(Painter):
     def ident(self):
         return "wato_folder_plain"
 
+<<<<<<< HEAD
     @property
     def title(self):
         return _("WATO folder - just folder name")
 
     @property
     def short_title(self):
+=======
+    def title(self, cell):
+        return _("WATO folder - just folder name")
+
+    def short_title(self, cell):
+>>>>>>> upstream/master
         return _("WATO folder")
 
     @property
@@ -172,9 +235,21 @@ class PainterWatoFolderPlain(Painter):
         return paint_wato_folder(row, "plain")
 
 
+<<<<<<< HEAD
 def cmp_wato_folder(r1, r2, how):
     return (get_wato_folder(r1, how, False) > get_wato_folder(r2, how, False)) - (get_wato_folder(
         r1, how, False) < get_wato_folder(r2, how, False))
+=======
+def cmp_wato_folder(r1: Row, r2: Row, how: str) -> int:
+    return ((_get_wato_folder_text(r1, how) > _get_wato_folder_text(r2, how)) -
+            (_get_wato_folder_text(r1, how) < _get_wato_folder_text(r2, how)))
+
+
+# NOTE: The funny str() call is only necessary because of the broken typing of
+# get_wato_folder().
+def _get_wato_folder_text(r: Row, how: str) -> str:
+    return str(get_wato_folder(r, how, False))
+>>>>>>> upstream/master
 
 
 @sorter_registry.register

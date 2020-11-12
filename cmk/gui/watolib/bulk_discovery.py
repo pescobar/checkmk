@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/env python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -25,6 +26,15 @@
 # Boston, MA 02110-1301 USA.
 
 from typing import NamedTuple, List  # pylint: disable=unused-import
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+from typing import NamedTuple, List
+>>>>>>> upstream/master
 
 import cmk.utils.store as store
 
@@ -33,10 +43,18 @@ from cmk.gui.globals import html
 from cmk.gui.valuespec import (
     Checkbox,
     Dictionary,
+<<<<<<< HEAD
     RadioChoice,
     Tuple,
     Integer,
 )
+=======
+    DropdownChoice,
+    Tuple,
+    Integer,
+)
+from cmk.gui.valuespec import ValueSpec
+>>>>>>> upstream/master
 
 from cmk.gui.watolib.hosts_and_folders import Folder
 from cmk.gui.watolib.automations import check_mk_automation
@@ -44,6 +62,7 @@ from cmk.gui.watolib.changes import add_service_change
 import cmk.gui.gui_background_job as gui_background_job
 from cmk.gui.watolib.wato_background_job import WatoBackgroundJob
 
+<<<<<<< HEAD
 DiscoveryHost = NamedTuple("DiscoveryHost", [("site_id", str), ("folder_path", str),
                                              ("host_name", str)])
 DiscoveryTask = NamedTuple("DiscoveryTask", [("site_id", str), ("folder_path", str),
@@ -52,13 +71,32 @@ DiscoveryTask = NamedTuple("DiscoveryTask", [("site_id", str), ("folder_path", s
 
 def get_tasks(hosts_to_discover, bulk_size):
     # type: (List[DiscoveryHost], int) -> List[DiscoveryTask]
+=======
+DiscoveryHost = NamedTuple("DiscoveryHost", [
+    ("site_id", str),
+    ("folder_path", str),
+    ("host_name", str),
+])
+DiscoveryTask = NamedTuple("DiscoveryTask", [
+    ("site_id", str),
+    ("folder_path", str),
+    ("host_names", list),
+])
+
+
+def get_tasks(hosts_to_discover: List[DiscoveryHost], bulk_size: int) -> List[DiscoveryTask]:
+>>>>>>> upstream/master
     """Create a list of tasks for the job
 
     Each task groups the hosts together that are in the same folder and site. This is
     mainly done to reduce the overhead of site communication and loading/saving of files
     """
     current_site_and_folder = None
+<<<<<<< HEAD
     tasks = []  # type: List[DiscoveryTask]
+=======
+    tasks: List[DiscoveryTask] = []
+>>>>>>> upstream/master
 
     for site_id, folder_path, host_name in sorted(hosts_to_discover):
         if not tasks or (site_id, folder_path) != current_site_and_folder or \
@@ -71,6 +109,7 @@ def get_tasks(hosts_to_discover, bulk_size):
 
 
 def vs_bulk_discovery(render_form=False, include_subfolders=True):
+<<<<<<< HEAD
     if render_form:
         render = "form"
     else:
@@ -80,6 +119,12 @@ def vs_bulk_discovery(render_form=False, include_subfolders=True):
         selection_elements = [Checkbox(label=_("Include all subfolders"), default_value=True)]
     else:
         selection_elements = []
+=======
+    selection_elements: List[ValueSpec] = []
+
+    if include_subfolders:
+        selection_elements.append(Checkbox(label=_("Include all subfolders"), default_value=True))
+>>>>>>> upstream/master
 
     selection_elements += [
         Checkbox(label=_("Only include hosts that failed on previous discovery"),
@@ -90,12 +135,20 @@ def vs_bulk_discovery(render_form=False, include_subfolders=True):
 
     return Dictionary(
         title=_("Bulk discovery"),
+<<<<<<< HEAD
         render=render,
         elements=[
             ("mode",
              RadioChoice(
                  title=_("Mode"),
                  orientation="vertical",
+=======
+        render="form" if render_form else "normal",
+        elements=[
+            ("mode",
+             DropdownChoice(
+                 title=_("Mode"),
+>>>>>>> upstream/master
                  default_value="new",
                  choices=[
                      ("new", _("Add unmonitored services and new host labels")),
@@ -109,6 +162,7 @@ def vs_bulk_discovery(render_form=False, include_subfolders=True):
             ("performance",
              Tuple(title=_("Performance options"),
                    elements=[
+<<<<<<< HEAD
                        Checkbox(label=_("Use cached data if present"), default_value=True),
                        Checkbox(label=_("Do full SNMP scan for SNMP devices"), default_value=True),
                        Integer(label=_("Number of hosts to handle at once"), default_value=10),
@@ -117,6 +171,17 @@ def vs_bulk_discovery(render_form=False, include_subfolders=True):
              Checkbox(title=_("Error handling"),
                       label=_("Ignore errors in single check plugins"),
                       default_value=True)),
+=======
+                       Checkbox(label=_("Do a full service scan"), default_value=True),
+                       Integer(label=_("Number of hosts to handle at once"), default_value=10),
+                   ])),
+            ("error_handling",
+             Checkbox(
+                 title=_("Error handling"),
+                 label=_("Ignore errors in single check plugins"),
+                 default_value=True,
+             )),
+>>>>>>> upstream/master
         ],
         optional_keys=[],
     )
@@ -132,6 +197,7 @@ class BulkDiscoveryBackgroundJob(WatoBackgroundJob):
         return _("Bulk Discovery")
 
     def __init__(self):
+<<<<<<< HEAD
         kwargs = {}
         kwargs["title"] = self.gui_title()
         kwargs["lock_wato"] = False
@@ -139,16 +205,32 @@ class BulkDiscoveryBackgroundJob(WatoBackgroundJob):
         kwargs["stoppable"] = False
 
         super(BulkDiscoveryBackgroundJob, self).__init__(self.job_prefix, **kwargs)
+=======
+        super(BulkDiscoveryBackgroundJob, self).__init__(
+            self.job_prefix,
+            title=self.gui_title(),
+            lock_wato=False,
+            stoppable=False,
+        )
+>>>>>>> upstream/master
 
     def _back_url(self):
         return Folder.current().url()
 
+<<<<<<< HEAD
     def do_execute(self, mode, use_cache, do_scan, error_handling, tasks, job_interface=None):
+=======
+    def do_execute(self, mode, do_scan, error_handling, tasks, job_interface=None):
+>>>>>>> upstream/master
         self._initialize_statistics()
         job_interface.send_progress_update(_("Bulk discovery started..."))
 
         for task in tasks:
+<<<<<<< HEAD
             self._bulk_discover_item(task, mode, use_cache, do_scan, error_handling, job_interface)
+=======
+            self._bulk_discover_item(task, mode, do_scan, error_handling, job_interface)
+>>>>>>> upstream/master
 
         job_interface.send_progress_update(_("Bulk discovery finished."))
 
@@ -178,12 +260,20 @@ class BulkDiscoveryBackgroundJob(WatoBackgroundJob):
         self._num_host_labels_total = 0
         self._num_host_labels_added = 0
 
+<<<<<<< HEAD
     def _bulk_discover_item(self, task, mode, use_cache, do_scan, error_handling, job_interface):
         self._num_hosts_total += len(task.host_names)
 
         try:
             counts, failed_hosts = self._execute_discovery(task, mode, use_cache, do_scan,
                                                            error_handling)
+=======
+    def _bulk_discover_item(self, task, mode, do_scan, error_handling, job_interface):
+        self._num_hosts_total += len(task.host_names)
+
+        try:
+            counts, failed_hosts = self._execute_discovery(task, mode, do_scan, error_handling)
+>>>>>>> upstream/master
             self._process_discovery_results(task, job_interface, counts, failed_hosts)
         except Exception:
             self._num_hosts_failed += len(task.host_names)
@@ -194,11 +284,17 @@ class BulkDiscoveryBackgroundJob(WatoBackgroundJob):
                 msg = _("Error during discovery of %s") % (", ".join(task.host_names))
             self._logger.exception(msg)
 
+<<<<<<< HEAD
     def _execute_discovery(self, task, mode, use_cache, do_scan, error_handling):
         arguments = [mode] + task.host_names
 
         if use_cache:
             arguments = ["@cache"] + arguments
+=======
+    def _execute_discovery(self, task, mode, do_scan, error_handling):
+        arguments = [mode] + task.host_names
+
+>>>>>>> upstream/master
         if do_scan:
             arguments = ["@scan"] + arguments
         if not error_handling:
@@ -209,7 +305,12 @@ class BulkDiscoveryBackgroundJob(WatoBackgroundJob):
         counts, failed_hosts = check_mk_automation(task.site_id,
                                                    "inventory",
                                                    arguments,
+<<<<<<< HEAD
                                                    timeout=timeout)
+=======
+                                                   timeout=timeout,
+                                                   non_blocking_http=True)
+>>>>>>> upstream/master
 
         return counts, failed_hosts
 

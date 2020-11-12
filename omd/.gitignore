@@ -1,19 +1,31 @@
 *.log
 .*.swp
 .config
+<<<<<<< HEAD
+=======
+.modulebuildrc
+>>>>>>> upstream/master
 .werks/.last
 .werks/.my_ids
 .werks/werks
 ChangeLog
 Python-[23].[0-9].[0-9]*/
+<<<<<<< HEAD
 bin/
 boost_[0-9]_[0-9][0-9]_[0-9]/
 build-helper/
+=======
+boost_[0-9]_[0-9][0-9]_[0-9]/
+>>>>>>> upstream/master
 build-stamp
 debian/changelog
 destdir
 dpkg.topdir
 freetds-[0-9].[0-9][0-9].[0-9][0-9]/
+<<<<<<< HEAD
+=======
+mk-livestatus-1.7.0i1/
+>>>>>>> upstream/master
 omd-*-*.rpm
 omd-*.deb
 omd-*.tar.gz
@@ -22,6 +34,13 @@ openhardwaremonitor-[0-9].[0-9].[0-9]/
 patch-stamp
 python*-modules-1.[67].0i1.cme/
 re2-20[12][0-9]-[01][0-9]-[0-3][0-9]/
+<<<<<<< HEAD
 dokuwiki-20[12][0-9]-[01][0-9]-[0-3][0-9][a-z]/
 rpm.buildroot
 rpm.topdir
+=======
+rpm.buildroot
+rpm.topdir
+rrdtool-1.7.1/
+build/
+>>>>>>> upstream/master

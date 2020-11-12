@@ -1,8 +1,21 @@
+<<<<<<< HEAD
 import pytest
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+from typing import Type
+
+# pylint: disable=redefined-outer-name
+import pytest  # type: ignore[import]
+>>>>>>> upstream/master
 
 import cmk.utils.plugin_registry
 
 
+<<<<<<< HEAD
 class Plugin(object):
     pass
 
@@ -13,6 +26,15 @@ class PluginRegistry(cmk.utils.plugin_registry.ClassRegistry):
 
     def plugin_name(self, plugin_class):
         return plugin_class.__name__
+=======
+class Plugin:
+    pass
+
+
+class PluginRegistry(cmk.utils.plugin_registry.Registry[Type[Plugin]]):
+    def plugin_name(self, instance):
+        return instance.__name__
+>>>>>>> upstream/master
 
 
 @pytest.fixture(scope="module")
@@ -24,12 +46,20 @@ def basic_registry():
 
 def test_initialization():
     registry = PluginRegistry()
+<<<<<<< HEAD
     assert registry.items() == []
+=======
+    assert list(registry.items()) == []
+>>>>>>> upstream/master
 
 
 def test_decorator_registration():
     registry = PluginRegistry()
+<<<<<<< HEAD
     assert registry.items() == []
+=======
+    assert list(registry.items()) == []
+>>>>>>> upstream/master
 
     @registry.register
     class DecoratedPlugin(Plugin):
@@ -40,7 +70,11 @@ def test_decorator_registration():
 
 def test_method_registration():
     registry = PluginRegistry()
+<<<<<<< HEAD
     assert registry.items() == []
+=======
+    assert list(registry.items()) == []
+>>>>>>> upstream/master
 
     class MethodRegisteredPlugin(Plugin):
         pass
@@ -56,6 +90,7 @@ def test_contains(basic_registry):
 
 def test_delitem(basic_registry):
     with pytest.raises(KeyError):
+<<<<<<< HEAD
         del basic_registry["bla"]
 
     @basic_registry.register
@@ -63,16 +98,30 @@ def test_delitem(basic_registry):
         pass
 
     del basic_registry["DelPlugin"]
+=======
+        basic_registry.unregister("bla")
+
+    @basic_registry.register
+    class DelPlugin(Plugin):  # pylint: disable=unused-variable
+        pass
+
+    basic_registry.unregister("DelPlugin")
+>>>>>>> upstream/master
 
 
 def test_getitem(basic_registry):
     with pytest.raises(KeyError):
+<<<<<<< HEAD
         _unused = basic_registry["bla"]
+=======
+        _unused = basic_registry["bla"]  # noqa: F841
+>>>>>>> upstream/master
 
     assert basic_registry["Plugin"] == Plugin
 
 
 def test_values(basic_registry):
+<<<<<<< HEAD
     assert basic_registry.values() == [Plugin]
 
 
@@ -82,6 +131,17 @@ def test_items(basic_registry):
 
 def test_keys(basic_registry):
     assert basic_registry.keys() == ["Plugin"]
+=======
+    assert list(basic_registry.values()) == [Plugin]
+
+
+def test_items(basic_registry):
+    assert list(basic_registry.items()) == [("Plugin", Plugin)]
+
+
+def test_keys(basic_registry):
+    assert list(basic_registry.keys()) == ["Plugin"]
+>>>>>>> upstream/master
 
 
 def test_get(basic_registry):
@@ -89,3 +149,22 @@ def test_get(basic_registry):
     assert basic_registry.get("bla", "blub") == "blub"
 
     assert basic_registry.get("Plugin") == Plugin
+<<<<<<< HEAD
+=======
+
+
+class InstanceRegistry(cmk.utils.plugin_registry.Registry[Plugin]):
+    def plugin_name(self, instance):
+        return instance.__class__.__name__
+
+
+def test_decorate_classes_for_instance_registry():
+    registry = InstanceRegistry()
+    assert list(registry.items()) == []
+
+    @registry.register_instance
+    class DecoratedPlugin(Plugin):
+        pass
+
+    assert isinstance(registry.get("DecoratedPlugin"), DecoratedPlugin)
+>>>>>>> upstream/master

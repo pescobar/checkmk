@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: SAP HANA Status and Version
+=======
+title: SAP HANA: Status and Version
+>>>>>>> upstream/master
 agents: linux
 catalog: app/sap_hana
 license: GPL
@@ -9,12 +13,27 @@ description:
  {{mk_sap_hana}}.
 
  If the status is OK the check is OK. If it is UNKNOWN the check
+<<<<<<< HEAD
  is also UNKNOWN. Otherwise the check is CRIT. 
+=======
+ is also UNKNOWN. Otherwise the check is CRIT.
+>>>>>>> upstream/master
 
  This check is also cluster-aware.
 
 item:
+<<<<<<< HEAD
  The instance name
 
 inventory:
  One service is created per instance.
+=======
+ The sid instance name
+
+inventory:
+ One service is created for each instance.
+
+cluster:
+  On a cluster the first dataset of a node that is encountered
+  is evaluated.
+>>>>>>> upstream/master

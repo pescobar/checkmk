@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,6 +24,13 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 # <<<elasticsearch_indices>>>
 # filebeat-6.5.4 11492614 801366929
@@ -41,12 +49,21 @@ def parse_elasticsearch_indices(info):
             index, count, size = line
             if parsed.get(index):
                 # sum up count/size for index names which already appeared
+<<<<<<< HEAD
                 parsed[index] = parsed[index]._replace(count=parsed[index].count + int(count))
                 parsed[index] = parsed[index]._replace(size=parsed[index].size + int(size))
             else:
                 parsed.setdefault(index, ElasticIndex(
                     int(count),
                     int(size),
+=======
+                parsed[index] = parsed[index]._replace(count=parsed[index].count + float(count))
+                parsed[index] = parsed[index]._replace(size=parsed[index].size + float(size))
+            else:
+                parsed.setdefault(index, ElasticIndex(
+                    float(count),
+                    float(size),
+>>>>>>> upstream/master
                 ))
         except (IndexError, ValueError):
             pass
@@ -73,7 +90,11 @@ def check_elasticsearch_indices(item, params, item_data):
                            infoname="Total %s" % infotext)
 
         this_time = time.time()
+<<<<<<< HEAD
         rate = get_rate("elasticsearch_indices.%s.%s" % (name, item), this_time, value)
+=======
+        rate = get_rate("elasticsearch_indices.%s.%s" % (name, item), this_time, value) * 60
+>>>>>>> upstream/master
 
         avg_rate = get_average("elasticsearch_indices.%s.%s.avg" % (name, item), this_time, rate,
                                avg)

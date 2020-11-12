@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/env python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -27,6 +28,16 @@
 import abc
 from typing import Union, Optional, Tuple  # pylint: disable=unused-import
 import six
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+import abc
+from typing import List, Optional, Tuple, Type, TYPE_CHECKING, Union
+>>>>>>> upstream/master
 
 import cmk.gui.config as config
 from cmk.gui.i18n import _
@@ -37,6 +48,12 @@ from cmk.gui.permissions import (
     declare_permission,
 )
 
+<<<<<<< HEAD
+=======
+if TYPE_CHECKING:
+    from cmk.gui.htmllib import HTML
+
+>>>>>>> upstream/master
 
 @permission_section_registry.register
 class PermissionSectionIconsAndActions(PermissionSection):
@@ -53,6 +70,7 @@ class PermissionSectionIconsAndActions(PermissionSection):
         return True
 
 
+<<<<<<< HEAD
 class Icon(six.with_metaclass(abc.ABCMeta, object)):
     _custom_toplevel = None  # type: Optional[bool]
     _custom_sort_index = None  # type: Optional[int]
@@ -70,10 +88,27 @@ class Icon(six.with_metaclass(abc.ABCMeta, object)):
     @classmethod
     def override_sort_index(cls, sort_index):
         # type: (int) -> None
+=======
+class Icon(metaclass=abc.ABCMeta):
+    _custom_toplevel: Optional[bool] = None
+    _custom_sort_index: Optional[int] = None
+
+    @classmethod
+    def type(cls) -> str:
+        return "icon"
+
+    @classmethod
+    def override_toplevel(cls, toplevel: bool) -> None:
+        cls._custom_toplevel = toplevel
+
+    @classmethod
+    def override_sort_index(cls, sort_index: int) -> None:
+>>>>>>> upstream/master
         cls._custom_sort_index = sort_index
 
     @classmethod
     @abc.abstractmethod
+<<<<<<< HEAD
     def ident(cls):
         # type: () -> str
         raise NotImplementedError()
@@ -85,25 +120,45 @@ class Icon(six.with_metaclass(abc.ABCMeta, object)):
 
     def columns(self):
         # type: () -> List[str]
+=======
+    def ident(cls) -> str:
+        raise NotImplementedError()
+
+    @abc.abstractmethod
+    def render(self, what: str, row: dict, tags: list,
+               custom_vars: dict) -> Union[None, 'HTML', Tuple, str]:
+        raise NotImplementedError()
+
+    def columns(self) -> List[str]:
+>>>>>>> upstream/master
         """List of livestatus columns needed by this icon idependent of
         the queried table. The table prefix will be added to each column
         (e.g. name -> host_name)"""
         return []
 
+<<<<<<< HEAD
     def host_columns(self):
         # type: () -> List[str]
+=======
+    def host_columns(self) -> List[str]:
+>>>>>>> upstream/master
         """List of livestatus columns needed by this icon when it is
         displayed for a host row. The prefix host_ will be added to each
         column (e.g. name -> host_name)"""
         return []
 
+<<<<<<< HEAD
     def service_columns(self):
         # type: () -> List[str]
+=======
+    def service_columns(self) -> List[str]:
+>>>>>>> upstream/master
         """List of livestatus columns needed by this icon when it is
         displayed for a service row. The prefix host_ will be added to each
         column (e.g. description -> service_description)"""
         return []
 
+<<<<<<< HEAD
     def default_toplevel(self):
         # type: () -> bool
         """Whether or not to display the icon in the column or the action menu"""
@@ -115,17 +170,32 @@ class Icon(six.with_metaclass(abc.ABCMeta, object)):
 
     def toplevel(self):
         # type: () -> bool
+=======
+    def default_toplevel(self) -> bool:
+        """Whether or not to display the icon in the column or the action menu"""
+        return False
+
+    def default_sort_index(self) -> int:
+        return 30
+
+    def toplevel(self) -> bool:
+>>>>>>> upstream/master
         if self._custom_toplevel is not None:
             return self._custom_toplevel
         return self.default_toplevel()
 
+<<<<<<< HEAD
     def sort_index(self):
         # type: () -> int
+=======
+    def sort_index(self) -> int:
+>>>>>>> upstream/master
         if self._custom_sort_index is not None:
             return self._custom_sort_index
         return self.default_sort_index()
 
 
+<<<<<<< HEAD
 class IconRegistry(cmk.utils.plugin_registry.ClassRegistry):
     def plugin_base_class(self):
         return Icon
@@ -135,6 +205,14 @@ class IconRegistry(cmk.utils.plugin_registry.ClassRegistry):
 
     def registration_hook(self, plugin_class):
         ident = self.plugin_name(plugin_class)
+=======
+class IconRegistry(cmk.utils.plugin_registry.Registry[Type[Icon]]):
+    def plugin_name(self, instance):
+        return instance.ident()
+
+    def registration_hook(self, instance):
+        ident = self.plugin_name(instance)
+>>>>>>> upstream/master
         declare_permission("icons_and_actions.%s" % ident, ident,
                            _("Allow to see the icon %s in the host and service views") % ident,
                            config.builtin_role_ids)

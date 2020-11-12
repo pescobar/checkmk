@@ -1,36 +1,27 @@
-// +------------------------------------------------------------------+
-// |             ____ _               _        __  __ _  __           |
-// |            / ___| |__   ___  ___| | __   |  \/  | |/ /           |
-// |           | |   | '_ \ / _ \/ __| |/ /   | |\/| | ' /            |
-// |           | |___| | | |  __/ (__|   <    | |  | | . \            |
-// |            \____|_| |_|\___|\___|_|\_\___|_|  |_|_|\_\           |
-// |                                                                  |
-// | Copyright Mathias Kettner 2014             mk@mathias-kettner.de |
-// +------------------------------------------------------------------+
-//
-// This file is part of Check_MK.
-// The official homepage is at http://mathias-kettner.de/check_mk.
-//
-// check_mk is free software;  you can redistribute it and/or modify it
-// under the  terms of the  GNU General Public License  as published by
-// the Free Software Foundation in version 2.  check_mk is  distributed
-// in the hope that it will be useful, but WITHOUT ANY WARRANTY;  with-
-// out even the implied warranty of  MERCHANTABILITY  or  FITNESS FOR A
-// PARTICULAR PURPOSE. See the  GNU General Public License for more de-
-// tails. You should have  received  a copy of the  GNU  General Public
-// License along with GNU Make; see the file  COPYING.  If  not,  write
-// to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
-// Boston, MA 02110-1301 USA.
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the
+// terms and conditions defined in the file COPYING, which is part of this
+// source code package.
 
 #include "TableContactGroups.h"
+<<<<<<< HEAD
 #include <memory>
 #include "Column.h"
 #include "ContactGroupsMemberColumn.h"
+=======
+
+#include <memory>
+#include <vector>
+
+#include "Column.h"
+#include "ListLambdaColumn.h"
+>>>>>>> upstream/master
 #include "MonitoringCore.h"
-#include "OffsetStringColumn.h"
 #include "Query.h"
+#include "StringLambdaColumn.h"
 #include "nagios.h"
 
+<<<<<<< HEAD
 extern contactgroup *contactgroup_list;
 
 TableContactGroups::TableContactGroups(MonitoringCore *mc) : Table(mc) {
@@ -43,6 +34,29 @@ TableContactGroups::TableContactGroups(MonitoringCore *mc) : Table(mc) {
     addColumn(std::make_unique<ContactGroupsMemberColumn>(
         "members", "A list of all members of this contactgroup", -1, -1, -1,
         0));
+=======
+TableContactGroups::TableContactGroups(MonitoringCore *mc) : Table(mc) {
+    ColumnOffsets offsets{};
+    addColumn(std::make_unique<StringLambdaColumn<contactgroup>>(
+        "name", "The name of the contactgroup", offsets,
+        [](const contactgroup &r) {
+            return r.group_name == nullptr ? "" : r.group_name;
+        }));
+    addColumn(std::make_unique<StringLambdaColumn<contactgroup>>(
+        "alias", "The alias of the contactgroup", offsets,
+        [](const contactgroup &r) {
+            return r.alias == nullptr ? "" : r.alias;
+        }));
+    addColumn(std::make_unique<ListLambdaColumn<contactgroup>>(
+        "members", "A list of all members of this contactgroup", offsets,
+        [](const contactgroup &r) {
+            std::vector<std::string> names;
+            for (const auto *cm = r.members; cm != nullptr; cm = cm->next) {
+                names.emplace_back(cm->contact_ptr->name);
+            }
+            return names;
+        }));
+>>>>>>> upstream/master
 }
 
 std::string TableContactGroups::name() const { return "contactgroups"; }
@@ -50,8 +64,15 @@ std::string TableContactGroups::name() const { return "contactgroups"; }
 std::string TableContactGroups::namePrefix() const { return "contactgroup_"; }
 
 void TableContactGroups::answerQuery(Query *query) {
+<<<<<<< HEAD
     for (contactgroup *cg = contactgroup_list; cg != nullptr; cg = cg->next) {
         if (!query->processDataset(Row(cg))) {
+=======
+    extern contactgroup *contactgroup_list;
+    for (const auto *cg = contactgroup_list; cg != nullptr; cg = cg->next) {
+        const contactgroup *r = cg;
+        if (!query->processDataset(Row(r))) {
+>>>>>>> upstream/master
             break;
         }
     }

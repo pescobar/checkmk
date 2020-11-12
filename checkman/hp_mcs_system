@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: HPE MCS 200: System health
+=======
+title: HPE MCS 200: System Health
+>>>>>>> upstream/master
 agents: snmp
 catalog: hw/environment/hpe
 license: GPL
@@ -11,5 +15,13 @@ description:
 
  Additionally the serial number will be in the output.
 
+<<<<<<< HEAD
 inventory:
  Only one service will be created.
+=======
+item:
+ Name of the product
+
+inventory:
+ One service is created for the system health.
+>>>>>>> upstream/master

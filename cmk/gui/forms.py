@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -28,14 +29,36 @@ import base64
 import six
 
 from cmk.gui.htmllib import HTML
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+import base64
+from typing import Union, Callable, Dict, Optional, Tuple, List, Any, TYPE_CHECKING
+from six import ensure_binary, ensure_str
+
+import cmk.gui.escaping as escaping
+from cmk.gui.utils.html import HTML
+>>>>>>> upstream/master
 from cmk.gui.i18n import _
 from cmk.gui.globals import html
 from cmk.gui.exceptions import MKUserError
 
+<<<<<<< HEAD
+=======
+if TYPE_CHECKING:
+    from typing import Sequence
+    from cmk.gui.valuespec import Dictionary, ValueSpec, Transform
+
+>>>>>>> upstream/master
 g_header_open = False
 g_section_open = False
 
 
+<<<<<<< HEAD
 # An input function with the same call syntax as htmllib.textinput()
 def textinput(valuespec, varprefix, defvalue):
     if html.form_submitted(html.form_name):
@@ -46,11 +69,15 @@ def textinput(valuespec, varprefix, defvalue):
 
 
 def get_input(valuespec, varprefix):
+=======
+def get_input(valuespec: 'ValueSpec', varprefix: str) -> Any:
+>>>>>>> upstream/master
     value = valuespec.from_html_vars(varprefix)
     valuespec.validate_value(value, varprefix)
     return value
 
 
+<<<<<<< HEAD
 # TODO: Remove all call sites and clean this up! The mechanic of this
 # and the edit_dictionaries() is very uncommon compared to the other
 # usages of valuespecs.
@@ -61,6 +88,8 @@ def edit_dictionary(entries, value, **args):
     return result
 
 
+=======
+>>>>>>> upstream/master
 # Edit a list of several dictionaries. Those can either be dictionary
 # valuespec or just a list of elements. Each entry in dictionaries is
 # a pair of key and either a list of elements or a Dictionary.
@@ -68,6 +97,7 @@ def edit_dictionary(entries, value, **args):
 # we can drop edit_dictionaries()? At least the function for editing
 # several dictionaries at once.
 # TODO: Remove all call sites and clean this up! The mechanic of this
+<<<<<<< HEAD
 # and the edit_dictionary() is very uncommon compared to the other
 # usages of valuespecs.
 def edit_dictionaries(dictionaries,
@@ -126,12 +156,50 @@ def edit_dictionaries(dictionaries,
                 except Exception as e:
                     messages.append("%s: %s" % (entries.title() or _("Properties"), e))
                     html.add_user_error(None, e)
+=======
+# is very uncommon compared to the other usages of valuespecs.
+def edit_dictionaries(dictionaries: 'Sequence[Tuple[str, Union[Transform, Dictionary]]]',
+                      value: Dict[str, Any],
+                      focus: Optional[str] = None,
+                      hover_help: bool = True,
+                      validate: Optional[Callable[[Any], None]] = None,
+                      title: Optional[str] = None,
+                      method: str = "GET",
+                      preview: bool = False,
+                      varprefix: str = "",
+                      formname: str = "form",
+                      consume_transid: bool = True):
+
+    if html.request.get_ascii_input("filled_in") == formname and html.transaction_valid():
+        if not preview and consume_transid:
+            html.check_transaction()
+
+        messages: List[str] = []
+        new_value: Dict[str, Dict[str, Any]] = {}
+        for keyname, vs_dict in dictionaries:
+            dict_varprefix = varprefix + keyname
+            new_value[keyname] = {}
+            try:
+                edited_value = vs_dict.from_html_vars(dict_varprefix)
+                vs_dict.validate_value(edited_value, dict_varprefix)
+                new_value[keyname].update(edited_value)
+            except MKUserError as e:
+                messages.append("%s: %s" % (vs_dict.title() or _("Properties"), e))
+                html.add_user_error(e.varname, e)
+            except Exception as e:
+                messages.append("%s: %s" % (vs_dict.title() or _("Properties"), e))
+                html.add_user_error(None, e)
+>>>>>>> upstream/master
 
             if validate and not html.has_user_errors():
                 try:
                     validate(new_value[keyname])
                 except MKUserError as e:
+<<<<<<< HEAD
                     messages.append(e)
+=======
+                    messages.append("%s" % e)
+>>>>>>> upstream/master
                     html.add_user_error(e.varname, e)
 
         if messages:
@@ -144,6 +212,7 @@ def edit_dictionaries(dictionaries,
             return new_value
 
     html.begin_form(formname, method=method)
+<<<<<<< HEAD
     for keyname, title1, entries in sections:
         subvalue = value.get(keyname, {})
         if isinstance(entries, list):
@@ -175,12 +244,21 @@ def edit_dictionaries(dictionaries,
         if buttontext is None:
             buttontext = _("Save")
         html.button("save", buttontext)
+=======
+    for keyname, vs_dict in dictionaries:
+        dict_varprefix = varprefix + keyname
+        subvalue = value.get(keyname, {})
+        vs_dict.render_input_as_form(dict_varprefix, subvalue)
+
+    end()
+>>>>>>> upstream/master
     # Should be ignored be hidden_fields, but I do not dare to change it there
     html.request.del_var("filled_in")
     html.hidden_fields()
     html.end_form()
 
 
+<<<<<<< HEAD
 # Similar but for editing an arbitrary valuespec
 def edit_valuespec(vs,
                    value,
@@ -237,10 +315,23 @@ def edit_valuespec(vs,
 
 
 def header(title, isopen=True, table_id="", narrow=False, css=None):
+=======
+# New functions for painting forms
+
+
+def header(title: str,
+           isopen: bool = True,
+           table_id: str = "",
+           narrow: bool = False,
+           css: Optional[str] = None,
+           show_more_toggle: bool = False,
+           show_more_mode: bool = False) -> None:
+>>>>>>> upstream/master
     global g_header_open, g_section_open
     if g_header_open:
         end()
 
+<<<<<<< HEAD
     html.open_table(id_=table_id if table_id else None,
                     class_=["nform", "narrow" if narrow else None, css if css else None])
 
@@ -250,11 +341,34 @@ def header(title, isopen=True, table_id="", narrow=False, css=None):
         isopen=isopen,
         title=title,
         indent="nform")
+=======
+    id_ = ensure_str(base64.b64encode(ensure_binary(title)))
+    treename = html.form_name or "nform"
+    isopen = html.foldable_container_is_open(treename, id_, isopen)
+
+    html.open_table(id_=table_id if table_id else None,
+                    class_=[
+                        "nform",
+                        "narrow" if narrow else None,
+                        css if css else None,
+                        "open" if isopen else "closed",
+                        "more" if show_more_mode else None,
+                    ])
+
+    _begin_foldable_nform_container(
+        treename=treename,
+        id_=id_,
+        isopen=isopen,
+        title=title,
+        show_more_toggle=show_more_toggle,
+    )
+>>>>>>> upstream/master
     html.tr(html.render_td('', colspan=2))
     g_header_open = True
     g_section_open = False
 
 
+<<<<<<< HEAD
 # container without legend and content
 def container():
     global g_section_open
@@ -282,11 +396,72 @@ def section(title=None,
         html.close_td()
         html.close_tr()
     html.open_tr(id_=section_id, class_=[css], style="display:none;" if hide else None)
+=======
+def _begin_foldable_nform_container(
+    treename: str,
+    id_: str,
+    isopen: bool,
+    title: str,
+    show_more_toggle: bool,
+) -> bool:
+    isopen = html.foldable_container_is_open(treename, id_, isopen)
+    onclick = html.foldable_container_onclick(treename, id_, fetch_url=None)
+    img_id = html.foldable_container_img_id(treename, id_)
+    container_id = html.foldable_container_id(treename, id_)
+
+    html.open_thead()
+    html.open_tr(class_="heading")
+    html.open_td(id_="nform.%s.%s" % (treename, id_), onclick=onclick, colspan=2)
+    html.img(id_=img_id,
+             class_=["treeangle", "nform", "open" if isopen else "closed"],
+             src="themes/%s/images/tree_closed.png" % (html.get_theme()),
+             align="absbottom")
+    html.write_text(title)
+    if show_more_toggle:
+        html.more_button("foldable_" + id_, dom_levels_up=4)
+    html.close_td()
+    html.close_tr()
+    html.close_thead()
+    html.open_tbody(id_=container_id, class_=["open" if isopen else "closed"])
+
+    return isopen
+
+
+# container without legend and content
+def container() -> None:
+    global g_section_open
+    section_close()
+    html.open_tr()
+    html.open_td(colspan=2)
+    g_section_open = True
+
+
+def space() -> None:
+    html.tr(html.render_td('', colspan=2, style="height:15px;"))
+
+
+def section(title: Union[None, HTML, str] = None,
+            checkbox: Union[None, HTML, str, Tuple[str, bool, str]] = None,
+            section_id: Optional[str] = None,
+            simple: bool = False,
+            hide: bool = False,
+            legend: bool = True,
+            css: Optional[str] = None,
+            is_show_more: bool = False) -> None:
+    global g_section_open
+    section_close()
+    html.open_tr(
+        id_=section_id,
+        class_=[css, "show_more_mode" if is_show_more else "basic"],
+        style="display:none;" if hide else None,
+    )
+>>>>>>> upstream/master
 
     if legend:
         html.open_td(class_=["legend", "simple" if simple else None])
         if title:
             html.open_div(class_=["title", "withcheckbox" if checkbox else None],
+<<<<<<< HEAD
                           title=html.strip_tags(title))
             html.write(html.permissive_attrencode(title))
             html.span('.' * 100, class_="dots")
@@ -294,6 +469,15 @@ def section(title=None,
         if checkbox:
             html.open_div(class_="checkbox")
             if isinstance(checkbox, six.string_types + (HTML,)):
+=======
+                          title=escaping.strip_tags(title))
+            html.write(escaping.escape_text(title))
+            html.span('.' * 200, class_="dots")
+            html.close_div()
+        if checkbox:
+            html.open_div(class_="checkbox")
+            if isinstance(checkbox, (str, HTML)):
+>>>>>>> upstream/master
                 html.write(checkbox)
             else:
                 name, active, attrname = checkbox
@@ -306,6 +490,7 @@ def section(title=None,
     g_section_open = True
 
 
+<<<<<<< HEAD
 def end():
     global g_header_open
     g_header_open = False
@@ -313,6 +498,18 @@ def end():
         html.close_td()
         html.close_tr()
     html.end_foldable_container()
+=======
+def section_close() -> None:
+    if g_section_open:
+        html.close_td()
+        html.close_tr()
+
+
+def end() -> None:
+    global g_header_open
+    g_header_open = False
+    section_close()
+>>>>>>> upstream/master
     html.tr(html.render_td('', colspan=2), class_=["bottom"])
     html.close_tbody()
     html.close_table()

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // +------------------------------------------------------------------+
 // |             ____ _               _        __  __ _  __           |
 // |            / ___| |__   ___  ___| | __   |  \/  | |/ /           |
@@ -43,6 +44,33 @@ export class NodeVisualizationLayout {
     remove_style(style_instance) {
         let idx = this.style_configs.indexOf(style_instance.style_config)
         this.style_configs.splice(idx, 1)
+=======
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+// conditions defined in the file COPYING, which is part of this source code package.
+
+export class NodeVisualizationLayout {
+    constructor(viewport, id) {
+        this.id = id;
+        this.viewport = viewport;
+        this.reference_size = {};
+        this.style_configs = [];
+        this.overlay_config = {};
+        this.line_config = {style: "round"};
+    }
+
+    save_style(style_config) {
+        this.style_configs.push(style_config);
+    }
+
+    clear_styles() {
+        this.style_configs = [];
+    }
+
+    remove_style(style_instance) {
+        let idx = this.style_configs.indexOf(style_instance.style_config);
+        this.style_configs.splice(idx, 1);
+>>>>>>> upstream/master
     }
 
     serialize() {
@@ -51,6 +79,7 @@ export class NodeVisualizationLayout {
             style_configs: this.style_configs,
             overlay_config: this.overlay_config,
             line_config: this.line_config,
+<<<<<<< HEAD
         }
     }
 
@@ -59,5 +88,15 @@ export class NodeVisualizationLayout {
         this.style_configs  = data.style_configs
         this.overlay_config = data.overlay_config
         this.line_config = data.line_config
+=======
+        };
+    }
+
+    deserialize(data) {
+        this.reference_size = data.reference_size;
+        this.style_configs = data.style_configs;
+        this.overlay_config = data.overlay_config;
+        this.line_config = data.line_config;
+>>>>>>> upstream/master
     }
 }

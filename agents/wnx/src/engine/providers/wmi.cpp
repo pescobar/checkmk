@@ -21,9 +21,13 @@
 // normally always true
 constexpr bool g_add_wmi_status_column = true;
 
+<<<<<<< HEAD
 namespace cma {
 
 namespace provider {
+=======
+namespace cma::provider {
+>>>>>>> upstream/master
 
 // use cache if body is empty(typical for new client, which returns empty on
 // timeout) post process result
@@ -153,10 +157,14 @@ SubSection::Type GetSubSectionType(std::string_view name) noexcept {
     return SubSection::Type::sub;
 }
 
+<<<<<<< HEAD
 bool IsHeaderless(std::string_view name) noexcept {
     if (name == kMsExch) return true;
     return false;
 }
+=======
+bool IsHeaderless(std::string_view name) noexcept { return name == kMsExch; }
+>>>>>>> upstream/master
 
 void Wmi::setupByName() noexcept {
     // setup namespace and object
@@ -208,7 +216,11 @@ void Wmi::setupByName() noexcept {
 // time?
 std::pair<std::string, wtools::WmiStatus> GenerateWmiTable(
     const std::wstring& wmi_namespace, const std::wstring& wmi_object,
+<<<<<<< HEAD
     const std::vector<std::wstring> columns_table,
+=======
+    const std::vector<std::wstring>& columns_table,
+>>>>>>> upstream/master
     std::wstring_view separator) {
     using namespace wtools;
 
@@ -401,5 +413,9 @@ std::string SubSection::generateContent(Mode mode) {
     return {};
 }
 
+<<<<<<< HEAD
 }  // namespace provider
 };  // namespace cma
+=======
+};  // namespace cma::provider
+>>>>>>> upstream/master

@@ -5,12 +5,20 @@
 
 #include <filesystem>
 
+<<<<<<< HEAD
+=======
+#include "cap.h"
+>>>>>>> upstream/master
 #include "cfg.h"
 #include "cfg_details.h"
 #include "commander.h"
 #include "common/cfg_info.h"
 #include "common/mailslot_transport.h"
 #include "common/wtools.h"
+<<<<<<< HEAD
+=======
+#include "common/yaml.h"
+>>>>>>> upstream/master
 #include "install_api.h"
 #include "providers/mrpe.h"
 #include "read_file.h"
@@ -20,10 +28,18 @@
 #include "tools/_process.h"
 #include "tools/_tgt.h"
 #include "upgrade.h"
+<<<<<<< HEAD
 #include "yaml-cpp/yaml.h"
 
 // we want to avoid those data public
 namespace cma {
+=======
+
+// we want to avoid those data public
+namespace cma {
+void ResetCleanOnExit();
+
+>>>>>>> upstream/master
 namespace details {
 extern bool G_Service;
 extern bool G_Test;
@@ -83,7 +99,11 @@ TEST(Cma, Commander) {
     cma::carrier::CoreCarrier cc;
     // "mail"
     auto ret = cc.establishCommunication(internal_port);
+<<<<<<< HEAD
     EXPECT_TRUE(ret);
+=======
+    EXPECT_TRUE(ret) << fmt::format("Failed port '{}'", internal_port);
+>>>>>>> upstream/master
     cc.sendCommand(cma::commander::kMainPeer, "a");
     cma::tools::sleep(100ms);
     enabled = GetEnabledFlag(true);
@@ -271,6 +291,26 @@ TEST(CmaCfg, InstallProtocol) {
     EXPECT_TRUE(name.empty());
 }
 
+<<<<<<< HEAD
+=======
+TEST(CmaCfg, Modules) {
+    ASSERT_TRUE(!cma::cfg::GetUserModulesDir().empty());
+    ASSERT_TRUE(std::wstring(cma::cfg::dirs::kUserModules) == L"modules");
+    ASSERT_TRUE(std::wstring(cma::cfg::dirs::kInstalledModules) == L"modules");
+    ASSERT_TRUE(envs::kMkModulesDirName == "MK_MODULESDIR");
+    auto all_dir = details::AllDirTable();
+
+    ASSERT_TRUE(std::any_of(
+        std::begin(all_dir), std::end(all_dir),
+        [](std::wstring_view dir) { return dir == dirs::kUserModules; }));
+
+    auto removable_dir = details::AllDirTable();
+    ASSERT_TRUE(std::any_of(
+        std::begin(removable_dir), std::end(removable_dir),
+        [](std::wstring_view dir) { return dir == dirs::kUserModules; }));
+}
+
+>>>>>>> upstream/master
 TEST(CmaCfg, ProcessPluginEnvironment) {
     //
     cma::OnStartTest();
@@ -280,7 +320,11 @@ TEST(CmaCfg, ProcessPluginEnvironment) {
             pairs.emplace_back(std::string(name), std::string(value));
         });
 
+<<<<<<< HEAD
     EXPECT_EQ(pairs.size(), 9);
+=======
+    EXPECT_EQ(pairs.size(), 10) << "Count of environment variables";
+>>>>>>> upstream/master
     auto ret = std::none_of(pairs.begin(), pairs.end(),
                             [](std::pair<std::string, std::string> p) {
                                 return p.first.empty() || p.second.empty();
@@ -375,6 +419,25 @@ TEST(CmaCfg, ReloadCfg) {
     EXPECT_TRUE(id2 > id);
 }
 
+<<<<<<< HEAD
+=======
+TEST(Cma, CleanApi) {
+    auto& alert = cma::G_UninstallALert;
+    ASSERT_FALSE(alert.isSet()) << "initial always false";
+    alert.clear();
+    ASSERT_FALSE(alert.isSet());
+    alert.set();
+    ASSERT_FALSE(alert.isSet())
+        << "forbidden to set for non service executable";
+    cma::details::G_Service = true;
+    alert.set();
+    EXPECT_TRUE(alert.isSet());
+    cma::details::G_Service = false;
+    alert.clear();
+    EXPECT_FALSE(alert.isSet());
+}
+
+>>>>>>> upstream/master
 TEST(Cma, PushPop) {
     cma::OnStartTest();
     namespace fs = std::filesystem;
@@ -441,3 +504,161 @@ TEST(CmaCfg, RestartBinaries) {
 }
 
 }  // namespace cma::srv
+<<<<<<< HEAD
+=======
+
+namespace cma::cfg {
+class CmaCfg_F : public ::testing::Test {
+protected:
+    void SetUp() override {
+        cma::OnStartTest();
+        tst::SafeCleanTempDir();
+        cap_base_ = cma::cfg::GetUserDir();
+        cap_base_ /= "plugins.test.cap";
+
+        auto [r, u] = tst::CreateInOut();
+        root_ = r.wstring();
+        user_ = u.wstring();
+        GetCfg().pushFolders(root_, user_);
+    }
+
+    void TearDown() override {
+        GetCfg().popFolders();
+        tst::SafeCleanTempDir();
+    }
+
+    auto prepareAll() {
+        namespace fs = std::filesystem;
+        fs::path pd = GetUserDir();
+        details::CreateTree(pd);
+        auto table = details::AllDirTable();
+        auto table_removed = details::RemovableDirTable();
+        for (auto& n : table) {
+            tst::ConstructFile(pd / n / "1.tmp", wtools::ConvertToUTF8(n));
+        }
+
+        user_folders_count_ = table.size() - table_removed.size();
+
+        return std::make_tuple(pd, table, table_removed);
+    }
+
+    std::wstring root_;
+    std::wstring user_;
+    std::filesystem::path cap_base_;
+    size_t user_folders_count_ = 0;
+};
+
+TEST_F(CmaCfg_F, CreateTree) {
+    namespace fs = std::filesystem;
+    ASSERT_TRUE(GetRootDir() == root_);
+    ASSERT_TRUE(GetUserDir() == user_);
+    fs::path pd = GetUserDir();
+    details::CreateTree(pd);
+    auto table = details::AllDirTable();
+    for (auto& n : table)
+        ASSERT_TRUE(fs::is_directory(pd / n))
+            << "Doesn't exist: " << n.data() << "\n";
+}
+
+TEST_F(CmaCfg_F, CleanInstallOnInvalidFolder) {
+    namespace fs = std::filesystem;
+
+    // prepare damaged folder
+    fs::path user_dir = cma::cfg::GetUserDir();
+    fs::remove_all(user_dir / dirs::kBakery);
+
+    for (auto m : {details::CleanMode::none, details::CleanMode::smart,
+                   details::CleanMode::all})
+        ASSERT_FALSE(details::CleanDataFolder(m))
+            << "Tmp Folder cannot be processed";
+}
+
+TEST_F(CmaCfg_F, CleanDataFolderNoneAllSmartEmpty) {
+    namespace fs = std::filesystem;
+    ASSERT_TRUE(GetRootDir() == root_);
+    ASSERT_TRUE(GetUserDir() == user_);
+    auto [pd, table, table_removed] = prepareAll();
+
+    ASSERT_TRUE(details::CleanDataFolder(details::CleanMode::none));
+
+    for (auto& n : table) {
+        EXPECT_TRUE(fs::exists(pd / n / "1.tmp"))
+            << "directory doesn't exist: " << n.data();
+    }
+
+    // check that all removes all folders
+    ASSERT_TRUE(details::CleanDataFolder(details::CleanMode::all));
+
+    for (auto& n : table) {
+        EXPECT_TRUE(!fs::exists(pd / n));
+    }
+
+    // check that smart removes also all empty folders
+    details::CreateTree(pd);
+    for (auto& n : table_removed) {
+        EXPECT_TRUE(fs::exists(pd / n));
+    }
+    details::CleanDataFolder(details::CleanMode::smart);
+
+    for (auto& n : table) {
+        EXPECT_TRUE(!fs::exists(pd / n));
+    }
+}
+
+TEST_F(CmaCfg_F, CleanDataFolderSmart) {
+    namespace fs = std::filesystem;
+    ASSERT_TRUE(GetRootDir() == root_);
+    ASSERT_TRUE(GetUserDir() == user_);
+    auto [pd, table, table_removed] = prepareAll();
+
+    // test additional preparation
+    ASSERT_TRUE(fs::exists(cap_base_));
+    auto [tgt, ignored] = cap::GetInstallPair(files::kCapFile);
+    ASSERT_TRUE(fs::copy_file(cap_base_, tgt));
+
+    std::vector<std::wstring> files;
+    cap::Process(tgt.u8string(), cap::ProcMode::install, files);
+    ASSERT_TRUE(files.size() > 0);
+    for (auto& f : files) {
+        EXPECT_TRUE(fs::exists(f));
+    }
+
+    auto [target_yml_example, ignore_it_again] = cap::GetExampleYmlNames();
+    tst::ConstructFile(target_yml_example, "aaa");
+    tst::ConstructFile(pd / files::kUserYmlFile, "aaa");
+
+    ASSERT_TRUE(details::CleanDataFolder(details::CleanMode::smart));
+    for (auto& f : files) {
+        EXPECT_TRUE(!fs::exists(f));
+    }
+    EXPECT_TRUE(!fs::exists(target_yml_example));
+    EXPECT_TRUE(!fs::exists(pd / files::kUserYmlFile));
+
+    for (auto& n : table_removed) {
+        EXPECT_TRUE(!fs::exists(pd / n)) << "directory exists: " << n.data();
+    }
+
+    // restore removed folders
+    details::CreateTree(pd);
+
+    // different user and example yml
+    tst::ConstructFile(target_yml_example, "aaa");
+    tst::ConstructFile(pd / files::kUserYmlFile, "aaabb");
+
+    ASSERT_TRUE(details::CleanDataFolder(details::CleanMode::smart));
+
+    EXPECT_TRUE(!fs::exists(target_yml_example));
+    EXPECT_TRUE(fs::exists(pd / files::kUserYmlFile))
+        << "this file must be left on disk";
+
+    int exists_count = 0;
+    for (auto& n : table) {
+        if (fs::exists(pd / n / "1.tmp")) ++exists_count;
+    }
+
+    EXPECT_EQ(exists_count, user_folders_count_)
+        << "you delete wrong count of folders";
+}
+
+}  // namespace cma::cfg
+>>>>>>> upstream/master

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -35,6 +36,23 @@ if sys.version_info[0] >= 3:
     from pathlib import Path  # pylint: disable=import-error
 else:
     from pathlib2 import Path
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+"""Code for processing Checkmk werks. This is needed by several components,
+so it's best place is in the central library."""
+
+import itertools
+import json
+from pathlib import Path
+import re
+from typing import Any, Dict
+
+from six import ensure_str
+>>>>>>> upstream/master
 
 import cmk.utils.paths
 
@@ -44,7 +62,11 @@ from cmk.utils.i18n import _
 
 # This class is used to avoid repeated construction of dictionaries, including
 # *all* translation values.
+<<<<<<< HEAD
 class WerkTranslator(object):
+=======
+class WerkTranslator:
+>>>>>>> upstream/master
     def __init__(self):
         super(WerkTranslator, self).__init__()
         self._classes = {
@@ -67,7 +89,11 @@ class WerkTranslator(object):
             "inv": _("HW/SW inventory"),
 
             # CEE
+<<<<<<< HEAD
             "cmc": _("The Check_MK Micro Core"),
+=======
+            "cmc": _("The Checkmk Micro Core"),
+>>>>>>> upstream/master
             "setup": _("Setup, site management"),
             "config": _("Configuration generation"),
             "inline-snmp": _("Inline SNMP"),
@@ -95,26 +121,42 @@ class WerkTranslator(object):
         }
 
     def classes(self):
+<<<<<<< HEAD
         return self._classes.iteritems()
+=======
+        return list(self._classes.items())
+>>>>>>> upstream/master
 
     def class_of(self, werk):
         return self._classes[werk["class"]]
 
     def components(self):
+<<<<<<< HEAD
         return self._components.iteritems()
+=======
+        return list(self._components.items())
+>>>>>>> upstream/master
 
     def component_of(self, werk):
         c = werk["component"]
         return self._components.get(c, c)
 
     def levels(self):
+<<<<<<< HEAD
         return self._levels.iteritems()
+=======
+        return list(self._levels.items())
+>>>>>>> upstream/master
 
     def level_of(self, werk):
         return self._levels[werk["level"]]
 
     def compatibilities(self):
+<<<<<<< HEAD
         return self._compatibilities.iteritems()
+=======
+        return list(self._compatibilities.items())
+>>>>>>> upstream/master
 
     def compatibility_of(self, werk):
         return self._compatibilities[werk["compatible"]]
@@ -125,18 +167,29 @@ def _compiled_werks_dir():
 
 
 def load():
+<<<<<<< HEAD
     werks = {}
     # The suppressions are needed because of https://github.com/PyCQA/pylint/issues/1660
     for file_name in itertools.chain(
             _compiled_werks_dir().glob("werks"),  # pylint: disable=no-member
             _compiled_werks_dir().glob("werks-*")):  # pylint: disable=no-member
+=======
+    werks: Dict[int, Dict[str, Any]] = {}
+    # The suppressions are needed because of https://github.com/PyCQA/pylint/issues/1660
+    for file_name in itertools.chain(_compiled_werks_dir().glob("werks"),
+                                     _compiled_werks_dir().glob("werks-*")):
+>>>>>>> upstream/master
         werks.update(load_precompiled_werks_file(file_name))
     return werks
 
 
 def load_precompiled_werks_file(path):
     with path.open() as fp:
+<<<<<<< HEAD
         return {int(werk_id): werk for werk_id, werk in json.load(fp).iteritems()}
+=======
+        return {int(werk_id): werk for werk_id, werk in json.load(fp).items()}
+>>>>>>> upstream/master
 
 
 def load_raw_files(werks_dir):
@@ -176,7 +229,11 @@ _ALLOWED_WERK_FIELDS = _REQUIRED_WERK_FIELDS | _OPTIONAL_WERK_FIELDS
 
 
 def _load_werk(path):
+<<<<<<< HEAD
     werk = {
+=======
+    werk: Dict[str, Any] = {
+>>>>>>> upstream/master
         "body": [],
         "compatible": "compat",
         "edition": "cre",
@@ -208,8 +265,13 @@ def _load_werk(path):
 
 
 def write_precompiled_werks(path, werks):
+<<<<<<< HEAD
     with path.open("wb") as fp:
         json.dump(werks, fp, check_circular=False)
+=======
+    with path.open("w", encoding="utf-8") as fp:
+        fp.write(ensure_str(json.dumps(werks, check_circular=False)))
+>>>>>>> upstream/master
 
 
 def write_as_text(werks, f, write_version=True):
@@ -222,10 +284,17 @@ def write_as_text(werks, f, write_version=True):
     for version, version_group in itertools.groupby(werklist, key=lambda w: w["version"]):
         # write_version=False is used by the announcement mails
         if write_version:
+<<<<<<< HEAD
             f.write("%s:\n" % version)
         for component, component_group in itertools.groupby(version_group,
                                                             key=translator.component_of):
             f.write("    %s:\n" % component.encode("utf-8"))
+=======
+            f.write("%s:\n" % ensure_str(version))
+        for component, component_group in itertools.groupby(version_group,
+                                                            key=translator.component_of):
+            f.write("    %s:\n" % ensure_str(component))
+>>>>>>> upstream/master
             for werk in component_group:
                 write_werk_as_text(f, werk)
             f.write("\n")
@@ -244,7 +313,11 @@ def write_werk_as_text(f, werk):
     else:
         omit = ""
 
+<<<<<<< HEAD
     f.write("    * %04d%s %s%s\n" % (werk["id"], prefix, werk["title"].encode("utf-8"), omit))
+=======
+    f.write("    * %04d%s %s%s\n" % (werk["id"], prefix, ensure_str(werk["title"]), omit))
+>>>>>>> upstream/master
 
     if werk["compatible"] == "incomp":
         f.write("            NOTE: Please refer to the migration notes!\n")
@@ -276,6 +349,7 @@ def sort_by_date(werks):
     return sorted(werks, key=lambda w: w["date"], reverse=True)
 
 
+<<<<<<< HEAD
 # Parses versions of Check_MK and converts them into comparable integers.
 # This does not handle daily build numbers, only official release numbers.
 # 1.2.4p1   -> 01020450001
@@ -317,5 +391,99 @@ def parse_check_mk_version(v):
     elif rest[0] == 'b':
         num, rest = extract_number(rest[1:])
         val = 20000 + num * 100
+=======
+VERSION_PATTERN = re.compile(r'^([.\-a-z]+)?(\d+)')
+
+
+# Parses versions of Checkmk and converts them into comparable integers.
+def parse_check_mk_version(v: str) -> int:
+    """Figure out how to compare versions semantically.
+
+    Parses versions of Checkmk and converts them into comparable integers.
+
+    >>> p = parse_check_mk_version
+
+    All dailies are built equal.
+
+    >>> p("1.5.0-2019.10.10")
+    1050090000
+
+    >>> p("1.6.0-2019.10.10")
+    1060090000
+
+    >>> p("1.5.0-2019.10.24") == p("1.5.0-2018.05.05")
+    True
+
+    >>> p('1.2.4p1')
+    1020450001
+
+    >>> p('1.2.4')
+    1020450000
+
+    >>> p('1.2.4b1')
+    1020420100
+
+    >>> p('1.2.3i1p1')
+    1020310101
+
+    >>> p('1.2.3i1')
+    1020310100
+
+    >>> p('1.2.4p10')
+    1020450010
+
+    >>> p("1.5.0") > p("1.5.0p22")
+    False
+
+    >>> p("1.5.0-2019.10.10") > p("1.5.0p22")
+    True
+
+    >>> p("1.5.0p13") == p("1.5.0p13")
+    True
+
+    >>> p("1.5.0p13") > p("1.5.0p12")
+    True
+
+    """
+    parts = v.split('.', 2)
+
+    while len(parts) < 3:
+        parts.append("0")
+
+    var_map = {
+        # identifier: (base-val, multiplier)
+        's': (0, 1),  # sub
+        'i': (10000, 100),  # innovation
+        'b': (20000, 100),  # beta
+        'p': (50000, 1),  # patch-level
+        '-': (90000, 0),  # daily
+        '.': (90000, 0),  # daily
+    }
+
+    def _extract_rest(_rest):
+        for match in VERSION_PATTERN.finditer(_rest):
+            _var_type = match.group(1) or 's'
+            _num = match.group(2)
+            return _var_type, int(_num), _rest[match.end():]
+        # Default fallback.
+        return 'p', 0, ''
+
+    major, minor, rest = parts
+    _, sub, rest = _extract_rest(rest)
+
+    if rest.startswith("-sandbox"):
+        return int('%02d%02d%02d%05d' % (int(major), int(minor), sub, 0))
+
+    # Only add the base once, else we could do it in the loop.
+    var_type, num, rest = _extract_rest(rest)
+    base, multiply = var_map[var_type]
+    val = base
+    val += num * multiply
+
+    while rest:
+        var_type, num, rest = _extract_rest(rest)
+        _, multiply = var_map[var_type]
+        val += num * multiply
+>>>>>>> upstream/master
 
     return int('%02d%02d%02d%05d' % (int(major), int(minor), sub, val))

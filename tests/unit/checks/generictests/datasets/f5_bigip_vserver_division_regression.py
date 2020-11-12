@@ -1,5 +1,17 @@
+<<<<<<< HEAD
 # -*- encoding: utf-8
 # yapf: disable
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# yapf: disable
+# type: ignore
+
+>>>>>>> upstream/master
 
 
 checkname = 'f5_bigip_vserver'
@@ -36,9 +48,15 @@ checks = {'': [(u'VS_BM',
                  (0,
                   'Client connections: 0',
                   [('connections', 0, None, None, None, None),
+<<<<<<< HEAD
                    ('connections_duration_max', 76766, None, None, None, None),
                    ('connections_duration_mean', 10744.0, None, None, None, None),
                    ('connections_duration_min', 38, None, None, None, None),
+=======
+                   ('connections_duration_max', 76.766, None, None, None, None),
+                   ('connections_duration_mean', 10.744, None, None, None, None),
+                   ('connections_duration_min', 0.038, None, None, None, None),
+>>>>>>> upstream/master
                    ('connections_rate', 0.0, None, None, None, None),
                    ('if_in_octets', 0.0, None, None, None, None),
                    ('if_in_pkts', 0.0, None, None, None, None),

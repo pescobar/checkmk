@@ -1,10 +1,15 @@
 properties([
+<<<<<<< HEAD
+=======
+    buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '7', numToKeepStr: '14')),
+>>>>>>> upstream/master
     pipelineTriggers([triggers: [upstream(upstreamProjects: "cmk_master/windows-agent-build", threshold: hudson.model.Result.SUCCESS)]]),
 ])
 
 node('windows') {
     stage('git checkout') {
         checkout(scm)
+<<<<<<< HEAD
     }
     stage('download artifacts') {
         dir('artefacts') {
@@ -18,4 +23,11 @@ node('windows') {
     stage('windows integration test') {
         bat 'cd agents\\wnx && call call_integration_tests.cmd'
     }
+=======
+        windows = load 'buildscripts/scripts/lib/windows.groovy'
+    }
+    windows.build(
+        TARGET: 'test_integration'
+    )
+>>>>>>> upstream/master
 }

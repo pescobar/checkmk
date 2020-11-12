@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // +------------------------------------------------------------------+
 // |             ____ _               _        __  __ _  __           |
 // |            / ___| |__   ___  ___| | __   |  \/  | |/ /           |
@@ -21,6 +22,11 @@
 // License along with GNU Make; see the file  COPYING.  If  not,  write
 // to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 // Boston, MA 02110-1301 USA.
+=======
+// Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+// This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+// conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 
 import * as utils from "utils";
 
@@ -30,8 +36,12 @@ import * as utils from "utils";
 
 var g_hover_menu = null;
 
+<<<<<<< HEAD
 export function hide()
 {
+=======
+export function hide() {
+>>>>>>> upstream/master
     if (!g_hover_menu) {
         return;
     }
@@ -41,16 +51,24 @@ export function hide()
     hover_menu.parentNode.removeChild(hover_menu);
 }
 
+<<<<<<< HEAD
 export function show(event, code)
 {
+=======
+export function show(event, code) {
+>>>>>>> upstream/master
     event = event || window.event;
     add();
     update_content(code);
     update_position(event);
 }
 
+<<<<<<< HEAD
 export function add()
 {
+=======
+export function add() {
+>>>>>>> upstream/master
     if (g_hover_menu) {
         return;
     }
@@ -60,8 +78,12 @@ export function add()
     document.body.appendChild(g_hover_menu);
 }
 
+<<<<<<< HEAD
 export function update_content(code)
 {
+=======
+export function update_content(code) {
+>>>>>>> upstream/master
     if (!g_hover_menu) {
         return;
     }
@@ -70,8 +92,12 @@ export function update_content(code)
     utils.execute_javascript_by_object(g_hover_menu);
 }
 
+<<<<<<< HEAD
 export function update_position(event)
 {
+=======
+export function update_position(event) {
+>>>>>>> upstream/master
     if (!g_hover_menu) {
         return;
     }
@@ -79,18 +105,32 @@ export function update_position(event)
     var hoverSpacer = 5;
 
     // document.body.scrollTop does not work in IE
+<<<<<<< HEAD
     var scrollTop = document.body.scrollTop ? document.body.scrollTop :
         document.documentElement.scrollTop;
     var scrollLeft = document.body.scrollLeft ? document.body.scrollLeft :
         document.documentElement.scrollLeft;
+=======
+    var scrollTop = document.body.scrollTop
+        ? document.body.scrollTop
+        : document.documentElement.scrollTop;
+    var scrollLeft = document.body.scrollLeft
+        ? document.body.scrollLeft
+        : document.documentElement.scrollLeft;
+>>>>>>> upstream/master
 
     var x = event.clientX;
     var y = event.clientY;
 
     // hide the menu first to avoid an "up-then-over" visual effect
     g_hover_menu.style.display = "block";
+<<<<<<< HEAD
     g_hover_menu.style.left = (x + hoverSpacer + scrollLeft) + "px";
     g_hover_menu.style.top = (y + hoverSpacer + scrollTop) + "px";
+=======
+    g_hover_menu.style.left = x + hoverSpacer + scrollLeft + "px";
+    g_hover_menu.style.top = y + hoverSpacer + scrollTop + "px";
+>>>>>>> upstream/master
 
     /**
      * Check if the menu is "in screen" or too large.
@@ -103,7 +143,11 @@ export function update_position(event)
     }
 
     if (!hoverPosAndSizeOk) {
+<<<<<<< HEAD
         g_hover_menu.style.left = (x - hoverSpacer - g_hover_menu.clientWidth) + "px";
+=======
+        g_hover_menu.style.left = x - hoverSpacer - g_hover_menu.clientWidth + "px";
+>>>>>>> upstream/master
 
         if (is_on_screen(g_hover_menu, hoverSpacer)) {
             hoverPosAndSizeOk = true;
@@ -114,12 +158,17 @@ export function update_position(event)
     // and fill the whole screen width
     if (!is_on_screen(g_hover_menu, hoverSpacer)) {
         g_hover_menu.style.left = hoverSpacer + scrollLeft + "px";
+<<<<<<< HEAD
         g_hover_menu.style.width = utils.page_width() - (2*hoverSpacer) + "px";
+=======
+        g_hover_menu.style.width = utils.page_width() - 2 * hoverSpacer + "px";
+>>>>>>> upstream/master
     }
 
     var hoverTop = parseInt(g_hover_menu.style.top.replace("px", ""));
     // Only move the menu to the top when the new top will not be
     // out of sight
+<<<<<<< HEAD
     if (hoverTop +g_hover_menu.clientHeight > utils.page_height() && hoverTop -g_hover_menu.clientHeight >= 0) {
         g_hover_menu.style.top = hoverTop -g_hover_menu.clientHeight - hoverSpacer + "px";
     }
@@ -130,6 +179,21 @@ function is_on_screen(hoverMenu, hoverSpacer)
     var hoverLeft = parseInt(hoverMenu.style.left.replace("px", ""));
     var scrollLeft = document.body.scrollLeft ? document.body.scrollLeft :
         document.documentElement.scrollLeft;
+=======
+    if (
+        hoverTop + g_hover_menu.clientHeight > utils.page_height() &&
+        hoverTop - g_hover_menu.clientHeight >= 0
+    ) {
+        g_hover_menu.style.top = hoverTop - g_hover_menu.clientHeight - hoverSpacer + "px";
+    }
+}
+
+function is_on_screen(hoverMenu, hoverSpacer) {
+    var hoverLeft = parseInt(hoverMenu.style.left.replace("px", ""));
+    var scrollLeft = document.body.scrollLeft
+        ? document.body.scrollLeft
+        : document.documentElement.scrollLeft;
+>>>>>>> upstream/master
 
     if (hoverLeft + hoverMenu.clientWidth >= utils.page_width() - scrollLeft) {
         return false;

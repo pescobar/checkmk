@@ -1,5 +1,17 @@
+<<<<<<< HEAD
 # -*- encoding: utf-8
 # yapf: disable
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# yapf: disable
+# type: ignore
+
+>>>>>>> upstream/master
 
 
 checkname = 'akcp_exp_humidity'
@@ -16,4 +28,8 @@ checks = {'': [(u'Dual Humidity Port 1',
                 [(2, 'State: sensor error', []),
                  (1,
                   '30.0% (warn/crit below 35.0%/30.0%)',
+<<<<<<< HEAD
                   [('humidity', 30, 60, 65, 0, 100)])])]}
+=======
+                  [('humidity', 30, 60, 65, 0, 100)])])]}
+>>>>>>> upstream/master

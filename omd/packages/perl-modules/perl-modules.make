@@ -3,6 +3,7 @@ PERL_MODULES_VERS := $(OMD_VERSION)
 PERL_MODULES_DIR := $(PERL_MODULES)-$(PERL_MODULES_VERS)
 
 PERL_MODULES_BUILD := $(BUILD_HELPER_DIR)/$(PERL_MODULES_DIR)-build
+<<<<<<< HEAD
 PERL_MODULES_INSTALL := $(BUILD_HELPER_DIR)/$(PERL_MODULES_DIR)-install
 PERL_MODULES_SKEL := $(BUILD_HELPER_DIR)/$(PERL_MODULES_DIR)-skel
 
@@ -13,6 +14,21 @@ perl-modules: $(PERL_MODULES_BUILD)
 perl-modules-install: $(PERL_MODULES_INSTALL)
 
 perl-modules-skel: $(PERL_MODULES_SKEL)
+=======
+PERL_MODULES_INTERMEDIATE_INSTALL := $(BUILD_HELPER_DIR)/$(PERL_MODULES_DIR)-install-intermediate
+PERL_MODULES_INSTALL := $(BUILD_HELPER_DIR)/$(PERL_MODULES_DIR)-install
+
+PERL_MODULES_INSTALL_DIR := $(INTERMEDIATE_INSTALL_BASE)/$(PERL_MODULES_DIR)
+PERL_MODULES_BUILD_DIR := $(PACKAGE_BUILD_DIR)/$(PERL_MODULES_DIR)
+PERL_MODULES_WORK_DIR := $(PACKAGE_WORK_DIR)/$(PERL_MODULES_DIR)
+
+PERL_MODULES_BUILD_SRCDIR := $(PERL_MODULES_BUILD_DIR)/src
+PERL_MODULES_BUILD_DESTDIR := $(PERL_MODULES_BUILD_DIR)/dest
+PERL_MODULES_BUILD_PERL5LIB := $(PERL_MODULES_BUILD_DESTDIR)/lib/perl5
+
+# Used by other packages
+PACKAGE_PERL_MODULES_PERL5LIB := $(PERL_MODULES_INSTALL_DIR)/lib/perl5
+>>>>>>> upstream/master
 
 PERL_MODULES_LIST1 := \
                    ExtUtils-MakeMaker-7.04.tar.gz \
@@ -103,6 +119,7 @@ PERL_MODULES_LIST2 := \
                   Nagios-Plugin-0.36.tar.gz \
                   DateTime-1.18.tar.gz
 
+<<<<<<< HEAD
 $(PACKAGE_DIR)/$(PERL_MODULES)/src/%-patched.tar.gz: $(PACKAGE_DIR)/$(PERL_MODULES)/src/%.tar.gz
 	tar xf $<
 	for P in $$($(LS) $(PACKAGE_DIR)/$(PERL_MODULES)/patches/$**.dif); do \
@@ -119,16 +136,43 @@ $(PERL_MODULES_BUILD): $(PACKAGE_DIR)/$(PERL_MODULES)/src/Crypt-SSLeay-0.72-patc
 	$(RSYNC) $(PACKAGE_DIR)/$(PERL_MODULES)/src/. $(PACKAGE_PERL_MODULES_DESTDIR)/src/.
 	$(RSYNC) $(PACKAGE_DIR)/$(PERL_MODULES)/build_module.pl $(PACKAGE_DIR)/$(PERL_MODULES)/lib $(PACKAGE_PERL_MODULES_DESTDIR)/src/.
 	for F in $$(ls $(PACKAGE_PERL_MODULES_DESTDIR)/src/*-patched.tar.gz); do \
+=======
+# TODO: Use PERL_MODULES_WORK_DIR for $(PACKAGE_DIR)/$(PERL_MODULES)/src/%-patched.tar.gz
+$(PACKAGE_DIR)/$(PERL_MODULES)/src/%-patched.tar.gz: $(PACKAGE_DIR)/$(PERL_MODULES)/src/%.tar.gz
+	$(MKDIR) $(PERL_MODULES_WORK_DIR)
+	tar xf $< -C $(PERL_MODULES_WORK_DIR)
+	set -e ; for P in $$($(LS) $(PACKAGE_DIR)/$(PERL_MODULES)/patches/$**.dif); do \
+	    $(ECHO) "applying $$P..." ; \
+	    $(PATCH) -p1 -b -d $(PERL_MODULES_WORK_DIR)/$* < $$P ; \
+	done
+	tar -cz -C $(PERL_MODULES_WORK_DIR) -f $@ $*
+
+
+$(PERL_MODULES_BUILD): $(PACKAGE_DIR)/$(PERL_MODULES)/src/Crypt-SSLeay-0.72-patched.tar.gz
+	$(MKDIR) $(PERL_MODULES_BUILD_DESTDIR)
+	$(MKDIR) $(PERL_MODULES_BUILD_SRCDIR)
+	$(RSYNC) $(PACKAGE_DIR)/$(PERL_MODULES)/src/. $(PERL_MODULES_BUILD_SRCDIR)/.
+	$(RSYNC) $(PACKAGE_DIR)/$(PERL_MODULES)/build_module.pl $(PACKAGE_DIR)/$(PERL_MODULES)/lib $(PERL_MODULES_BUILD_SRCDIR)/.
+	set -e ; for F in $$(ls $(PERL_MODULES_BUILD_SRCDIR)/*-patched.tar.gz); do \
+>>>>>>> upstream/master
 		echo $$F; \
 		echo $${F/-patched/}; \
 	    mv $$F $${F/-patched/}; \
 	done
+<<<<<<< HEAD
 	echo "install --install_base $(PACKAGE_PERL_MODULES_DESTDIR)/dest" > $(PACKAGE_PERL_MODULES_DESTDIR)/dest/.modulebuildrc
 	unset LANG; \
+=======
+	echo "install --install_base $(PERL_MODULES_BUILD_DESTDIR)" > $(PERL_MODULES_BUILD_DESTDIR)/.modulebuildrc
+	set -e; unset LANG; \
+	    unset DESTDIR; \
+	    unset MAKEFLAGS ; \
+>>>>>>> upstream/master
 	    unset PERL5LIB; \
 	    unset PERL_MB_OPT; \
 	    unset PERL_LOCAL_LIB_ROOT; \
 	    unset PERL_MM_OPT; \
+<<<<<<< HEAD
 	    export PATH=$(PACKAGE_PERL_MODULES_DESTDIR)/dest/bin:$$PATH; \
 	    export PERL_MM_OPT=INSTALL_BASE=$(PACKAGE_PERL_MODULES_DESTDIR)/dest; \
 	    export PERL_MB_OPT=--install_base=$(PACKAGE_PERL_MODULES_DESTDIR)/dest; \
@@ -160,3 +204,36 @@ $(PERL_MODULES_SKEL): $(PERL_MODULES_INSTALL)
 
 perl-modules-clean:
 	$(RM) -r src/inc $(PACKAGE_PERL_MODULES_DESTDIR) $(BUILD_HELPER_DIR) $(PACKAGE_DIR)/$(PERL_MODULES)/src/*-patched.tar.gz
+=======
+	    export PATH=$(PERL_MODULES_BUILD_DESTDIR)/bin:$$PATH; \
+	    export PERL_MM_OPT=INSTALL_BASE=$(PERL_MODULES_BUILD_DESTDIR); \
+	    export PERL_MB_OPT=--install_base=$(PERL_MODULES_BUILD_DESTDIR); \
+	    export MODULEBUILDRC=$(PERL_MODULES_BUILD_DESTDIR)/.modulebuildrc; \
+	    export PERL5LIB=$(PERL_MODULES_BUILD_PERL5LIB):$(PERL_MODULES_BUILD_SRCDIR)/lib:$(PERL_MODULES_BUILD_SRCDIR)/Crypt-SSLeay-0.72; \
+	    cd $(PERL_MODULES_BUILD_SRCDIR) ; \
+		FORCE=1 ./build_module.pl -d "$(DISTRO_INFO)" -p $(PERL_MODULES_BUILD_DESTDIR) $(PERL_MODULES_LIST1); \
+	    export PERL_JSON_BACKEND='JSON::XS'; \
+	    cd $(PERL_MODULES_BUILD_SRCDIR) ; \
+	    ./build_module.pl -d "$(DISTRO_INFO)" -p $(PERL_MODULES_BUILD_DESTDIR) $(PERL_MODULES_LIST2)
+# Fixup some library permissions. They need to be owner writable to make
+# dh_strip command of deb packaging procedure work
+	find $(PERL_MODULES_BUILD_DESTDIR)/lib -type f -name \*.so -exec chmod u+w {} \;
+	cd $(PERL_MODULES_BUILD_PERL5LIB)/ ; $(RM) utils.pm ; ln -s ../../../nagios/plugins/utils.pm .
+	$(MKDIR) $(PERL_MODULES_BUILD_PERL5LIB)/CPAN
+	cp $(PACKAGE_DIR)/$(PERL_MODULES)/MyConfig.pm $(PERL_MODULES_BUILD_PERL5LIB)/CPAN/MyConfig.skel
+	$(MKDIR) $(BUILD_HELPER_DIR)
+	$(TOUCH) $@
+
+$(PERL_MODULES_INTERMEDIATE_INSTALL): $(PERL_MODULES_BUILD)
+	$(MKDIR) $(PERL_MODULES_INSTALL_DIR)/lib/perl5 $(PERL_MODULES_INSTALL_DIR)/bin
+	$(RSYNC) $(PERL_MODULES_BUILD_DESTDIR)/lib $(PERL_MODULES_INSTALL_DIR)/lib/perl5/
+	$(RSYNC) $(PERL_MODULES_BUILD_DESTDIR)/bin $(PERL_MODULES_INSTALL_DIR)/lib/perl5/
+	$(MKDIR) $(PERL_MODULES_INSTALL_DIR)/local/lib/perl5
+	install -m 755 $(PACKAGE_DIR)/$(PERL_MODULES)/bin/cpan.wrapper $(PERL_MODULES_INSTALL_DIR)/bin/cpan.wrapper
+	$(TOUCH) $@
+
+$(PERL_MODULES_INSTALL): $(PERL_MODULES_INTERMEDIATE_INSTALL)
+	$(RSYNC) $(PERL_MODULES_INSTALL_DIR)/ $(DESTDIR)$(OMD_ROOT)/
+	echo "install  --install_base  ###ROOT###/local/lib/perl5" > $(SKEL)/.modulebuildrc
+	$(TOUCH) $@
+>>>>>>> upstream/master

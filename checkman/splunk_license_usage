@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: Splunk: License usage
+=======
+title: Splunk: License Usage
+>>>>>>> upstream/master
 agents: splunk
 catalog: app/splunk
 license: GPL
@@ -8,5 +12,9 @@ description:
  You can check for the used quota in absolut or percentage levels
 
 inventory:
+<<<<<<< HEAD
  One service will be created
+=======
+ One service is created.
+>>>>>>> upstream/master
 

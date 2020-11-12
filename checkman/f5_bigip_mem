@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 title: F5 Big-IP: Usage of memory
+=======
+title: F5 Big-IP: Usage of Memory
+>>>>>>> upstream/master
 agents: snmp
 catalog: hw/network/f5
 license: GPL
@@ -9,5 +13,13 @@ description:
  The logic used for monitoring is exactly the same as in the agent based
  check {mem.used}. Please refer to the man page of that check for details.
 
+<<<<<<< HEAD
 inventory:
  One service for the target host will be created.
+=======
+item:
+ The fixed statement {{total}}
+
+inventory:
+ One service is created for the target host.
+>>>>>>> upstream/master

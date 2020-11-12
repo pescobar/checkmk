@@ -1,4 +1,5 @@
 // carrier test
+<<<<<<< HEAD
 // 
 
 #include "pch.h"
@@ -13,6 +14,22 @@
 
 #include "carrier.h"
 #include "read_file.h"
+=======
+//
+
+#include "pch.h"
+
+#include "carrier.h"
+#include "commander.h"
+#include "common/cfg_info.h"
+#include "common/mailslot_transport.h"
+#include "common/wtools.h"
+#include "logger.h"
+#include "read_file.h"
+#include "service_processor.h"
+#include "tools/_misc.h"
+#include "tools/_process.h"
+>>>>>>> upstream/master
 
 namespace cma::carrier {  // to become friendly for wtools classes
 TEST(PlayerTest, Pipe) {
@@ -108,7 +125,12 @@ TEST(CarrierTest, EstablishShutdown) {
     internal_port = BuildPortName(kCarrierAsioName, "127.0.0.1");  // port here
     ret = cc.establishCommunication(internal_port);
     EXPECT_FALSE(ret);
+<<<<<<< HEAD
     ret = cc.sendData("a", 11, "aaa", 3);
+=======
+    std::string_view s = "Output from the asio";
+    ret = cc.sendData("a", 11, s.data(), s.length());
+>>>>>>> upstream/master
     EXPECT_FALSE(ret);
 
     // bad port
@@ -120,7 +142,12 @@ TEST(CarrierTest, EstablishShutdown) {
     internal_port = BuildPortName(kCarrierNullName, "???");  // port here
     ret = cc.establishCommunication(internal_port);
     EXPECT_TRUE(ret);
+<<<<<<< HEAD
     ret = cc.sendData("a", 11, "aaa", 3);
+=======
+    s = "Output from the null";
+    ret = cc.sendData("a", 11, s.data(), s.length());
+>>>>>>> upstream/master
     EXPECT_TRUE(ret);
     cc.shutdownCommunication();
 
@@ -128,7 +155,12 @@ TEST(CarrierTest, EstablishShutdown) {
     internal_port = BuildPortName(kCarrierDumpName, "???");  // port here
     ret = cc.establishCommunication(internal_port);
     EXPECT_TRUE(ret);
+<<<<<<< HEAD
     ret = cc.sendData("a", 11, "aaa", 3);
+=======
+    s = "Output from the dump";
+    ret = cc.sendData("a", 11, s.data(), s.length());
+>>>>>>> upstream/master
     EXPECT_TRUE(ret);
     cc.shutdownCommunication();
 
@@ -183,6 +215,56 @@ TEST(CarrierTest, Mail) {
     }
 
     EXPECT_TRUE(false);
+<<<<<<< HEAD
+=======
+}
+
+static std::string last;
+
+bool TestRunCommand(std::string_view peer, std::string_view cmd) {
+    last = cmd;
+    return true;
+}
+
+// check that inform port works ok
+TEST(CarrierTest, InformByMailSLot) {
+    using namespace std::chrono;
+
+    auto name_used = "WinAgentTestLocal";
+    cma::MailSlot mailbox_client(name_used, 0);
+    cma::MailSlot mailbox_server(name_used, 0);
+    using namespace cma::carrier;
+    auto internal_port = BuildPortName(kCarrierMailslotName,
+                                       mailbox_server.GetName());  // port here
+    cma::srv::ServiceProcessor processor;
+    mailbox_server.ConstructThread(cma::srv::SystemMailboxCallback, 20,
+                                   &processor);
+    ON_OUT_OF_SCOPE(mailbox_server.DismantleThread());
+    cma::tools::sleep(100ms);
+
+    {
+        cma::carrier::CoreCarrier cc;
+        // "mail"
+        auto ret = cc.establishCommunication(internal_port);
+        ASSERT_TRUE(ret);
+        ON_OUT_OF_SCOPE(cc.shutdownCommunication());
+
+        cma::tools::sleep(100ms);
+
+        auto save_rcp = cma::commander::ObtainRunCommandProcessor();
+        ON_OUT_OF_SCOPE(cma::commander::ChangeRunCommandProcessor(save_rcp));
+        cma::commander::ChangeRunCommandProcessor(TestRunCommand);
+
+        InformByMailSlot(mailbox_client.GetName(), "xxx");
+        cma::tools::sleep(100ms);
+        EXPECT_EQ(last, "xxx");
+
+        InformByMailSlot(mailbox_client.GetName(), "zzz");
+        cma::tools::sleep(100ms);
+        EXPECT_EQ(last, "zzz");
+    }
+
+>>>>>>> upstream/master
 }  // namespace cma::carrier
 
 }  // namespace cma::carrier

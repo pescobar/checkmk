@@ -1,8 +1,22 @@
+<<<<<<< HEAD
 # encoding: utf-8
 # pylint: disable=redefined-outer-name
 
 import pytest  # type: ignore
 from pathlib2 import Path
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# pylint: disable=redefined-outer-name
+
+from pathlib import Path
+
+import pytest  # type: ignore[import]
+>>>>>>> upstream/master
 
 import cmk.gui.watolib.utils
 import cmk.utils.tags as tags
@@ -16,7 +30,11 @@ def test_pre_16_cfg(monkeypatch):
     multisite_dir.mkdir(parents=True, exist_ok=True)
     hosttags_mk = multisite_dir / "hosttags.mk"
 
+<<<<<<< HEAD
     with hosttags_mk.open("w", encoding="utf-8") as f:  # pylint: disable=no-member
+=======
+    with hosttags_mk.open("w", encoding="utf-8") as f:
+>>>>>>> upstream/master
         f.write(u"""# Created by WATO
 # encoding: utf-8
 
@@ -41,8 +59,13 @@ wato_aux_tags += [("bla", u"bläää")]
 
     yield cfg
 
+<<<<<<< HEAD
     if hosttags_mk.exists():  # pylint: disable=no-member
         hosttags_mk.unlink()  # pylint: disable=no-member
+=======
+    if hosttags_mk.exists():
+        hosttags_mk.unlink()
+>>>>>>> upstream/master
 
 
 @pytest.fixture()
@@ -51,14 +74,22 @@ def test_cfg(test_pre_16_cfg):
     tags_mk = multisite_dir / "tags.mk"
     hosttags_mk = multisite_dir / "hosttags.mk"
 
+<<<<<<< HEAD
     with tags_mk.open("w", encoding="utf-8") as f:  # pylint: disable=no-member
+=======
+    with tags_mk.open("w", encoding="utf-8") as f:
+>>>>>>> upstream/master
         f.write(u"""# Created by WATO
 # encoding: utf-8
 
 wato_tags = %s
 """ % repr(test_pre_16_cfg.get_dict_format()))
 
+<<<<<<< HEAD
     with hosttags_mk.open("w", encoding="utf-8") as f:  # pylint: disable=no-member
+=======
+    with hosttags_mk.open("w", encoding="utf-8") as f:
+>>>>>>> upstream/master
         f.write(u"")
 
     cfg = tags.TagConfig()
@@ -66,8 +97,13 @@ wato_tags = %s
 
     yield cfg
 
+<<<<<<< HEAD
     if tags_mk.exists():  # pylint: disable=no-member
         tags_mk.unlink()  # pylint: disable=no-member
+=======
+    if tags_mk.exists():
+        tags_mk.unlink()
+>>>>>>> upstream/master
 
 
 def test_tag_config_load_pre_16(test_pre_16_cfg):

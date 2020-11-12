@@ -5,7 +5,11 @@ Class: feature
 Compatible: compat
 Edition: cre
 State: unknown
+<<<<<<< HEAD
 Version: 1.7.0i1
+=======
+Version: 2.0.0i1
+>>>>>>> upstream/master
 Date: 1560451480
 
 It's now possible to configure a list of alternative matching tag IDs of a

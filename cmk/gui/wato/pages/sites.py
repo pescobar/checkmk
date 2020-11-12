@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/env python
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 # +------------------------------------------------------------------+
@@ -23,11 +24,19 @@
 # License along with GNU Make; see the file  COPYING.  If  not,  write
 # to the Free Software Foundation, Inc., 51 Franklin St,  Fifth Floor,
 # Boston, MA 02110-1301 USA.
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+>>>>>>> upstream/master
 """Mode for managing sites"""
 
 import traceback
 import time
 import multiprocessing
+<<<<<<< HEAD
 import Queue
 import socket
 import contextlib
@@ -42,10 +51,37 @@ from cryptography.hazmat.backends import default_backend  # type: ignore
 from cryptography.hazmat.primitives import hashes  # type: ignore
 
 import cmk
+=======
+import socket
+import contextlib
+import binascii
+import queue
+from typing import (Dict, List, NamedTuple, Union, Tuple as _Tuple, Optional, Type, Iterator,
+                    overload)
+
+from six import ensure_binary, ensure_str
+from OpenSSL import crypto  # type: ignore[import]
+from OpenSSL import SSL  # type: ignore[attr-defined]
+# mypy can't find x509 for some reason (is a c extension involved?)
+from cryptography.x509.oid import ExtensionOID, NameOID  # type: ignore[import]
+from cryptography import x509
+from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives import hashes
+
+import cmk.utils.version as cmk_version
+import cmk.utils.paths
+
+from cmk.gui.sites import SiteStatus
+import cmk.gui.sites
+>>>>>>> upstream/master
 import cmk.gui.config as config
 import cmk.gui.watolib as watolib
 import cmk.gui.forms as forms
 import cmk.gui.log as log
+<<<<<<< HEAD
+=======
+from cmk.gui.utils.html import HTML
+>>>>>>> upstream/master
 from cmk.gui.table import table_element
 from cmk.gui.valuespec import (
     Dictionary,
@@ -65,6 +101,7 @@ from cmk.gui.valuespec import (
 from cmk.gui.pages import page_registry, AjaxPage
 from cmk.gui.plugins.wato.utils import mode_registry, sort_sites
 from cmk.gui.plugins.watolib.utils import config_variable_registry
+<<<<<<< HEAD
 from cmk.gui.plugins.wato.utils.base_modes import WatoMode
 from cmk.gui.plugins.wato.utils.html_elements import wato_html_head, wato_confirm
 from cmk.gui.i18n import _
@@ -92,6 +129,30 @@ def _site_detail_buttons(site_id, site, current_mode):
         encrypted_url = watolib.folder_preserving_link([("mode", "site_livestatus_encryption"),
                                                         ("site", site_id)])
         html.context_button(_("Status encryption"), encrypted_url, "encrypted")
+=======
+from cmk.gui.plugins.wato.utils.base_modes import WatoMode, ActionResult, redirect, mode_url
+from cmk.gui.plugins.wato.utils.html_elements import wato_html_head
+from cmk.gui.utils.flashed_messages import flash
+from cmk.gui.i18n import _
+from cmk.gui.globals import html, request
+from cmk.gui.exceptions import MKUserError, MKGeneralException, FinalizeRequest
+from cmk.gui.log import logger
+from cmk.gui.breadcrumb import Breadcrumb
+from cmk.gui.page_menu import (
+    PageMenu,
+    PageMenuDropdown,
+    PageMenuTopic,
+    PageMenuEntry,
+    make_simple_link,
+    make_simple_form_page_menu,
+)
+
+from cmk.gui.watolib.sites import is_livestatus_encrypted
+from cmk.gui.watolib.activate_changes import clear_site_replication_status
+from cmk.gui.wato.pages.global_settings import ABCGlobalSettingsMode, ABCEditGlobalSettingMode
+
+from cmk.gui.utils.urls import makeuri_contextless, make_confirm_link
+>>>>>>> upstream/master
 
 
 def _site_globals_editable(site_id, site):
@@ -107,6 +168,16 @@ def _site_globals_editable(site_id, site):
     return site["replication"] or config.site_is_local(site_id)
 
 
+<<<<<<< HEAD
+=======
+def _get_demo_message():
+    return _("With the Checkmk Enterprise Free Edition you can create a distributed setup "
+             "with two sites, one central and one remote site. In case you want to test "
+             "more complex distributed setups, please "
+             "<a href=\"mailto:info@checkmk.com\">contact us</a>.")
+
+
+>>>>>>> upstream/master
 @mode_registry.register
 class ModeEditSite(WatoMode):
     @classmethod
@@ -117,6 +188,7 @@ class ModeEditSite(WatoMode):
     def permissions(cls):
         return ["sites"]
 
+<<<<<<< HEAD
     def __init__(self):
         super(ModeEditSite, self).__init__()
         if cmk.is_demo():
@@ -130,6 +202,40 @@ class ModeEditSite(WatoMode):
         self._clone_id = html.request.var("clone")
         self._new = self._site_id is None
 
+=======
+    @classmethod
+    def parent_mode(cls) -> Optional[Type[WatoMode]]:
+        return ModeDistributedMonitoring
+
+    # pylint does not understand this overloading
+    @overload
+    @classmethod
+    def mode_url(cls, *, site: str) -> str:  # pylint: disable=arguments-differ
+        ...
+
+    @overload
+    @classmethod
+    def mode_url(cls, **kwargs: str) -> str:
+        ...
+
+    @classmethod
+    def mode_url(cls, **kwargs: str) -> str:
+        return super().mode_url(**kwargs)
+
+    def __init__(self):
+        super().__init__()
+        self._site_mgmt = watolib.SiteManagementFactory().factory()
+
+        self._site_id = html.request.get_ascii_input("site")
+        self._clone_id = html.request.get_ascii_input("clone")
+        self._new = self._site_id is None
+
+        if cmk_version.is_demo() and self._new:
+            num_sites = len(self._site_mgmt.load_sites())
+            if num_sites > 1:
+                raise MKUserError(None, _get_demo_message())
+
+>>>>>>> upstream/master
         configured_sites = self._site_mgmt.load_sites()
 
         if self._clone_id:
@@ -161,6 +267,10 @@ class ModeEditSite(WatoMode):
                 })
 
         else:
+<<<<<<< HEAD
+=======
+            assert self._site_id is not None
+>>>>>>> upstream/master
             try:
                 self._site = configured_sites[self._site_id]
             except KeyError:
@@ -168,6 +278,7 @@ class ModeEditSite(WatoMode):
 
     def title(self):
         if self._new:
+<<<<<<< HEAD
             return _("Create new site connection")
         return _("Edit site connection %s") % self._site_id
 
@@ -181,6 +292,25 @@ class ModeEditSite(WatoMode):
     def action(self):
         if not html.check_transaction():
             return "sites"
+=======
+            return _("Add site connection")
+        return _("Edit site connection %s") % self._site_id
+
+    def _breadcrumb_url(self) -> str:
+        assert self._site_id is not None
+        return self.mode_url(site=self._site_id)
+
+    def page_menu(self, breadcrumb: Breadcrumb) -> PageMenu:
+        menu = make_simple_form_page_menu(breadcrumb, form_name="site", button_name="save")
+        if not self._new and isinstance(self._site_id, str):
+            menu.dropdowns.insert(
+                1, _page_menu_dropdown_site_details(self._site_id, self._site, self.name()))
+        return menu
+
+    def action(self) -> ActionResult:
+        if not html.check_transaction():
+            return redirect(mode_url("sites"))
+>>>>>>> upstream/master
 
         vs = self._valuespec()
         site_spec = vs.from_html_vars("site")
@@ -190,6 +320,10 @@ class ModeEditSite(WatoMode):
         if self._new:
             self._site_id = site_spec["id"]
         del site_spec["id"]
+<<<<<<< HEAD
+=======
+        assert self._site_id is not None
+>>>>>>> upstream/master
 
         configured_sites = self._site_mgmt.load_sites()
 
@@ -226,7 +360,12 @@ class ModeEditSite(WatoMode):
                                sites=[config.omd_site()],
                                domains=[watolib.ConfigDomainGUI])
 
+<<<<<<< HEAD
         return "sites", msg
+=======
+        flash(msg)
+        return redirect(mode_url("sites"))
+>>>>>>> upstream/master
 
     def page(self):
         html.begin_form("site")
@@ -234,7 +373,10 @@ class ModeEditSite(WatoMode):
         self._valuespec().render_input("site", self._site)
 
         forms.end()
+<<<<<<< HEAD
         html.button("save", _("Save"))
+=======
+>>>>>>> upstream/master
         html.hidden_fields()
         html.end_form()
 
@@ -325,20 +467,32 @@ class ModeEditSite(WatoMode):
                  title=_("URL prefix"),
                  size=60,
                  help=
+<<<<<<< HEAD
                  _("The URL prefix will be prepended to links of addons like PNP4Nagios "
                    "or the classical Nagios GUI when a link to such applications points to a host or "
+=======
+                 _("The URL prefix will be prepended to links of addons like NagVis "
+                   "when a link to such applications points to a host or "
+>>>>>>> upstream/master
                    "service on that site. You can either use an absolute URL prefix like <tt>http://some.host/mysite/</tt> "
                    "or a relative URL like <tt>/mysite/</tt>. When using relative prefixes you needed a mod_proxy "
                    "configuration in your local system apache that proxies such URLs to the according remote site. "
                    "Please refer to the <a target=_blank href='%s'>online documentation</a> for details. "
+<<<<<<< HEAD
                    "The prefix should end with a slash. Omit the <tt>/pnp4nagios/</tt> from the prefix."
+=======
+                   "The prefix should end with a slash. Omit the <tt>/nagvis/</tt> from the prefix."
+>>>>>>> upstream/master
                   ) % proxy_docu_url,
                  allow_empty=True,
              )),
             ("status_host",
              Alternative(
                  title=_("Status host"),
+<<<<<<< HEAD
                  style="dropdown",
+=======
+>>>>>>> upstream/master
                  elements=[
                      FixedValue(None, title=_("No status host"), totext=""),
                      Tuple(
@@ -396,7 +550,10 @@ class ModeEditSite(WatoMode):
             ("multisiteurl",
              HTTPUrl(
                  title=_("URL of remote site"),
+<<<<<<< HEAD
                  size=60,
+=======
+>>>>>>> upstream/master
                  help=_(
                      "URL of the remote Check_MK including <tt>/check_mk/</tt>. "
                      "This URL is in many cases the same as the URL-Prefix but with <tt>check_mk/</tt> "
@@ -409,9 +566,16 @@ class ModeEditSite(WatoMode):
              Checkbox(
                  title=_("Disable remote configuration"),
                  label=_('Disable configuration via WATO on this site'),
+<<<<<<< HEAD
                  help=_('It is a good idea to disable access to WATO completely on the slave site. '
                         'Otherwise a user who does not now about the replication could make local '
                         'changes that are overridden at the next configuration activation.'),
+=======
+                 help=_(
+                     'It is a good idea to disable access to WATO completely on the remote site. '
+                     'Otherwise a user who does not now about the replication could make local '
+                     'changes that are overridden at the next configuration activation.'),
+>>>>>>> upstream/master
              )),
             ("insecure",
              Checkbox(
@@ -426,9 +590,16 @@ class ModeEditSite(WatoMode):
                  label=_('Users are allowed to directly login into the Web GUI of this site'),
                  help=_(
                      'When enabled, this site is marked for synchronisation every time a Web GUI '
+<<<<<<< HEAD
                      'related option is changed in the master site.'),
              )),
             ("user_sync", self._site_mgmt.user_sync_valuespec()),
+=======
+                     'related option is changed and users are allowed to login '
+                     'to the Web GUI of this site.'),
+             )),
+            ("user_sync", self._site_mgmt.user_sync_valuespec(self._site_id)),
+>>>>>>> upstream/master
             ("replicate_ec",
              Checkbox(
                  title=_("Replicate Event Console config"),
@@ -445,9 +616,15 @@ class ModeEditSite(WatoMode):
                  label=_("Replicate extensions (MKPs and files in <tt>~/local/</tt>)"),
                  help=
                  _("If you enable the replication of MKPs then during each <i>Activate Changes</i> MKPs "
+<<<<<<< HEAD
                    "that are installed on your master site and all other files below the <tt>~/local/</tt> "
                    "directory will be also transferred to the slave site. Note: <b>all other MKPs and files "
                    "below <tt>~/local/</tt> on the slave will be removed</b>."),
+=======
+                   "that are installed on your central site and all other files below the <tt>~/local/</tt> "
+                   "directory will be also transferred to the remote site. Note: <b>all other MKPs and files "
+                   "below <tt>~/local/</tt> on the remote site will be removed</b>."),
+>>>>>>> upstream/master
              )),
         ]
 
@@ -463,17 +640,22 @@ class ModeDistributedMonitoring(WatoMode):
         return ["sites"]
 
     def __init__(self):
+<<<<<<< HEAD
         super(ModeDistributedMonitoring, self).__init__()
         if cmk.is_demo():
             raise MKGeneralException(
                 _("Distributed setups are not allowed with the Checkmk demo. "
                   "In case you want to test distributed setups, please "
                   "<a href=\"mailto:info@checkmk.com\">contact us</a>."))
+=======
+        super().__init__()
+>>>>>>> upstream/master
         self._site_mgmt = watolib.SiteManagementFactory().factory()
 
     def title(self):
         return _("Distributed Monitoring")
 
+<<<<<<< HEAD
     def buttons(self):
         super(ModeDistributedMonitoring, self).buttons()
         html.context_button(_("New connection"),
@@ -493,6 +675,50 @@ class ModeDistributedMonitoring(WatoMode):
             return self._action_login(login_id)
 
     def _action_delete(self, delete_id):
+=======
+    def page_menu(self, breadcrumb: Breadcrumb) -> PageMenu:
+        return PageMenu(
+            dropdowns=[
+                PageMenuDropdown(
+                    name="connections",
+                    title=_("Connections"),
+                    topics=[
+                        PageMenuTopic(
+                            title=_("Connections"),
+                            entries=[
+                                PageMenuEntry(
+                                    title=_("Add connection"),
+                                    icon_name="new",
+                                    item=make_simple_link(
+                                        makeuri_contextless(request, [("mode", "edit_site")]),),
+                                    is_shortcut=True,
+                                    is_suggested=True,
+                                ),
+                            ],
+                        ),
+                    ],
+                ),
+            ],
+            breadcrumb=breadcrumb,
+        )
+
+    def action(self) -> ActionResult:
+        delete_id = html.request.get_ascii_input("_delete")
+        if delete_id and html.check_transaction():
+            self._action_delete(delete_id)
+
+        logout_id = html.request.get_ascii_input("_logout")
+        if logout_id:
+            return self._action_logout(logout_id)
+
+        login_id = html.request.get_ascii_input("_login")
+        if login_id:
+            return self._action_login(login_id)
+        return None
+
+    # Mypy wants the explicit return, pylint does not like it.
+    def _action_delete(self, delete_id) -> ActionResult:  # pylint: disable=useless-return
+>>>>>>> upstream/master
         # TODO: Can we delete this ancient code? The site attribute is always available
         # these days and the following code does not seem to have any effect.
         configured_sites = self._site_mgmt.load_sites()
@@ -523,6 +749,7 @@ class ModeDistributedMonitoring(WatoMode):
                   "assigned to it. You can use the <a href=\"%s\">host "
                   "search</a> to get a list of the hosts.") % search_url)
 
+<<<<<<< HEAD
 
         c = wato_confirm(_("Confirm deletion of site %s") % html.render_tt(delete_id),
                          _("Do you really want to delete the connection to the site %s?") % \
@@ -565,13 +792,43 @@ class ModeDistributedMonitoring(WatoMode):
 
         if not html.check_transaction():
             return
+=======
+        self._site_mgmt.delete_site(delete_id)
+        return redirect(mode_url("sites"))
+
+    def _action_logout(self, logout_id: str) -> ActionResult:
+        configured_sites = self._site_mgmt.load_sites()
+        site = configured_sites[logout_id]
+        if "secret" in site:
+            del site["secret"]
+        self._site_mgmt.save_sites(configured_sites)
+        watolib.add_change("edit-site",
+                           _("Logged out of remote site %s") % html.render_tt(site["alias"]),
+                           domains=[watolib.ConfigDomainGUI],
+                           sites=[config.omd_site()])
+        flash(_("Logged out."))
+        return redirect(mode_url("sites"))
+
+    def _action_login(self, login_id: str) -> ActionResult:
+        configured_sites = self._site_mgmt.load_sites()
+        if html.request.get_ascii_input("_abort"):
+            return redirect(mode_url("sites"))
+
+        if not html.check_transaction():
+            return None
+>>>>>>> upstream/master
 
         site = configured_sites[login_id]
         error = None
         # Fetch name/password of admin account
         if html.request.has_var("_name"):
+<<<<<<< HEAD
             name = html.request.var("_name", "").strip()
             passwd = html.request.var("_passwd", "").strip()
+=======
+            name = html.request.get_unicode_input_mandatory("_name", "").strip()
+            passwd = html.request.get_ascii_input_mandatory("_passwd", "").strip()
+>>>>>>> upstream/master
             try:
                 if not html.get_checkbox("_confirm"):
                     raise MKUserError(
@@ -586,7 +843,12 @@ class ModeDistributedMonitoring(WatoMode):
                 message = _("Successfully logged into remote site %s.") % html.render_tt(
                     site["alias"])
                 watolib.log_audit(None, "edit-site", message)
+<<<<<<< HEAD
                 return None, message
+=======
+                flash(message)
+                return None
+>>>>>>> upstream/master
 
             except watolib.MKAutomationException as e:
                 error = _("Cannot connect to remote site: %s") % e
@@ -599,16 +861,29 @@ class ModeDistributedMonitoring(WatoMode):
                 logger.exception("error logging in")
                 if config.debug:
                     raise
+<<<<<<< HEAD
                 html.add_user_error("_name", error)
                 error = (_("Internal error: %s\n%s") % (e, traceback.format_exc())).replace(
                     "\n", "\n<br>")
 
         wato_html_head(_("Login into site \"%s\"") % site["alias"])
+=======
+                error = (_("Internal error: %s\n%s") % (e, traceback.format_exc())).replace(
+                    "\n", "\n<br>")
+                html.add_user_error("_name", error)
+
+        wato_html_head(title=_("Login into site \"%s\"") % site["alias"],
+                       breadcrumb=self.breadcrumb())
+>>>>>>> upstream/master
         if error:
             html.show_error(error)
 
         html.p(
+<<<<<<< HEAD
             _("For the initial login into the slave site %s "
+=======
+            _("For the initial login into the remote site %s "
+>>>>>>> upstream/master
               "we need once your administration login for the Multsite "
               "GUI on that site. Your credentials will only be used for "
               "the initial handshake and not be stored. If the login is "
@@ -633,11 +908,21 @@ class ModeDistributedMonitoring(WatoMode):
         html.hidden_fields()
         html.end_form()
         html.footer()
+<<<<<<< HEAD
         return False
+=======
+        return FinalizeRequest(code=200)
+>>>>>>> upstream/master
 
     def page(self):
         sites = sort_sites(self._site_mgmt.load_sites())
 
+<<<<<<< HEAD
+=======
+        if cmk_version.is_demo():
+            html.show_message(_get_demo_message())
+
+>>>>>>> upstream/master
         html.div("", id_="message_container")
         with table_element(
                 "sites",
@@ -662,7 +947,11 @@ class ModeDistributedMonitoring(WatoMode):
 
     def _show_buttons(self, table, site_id, site):
         table.cell(_("Actions"), css="buttons")
+<<<<<<< HEAD
         edit_url = watolib.folder_preserving_link([("mode", "edit_site"), ("edit", site_id)])
+=======
+        edit_url = watolib.folder_preserving_link([("mode", "edit_site"), ("site", site_id)])
+>>>>>>> upstream/master
         html.icon_button(edit_url, _("Properties"), "edit")
 
         clone_url = watolib.folder_preserving_link([("mode", "edit_site"), ("clone", site_id)])
@@ -674,7 +963,14 @@ class ModeDistributedMonitoring(WatoMode):
         if site_id == config.omd_site():
             html.empty_icon_button()
         else:
+<<<<<<< HEAD
             delete_url = html.makeactionuri([("_delete", site_id)])
+=======
+            delete_url = make_confirm_link(
+                url=html.makeactionuri([("_delete", site_id)]),
+                message=_("Do you really want to delete the connection to the site %s?") %
+                html.render_tt(site_id))
+>>>>>>> upstream/master
             html.icon_button(delete_url, _("Delete"), "delete")
 
         if _site_globals_editable(site_id, site):
@@ -709,8 +1005,13 @@ class ModeDistributedMonitoring(WatoMode):
 
         # The status is fetched asynchronously for all sites. Show a temporary loading icon.
         html.open_div(id_="livestatus_status_%s" % site_id, class_="connection_status")
+<<<<<<< HEAD
         html.icon(_("Fetching livestatus status"),
                   "reload",
+=======
+        html.icon("reload",
+                  _("Fetching livestatus status"),
+>>>>>>> upstream/master
                   class_=["reloading", "replication_status_loading"])
         html.close_div()
 
@@ -734,7 +1035,14 @@ class ModeDistributedMonitoring(WatoMode):
 
         if site["replication"]:
             if site.get("secret"):
+<<<<<<< HEAD
                 logout_url = watolib.make_action_link([("mode", "sites"), ("_logout", site_id)])
+=======
+                logout_url = make_confirm_link(url=watolib.make_action_link([("mode", "sites"),
+                                                                             ("_logout", site_id)]),
+                                               message=_("Do you really want to log out of '%s'?") %
+                                               html.render_tt(site["alias"]))
+>>>>>>> upstream/master
                 html.icon_button(logout_url, _("Logout"), "autherr")
             else:
                 login_url = watolib.make_action_link([("mode", "sites"), ("_login", site_id)])
@@ -743,8 +1051,13 @@ class ModeDistributedMonitoring(WatoMode):
         html.open_div(id_="replication_status_%s" % site_id, class_="connection_status")
         if site.get("replication"):
             # The status is fetched asynchronously for all sites. Show a temporary loading icon.
+<<<<<<< HEAD
             html.icon(_("Fetching replication status"),
                       "reload",
+=======
+            html.icon("reload",
+                      _("Fetching replication status"),
+>>>>>>> upstream/master
                       class_=["reloading", "replication_status_loading"])
         html.close_div()
 
@@ -757,7 +1070,11 @@ class ModeAjaxFetchSiteStatus(AjaxPage):
 
         site_states = {}
 
+<<<<<<< HEAD
         sites = watolib.SiteManagementFactory().factory().load_sites().items()
+=======
+        sites = list(watolib.SiteManagementFactory().factory().load_sites().items())
+>>>>>>> upstream/master
         replication_sites = [e for e in sites if e[1]["replication"]]
         replication_status = ReplicationStatusFetcher().fetch(replication_sites)
 
@@ -794,7 +1111,11 @@ class ModeAjaxFetchSiteStatus(AjaxPage):
                 html.render_span(msg, style="vertical-align:middle"))
 
     def _render_status_connection_status(self, site_id, site):
+<<<<<<< HEAD
         site_status = cmk.gui.sites.states().get(site_id, {})
+=======
+        site_status: SiteStatus = cmk.gui.sites.states().get(site_id, SiteStatus({}))
+>>>>>>> upstream/master
         if site.get("disabled", False) is True:
             status = status_msg = "disabled"
         else:
@@ -818,6 +1139,7 @@ PingResult = NamedTuple("PingResult", [
 ReplicationStatus = NamedTuple("ReplicationStatus", [
     ("site_id", str),
     ("success", bool),
+<<<<<<< HEAD
     ("response", TypeVar("ReplicationResponse", PingResult, Exception)),
 ])
 
@@ -830,11 +1152,28 @@ class ReplicationStatusFetcher(object):
 
     def fetch(self, sites):
         # type: (List[typing.Tuple[str, Dict]]) -> Dict[str, PingResult]
+=======
+    ("response", Union[PingResult, Exception]),
+])
+
+
+class ReplicationStatusFetcher:
+    """Helper class to retrieve the replication status of all relevant sites"""
+    def __init__(self):
+        super().__init__()
+        self._logger = logger.getChild("replication-status")
+
+    def fetch(self, sites: List[_Tuple[str, Dict]]) -> Dict[str, PingResult]:
+>>>>>>> upstream/master
         self._logger.debug("Fetching replication status for %d sites" % len(sites))
         results_by_site = {}
 
         # Results are fetched simultaneously from the remote sites
+<<<<<<< HEAD
         result_queue = multiprocessing.JoinableQueue()
+=======
+        result_queue = multiprocessing.JoinableQueue()  # type: ignore[var-annotated]
+>>>>>>> upstream/master
 
         processes = []
         for site_id, site in sites:
@@ -844,17 +1183,32 @@ class ReplicationStatusFetcher(object):
             processes.append((site_id, process))
 
         # Now collect the results from the queue until all processes are finished
+<<<<<<< HEAD
         while any([p.is_alive() for site_id, p in processes]):
+=======
+        while any(p.is_alive() for site_id, p in processes):
+>>>>>>> upstream/master
             try:
                 result = result_queue.get_nowait()
                 result_queue.task_done()
                 results_by_site[result.site_id] = result
+<<<<<<< HEAD
             except Queue.Empty:
                 time.sleep(0.5)  # wait some time to prevent CPU hogs
 
             except Exception as e:
                 logger.exception("error collecting replication results from site %s", site_id)
                 html.show_error("%s: %s" % (site_id, e))
+=======
+
+            except queue.Empty:
+                time.sleep(0.5)  # wait some time to prevent CPU hogs
+
+            except Exception as e:
+                logger.exception("error collecting replication results from site %s",
+                                 result.site_id)
+                html.show_error("%s: %s" % (result.site_id, e))
+>>>>>>> upstream/master
 
         self._logger.debug("Got results")
         return results_by_site
@@ -901,7 +1255,11 @@ class ReplicationStatusFetcher(object):
 
 
 @mode_registry.register
+<<<<<<< HEAD
 class ModeEditSiteGlobals(GlobalSettingsMode):
+=======
+class ModeEditSiteGlobals(ABCGlobalSettingsMode):
+>>>>>>> upstream/master
     @classmethod
     def name(cls):
         return "edit_site_globals"
@@ -910,6 +1268,7 @@ class ModeEditSiteGlobals(GlobalSettingsMode):
     def permissions(cls):
         return ["sites"]
 
+<<<<<<< HEAD
     def __init__(self):
         super(ModeEditSiteGlobals, self).__init__()
         if cmk.is_demo():
@@ -918,6 +1277,30 @@ class ModeEditSiteGlobals(GlobalSettingsMode):
                   "In case you want to test distributed setups, please "
                   "<a href=\"mailto:info@checkmk.com\">contact us</a>."))
         self._site_id = html.request.var("site")
+=======
+    @classmethod
+    def parent_mode(cls) -> Optional[Type[WatoMode]]:
+        return ModeEditSite
+
+    # pylint does not understand this overloading
+    @overload
+    @classmethod
+    def mode_url(cls, *, site: str) -> str:  # pylint: disable=arguments-differ
+        ...
+
+    @overload
+    @classmethod
+    def mode_url(cls, **kwargs: str) -> str:
+        ...
+
+    @classmethod
+    def mode_url(cls, **kwargs: str) -> str:
+        return super().mode_url(**kwargs)
+
+    def __init__(self):
+        super().__init__()
+        self._site_id = html.request.get_ascii_input_mandatory("site")
+>>>>>>> upstream/master
         self._site_mgmt = watolib.SiteManagementFactory().factory()
         self._configured_sites = self._site_mgmt.load_sites()
         try:
@@ -938,6 +1321,7 @@ class ModeEditSiteGlobals(GlobalSettingsMode):
     def title(self):
         return _("Edit site specific global settings of %s") % self._site_id
 
+<<<<<<< HEAD
     def buttons(self):
         super(ModeEditSiteGlobals, self).buttons()
         html.context_button(_("All Sites"), watolib.folder_preserving_link([("mode", "sites")]),
@@ -950,10 +1334,30 @@ class ModeEditSiteGlobals(GlobalSettingsMode):
         action = html.request.var("_action")
         if not varname:
             return
+=======
+    def _breadcrumb_url(self) -> str:
+        return self.mode_url(site=self._site_id)
+
+    def page_menu(self, breadcrumb: Breadcrumb) -> PageMenu:
+        return PageMenu(
+            dropdowns=[
+                _page_menu_dropdown_site_details(self._site_id, self._site, self.name()),
+            ],
+            breadcrumb=breadcrumb,
+        )
+
+    # TODO: Consolidate with ModeEditGlobals.action()
+    def action(self) -> ActionResult:
+        varname = html.request.get_ascii_input("_varname")
+        action = html.request.get_ascii_input("_action")
+        if not varname:
+            return None
+>>>>>>> upstream/master
 
         config_variable = config_variable_registry[varname]()
         def_value = self._global_settings.get(varname, self._default_values[varname])
 
+<<<<<<< HEAD
         if action == "reset" and not is_a_checkbox(config_variable.valuespec()):
             c = wato_confirm(
                 _("Removing site specific configuration variable"),
@@ -996,6 +1400,32 @@ class ModeEditSiteGlobals(GlobalSettingsMode):
 
         else:
             return None
+=======
+        if not html.check_transaction():
+            return None
+
+        if varname in self._current_settings:
+            self._current_settings[varname] = not self._current_settings[varname]
+        else:
+            self._current_settings[varname] = not def_value
+
+        msg = _("Changed site specific configuration variable %s to %s.") % \
+            (varname, _("on") if self._current_settings[varname] else _("off"))
+
+        self._site.setdefault("globals", {})[varname] = self._current_settings[varname]
+        self._site_mgmt.save_sites(self._configured_sites, activate=False)
+
+        watolib.add_change(
+            "edit-configvar",
+            msg,
+            sites=[self._site_id],
+            need_restart=config_variable.need_restart(),
+        )
+
+        if action == "_reset":
+            flash(msg)
+        return redirect(mode_url("edit_site_globals"))
+>>>>>>> upstream/master
 
     def _edit_mode(self):
         return "edit_site_configvar"
@@ -1015,13 +1445,64 @@ class ModeEditSiteGlobals(GlobalSettingsMode):
 
             if not self._site["replication"] and not config.site_is_local(self._site_id):
                 html.show_error(
+<<<<<<< HEAD
                     _("This site is not the master site nor a replication slave. "
                       "You cannot configure specific settings for it."))
+=======
+                    _("This site is not the central site nor a replication "
+                      "remote site. You cannot configure specific settings for it."))
+>>>>>>> upstream/master
                 return
 
         self._show_configuration_variables(self._groups(show_all=True))
 
 
+<<<<<<< HEAD
+=======
+@mode_registry.register
+class ModeEditSiteGlobalSetting(ABCEditGlobalSettingMode):
+    @classmethod
+    def name(cls):
+        return "edit_site_configvar"
+
+    @classmethod
+    def permissions(cls):
+        return ["global"]
+
+    @classmethod
+    def parent_mode(cls) -> Optional[Type[WatoMode]]:
+        return ModeEditSiteGlobals
+
+    def _from_vars(self):
+        super()._from_vars()
+        self._site_id = html.request.var("site")
+        if self._site_id:
+            self._configured_sites = watolib.SiteManagementFactory().factory().load_sites()
+            try:
+                site = self._configured_sites[self._site_id]
+            except KeyError:
+                raise MKUserError("site", _("Invalid site"))
+
+        self._current_settings = site.setdefault("globals", {})
+        self._global_settings = watolib.load_configuration_settings()
+
+    def title(self):
+        return _("Site-specific global configuration for %s") % self._site_id
+
+    def _affected_sites(self):
+        return [self._site_id]
+
+    def _save(self):
+        watolib.SiteManagementFactory().factory().save_sites(self._configured_sites, activate=False)
+        if self._site_id == config.omd_site():
+            watolib.save_site_global_settings(self._current_settings)
+
+    def _show_global_setting(self):
+        forms.section(_("Global setting"))
+        html.write_html(HTML(self._valuespec.value_to_text(self._global_settings[self._varname])))
+
+
+>>>>>>> upstream/master
 ChainVerifyResult = NamedTuple("ChainVerifyResult", [
     ("cert_pem", str),
     ("error_number", int),
@@ -1031,11 +1512,19 @@ ChainVerifyResult = NamedTuple("ChainVerifyResult", [
 ])
 
 CertificateDetails = NamedTuple("CertificateDetails", [
+<<<<<<< HEAD
     ("issued_to", Text),
     ("issued_by", Text),
     ("valid_from", Text),
     ("valid_till", Text),
     ("signature_algorithm", Text),
+=======
+    ("issued_to", str),
+    ("issued_by", str),
+    ("valid_from", str),
+    ("valid_till", str),
+    ("signature_algorithm", str),
+>>>>>>> upstream/master
     ("digest_sha256", str),
     ("serial_number", int),
     ("is_ca", bool),
@@ -1053,6 +1542,7 @@ class ModeSiteLivestatusEncryption(WatoMode):
     def permissions(cls):
         return ["sites"]
 
+<<<<<<< HEAD
     def __init__(self):
         super(ModeSiteLivestatusEncryption, self).__init__()
         if cmk.is_demo():
@@ -1061,6 +1551,15 @@ class ModeSiteLivestatusEncryption(WatoMode):
                   "In case you want to test distributed setups, please "
                   "<a href=\"mailto:info@checkmk.com\">contact us</a>."))
         self._site_id = html.request.var("site")
+=======
+    @classmethod
+    def parent_mode(cls) -> Optional[Type[WatoMode]]:
+        return ModeEditSite
+
+    def __init__(self):
+        super().__init__()
+        self._site_id = html.request.get_ascii_input_mandatory("site")
+>>>>>>> upstream/master
         self._site_mgmt = watolib.SiteManagementFactory().factory()
         self._configured_sites = self._site_mgmt.load_sites()
         try:
@@ -1071,6 +1570,7 @@ class ModeSiteLivestatusEncryption(WatoMode):
     def title(self):
         return _("Livestatus encryption of %s") % self._site_id
 
+<<<<<<< HEAD
     def buttons(self):
         super(ModeSiteLivestatusEncryption, self).buttons()
         html.context_button(_("All Sites"), watolib.folder_preserving_link([("mode", "sites")]),
@@ -1086,13 +1586,36 @@ class ModeSiteLivestatusEncryption(WatoMode):
             return
 
         digest_sha256 = html.get_ascii_input("_digest")
+=======
+    def page_menu(self, breadcrumb: Breadcrumb) -> PageMenu:
+        return PageMenu(
+            dropdowns=[
+                _page_menu_dropdown_site_details(self._site_id, self._site, self.name()),
+            ],
+            breadcrumb=breadcrumb,
+        )
+
+    def action(self) -> ActionResult:
+        if not html.check_transaction():
+            return None
+
+        action = html.request.get_ascii_input_mandatory("_action")
+        if action != "trust":
+            return None
+
+        digest_sha256 = html.request.get_ascii_input("_digest")
+>>>>>>> upstream/master
 
         try:
             cert_details = self._fetch_certificate_details()
         except Exception as e:
             logger.exception("Failed to fetch peer certificate")
             html.show_error(_("Failed to fetch peer certificate (%s)") % e)
+<<<<<<< HEAD
             return
+=======
+            return None
+>>>>>>> upstream/master
 
         cert_pem = None
         for cert_detail in cert_details:
@@ -1126,12 +1649,21 @@ class ModeSiteLivestatusEncryption(WatoMode):
                            need_restart=config_variable.need_restart())
         watolib.save_global_settings(global_settings)
 
+<<<<<<< HEAD
         return None, _(
             "Added CA with fingerprint %s to trusted certificate authorities") % digest_sha256
 
     def page(self):
         if not self._is_livestatus_encrypted():
             html.show_info(
+=======
+        flash(_("Added CA with fingerprint %s to trusted certificate authorities") % digest_sha256)
+        return None
+
+    def page(self):
+        if not is_livestatus_encrypted(self._site):
+            html.show_message(
+>>>>>>> upstream/master
                 _("The livestatus connection to this site configured not to be encrypted."))
             return
 
@@ -1198,12 +1730,16 @@ class ModeSiteLivestatusEncryption(WatoMode):
     def _cert_trusted_css_class(self, cert):
         return "state state0" if cert.verify_result.is_valid else "state state2"
 
+<<<<<<< HEAD
     def _is_livestatus_encrypted(self):
         family_spec, address_spec = self._site["socket"]
         return family_spec in ["tcp", "tcp6"] and address_spec["tls"][0] != "plain_text"
 
     def _fetch_certificate_details(self):
         # type: () -> List[CertificateDetails]
+=======
+    def _fetch_certificate_details(self) -> List[CertificateDetails]:
+>>>>>>> upstream/master
         """Creates a list of certificate details for the chain certs"""
         verify_chain_results = self._fetch_certificate_chain_verify_results()
         if not verify_chain_results:
@@ -1215,16 +1751,29 @@ class ModeSiteLivestatusEncryption(WatoMode):
         cert_details = []
         for result in verify_chain_results:
             # use cryptography module over OpenSSL because it is easier to do the x509 parsing
+<<<<<<< HEAD
             crypto_cert = x509.load_pem_x509_certificate(result.cert_pem, default_backend())
+=======
+            crypto_cert = x509.load_pem_x509_certificate(ensure_binary(result.cert_pem),
+                                                         default_backend())
+>>>>>>> upstream/master
 
             cert_details.append(
                 CertificateDetails(
                     issued_to=get_name(crypto_cert.subject),
                     issued_by=get_name(crypto_cert.issuer),
+<<<<<<< HEAD
                     valid_from=crypto_cert.not_valid_before,
                     valid_till=crypto_cert.not_valid_after,
                     signature_algorithm=crypto_cert.signature_hash_algorithm.name,
                     digest_sha256=binascii.hexlify(crypto_cert.fingerprint(hashes.SHA256())),
+=======
+                    valid_from=str(crypto_cert.not_valid_before),
+                    valid_till=str(crypto_cert.not_valid_after),
+                    signature_algorithm=crypto_cert.signature_hash_algorithm.name,
+                    digest_sha256=ensure_str(
+                        binascii.hexlify(crypto_cert.fingerprint(hashes.SHA256()))),
+>>>>>>> upstream/master
                     serial_number=crypto_cert.serial_number,
                     is_ca=self._is_ca_certificate(crypto_cert),
                     verify_result=result,
@@ -1232,8 +1781,12 @@ class ModeSiteLivestatusEncryption(WatoMode):
 
         return cert_details
 
+<<<<<<< HEAD
     def _is_ca_certificate(self, crypto_cert):
         # type: (SSL.Certificate) -> bool
+=======
+    def _is_ca_certificate(self, crypto_cert: 'SSL.Certificate') -> bool:
+>>>>>>> upstream/master
         try:
             key_usage = crypto_cert.extensions.get_extension_for_oid(ExtensionOID.KEY_USAGE)
             use_key_for_signing = key_usage.value.key_cert_sign is True
@@ -1249,8 +1802,12 @@ class ModeSiteLivestatusEncryption(WatoMode):
 
         return is_ca and use_key_for_signing
 
+<<<<<<< HEAD
     def _fetch_certificate_chain_verify_results(self):
         # type: () -> List[ChainVerifyResult]
+=======
+    def _fetch_certificate_chain_verify_results(self) -> List[ChainVerifyResult]:
+>>>>>>> upstream/master
         """Opens a SSL connection and performs a handshake to get the certificate chain"""
 
         ctx = SSL.Context(SSL.SSLv23_METHOD)
@@ -1266,6 +1823,7 @@ class ModeSiteLivestatusEncryption(WatoMode):
                 SSL.Connection(ctx, socket.socket(address_family, socket.SOCK_STREAM))) as sock:
 
             # pylint does not get the object type of sock right
+<<<<<<< HEAD
             sock.connect(address_spec["address"])  # pylint: disable=no-member
             sock.do_handshake()  # pylint: disable=no-member
             certificate_chain = sock.get_peer_cert_chain()  # pylint: disable=no-member
@@ -1274,6 +1832,16 @@ class ModeSiteLivestatusEncryption(WatoMode):
 
     def _verify_certificate_chain(self, connection, certificate_chain):
         # type: (SSL.Connection, List[crypto.X509]) -> List[ChainVerifyResult]
+=======
+            sock.connect(address_spec["address"])
+            sock.do_handshake()
+            certificate_chain = sock.get_peer_cert_chain()
+
+            return self._verify_certificate_chain(sock, certificate_chain)
+
+    def _verify_certificate_chain(self, connection: SSL.Connection,
+                                  certificate_chain: List[crypto.X509]) -> List[ChainVerifyResult]:
+>>>>>>> upstream/master
         verify_chain_results = []
 
         # Used to record all certificates and verification results for later displaying
@@ -1297,3 +1865,50 @@ class ModeSiteLivestatusEncryption(WatoMode):
                 ))
 
         return verify_chain_results
+<<<<<<< HEAD
+=======
+
+
+def _page_menu_dropdown_site_details(site_id: str, site: Dict,
+                                     current_mode: str) -> PageMenuDropdown:
+    return PageMenuDropdown(
+        name="connections",
+        title=_("Connections"),
+        topics=[
+            PageMenuTopic(
+                title=_("This connection"),
+                entries=list(_page_menu_entries_site_details(site_id, site, current_mode)),
+            ),
+        ],
+    )
+
+
+def _page_menu_entries_site_details(site_id: str, site: Dict,
+                                    current_mode: str) -> Iterator[PageMenuEntry]:
+    if current_mode != "edit_site_globals" and _site_globals_editable(site_id, site):
+        yield PageMenuEntry(
+            title=_("Global settings"),
+            icon_name="configuration",
+            item=make_simple_link(
+                makeuri_contextless(request, [("mode", "edit_site_globals"), ("site", site_id)]),),
+        )
+
+    if current_mode != "edit_site":
+        yield PageMenuEntry(
+            title=_("Edit connection"),
+            icon_name="edit",
+            item=make_simple_link(
+                makeuri_contextless(request, [("mode", "edit_site"), ("site", site_id)]),),
+        )
+
+    if current_mode != "site_livestatus_encryption":
+        yield PageMenuEntry(
+            title=_("Status encryption"),
+            icon_name="encrypted",
+            item=make_simple_link(
+                makeuri_contextless(
+                    request,
+                    [("mode", "site_livestatus_encryption"), ("site", site_id)],
+                )),
+        )
+>>>>>>> upstream/master

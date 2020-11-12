@@ -1,5 +1,17 @@
+<<<<<<< HEAD
 # -*- encoding: utf-8
 # yapf: disable
+=======
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2019 tribe29 GmbH - License: GNU General Public License v2
+# This file is part of Checkmk (https://checkmk.com). It is subject to the terms and
+# conditions defined in the file COPYING, which is part of this source code package.
+
+# yapf: disable
+# type: ignore
+
+>>>>>>> upstream/master
 
 
 checkname = u'hp_msa_fan'
@@ -51,4 +63,8 @@ discovery = {'': [(u'Enclosure 1 Left', None), (u'Enclosure 1 Right', None)]}
 
 
 checks = {'': [(u'Enclosure 1 Left', {}, [(0, 'Status: up, speed: 3950 RPM', [])]),
+<<<<<<< HEAD
                (u'Enclosure 1 Right', {}, [(0, 'Status: up, speed: 4020 RPM', [])])]}
+=======
+               (u'Enclosure 1 Right', {}, [(0, 'Status: up, speed: 4020 RPM', [])])]}
+>>>>>>> upstream/master
